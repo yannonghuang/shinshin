@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/formbuilder-react" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/forms/react-json-schema-form-builder" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/forms/react-json-schema-form-builder/example/node_modules/@ginkgo-bioworks/react-json-schema-form-builder" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/frontend" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/react-app" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/react-app/example/node_modules/@ginkgo-bioworks/react-json-schema-form-builder" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/react-crud" vcs="Git" />
+  </component>
+</project>
