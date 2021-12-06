@@ -7,6 +7,8 @@ import "@fortawesome/fontawesome-free/js/all.js";
 
 import "./App.css";
 
+import logo from './shinshin-logo.png';
+
 import AddTutorial from "./components/add-tutorial.component";
 import Tutorial from "./components/tutorial.component";
 import TutorialsList from "./components/tutorials-list.component";
@@ -77,6 +79,10 @@ class App extends Component {
 
     return (
       <div>
+        <div>
+          <img src={logo} alt="" height="60" width="370" />
+        </div>
+
         <nav class="navbar navbar-expand navbar-dark bg-dark">
           <Link to={"/"} class="navbar-brand">
             欣欣教育基金会
