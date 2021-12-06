@@ -6,6 +6,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import $ from "jquery"; //Load jquery
 import { Link } from "react-router-dom";
+import Select from 'react-select';
 
 import ResponsesList from './responses-list.component.js';
 import DossiersList from './dossiers-list.component.js';
@@ -82,11 +83,32 @@ export default class Project extends Component {
     this.getStatuses();
   }
 
+  convert(schools) {
+    const result = [];
+    if (schools) {
+    for (var i = 0; i < schools.length; i++) {
+      result.push({value: schools[i].id,
+        label: schools[i].region + "-" + schools[i].code + "-" + schools[i].name});
+    }
+    return result;
+    }
+  }
+
+  display(schoolId) {
+    if (this.state.schools) {
+      for (var i = 0; i < this.state.schools.length; i++) {
+        if (this.state.schools[i].value == schoolId)
+          return this.state.schools[i];
+      }
+      return [];
+    }
+  }
+
   getSchools() {
     SchoolDataService.getAllSimple()
       .then(response => {
         this.setState({
-          schools: response.data
+          schools: this.convert(response.data)
         });
         console.log(response);
       })
@@ -136,7 +158,7 @@ export default class Project extends Component {
   }
 
   onChangeSchoolId(e) {
-    const schoolId = e.target.value;
+    const schoolId = e.value; //.target.value;
 
     this.setState(function(prevState) {
       return {
@@ -219,7 +241,7 @@ export default class Project extends Component {
         this.setState(prevState => ({
               currentProject: {
                 ...prevState.currentProject,
-                schoolId: response.data.school.id
+                schoolId: response.data.school ? response.data.school.id : null
               }
             }));
 
@@ -526,20 +548,26 @@ export default class Project extends Component {
 
             <div class="col-md-8">
               <div class="row">
+                <div class="col-md-8">
                   <label htmlFor="schoolId">学校</label>
-                  <select onChange={this.onChangeSchoolId.bind(this)}
+                  <Select onChange={this.onChangeSchoolId.bind(this)}
                     readonly={this.state.readonly?"":false}
                     class="form-control"
                     id="schoolId"
-                    value={currentProject.schoolId}
+                    value={this.display(currentProject.schoolId)}
                     name="schoolId"
-                  >
+                    options={this.state.schools}
+                  />
+                </div>
+{/*}
                     <option value="">学校编号（省-学校名）</option>
                     {this.state.schools.map((option) => (
                       <option value={option.id}>{option.code + "(" + option.region + " - " + option.name + ")"}</option>
                     ))}
-                  </select>
+                  </Select>
+*/}
 
+                <div class="w-100"></div>
 
                 <div class="col-md-4">
                 <label htmlFor="budget">预算</label>
@@ -555,6 +583,7 @@ export default class Project extends Component {
                 />
                 </div>
 
+                {(currentProject.responseId) ? (
                 <div class="col-md-4">
                 <label htmlFor="response">项目申请</label>
                 <Link
@@ -565,6 +594,7 @@ export default class Project extends Component {
                   {"点击查看项目申请"}
                 </Link>
                 </div>
+                ) : '' }
 
                 <div class="w-100"></div>
 

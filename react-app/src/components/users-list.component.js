@@ -200,6 +200,12 @@ const UsersList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
+              <Link
+                to={"/usersView/" + usersRef.current[rowIdx].id}
+              >
+                <i className="fas fa-glasses action mr-2"></i>
+              </Link>
+
               <span onClick={() => openUser(rowIdx)}>
                 <i className="far fa-edit action mr-2"></i>
               </span>

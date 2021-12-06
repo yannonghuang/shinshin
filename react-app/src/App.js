@@ -245,7 +245,7 @@ class App extends Component {
 
             <Route exact path={["/users"]} component={UsersList} />
             <Route exact path="/addU" component={Register} />
-            <Route path="/users/:id" component={Register} />
+            <Route path={["/users/:id", "/usersView/:id"]} component={Register} />
           </Switch>
         </div>
       </div>

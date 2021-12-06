@@ -284,11 +284,13 @@ const ProjectsList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
+            {(projectsRef.current[rowIdx].school) ? (
               <Link
                 to={"/schoolsView/" + projectsRef.current[rowIdx].school.id}
               >
                 {projectsRef.current[rowIdx].school.code}
               </Link>
+              ) : ''}
             </div>
           );
         },
@@ -300,11 +302,13 @@ const ProjectsList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
+            {(projectsRef.current[rowIdx].school) ? (
               <Link
                 to={"/schoolsView/" + projectsRef.current[rowIdx].school.id}
               >
                 {projectsRef.current[rowIdx].school.name}
               </Link>
+              ) : ''}
             </div>
           );
         },
@@ -317,11 +321,13 @@ const ProjectsList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
+            {(projectsRef.current[rowIdx].response) ? (
               <Link
                 to={"/responsesView/" + projectsRef.current[rowIdx].response.id}
               >
                 {projectsRef.current[rowIdx].response.title}
               </Link>
+              ) : ''}
             </div>
           );
         },

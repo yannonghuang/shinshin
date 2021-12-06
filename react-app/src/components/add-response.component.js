@@ -210,6 +210,7 @@ options = {
                 <label htmlFor="title">标题</label>
                 <input
                   type="text"
+                  readonly={"true"}
                   className="form-control"
                   id="title"
                   value={currentResponse.title}
@@ -220,6 +221,7 @@ options = {
                 <div className="form-group">
                   <label htmlFor="schoolId">School</label>
                   <select onChange={this.onChangeSchoolId.bind(this)}
+                    readonly={"true"}
                     class="form-control"
                     id="schoolId"
                     value={currentResponse.schoolId}

@@ -180,12 +180,14 @@ const ResponsesList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
+            { (responsesRef.current[rowIdx].school) ? (
               <Link
                 to={"/schoolsView/" + responsesRef.current[rowIdx].school.id}
                 className="badge badge-success"
               >
                 {responsesRef.current[rowIdx].school.code}
               </Link>
+            ) : ''}
             </div>
           );
         },
@@ -197,12 +199,14 @@ const ResponsesList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
+            { (responsesRef.current[rowIdx].school) ? (
               <Link
                 to={"/schoolsView/" + responsesRef.current[rowIdx].school.id}
                 className="badge badge-success"
               >
                 {responsesRef.current[rowIdx].school.name}
               </Link>
+            ) : ''}
             </div>
           );
         },

@@ -3,6 +3,7 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
+import Select from 'react-select';
 
 import AuthService from "../services/auth.service";
 import SchoolDataService from "../services/school.service";
@@ -73,11 +74,14 @@ export default class Register extends Component {
       schools: [],
       rolesFull: [],
       successful: false,
-      message: ""
+      message: "",
+      readonly: true
     };
   }
 
   componentDidMount() {
+    this.setState({readonly: window.location.pathname.includes('View')});
+
     this.getRoles();
     this.getSchools();
     if (this.props.match.params.id) {
@@ -153,11 +157,32 @@ export default class Register extends Component {
       });
   }
 
+  convert(schools) {
+    const result = [];
+    if (schools) {
+    for (var i = 0; i < schools.length; i++) {
+      result.push({value: schools[i].id,
+        label: schools[i].region + "-" + schools[i].code + "-" + schools[i].name});
+    }
+    return result;
+    }
+  }
+
+  display(schoolId) {
+    if (this.state.schools) {
+      for (var i = 0; i < this.state.schools.length; i++) {
+        if (this.state.schools[i].value == schoolId)
+          return this.state.schools[i];
+      }
+      return [];
+    }
+  }
+
   getSchools() {
     SchoolDataService.getAllSimple()
       .then(response => {
         this.setState({
-          schools: response.data
+          schools: this.convert(response.data)
         });
         console.log(response);
       })
@@ -181,7 +206,7 @@ export default class Register extends Component {
 
   onChangeSchoolId(e) {
     this.setState({
-      schoolId: e.target.value
+      schoolId: e.value //.target.value
     });
   }
 
@@ -255,6 +280,7 @@ export default class Register extends Component {
                 <div className="form-group">
                   <label htmlFor="username">Username</label>
                   <Input
+                    readonly={this.state.readonly?"":false}
                     type="text"
                     className="form-control"
                     name="username"
@@ -267,6 +293,7 @@ export default class Register extends Component {
                 <div className="form-group">
                   <label htmlFor="email">Email</label>
                   <Input
+                    readonly={this.state.readonly?"":false}
                     type="text"
                     className="form-control"
                     name="email"
@@ -279,6 +306,7 @@ export default class Register extends Component {
                 <div className="form-group">
                   <label htmlFor="password">Password</label>
                   <Input
+                    readonly={this.state.readonly?"":false}
                     type="password"
                     className="form-control"
                     name="password"
@@ -291,6 +319,7 @@ export default class Register extends Component {
                 <div className="form-group">
                   <label htmlFor="roles">Roles</label>
                   <select multiple onChange={this.onChangeRoles.bind(this)}
+                    readonly={this.state.readonly?"":false}
                     class="form-control"
                     id="roles"
                     required
@@ -303,24 +332,24 @@ export default class Register extends Component {
                   </select>
                 </div>
 
+
                 <div className="form-group">
                   <label htmlFor="schoolId">School</label>
-                  <select onChange={this.onChangeSchoolId.bind(this)}
+                  <Select onChange={this.onChangeSchoolId.bind(this)}
+                    readonly={this.state.readonly?"":false}
                     class="form-control"
                     id="schoolId"
-                    value={this.state.schoolId}
+                    value={this.display(this.state.schoolId)}
                     name="schoolId"
-                >
-                    <option value="">学校编号（省-学校名）</option>
-                    {this.state.schools.map((option) => (
-                      <option value={option.id}>{option.code + "(" + option.region + " - " + option.name + ")"}</option>
-                    ))}
-                  </select>
+                    options={this.state.schools}
+                  />
                 </div>
 
+                {this.state.readonly ? '' : (
                 <div className="form-group">
                   <button className="btn btn-primary btn-block">{this.state.newuser?'创建新用户':'修改用户'}</button>
                 </div>
+                )}
               </div>
             )}
 
