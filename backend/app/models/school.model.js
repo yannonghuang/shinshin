@@ -30,6 +30,9 @@ module.exports = (sequelize, Sequelize) => {
     teachersCount: {
       type: Sequelize.INTEGER
     },
+    startAt: {
+      type: Sequelize.DATE
+    },
   });
 
   return School;

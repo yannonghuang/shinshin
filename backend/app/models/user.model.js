@@ -8,7 +8,19 @@ module.exports = (sequelize, Sequelize) => {
     },
     password: {
       type: Sequelize.STRING
-    }
+    },
+    chineseName: {
+      type: Sequelize.STRING
+    },
+    phone: {
+      type: Sequelize.STRING
+    },
+    wechat: {
+      type: Sequelize.STRING
+    },
+    startAt: {
+      type: Sequelize.DATE
+    },
   });
 
   return User;

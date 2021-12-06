@@ -26,6 +26,7 @@ export default class School extends Component {
     this.onChangeStudentsCount = this.onChangeStudentsCount.bind(this);
     this.onChangeTeachersCount = this.onChangeTeachersCount.bind(this);
     this.onChangeRegion = this.onChangeRegion.bind(this);
+    this.onChangeStartAt = this.onChangeStartAt.bind(this);
 
     this.getSchool = this.getSchool.bind(this);
     this.getSchoolPhoto = this.getSchoolPhoto.bind(this);
@@ -56,7 +57,8 @@ export default class School extends Component {
         studentsCount: 0,
         teachersCount: 0,
         docFiles: [],
-        docCategory: ""
+        docCategory: "",
+        startAt: null
       },
 
       newschool: true,
@@ -116,6 +118,19 @@ export default class School extends Component {
         currentSchool: {
           ...prevState.currentSchool,
           name: name
+        }
+      };
+    });
+  }
+
+  onChangeStartAt(e) {
+    const startAt = e.target.value;
+
+    this.setState(function(prevState) {
+      return {
+        currentSchool: {
+          ...prevState.currentSchool,
+          startAt: startAt
         }
       };
     });
@@ -241,6 +256,7 @@ export default class School extends Component {
         this.setState({
           currentSchool: response.data
         });
+
         //this.getSchoolPhoto(id);
         console.log(response.data);
       })
@@ -329,6 +345,7 @@ export default class School extends Component {
       phone: this.state.currentSchool.phone,
       studentsCount: this.state.currentSchool.studentsCount,
       teachersCount: this.state.currentSchool.teachersCount,
+      startAt: this.state.currentSchool.startAt,
     };
 
     SchoolDataService.create(data)
@@ -348,6 +365,7 @@ export default class School extends Component {
             phone: response.data.phone,
             studentsCount: response.data.studentsCount,
             teachersCount: response.data.teachersCount,
+            startAt: response.data.startAt,
           },
 
           submitted: true
@@ -382,6 +400,7 @@ export default class School extends Component {
       phone: this.state.currentSchool.phone,
       studentsCount: this.state.currentSchool.studentsCount,
       teachersCount: this.state.currentSchool.teachersCount,
+      startAt: this.state.currentSchool.startAt,
     };
 
     SchoolDataService.update(
@@ -605,7 +624,7 @@ export default class School extends Component {
                 />
                 </div>
 
-                <div class="form-group col-md-5">
+                <div class="form-group col-md-3">
                 <label htmlFor="phone">电话</label>
                 <input
                 readonly={this.state.readonly?"":false}
@@ -616,6 +635,20 @@ export default class School extends Component {
                 value={currentSchool.phone}
                 onChange={this.onChangePhone}
                 name="phone"
+                />
+                </div>
+
+                <div class="form-group col-md-3">
+                <label htmlFor="startAt">创建时间</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="date"
+                class="form-control"
+                id="startAt"
+                required
+                value={currentSchool.startAt}
+                onChange={this.onChangeStartAt}
+                name="startAt"
                 />
                 </div>
 

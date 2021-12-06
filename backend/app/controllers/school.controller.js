@@ -49,6 +49,7 @@ exports.create = (req, res) => {
     phone: req.body.phone,
     studentsCount: req.body.studentsCount,
     teachersCount: req.body.teachersCount,
+    startAt: req.body.startAt,
   };
 
   // Save School in the database
@@ -125,7 +126,7 @@ exports.SAVE_SQL_findAll2 = (req, res) => {
 
   const { limit, offset } = getPagination(page, size);
 
-  const selectClause = "select id, code, name, description, principal, region, address, phone, teachersCount, studentsCount, year(createdAt) as createdYear, ";
+  const selectClause = "select id, code, name, description, principal, region, address, phone, teachersCount, studentsCount, year(startAt) as createdYear, ";
   const attributeResponsesCount = "(select count(*)  from responses where responses.schoolId = schools.Id) as responsesCount, "
   const attributeDocumentsCount = "(select count(*) from documents where documents.schoolId = schools.Id) as documentsCount ";
   const fromClause = "from schools ";
@@ -177,7 +178,7 @@ exports.findAll2 = (req, res) => {
   const orderby = req.body.orderby;
   const code = req.body.code;
   const region = req.body.region;
-  const createdAt = req.body.createdAt;
+  const startAt = req.body.startAt;
   const exportFlag = req.body.exportFlag;
 
   //var condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
@@ -187,7 +188,7 @@ exports.findAll2 = (req, res) => {
             name ? { name: { [Op.like]: `%${name}%` } } : null,
             code ? { code: { [Op.like]: `%${code}%` } } : null,
             region ? { region: { [Op.eq]: `${region}` } } : null,
-            createdAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('schools.createdAt')), `${createdAt}`) } } : null
+            startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('schools.startAt')), `${startAt}`) } } : null
         ]};
 
   const { limit, offset } = getPagination(page, size);
@@ -207,7 +208,7 @@ exports.findAll2 = (req, res) => {
 //  offset: offset,
   subQuery: false,
   attributes: ['id', 'code', 'name', 'description', 'principal', 'region', 'address', 'phone', 'teachersCount', 'studentsCount',
-            [db.Sequelize.fn("year", db.Sequelize.col("schools.createdAt")), "createdAt"],
+            [db.Sequelize.fn("year", db.Sequelize.col("schools.startAt")), "startAt"],
             [db.Sequelize.fn("COUNT", db.Sequelize.col("responses.id")), "responsesCount"],
   ],
 
@@ -360,7 +361,9 @@ exports.findOne = (req, res) => {
                          'address',
                          'phone',
                          'studentsCount',
-                         'teachersCount',],
+                         'teachersCount',
+                          [db.Sequelize.fn('date_format', db.Sequelize.col("startAt"), '%Y-%m-%d'), "startAt"],
+                   ],
       raw: true,
     }
   )
