@@ -79,7 +79,7 @@ class App extends Component {
 
     return (
       <div>
-        <div>
+        <div class="mb-3">
           <img src={logo} alt="" height="60" width="370" />
         </div>
 
@@ -211,8 +211,10 @@ class App extends Component {
 
         <div class="container mt-3">
           <Switch>
+          {/*}
             <Route exact path={["/", "/home"]} component={Home} />
-            <Route exact path="/login" component={Login} />
+          */}
+            <Route exact path={["/login", "/", "/home"]} component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />
             <Route path="/user" component={BoardUser} />
