@@ -36,16 +36,47 @@ export default class Form extends Component {
     };
   }
 
-  optionOnSave = {
-    onSave: (e, formData) => {   //Auto binds `this`
-     this.updateForm();
-    },
-    showActionButtons: !window.location.pathname.includes('View')
-  };
+
 
   fb = createRef();
   fBuilder = null;
-  async componentDidMount() {
+  componentDidMount() {
+
+  /**
+    this.setState(function(prevState) {
+      return {
+        currentForm: {
+          ...prevState.currentForm,
+          readonly: window.location.pathname.includes('View')
+        }
+      };
+    });
+*/
+    //this.setState({readonly: window.location.pathname.includes('View')});
+
+    const optionOnSave = {
+      onSave: (e, formData) => {   //Auto binds `this`
+       this.updateForm();
+      },
+      showActionButtons: !window.location.pathname.includes('View')
+      //showActionButtons: !this.state.currentForm.readonly
+    };
+
+    this.fBuilder = $(this.fb.current).formBuilder(optionOnSave);
+
+    this.getForm(this.props.match.params.id);
+
+/**
+    try {
+      this.fBuilder.actions.setData(this.state.currentForm.fdata);
+    } catch (e) {
+      alert(e);
+    }
+*/
+
+  }
+
+  async SAVE_componentDidMount() {
     this.fBuilder = $(this.fb.current).formBuilder(this.optionOnSave);
 
     await this.getForm(this.props.match.params.id);
@@ -94,7 +125,7 @@ export default class Form extends Component {
     }));
   }
 
-  async getForm(id) {
+  async SAVE_getForm(id) {
     const response = await FormDataService.get(id);
 
       this.setState({
@@ -102,12 +133,25 @@ export default class Form extends Component {
     });
   }
 
-  OLDgetForm(id) {
+  getForm(id) {
     FormDataService.get(id)
       .then(response => {
         this.setState({
           currentForm: response.data
         });
+
+        this.fBuilder.actions.setData(this.state.currentForm.fdata);
+
+
+        this.setState(function(prevState) {
+          return {
+            currentForm: {
+              ...prevState.currentForm,
+              readonly: window.location.pathname.includes('View')
+          }
+        };
+      });
+
         console.log(response.data);
       })
       .catch(e => {
@@ -188,7 +232,7 @@ export default class Form extends Component {
               <div className="form-group">
                 <label htmlFor="title">标题</label>
                 <input
-                  readonly={this.state.readonly?"":false}
+                  readonly={currentForm.readonly?"":false}
                   type="text"
                   className="form-control"
                   id="title"
@@ -199,7 +243,7 @@ export default class Form extends Component {
               <div className="form-group">
                 <label htmlFor="description">说明</label>
                 <input
-                  readonly={this.state.readonly?"":false}
+                  readonly={currentForm.readonly?"":false}
                   type="text"
                   className="form-control"
                   id="description"
@@ -210,7 +254,7 @@ export default class Form extends Component {
               <div className="form-group">
                 <label htmlFor="deadline">截止日期</label>
                 <input
-                  readonly={this.state.readonly?"":false}
+                  readonly={currentForm.readonly?"":false}
                   type="date"
                   className="form-control"
                   id="deadline"
@@ -247,13 +291,14 @@ export default class Form extends Component {
 
             )}
 */}
-
+            {currentForm.readonly ? '' : (
             <button
               className="badge badge-danger mr-2"
               onClick={this.deleteForm}
             >
               Delete
             </button>
+            )}
 
             <p>{this.state.message}</p>
           </div>
