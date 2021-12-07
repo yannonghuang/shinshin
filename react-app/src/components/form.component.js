@@ -48,7 +48,7 @@ export default class Form extends Component {
       showActionButtons: !window.location.pathname.includes('View')
     };
     this.fBuilder = $(this.fb.current).formBuilder(optionOnSave);
-    
+
     this.getForm(this.props.match.params.id);
   }
 
@@ -95,7 +95,8 @@ export default class Form extends Component {
           currentForm: response.data
         });
 
-        this.fBuilder.actions.setData(this.state.currentForm.fdata);
+        //this.fBuilder.actions.setData(this.state.currentForm.fdata);
+        this.fBuilder.actions.setData(response.data.fdata);
 
         this.setState(function(prevState) {
           return {
@@ -105,6 +106,7 @@ export default class Form extends Component {
             }
           };
         });
+
         console.log(response.data);
       })
       .catch(e => {
