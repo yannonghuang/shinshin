@@ -161,6 +161,10 @@ const UsersList = (props) => {
         accessor: "username",
       },
       {
+        Header: "中文名",
+        accessor: "chineseName",
+      },
+      {
         Header: "电子邮件",
         accessor: "email",
       },
@@ -184,7 +188,7 @@ const UsersList = (props) => {
           return (
             <div>
               <Link
-                to={"/schoolsView/" + usersRef.current[rowIdx].id}
+                to={"/schoolsView/" + usersRef.current[rowIdx].school.id}
                 className="badge badge-success"
               >
                 {renderSchool(rowIdx)}

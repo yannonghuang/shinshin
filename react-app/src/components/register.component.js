@@ -60,6 +60,10 @@ export default class Register extends Component {
     this.onChangePassword = this.onChangePassword.bind(this);
     this.onChangeRoles = this.onChangeRoles.bind(this);
     this.onChangeSchoolId = this.onChangeSchoolId.bind(this);
+    this.onChangeChineseName = this.onChangeChineseName.bind(this);
+    this.onChangePhone = this.onChangePhone.bind(this);
+    this.onChangeWechat = this.onChangeWechat.bind(this);
+    this.onChangeStartAt = this.onChangeStartAt.bind(this);
 
     this.state = {
       id: null,
@@ -68,6 +72,10 @@ export default class Register extends Component {
       password: "",
       roles: [],
       schoolId: null,
+      chineseName: "",
+      phone: "",
+      wechat: "",
+      startAt: null,
 
       newuser: true,
 
@@ -97,6 +105,10 @@ export default class Register extends Component {
       password: this.state.password,
       roles: this.state.roles,
       schoolId: this.state.schoolId,
+      chineseName: this.state.chineseName,
+      phone: this.state.phone,
+      wechat: this.state.wechat,
+      startAt: this.state.startAt
     };
 
     AuthService.update(
@@ -134,6 +146,10 @@ export default class Register extends Component {
           password: response.data.password,
           roles: this.getRoleNames(response.data.roles),
           schoolId: response.data.schoolId,
+          chineseName: response.data.chineseName,
+          phone: response.data.phone,
+          wechat: response.data.wechat,
+          startAt: response.data.startAt,
 
           newuser: false
         });
@@ -198,6 +214,30 @@ export default class Register extends Component {
     });
   }
 
+  onChangeChineseName(e) {
+    this.setState({
+      chineseName: e.target.value
+    });
+  }
+
+  onChangePhone(e) {
+    this.setState({
+      phone: e.target.value
+    });
+  }
+
+  onChangeWechat(e) {
+    this.setState({
+      wechat: e.target.value
+    });
+  }
+
+  onChangeStartAt(e) {
+    this.setState({
+      startAt: e.target.value
+    });
+  }
+
   onChangeUsername(e) {
     this.setState({
       username: e.target.value
@@ -238,7 +278,11 @@ export default class Register extends Component {
         this.state.email,
         this.state.password,
         this.state.roles,
-        this.state.schoolId
+        this.state.schoolId,
+        this.state.chineseName,
+        this.state.phone,
+        this.state.wechat,
+        this.state.startAt
       ).then(
         response => {
           this.setState({
@@ -266,23 +310,24 @@ export default class Register extends Component {
   render() {
 
     return (
-      <div className="col-md-12">
+      <div>
+{/*}
         <div className="card card-container">
-
+*/}
           <Form
             onSubmit={this.state.newuser ? this.handleRegister : this.updateUser}
             ref={c => {
               this.form = c;
             }}
           >
-            {!this.state.successful && (
-              <div>
-                <div className="form-group">
-                  <label htmlFor="username">Username</label>
+          {!this.state.successful && (
+            <div class="row">
+                <div class="form-group col-md-4">
+                  <label htmlFor="username">用户名</label>
                   <Input
                     readonly={this.state.readonly?"":false}
                     type="text"
-                    className="form-control"
+                    class="form-control"
                     name="username"
                     value={this.state.username}
                     onChange={this.onChangeUsername}
@@ -290,12 +335,12 @@ export default class Register extends Component {
                   />
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="email">Email</label>
+                <div class="form-group col-md-4">
+                  <label htmlFor="email">电子邮箱</label>
                   <Input
                     readonly={this.state.readonly?"":false}
                     type="text"
-                    className="form-control"
+                    class="form-control"
                     name="email"
                     value={this.state.email}
                     onChange={this.onChangeEmail}
@@ -303,12 +348,12 @@ export default class Register extends Component {
                   />
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="password">Password</label>
+                <div class="form-group col-md-4">
+                  <label htmlFor="password">密码</label>
                   <Input
                     readonly={this.state.readonly?"":false}
                     type="password"
-                    className="form-control"
+                    class="form-control"
                     name="password"
                     value={this.state.password}
                     onChange={this.onChangePassword}
@@ -316,8 +361,56 @@ export default class Register extends Component {
                   />
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="roles">Roles</label>
+                <div class="form-group col-md-4">
+                  <label htmlFor="chineseName">中文名</label>
+                  <Input
+                    readonly={this.state.readonly?"":false}
+                    type="text"
+                    class="form-control"
+                    name="chineseName"
+                    value={this.state.chineseName}
+                    onChange={this.onChangeChineseName}
+                  />
+                </div>
+
+                <div class="form-group col-md-4">
+                  <label htmlFor="phone">电话</label>
+                  <Input
+                    readonly={this.state.readonly?"":false}
+                    type="text"
+                    class="form-control"
+                    name="phone"
+                    value={this.state.phone}
+                    onChange={this.onChangePhone}
+                  />
+                </div>
+
+                <div class="form-group col-md-4">
+                  <label htmlFor="wechat">微信</label>
+                  <Input
+                    readonly={this.state.readonly?"":false}
+                    type="text"
+                    class="form-control"
+                    name="wechat"
+                    value={this.state.wechat}
+                    onChange={this.onChangeWechat}
+                  />
+                </div>
+
+                <div class="form-group col-md-4">
+                  <label htmlFor="startAt">加入时间</label>
+                  <Input
+                    readonly={this.state.readonly?"":false}
+                    type="date"
+                    class="form-control"
+                    name="startAt"
+                    value={this.state.startAt}
+                    onChange={this.onChangeStartAt}
+                  />
+                </div>
+
+                <div class="form-group col-md-4">
+                  <label htmlFor="roles">角色</label>
                   <select multiple onChange={this.onChangeRoles.bind(this)}
                     readonly={this.state.readonly?"":false}
                     class="form-control"
@@ -333,8 +426,8 @@ export default class Register extends Component {
                 </div>
 
 
-                <div className="form-group">
-                  <label htmlFor="schoolId">School</label>
+                <div class="form-group col-md-4">
+                  <label htmlFor="schoolId">所属学校</label>
                   <Select onChange={this.onChangeSchoolId.bind(this)}
                     readonly={this.state.readonly?"":false}
                     class="form-control"
@@ -345,16 +438,18 @@ export default class Register extends Component {
                   />
                 </div>
 
+                <div class="w-100"></div>
+
                 {this.state.readonly ? '' : (
-                <div className="form-group">
+                <div class="form-group">
                   <button className="btn btn-primary btn-block">{this.state.newuser?'创建新用户':'修改用户'}</button>
                 </div>
                 )}
-              </div>
-            )}
+            </div>
+          )}
 
             {this.state.message && (
-              <div className="form-group">
+              <div class="form-group">
                 <div
                   className={
                     this.state.successful
@@ -374,7 +469,9 @@ export default class Register extends Component {
               }}
             />
           </Form>
+{/*}
         </div>
+*/}
       </div>
     );
   }

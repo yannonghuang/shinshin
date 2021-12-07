@@ -74,6 +74,11 @@ exports.findOne = (req, res) => {
   const id = req.params.id;
 
   User.findByPk(id, {
+  attributes: [
+        'id', 'username', 'email', 'chineseName', 'phone', 'wechat', 'schoolId',
+        [db.Sequelize.fn('date_format', db.Sequelize.col("startAt"), '%Y-%m-%d'), "startAt"],
+  ],
+
   include: [
     {
       model: Role,
@@ -113,8 +118,9 @@ exports.findAll2 = (req, res) => {
   limit: limit,
   offset: offset,
   subQuery: false,
-  attributes: ['id', 'username', 'email',
-   //   [db.Sequelize.fn("COUNT", db.Sequelize.col("responses.id")), "responsesCount"]
+  attributes: [
+        'id', 'username', 'email', 'chineseName', 'phone', 'wechat',
+        [db.Sequelize.fn('date_format', db.Sequelize.col("users.startAt"), '%Y-%m-%d'), "startAt"],
   ],
   include: [
   {
@@ -124,7 +130,7 @@ exports.findAll2 = (req, res) => {
   },
   {
       model: School,
-      attributes: ['name', 'region'],
+      attributes: ['id', 'code', 'name', 'region'],
       required: false,
   },
   ],
@@ -190,7 +196,11 @@ exports.signup = (req, res) => {
     username: req.body.username,
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 8),
-    schoolId: req.body.schoolId
+    schoolId: req.body.schoolId,
+    chineseName: req.body.chineseName,
+    phone: req.body.phone,
+    wechat: req.body.wechat,
+    startAt: req.body.startAt,
   })
     .then(user => {
       if (req.body.roles) {

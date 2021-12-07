@@ -587,7 +587,6 @@ export default class School extends Component {
                 name="code"
                 />
                 </div>
-
               </div>
             </div>
 
