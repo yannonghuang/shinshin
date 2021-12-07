@@ -248,7 +248,7 @@ export default class Project extends Component {
         this.setState(prevState => ({
               currentProject: {
                 ...prevState.currentProject,
-                responseId: response.data.response.id
+                responseId: response.data.response ? response.data.response.id : null
               }
             }));
 
