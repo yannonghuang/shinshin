@@ -41,54 +41,17 @@ export default class Form extends Component {
   fb = createRef();
   fBuilder = null;
   componentDidMount() {
-
-  /**
-    this.setState(function(prevState) {
-      return {
-        currentForm: {
-          ...prevState.currentForm,
-          readonly: window.location.pathname.includes('View')
-        }
-      };
-    });
-*/
-    //this.setState({readonly: window.location.pathname.includes('View')});
-
     const optionOnSave = {
       onSave: (e, formData) => {   //Auto binds `this`
        this.updateForm();
       },
       showActionButtons: !window.location.pathname.includes('View')
-      //showActionButtons: !this.state.currentForm.readonly
     };
-
     this.fBuilder = $(this.fb.current).formBuilder(optionOnSave);
-
+    
     this.getForm(this.props.match.params.id);
-
-/**
-    try {
-      this.fBuilder.actions.setData(this.state.currentForm.fdata);
-    } catch (e) {
-      alert(e);
-    }
-*/
-
   }
 
-  async SAVE_componentDidMount() {
-    this.fBuilder = $(this.fb.current).formBuilder(this.optionOnSave);
-
-    await this.getForm(this.props.match.params.id);
-
-    try {
-      this.fBuilder.actions.setData(this.state.currentForm.fdata);
-    } catch (e) {
-      alert(e);
-    }
-
-    this.setState({readonly: window.location.pathname.includes('View')});
-  }
 
   onChangeTitle(e) {
     const title = e.target.value;
@@ -125,14 +88,6 @@ export default class Form extends Component {
     }));
   }
 
-  async SAVE_getForm(id) {
-    const response = await FormDataService.get(id);
-
-      this.setState({
-      currentForm: response.data
-    });
-  }
-
   getForm(id) {
     FormDataService.get(id)
       .then(response => {
@@ -142,48 +97,20 @@ export default class Form extends Component {
 
         this.fBuilder.actions.setData(this.state.currentForm.fdata);
 
-
         this.setState(function(prevState) {
           return {
             currentForm: {
               ...prevState.currentForm,
               readonly: window.location.pathname.includes('View')
-          }
-        };
-      });
-
+            }
+          };
+        });
         console.log(response.data);
       })
       .catch(e => {
         console.log(e);
       });
   }
-
-/*
-  updatePublished(status) {
-    var data = {
-      id: this.state.currentForm.id,
-      title: this.state.currentForm.title,
-      description: this.state.currentForm.description,
-      deadline: this.state.currentForm.deadline,
-      published: status
-    };
-
-    FormDataService.update(this.state.currentForm.id, data)
-      .then(response => {
-        this.setState(prevState => ({
-          currentForm: {
-            ...prevState.currentForm,
-            published: status
-          }
-        }));
-        console.log(response.data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  }
-*/
 
   updateForm() {
     this.setState(prevState => ({
@@ -262,45 +189,7 @@ export default class Form extends Component {
                   onChange={this.onChangeDeadline}
                 />
               </div>
-{/*}
-              <div className="form-group">
-                <label>
-                  <strong>Status:</strong>
-                </label>
-                {currentForm.published ? "Published" : "Pending"}
-              </div>
-*/}
-
             </form>
-
-{/*}
-            {currentForm.published ? (
-              <button
-                className="badge badge-primary mr-2"
-                onClick={() => this.updatePublished(false)}
-              >
-                UnPublish
-              </button>
-            ) : (
-              <button
-                className="badge badge-primary mr-2"
-                onClick={() => this.updatePublished(true)}
-              >
-                Publish
-              </button>
-
-            )}
-*/}
-            {currentForm.readonly ? '' : (
-            <button
-              className="badge badge-danger mr-2"
-              onClick={this.deleteForm}
-            >
-              Delete
-            </button>
-            )}
-
-            <p>{this.state.message}</p>
           </div>
         ) : (
           <div>
@@ -310,6 +199,17 @@ export default class Form extends Component {
         )}
 
         <div id="fb-editor" ref={this.fb} />
+
+        {currentForm.readonly ? '' : (
+        <button
+          className="badge badge-danger mr-2"
+          onClick={this.deleteForm}
+        >
+          Delete
+        </button>
+        )}
+        <p>{this.state.message}</p>
+
       </div>
     );
   }
