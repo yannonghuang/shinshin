@@ -18,7 +18,7 @@ export default class Form extends Component {
     this.onChangeDescription = this.onChangeDescription.bind(this);
     this.onChangeDeadline = this.onChangeDeadline.bind(this);
     this.getForm = this.getForm.bind(this);
-    this.updatePublished = this.updatePublished.bind(this);
+    //this.updatePublished = this.updatePublished.bind(this);
     this.updateForm = this.updateForm.bind(this);
     this.deleteForm = this.deleteForm.bind(this);
 
@@ -29,21 +29,23 @@ export default class Form extends Component {
         description: "",
         published: false,
         fdata: null,
-        deadline: null
+        deadline: null,
+        readonly: true
       },
       message: ""
     };
   }
 
-optionOnSave = {
-  onSave: (e, formData) => {   //Auto binds `this`
+  optionOnSave = {
+    onSave: (e, formData) => {   //Auto binds `this`
      this.updateForm();
-  }
-};
+    },
+    showActionButtons: !window.location.pathname.includes('View')
+  };
 
- fb = createRef();
- fBuilder = null;
- async componentDidMount() {
+  fb = createRef();
+  fBuilder = null;
+  async componentDidMount() {
     this.fBuilder = $(this.fb.current).formBuilder(this.optionOnSave);
 
     await this.getForm(this.props.match.params.id);
@@ -53,6 +55,8 @@ optionOnSave = {
     } catch (e) {
       alert(e);
     }
+
+    this.setState({readonly: window.location.pathname.includes('View')});
   }
 
   onChangeTitle(e) {
@@ -111,6 +115,7 @@ optionOnSave = {
       });
   }
 
+/*
   updatePublished(status) {
     var data = {
       id: this.state.currentForm.id,
@@ -134,16 +139,15 @@ optionOnSave = {
         console.log(e);
       });
   }
+*/
 
   updateForm() {
-
-      this.setState(prevState => ({
-        currentForm: {
-          ...prevState.currentForm,
-          fdata: this.fBuilder.actions.getData()
-        }
-      }));
-
+    this.setState(prevState => ({
+      currentForm: {
+        ...prevState.currentForm,
+        fdata: this.fBuilder.actions.getData()
+      }
+    }));
 
     FormDataService.update(
       this.state.currentForm.id,
@@ -184,6 +188,7 @@ optionOnSave = {
               <div className="form-group">
                 <label htmlFor="title">标题</label>
                 <input
+                  readonly={this.state.readonly?"":false}
                   type="text"
                   className="form-control"
                   id="title"
@@ -194,6 +199,7 @@ optionOnSave = {
               <div className="form-group">
                 <label htmlFor="description">说明</label>
                 <input
+                  readonly={this.state.readonly?"":false}
                   type="text"
                   className="form-control"
                   id="description"
@@ -204,6 +210,7 @@ optionOnSave = {
               <div className="form-group">
                 <label htmlFor="deadline">截止日期</label>
                 <input
+                  readonly={this.state.readonly?"":false}
                   type="date"
                   className="form-control"
                   id="deadline"
@@ -211,15 +218,18 @@ optionOnSave = {
                   onChange={this.onChangeDeadline}
                 />
               </div>
-
+{/*}
               <div className="form-group">
                 <label>
                   <strong>Status:</strong>
                 </label>
                 {currentForm.published ? "Published" : "Pending"}
               </div>
+*/}
+
             </form>
 
+{/*}
             {currentForm.published ? (
               <button
                 className="badge badge-primary mr-2"
@@ -234,7 +244,9 @@ optionOnSave = {
               >
                 Publish
               </button>
+
             )}
+*/}
 
             <button
               className="badge badge-danger mr-2"

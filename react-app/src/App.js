@@ -235,7 +235,7 @@ class App extends Component {
 
             <Route exact path={["/forms"]} component={FormsList} />
             <Route exact path="/addF" component={AddForm} />
-            <Route path="/forms/:id" component={Form} />
+            <Route path={["/forms/:id", "/formsView/:id"]} component={Form} />
 
             <Route exact path={["/responses", "/responses/form/:formId", "/responses/school/:schoolId"]} component={ResponsesList} />
             <Route path="/addR/:id" component={AddResponse} />

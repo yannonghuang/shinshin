@@ -154,6 +154,12 @@ const FormsList = (props) => {
                 申请
               </Link>
 
+              <Link
+                to={"/formsView/" + formsRef.current[rowIdx].id}
+              >
+                <i className="fas fa-glasses action mr-2"></i>
+              </Link>
+
               <span onClick={() => openForm(rowIdx)}>
                 <i className="far fa-edit action mr-2"></i>
               </span>
