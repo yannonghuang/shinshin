@@ -187,12 +187,14 @@ const UsersList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
+            {usersRef.current[rowIdx].school ? (
               <Link
                 to={"/schoolsView/" + usersRef.current[rowIdx].school.id}
                 className="badge badge-success"
               >
                 {renderSchool(rowIdx)}
               </Link>
+            ) : ''}
             </div>
           );
         },
