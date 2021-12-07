@@ -87,8 +87,9 @@ exports.findAll2 = (req, res) => {
   limit: limit,
   offset: offset,
   subQuery: false,
-  attributes: ['id', 'title', 'description', 'deadline',
-      [db.Sequelize.fn("COUNT", db.Sequelize.col("responses.id")), "responsesCount"]
+  attributes: ['id', 'title', 'description',// 'deadline',
+      [db.Sequelize.fn("COUNT", db.Sequelize.col("responses.id")), "responsesCount"],
+      [db.Sequelize.fn('date_format', db.Sequelize.col("deadline"), '%Y-%m-%d'), "deadline"],
   ],
   include: [{
       model: Response,
@@ -164,7 +165,11 @@ exports.findAllPublished = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Form.findByPk(id)
+  Form.findByPk(id, {
+    attributes: ['id', 'title', 'description', 'fdata', // 'deadline',
+      [db.Sequelize.fn('date_format', db.Sequelize.col("deadline"), '%Y-%m-%d'), "deadline"],
+  ]
+  })
     .then(data => {
       if (data) {
         res.send(data);
