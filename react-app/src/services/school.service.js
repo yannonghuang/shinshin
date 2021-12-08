@@ -47,20 +47,24 @@ class SchoolDataService {
   }
 
   updatePhoto(id, data) {
+    const user = JSON.parse(localStorage.getItem('user'));
     return http.post(`/single-upload/${id}`, data, {
-        headers: [
+        headers: {
             'content-type': 'multipart/form-data',
-            authHeader()
-        ]
+            'x-access-token':  (user && user.accessToken) ? user.accessToken : null
+            //authHeader()
+        }
     });
   }
 
   uploadDocuments(id, data) {
+    const user = JSON.parse(localStorage.getItem('user'));
     return http.post(`/documents-upload/${id}`, data, {
-        headers: [
+        headers: {
             'content-type': 'multipart/form-data',
-            authHeader()
-        ]
+            'x-access-token':  (user && user.accessToken) ? user.accessToken : null
+            //authHeader()
+        }
     });
   }
 

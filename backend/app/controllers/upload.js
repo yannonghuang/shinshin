@@ -53,12 +53,55 @@ const multipleUpload = async (req, res) => {
   }
 };
 
-const dossiersUpload = async (req, res) => {
+const attachmentsUpload = async (req, res) => {
   try {
     await upload(req, res);
     console.log(req.files);
     console.log("req.params.id: " + req.params.id);
 
+/**
+    if (req.files.length <= 0) {
+      return res.send(`You must select at least 1 file.`);
+    }
+*/
+
+    // save attachment to db
+    if (req.files != null) {
+      for (var i = 0; i < req.files.length; i++) {
+        var attachment = {
+          originalname: req.files[i].originalname,
+          encoding: req.files[i].encoding,
+          mimetype: req.files[i].mimetype,
+          destination: req.files[i].destination,
+          filename: req.files[i].destination,
+          path: req.files[i].path,
+          responseId: req.params.id
+        };
+        try {
+          var data = Attachment.create(attachment);
+        } catch (err) {
+          console.log(err.message || "Some error occurred while creating the Attachment.");
+        }
+      }
+    }
+
+    return res.send(`Files have been uploaded ... req.params.id: ` + req.params.id);
+
+  } catch (error) {
+    console.log(error);
+
+    if (error.code === "LIMIT_UNEXPECTED_FILE") {
+      return res.send("Too many files to upload.");
+    }
+    return res.send(`Error when trying upload many files: ${error}`);
+  }
+};
+
+const dossiersUpload = async (req, res) => {
+  try {
+    await upload(req, res);
+    console.log(req.files);
+    console.log("req.params.id: " + req.params.id);
 
     projectId = req.params.id;
     docCategory = req.body.docCategory;
@@ -212,5 +255,6 @@ module.exports = {
   singleUpload: singleUpload,
   documentsUpload: documentsUpload,
   singleProjectUpload: singleProjectUpload,
-  dossiersUpload: dossiersUpload
+  dossiersUpload: dossiersUpload,
+  attachmentsUpload: attachmentsUpload
 };

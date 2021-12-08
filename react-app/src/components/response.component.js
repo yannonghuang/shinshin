@@ -27,6 +27,7 @@ export default class Response extends Component {
     this.updateResponse = this.updateResponse.bind(this);
     this.deleteResponse = this.deleteResponse.bind(this);
     this.onChangeSchoolId = this.onChangeSchoolId.bind(this);
+    this.onChangeAttFiles = this.onChangeAttFiles.bind(this);
 
     this.state = {
       currentResponse: {
@@ -35,6 +36,7 @@ export default class Response extends Component {
         fdata: null,
         formId: null,
         schoolId: null,
+        attFiles: [],
       },
 
       currentUser: null,
@@ -43,7 +45,7 @@ export default class Response extends Component {
       readonly: true,
     };
 
-    this.init();
+    //this.init();
   }
 
 optionOnSave = {
@@ -55,8 +57,53 @@ optionOnSave = {
   fb = createRef();
   fRender = null;
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.setState({readonly: window.location.pathname.includes('View')});
+    this.getResponse(this.props.match.params.id);
 
+    const user = AuthService.getCurrentUser();
+    if (user) {
+      this.setState({
+        currentUser: user,
+      });
+      if (user.schoolId) {
+        this.setState(function(prevState) {
+          return {
+            currentResponse: {
+              ...prevState.currentResponse,
+              schoolId: user.schoolId
+            }
+          };
+        });
+      }
+    }
+  }
+
+  getResponse(id) {
+    ResponseDataService.get(id)
+      .then(response => {
+        this.setState({
+          currentResponse: response.data
+        });
+
+        try {
+          const formData = JSON.stringify(response.data.fdata);
+          this.fRender = $(this.fb.current).formRender({ formData });
+          //this.fRender = $(this.fb.current).formRender(this.state.currentResponse.fdata);
+        } catch (e) {
+          alert(e);
+        }
+
+        this.getSchools();
+
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  async SAVE_componentDidMount() {
     this.setState({readonly: window.location.pathname.includes('View')});
 
     await this.getResponse(this.props.match.params.id);
@@ -123,6 +170,17 @@ optionOnSave = {
       });
   }
 
+  onChangeAttFiles(e) {
+    e.preventDefault();
+    var attFiles = e.target.files;
+    this.setState(prevState => ({
+          currentResponse: {
+            ...prevState.currentResponse,
+            attFiles: attFiles
+          }
+        }));
+  }
+
   onChangeSchoolId(e) {
     const SchoolId = e.target.value;
 
@@ -149,25 +207,44 @@ optionOnSave = {
     });
   }
 
-   async getResponse(id) {
+   async SAVE_getResponse(id) {
      const response = await ResponseDataService.get(id);
      this.setState({
        currentResponse: response.data
      });
    }
 
-   updateResponse() {
-       var data = {
-         title: this.state.currentResponse.title,
-         schoolId: this.state.currentResponse.schoolId,
-         fdata: this.fRender.userData
-       };
+
+  uploadAttachments() {
+    var data = new FormData();
+    for (var i = 0; i < this.state.currentResponse.attFiles.length; i++) {
+      data.append('multi-files', this.state.currentResponse.attFiles[i],
+        this.state.currentResponse.attFiles[i].name);
+    }
+    ResponseDataService.uploadAttachments(this.state.currentResponse.id, data)
+    .then(response => {
+      console.log(response.data);
+    })
+    .catch(e => {
+      console.log(e);
+    });
+  }
+
+  updateResponse() {
+    var data = {
+      title: this.state.currentResponse.title,
+      schoolId: this.state.currentResponse.schoolId,
+      fdata: this.fRender.userData
+    };
 
     ResponseDataService.update(
       this.state.currentResponse.id,
       data
     )
       .then(response => {
+      if (this.state.currentResponse.attFiles)
+        this.uploadAttachments();
+
         console.log(response.data);
         this.setState({
           currentResponse: response.data,
@@ -178,8 +255,8 @@ optionOnSave = {
         console.log(e);
       });
 
-      $('input[name="responseId"]').attr('value', this.state.currentResponse.id);
-      this.refs.formToSubmit.submit();
+      //$('input[name="responseId"]').attr('value', this.state.currentResponse.id);
+      //this.refs.formToSubmit.submit();
   }
 
   deleteResponse() {
@@ -231,59 +308,56 @@ optionOnSave = {
                     ))}
                   </select>
                 </div>
-
             </form>
-            <p>{this.state.message}</p>
           </div>
-
-
-
-        ) : (
-          <div>
-            <br />
-            <p>Please click on a Response...</p>
-          </div>
-        )}
+        ) : ''}
 
         <div id="fb-editor" ref={this.fb} />
 
         {this.state.readonly ? (<AttachmentsList responseId = {this.state.currentResponse.id}/>) : (
-        <div>
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-8 mt-3">
-            <form ref="formToSubmit" action="http://localhost:8080/multiple-upload" method="POST" enctype="multipart/form-data">
+          <div>
+            <div class="container">
+            <div class="row">
+              <div class="col-sm-8 mt-3">
+              <form ref="formToSubmit" action="http://localhost:8080/multiple-upload" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                 <label for="input-multi-files">上传附件:</label>
-                <input type="file" name="multi-files" multiple id="input-multi-files" class="form-control-file border"/>
+                <input type="file"
+                  name="multi-files" multiple
+                  id="input-multi-files"
+                  class="form-control-file border"
+                  onChange={e => this.onChangeAttFiles(e)}
+                />
                 <input type="hidden" name="responseId" id="responseId"/>
                 </div>
-            </form>
-            </div>
+              </form>
+              </div>
 
-          </div>
-          <hr />
-          <div class="row">
-            <div class="col-sm-12">
-              <div class="preview-images"></div>
+            </div>
+            <hr />
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="preview-images"></div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <button
+          <button
           type="submit"
           className="badge badge-success"
           onClick={this.updateResponse}
-        >
+          >
           Update
-        </button>
+          </button>
 
-        <button
+          <button
           className="badge badge-danger mr-2"
           onClick={this.deleteResponse}
-        >
+          >
           Delete
-        </button>
+          </button>
+
+          <p>{this.state.message}</p>
         </div>
         )}
       </div>

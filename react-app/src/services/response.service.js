@@ -47,6 +47,17 @@ class ResponseDataService {
   findByTitle(title) {
     return http.get(`/responses?title=${title}`, { headers: authHeader() });
   }
+
+  uploadAttachments(id, data) {
+    const user = JSON.parse(localStorage.getItem('user'));
+    return http.post(`/attachments-upload/${id}`, data, {
+        headers: {
+            'content-type': 'multipart/form-data',
+            'x-access-token':  (user && user.accessToken) ? user.accessToken : null
+            //authHeader()
+        }
+    });
+  }
 }
 
 export default new ResponseDataService();

@@ -51,20 +51,24 @@ class ProjectDataService {
   }
 
   updatePhoto(id, data) {
+    const user = JSON.parse(localStorage.getItem('user'));
     return http.post(`/single-project-upload/${id}`, data, {
-        headers: [
+        headers: {
             'content-type': 'multipart/form-data',
-            authHeader()
-        ]
+            'x-access-token':  (user && user.accessToken) ? user.accessToken : null
+            //authHeader()
+        }
     });
   }
 
   uploadDossiers(id, data) {
+    const user = JSON.parse(localStorage.getItem('user'));
     return http.post(`/dossiers-upload/${id}`, data, {
-        headers: [
+        headers: {
             'content-type': 'multipart/form-data',
-            authHeader()
-        ]
+            'x-access-token':  (user && user.accessToken) ? user.accessToken : null
+            //authHeader()
+        }
     });
   }
 

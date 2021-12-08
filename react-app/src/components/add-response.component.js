@@ -25,6 +25,7 @@ export default class Response extends Component {
     this.submitResponse = this.submitResponse.bind(this);
     this.deleteResponse = this.deleteResponse.bind(this);
     this.onChangeSchoolId = this.onChangeSchoolId.bind(this);
+    this.onChangeAttFiles = this.onChangeAttFiles.bind(this);
 
     this.state = {
       currentResponse: {
@@ -33,6 +34,7 @@ export default class Response extends Component {
         fdata: null,
         formId: null,
         schoolId: null,
+        attFiles: [],
       },
 
       currentUser: null,
@@ -40,7 +42,7 @@ export default class Response extends Component {
       message: ""
     };
 
-    this.init();
+    //this.init();
   }
 
 options = {
@@ -51,16 +53,8 @@ options = {
 
   fb = createRef();
   fRender = null;
-  async componentDidMount() {
-    await this.getForm(this.props.match.params.id);
-
-    try {
-      const formData = JSON.stringify(this.state.currentResponse.fdata);
-      this.fRender = $(this.fb.current).formRender({ formData });
-      //this.fRender.actions.append("action", "http://localhost:8080/multiple-upload");
-    } catch (e) {
-      alert(e);
-    }
+  componentDidMount() {
+    this.getForm(this.props.match.params.id);
 
     const user = AuthService.getCurrentUser();
     if (user) {
@@ -69,14 +63,14 @@ options = {
       });
 
       if (user.schoolId) {
-          this.setState(function(prevState) {
-            return {
-              currentResponse: {
-                ...prevState.currentResponse,
-                schoolId: user.schoolId
-              }
-            };
-          });
+        this.setState(function(prevState) {
+          return {
+            currentResponse: {
+              ...prevState.currentResponse,
+              schoolId: user.schoolId
+            }
+          };
+        });
       }
     }
     this.getSchools();
@@ -117,6 +111,17 @@ options = {
       });
   }
 
+  onChangeAttFiles(e) {
+    e.preventDefault();
+    var attFiles = e.target.files;
+    this.setState(prevState => ({
+          currentResponse: {
+            ...prevState.currentResponse,
+            attFiles: attFiles
+          }
+        }));
+  }
+
   onChangeSchoolId(e) {
     const SchoolId = e.target.value;
 
@@ -143,46 +148,72 @@ options = {
     });
   }
 
-   async getForm(id) {
-     const response = await FormDataService.get(id);
-
-     this.setState({
-       currentResponse: response.data
-     });
-
-     this.setState(function(prevState) {
-       return {
-         currentResponse: {
+  getForm(id) {
+    FormDataService.get(id)
+      .then(response => {
+        this.setState({
+          currentResponse: response.data
+        });
+         try {
+         const formData = JSON.stringify(response.data.fdata);
+         this.fRender = $(this.fb.current).formRender({ formData });
+        } catch (e) {
+          alert(e);
+        }
+         this.setState(function(prevState) {
+          return {
+           currentResponse: {
            ...prevState.currentResponse,
            formId: id
          }
-       };
-     });
-   }
+        };
+      });
+    })
+  }
 
-   async submitResponse() {
-      var data = {
-        title: this.state.currentResponse.title,
-        formId: this.state.currentResponse.formId,
-        schoolId: this.state.currentResponse.schoolId,
-        fdata: this.fRender.userData
-      };
-      await ResponseDataService.create(
-        data
-      )
-      .then(response => {
-        console.log(response.data);
-        this.setState({
-          currentResponse: response.data,
-          message: "The response was submitted successfully!"
+  uploadAttachments(responseId) {
+    var data = new FormData();
+    for (var i = 0; i < this.state.currentResponse.attFiles.length; i++) {
+      data.append('multi-files', this.state.currentResponse.attFiles[i],
+        this.state.currentResponse.attFiles[i].name);
+    }
+    ResponseDataService.uploadAttachments(responseId /*this.state.currentResponse.id*/, data)
+    .then(response => {
+      console.log(response.data);
+    })
+    .catch(e => {
+      console.log(e);
+    });
+  }
+
+  submitResponse() {
+    var data = {
+      title: this.state.currentResponse.title,
+      formId: this.state.currentResponse.formId,
+      schoolId: this.state.currentResponse.schoolId,
+      fdata: this.fRender.userData
+    };
+
+    ResponseDataService.create(
+      data
+    )
+    .then(response => {
+      if (this.state.currentResponse.attFiles)
+        this.uploadAttachments(response.data.id);
+
+      console.log(response.data);
+
+      this.setState({
+        currentResponse: response.data,
+        message: "The response was submitted successfully!"
         });
       })
       .catch(e => {
         console.log(e);
       });
 
-      $('input[name="responseId"]').attr('value', this.state.currentResponse.id);
-      this.refs.formToSubmit.submit();
+      //$('input[name="responseId"]').attr('value', this.state.currentResponse.id);
+      //this.refs.formToSubmit.submit();
    }
 
   deleteResponse() {
@@ -235,14 +266,9 @@ options = {
                 </div>
 
             </form>
-            <p>{this.state.message}</p>
+
           </div>
-        ) : (
-          <div>
-            <br />
-            <p>Please click on a Response...</p>
-          </div>
-        )}
+        ) : ''}
 
         <div id="fb-editor" ref={this.fb} />
 
@@ -252,7 +278,12 @@ options = {
                 <h4>Attachment</h4>
             <form ref="formToSubmit" action="http://localhost:8080/multiple-upload" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
-                <input type="file" name="multi-files" multiple id="input-multi-files" class="form-control-file border"/>
+                <input type="file"
+                  name="multi-files"
+                  multiple id="input-multi-files"
+                  class="form-control-file border"
+                  onChange={e => this.onChangeAttFiles(e)}
+                />
                 <input type="hidden" name="responseId" id="responseId"/>
                 </div>
             </form>
@@ -273,6 +304,8 @@ options = {
         >
           Submit
         </button>
+
+        <p>{this.state.message}</p>
       </div>
     );
   }
