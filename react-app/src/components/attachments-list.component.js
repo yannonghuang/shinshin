@@ -132,10 +132,14 @@ const AttachmentsList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
+{/*}
               <span onClick={() => openAttachment(rowIdx)}>
                 <i className="far fa-edit action mr-2"></i>
               </span>
-
+*/}
+              <a href={"http://localhost:8080/api/attachmentsContent/" + attachmentsRef.current[rowIdx].id} target="blank" >
+                <i className="fas fa-glasses action mr-2"></i>
+              </a>
               <span onClick={() => deleteAttachment(rowIdx)}>
                 <i className="fas fa-trash action"></i>
               </span>
