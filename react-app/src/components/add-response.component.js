@@ -7,6 +7,7 @@ import AuthService from "./../services/auth.service";
 import $ from "jquery"; //Load jquery
 import React, { Component, createRef } from "react"; //For react component
 import ReactDOM from "react-dom";
+import Select from 'react-select';
 
 window.jQuery = $; //JQuery alias
 window.$ = $; //JQuery alias
@@ -56,37 +57,60 @@ options = {
   componentDidMount() {
     this.getForm(this.props.match.params.id);
 
-    const user = AuthService.getCurrentUser();
-    if (user) {
-      this.setState({
-        currentUser: user,
-      });
-
-      if (user.schoolId) {
-        this.setState(function(prevState) {
-          return {
-            currentResponse: {
-              ...prevState.currentResponse,
-              schoolId: user.schoolId
-            }
-          };
-        });
-      }
-    }
     this.getSchools();
+  }
+
+
+  convert(schools) {
+    const result = [];
+    if (schools) {
+    for (var i = 0; i < schools.length; i++) {
+      result.push({value: schools[i].id,
+        label: schools[i].region + "-" + schools[i].code + "-" + schools[i].name});
+    }
+    return result;
+    }
+  }
+
+  display(schoolId) {
+    if (this.state.schools) {
+      for (var i = 0; i < this.state.schools.length; i++) {
+        if (this.state.schools[i].value == schoolId)
+          return this.state.schools[i];
+      }
+      return [];
+    }
   }
 
   getSchools() {
     SchoolDataService.getAllSimple()
-      .then(response => {
+    .then(response => {
         this.setState({
-          schools: response.data
+          schools: this.convert(response.data)
         });
         console.log(response);
-      })
-      .catch(e => {
-        console.log(e);
-      });
+
+      const user = AuthService.getCurrentUser();
+      if (user) {
+        this.setState({
+          currentUser: user,
+        });
+
+        if (user.schoolId) {
+          this.setState(function(prevState) {
+            return {
+              currentResponse: {
+                ...prevState.currentResponse,
+                schoolId: user.schoolId
+              }
+            };
+          });
+        }
+      }
+    })
+    .catch(e => {
+      console.log(e);
+    });
   }
 
   init() {
@@ -123,13 +147,13 @@ options = {
   }
 
   onChangeSchoolId(e) {
-    const SchoolId = e.target.value;
+    const schoolId = e.value; //.target.value
 
     this.setState(function(prevState) {
       return {
         currentResponse: {
           ...prevState.currentResponse,
-          SchoolId: SchoolId
+          schoolId: schoolId
         }
       };
     });
@@ -154,22 +178,24 @@ options = {
         this.setState({
           currentResponse: response.data
         });
-         try {
-         const formData = JSON.stringify(response.data.fdata);
-         this.fRender = $(this.fb.current).formRender({ formData });
+
+        try {
+          const formData = JSON.stringify(response.data.fdata);
+          this.fRender = $(this.fb.current).formRender({ formData });
         } catch (e) {
           alert(e);
         }
-         this.setState(function(prevState) {
+
+        this.setState(function(prevState) {
           return {
-           currentResponse: {
-           ...prevState.currentResponse,
-           formId: id
-         }
-        };
-      });
-    })
-  }
+            currentResponse: {
+              ...prevState.currentResponse,
+              formId: id
+              }
+           };
+        });
+      })
+    }
 
   uploadAttachments(responseId) {
     var data = new FormData();
@@ -207,10 +233,11 @@ options = {
         currentResponse: response.data,
         message: "The response was submitted successfully!"
         });
-      })
-      .catch(e => {
-        console.log(e);
-      });
+
+    })
+    .catch(e => {
+      console.log(e);
+    });
 
       //$('input[name="responseId"]').attr('value', this.state.currentResponse.id);
       //this.refs.formToSubmit.submit();
@@ -249,21 +276,17 @@ options = {
                 />
               </div>
 
-                <div className="form-group">
-                  <label htmlFor="schoolId">School</label>
-                  <select onChange={this.onChangeSchoolId.bind(this)}
-                    readonly={"true"}
+                <div class="form-group">
+                  <label htmlFor="schoolId">所属学校</label>
+                  <Select onChange={this.onChangeSchoolId.bind(this)}
                     class="form-control"
                     id="schoolId"
-                    value={currentResponse.schoolId}
+                    value={this.display(currentResponse.schoolId)}
                     name="schoolId"
-                >
-                    <option value="">所属学校</option>
-                    {this.state.schools.map((option) => (
-                      <option value={option.id}>{option.region + " - " + option.name}</option>
-                    ))}
-                  </select>
+                    options={this.state.schools}
+                  />
                 </div>
+
 
             </form>
 
