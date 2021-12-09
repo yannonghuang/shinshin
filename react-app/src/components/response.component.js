@@ -4,11 +4,12 @@ import FormDataService from "../services/form.service";
 import AttachmentsList from './collapsible-attachments-list.component.js';
 import SchoolDataService from "../services/school.service";
 import AuthService from "./../services/auth.service";
+import TheCollapsible from './collapsible-attachments-list.component';
 
 import $ from "jquery"; //Load jquery
 import React, { Component, createRef } from "react"; //For react component
 import ReactDOM from "react-dom";
-import TheCollapsible from './collapsible-attachments-list.component';
+import Select from 'react-select';
 
 window.jQuery = $; //JQuery alias
 window.$ = $; //JQuery alias
@@ -60,22 +61,26 @@ optionOnSave = {
   componentDidMount() {
     this.setState({readonly: window.location.pathname.includes('View')});
     this.getResponse(this.props.match.params.id);
+  }
 
-    const user = AuthService.getCurrentUser();
-    if (user) {
-      this.setState({
-        currentUser: user,
-      });
-      if (user.schoolId) {
-        this.setState(function(prevState) {
-          return {
-            currentResponse: {
-              ...prevState.currentResponse,
-              schoolId: user.schoolId
-            }
-          };
-        });
+  convert(schools) {
+    const result = [];
+    if (schools) {
+    for (var i = 0; i < schools.length; i++) {
+      result.push({value: schools[i].id,
+        label: schools[i].region + "-" + schools[i].code + "-" + schools[i].name});
+    }
+    return result;
+    }
+  }
+
+  display(schoolId) {
+    if (this.state.schools) {
+      for (var i = 0; i < this.state.schools.length; i++) {
+        if (this.state.schools[i].value == schoolId)
+          return this.state.schools[i];
       }
+      return [];
     }
   }
 
@@ -139,9 +144,28 @@ optionOnSave = {
     SchoolDataService.getAllSimple()
       .then(response => {
         this.setState({
-          schools: response.data
+          schools: this.convert(response.data)
         });
-        console.log(response);
+
+        const user = AuthService.getCurrentUser();
+        if (user) {
+          this.setState({
+          currentUser: user,
+        });
+        if (user.schoolId) {
+          this.setState(function(prevState) {
+            return {
+              currentResponse: {
+                ...prevState.currentResponse,
+                schoolId: user.schoolId
+              }
+            };
+          });
+        }
+      }
+
+      console.log(response);
+
       })
       .catch(e => {
         console.log(e);
@@ -182,13 +206,13 @@ optionOnSave = {
   }
 
   onChangeSchoolId(e) {
-    const SchoolId = e.target.value;
+    const schoolId = e.value; //.target.value
 
     this.setState(function(prevState) {
       return {
         currentResponse: {
           ...prevState.currentResponse,
-          SchoolId: SchoolId
+          schoolId: schoolId
         }
       };
     });
@@ -292,22 +316,18 @@ optionOnSave = {
                 />
               </div>
 
+              <div class="form-group">
+                <label htmlFor="schoolId">所属学校</label>
+                <Select onChange={this.onChangeSchoolId.bind(this)}
+                  readonly={this.state.readonly?"":false}
+                  class="form-control"
+                  id="schoolId"
+                  value={this.display(currentResponse.schoolId)}
+                  name="schoolId"
+                  options={this.state.schools}
+                />
+              </div>
 
-                <div className="form-group">
-                  <label htmlFor="schoolId">School</label>
-                  <select onChange={this.onChangeSchoolId.bind(this)}
-                  readonly={"true"/*this.state.readonly?"":false*/}
-                    class="form-control"
-                    id="schoolId"
-                    value={currentResponse.schoolId}
-                    name="schoolId"
-                >
-                    <option value="">学校编号（省-学校名）</option>
-                    {this.state.schools.map((option) => (
-                      <option value={option.id}>{option.code + "(" + option.region + " - " + option.name + ")"}</option>
-                    ))}
-                  </select>
-                </div>
             </form>
           </div>
         ) : ''}

@@ -276,17 +276,16 @@ options = {
                 />
               </div>
 
-                <div class="form-group">
-                  <label htmlFor="schoolId">所属学校</label>
-                  <Select onChange={this.onChangeSchoolId.bind(this)}
-                    class="form-control"
-                    id="schoolId"
-                    value={this.display(currentResponse.schoolId)}
-                    name="schoolId"
-                    options={this.state.schools}
-                  />
-                </div>
-
+              <div class="form-group">
+                <label htmlFor="schoolId">所属学校</label>
+                <Select onChange={this.onChangeSchoolId.bind(this)}
+                  class="form-control"
+                  id="schoolId"
+                  value={this.display(currentResponse.schoolId)}
+                  name="schoolId"
+                  options={this.state.schools}
+                />
+              </div>
 
             </form>
 
