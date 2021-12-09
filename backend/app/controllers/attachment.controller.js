@@ -164,17 +164,7 @@ exports.findOneContent = (req, res) => {
   Attachment.findByPk(id)
     .then(data => {
       if (data) {
-      /**
-        var file = data.path;
-        var filename = data.originalname;
-        var mimetype = data.mimetype;
-        res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-        res.setHeader('Content-type', mimetype);
-        var filestream = fs.createReadStream(file);
-        filestream.pipe(res);
-        */
         res.sendFile(data.path);
-        //res.send(data);
       } else {
         res.status(404).send({
           message: `Cannot find Attachment with id=${id}.`

@@ -8,6 +8,7 @@ import { useTable, useSortBy } from "react-table";
 
 const AttachmentsList = (props) => {
   const [attachments, setAttachments] = useState([]);
+
   const [currentAttachment, setCurrentAttachment] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [searchOriginalname, setSearchOriginalname] = useState("");
@@ -137,9 +138,15 @@ const AttachmentsList = (props) => {
                 <i className="far fa-edit action mr-2"></i>
               </span>
 */}
-              <a href={"http://localhost:8080/api/attachmentsContent/" + attachmentsRef.current[rowIdx].id} target="blank" >
-                <i className="fas fa-glasses action mr-2"></i>
+
+{/*}
+
+*/}
+
+              <a href="#" onClick={() => download(attachmentsRef.current[rowIdx].id, attachmentsRef.current[rowIdx].originalname)} >
+                <i className="fas fa-download action mr-2"></i>
               </a>
+
               <span onClick={() => deleteAttachment(rowIdx)}>
                 <i className="fas fa-trash action"></i>
               </span>
@@ -177,6 +184,26 @@ const AttachmentsList = (props) => {
     setPage(1);
   };
 
+  const download = (id, originalname) => {
+    AttachmentDataService.getContent(id)
+	  .then(response => {
+        console.log(response.data);
+
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download',
+                originalname //'file.file' response.headers["Content-Disposition"].split("filename=")[1]
+            ); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+	  })
+	  .catch((e) => {
+	  alert(e);
+        console.log(e);
+      });
+  }
 
   return (
     <div className="list row">

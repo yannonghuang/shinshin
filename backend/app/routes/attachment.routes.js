@@ -37,7 +37,7 @@ module.exports = function(app) {
 
   // Retrieve a single Attachment with id return file contents
   app.get("/api/attachmentsContent/:id",
-//    [authJwt.verifyToken],
+    [authJwt.verifyToken],
   attachments.findOneContent);
 
   app.get("/api/attachmentsCount/:id",

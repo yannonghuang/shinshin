@@ -29,7 +29,13 @@ class DossierDataService {
   }
 
   getContent(id) {
-    return http.get(`/dossiersContent/${id}`, { headers: authHeader() });
+    const user = JSON.parse(localStorage.getItem('user'));
+    return http.get(`/dossiersContent/${id}`, {
+        headers: {
+          'x-access-token':  (user && user.accessToken) ? user.accessToken : null
+        },
+        responseType: 'arraybuffer'
+      });
   }
 
   getDocCategories() {

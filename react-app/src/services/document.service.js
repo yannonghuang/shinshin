@@ -29,7 +29,13 @@ class DocumentDataService {
   }
 
   getContent(id) {
-    return http.get(`/documentsContent/${id}`, { headers: authHeader() });
+    const user = JSON.parse(localStorage.getItem('user'));
+    return http.get(`/documentsContent/${id}`, {
+        headers: {
+          'x-access-token':  (user && user.accessToken) ? user.accessToken : null
+        },
+        responseType: 'arraybuffer'
+      });
   }
 
   getDocCategories() {

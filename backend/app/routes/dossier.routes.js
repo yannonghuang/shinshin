@@ -42,7 +42,7 @@ module.exports = function(app) {
 
   // Retrieve a single Dossier with id return file contents
   app.get("/api/dossiersContent/:id",
-//    [authJwt.verifyToken],
+    [authJwt.verifyToken],
   dossiers.findOneContent);
 
   app.get("/api/dossiersCount/:id",

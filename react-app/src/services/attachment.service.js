@@ -29,7 +29,13 @@ class AttachmentDataService {
   }
 
   getContent(id) {
-    return http.get(`/attachmentsContent/${id}`, { headers: authHeader() });
+    const user = JSON.parse(localStorage.getItem('user'));
+    return http.get(`/attachmentsContent/${id}`, {
+        headers: {
+          'x-access-token':  (user && user.accessToken) ? user.accessToken : null
+        },
+        responseType: 'arraybuffer'
+      });
   }
 
   getCount(id) {
