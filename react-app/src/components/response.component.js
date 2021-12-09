@@ -1,7 +1,8 @@
 //import React, { Component } from "react";
 import ResponseDataService from "../services/response.service";
 import FormDataService from "../services/form.service";
-import AttachmentsList from './collapsible-attachments-list.component.js';
+//import AttachmentsList from './collapsible-attachments-list.component.js';
+import AttachmentsList from './attachments-list.component.js';
 import SchoolDataService from "../services/school.service";
 import AuthService from "./../services/auth.service";
 import TheCollapsible from './collapsible-attachments-list.component';
@@ -10,6 +11,7 @@ import $ from "jquery"; //Load jquery
 import React, { Component, createRef } from "react"; //For react component
 import ReactDOM from "react-dom";
 import Select from 'react-select';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 window.jQuery = $; //JQuery alias
 window.$ = $; //JQuery alias
@@ -334,7 +336,23 @@ optionOnSave = {
 
         <div id="fb-editor" ref={this.fb} />
 
-        {this.state.readonly ? (<AttachmentsList responseId = {this.state.currentResponse.id}/>) : (
+        {this.state.readonly ? (
+
+            <Tabs>
+              <TabList>
+                <Tab>...</Tab>
+                <Tab>项目申请附件</Tab>
+              </TabList>
+              <TabPanel>
+                <p>... 查看项目申请附件 ...</p>
+              </TabPanel>
+              <TabPanel>
+                <AttachmentsList responseId = {currentResponse.id} />
+              </TabPanel>
+
+            </Tabs>
+
+        ) : (
           <div>
             <div class="container">
             <div class="row">
