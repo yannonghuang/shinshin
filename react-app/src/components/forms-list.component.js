@@ -149,7 +149,7 @@ const FormsList = (props) => {
             <div>
               <Link
                 to={"/addR/" + formsRef.current[rowIdx].id}
-                className="badge badge-success"
+                className="badge badge-success mr-2"
               >
                 申请
               </Link>
@@ -157,7 +157,7 @@ const FormsList = (props) => {
               <Link
                 to={"/formsView/" + formsRef.current[rowIdx].id}
               >
-                <i className="fas fa-glasses action mr-2"></i>
+                <i className="fas fa-eye action mr-2"></i>
               </Link>
 
               <span onClick={() => openForm(rowIdx)}>
