@@ -88,7 +88,7 @@ export default class Project extends Component {
     if (schools) {
     for (var i = 0; i < schools.length; i++) {
       result.push({value: schools[i].id,
-        label: schools[i].region + "-" + schools[i].code + "-" + schools[i].name});
+        label: schools[i].code + "-" + schools[i].name + "-" + schools[i].region});
     }
     return result;
     }
