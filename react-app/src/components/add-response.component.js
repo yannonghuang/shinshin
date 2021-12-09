@@ -56,7 +56,6 @@ options = {
   fRender = null;
   componentDidMount() {
     this.getForm(this.props.match.params.id);
-
     this.getSchools();
   }
 
@@ -231,8 +230,12 @@ options = {
 
       this.setState({
         currentResponse: response.data,
-        message: "The response was submitted successfully!"
-        });
+        message: "项目申请成功提交!"
+      });
+
+      this.props.history.push("/responses" +
+        (this.state.currentResponse.schoolId ? ('/school/' + this.state.currentResponse.schoolId) : '')
+      );
 
     })
     .catch(e => {

@@ -381,7 +381,7 @@ export default class Project extends Component {
       .then(response => {
         console.log(response.data);
         this.setState({
-          message: "The project was updated successfully!"
+          message: "项目信息成功修改!"
         });
 
         if (this.state.currentProject.file) { // photo, followed by docs
@@ -515,7 +515,7 @@ export default class Project extends Component {
          <h4>项目信息</h4>
         {(this.state.submitted && this.state.newproject) ? (
           <div>
-            <h4>You submitted successfully!</h4>
+            <h4>项目信息成功提交!</h4>
             <button class="btn btn-success" onClick={this.newProject}>
               Add
             </button>

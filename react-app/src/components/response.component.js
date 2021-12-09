@@ -110,6 +110,7 @@ optionOnSave = {
       });
   }
 
+/*
   async SAVE_componentDidMount() {
     this.setState({readonly: window.location.pathname.includes('View')});
 
@@ -141,6 +142,7 @@ optionOnSave = {
     }
     this.getSchools();
   }
+*/
 
   getSchools() {
     SchoolDataService.getAllSimple()
@@ -233,13 +235,14 @@ optionOnSave = {
     });
   }
 
+/*
    async SAVE_getResponse(id) {
      const response = await ResponseDataService.get(id);
      this.setState({
        currentResponse: response.data
      });
    }
-
+*/
 
   uploadAttachments() {
     var data = new FormData();
@@ -274,12 +277,16 @@ optionOnSave = {
         console.log(response.data);
         this.setState({
           currentResponse: response.data,
-          message: "The response was updated successfully!"
+          message: "项目申请成功修改!"
         });
       })
       .catch(e => {
         console.log(e);
       });
+
+      this.props.history.push("/responses" +
+        (this.state.currentResponse.schoolId ? ('/school/' + this.state.currentResponse.schoolId) : '')
+      );
 
       //$('input[name="responseId"]').attr('value', this.state.currentResponse.id);
       //this.refs.formToSubmit.submit();

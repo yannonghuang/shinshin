@@ -411,7 +411,7 @@ export default class School extends Component {
       .then(response => {
         console.log(response.data);
         this.setState({
-          message: "The school was updated successfully!"
+          message: "学校信息成功修改!"
         });
 
         if (this.state.currentSchool.file) { // photo, followed by docs
@@ -545,7 +545,7 @@ export default class School extends Component {
          <h4>学校信息</h4>
         {(this.state.submitted && this.state.newschool) ? (
           <div>
-            <h4>You submitted successfully!</h4>
+            <h4>学校信息成功提交!</h4>
             <button class="btn btn-success" onClick={this.newSchool}>
               Add
             </button>
