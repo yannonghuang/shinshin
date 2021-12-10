@@ -196,7 +196,7 @@ options = {
       })
     }
 
-  uploadAttachments(responseId) {
+  SAVE_uploadAttachments(responseId) {
     var data = new FormData();
     for (var i = 0; i < this.state.currentResponse.attFiles.length; i++) {
       data.append('multi-files', this.state.currentResponse.attFiles[i],
@@ -211,7 +211,67 @@ options = {
     });
   }
 
+  uploadAttachments(responseId, attFiles) {
+    var data = new FormData();
+    for (var i = 0; i < attFiles.length; i++) {
+      data.append('multi-files', attFiles[i].file,
+      attFiles[i].file.name);
+    }
+    if (attFiles[0]) data.append('description', attFiles[0].description);
+/**
+    for (var i = 0; i < this.state.currentResponse.attFiles.length; i++) {
+      data.append('multi-files', this.state.currentResponse.attFiles[i],
+        this.state.currentResponse.attFiles[i].name);
+    }
+*/
+    ResponseDataService.uploadAttachments(responseId /*this.state.currentResponse.id*/, data)
+    .then(response => {
+      console.log(response.data);
+    })
+    .catch(e => {
+      console.log(e);
+    });
+  }
+
+  getLabel(type, name) {
+    if (!this.state.currentResponse.fdata)
+      return '';
+
+    for (var i = 0; i < this.state.currentResponse.fdata.length; i++) {
+      if (this.state.currentResponse.fdata[i].type === type &&
+          this.state.currentResponse.fdata[i].name === name)
+        return this.state.currentResponse.fdata[i].label;
+    }
+
+    return '';
+  }
+
+  collectFiles() {
+    var inputs = document.getElementsByTagName("input");
+    const attFiles = [];
+    for (var i = 0; i < inputs.length; i++) {
+      if (inputs[i].type === "file" && inputs[i].files) {
+        let filesN = inputs[i].files.length;
+        for (var j = 0; j < filesN; j++) {
+          attFiles.push({description: this.getLabel(inputs[i].type, inputs[i].name),
+            file: inputs[i].files[j]});
+        }
+      }
+    }
+
+    this.setState(prevState => ({
+          currentResponse: {
+            ...prevState.currentResponse,
+            attFiles: attFiles
+          }
+        }));
+
+    return attFiles;
+  }
+
   submitResponse() {
+    const attFiles = this.collectFiles();
+
     var data = {
       title: this.state.currentResponse.title,
       formId: this.state.currentResponse.formId,
@@ -223,8 +283,8 @@ options = {
       data
     )
     .then(response => {
-      if (this.state.currentResponse.attFiles)
-        this.uploadAttachments(response.data.id);
+      //if (this.state.currentResponse.attFiles)
+      this.uploadAttachments(response.data.id, attFiles);
 
       console.log(response.data);
 
@@ -296,7 +356,7 @@ options = {
         ) : ''}
 
         <div id="fb-editor" ref={this.fb} />
-
+{/*}
         <div class="container">
           <div class="row">
             <div class="col-sm-8 mt-3">
@@ -321,7 +381,7 @@ options = {
             </div>
           </div>
         </div>
-
+*/}
         <button
           type="submit"
           className="badge badge-success"

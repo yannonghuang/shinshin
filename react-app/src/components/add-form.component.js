@@ -31,6 +31,7 @@ export default class AddForm extends Component {
   }
 
 options = {
+  id: "shinshin-form-id",
   action: "http://localhost:8080/multiple-upload",
   method: "POST",
   enctype: "multipart/form-data",

@@ -18,6 +18,9 @@ module.exports = (sequelize, Sequelize) => {
     path: {
       type: Sequelize.STRING
     },
+    description: {
+      type: Sequelize.STRING
+    },
   });
 
   return Attachment;
