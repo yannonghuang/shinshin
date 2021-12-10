@@ -361,7 +361,7 @@ optionOnSave = {
       <div>
         {currentResponse ? (
           <div className="edit-form">
-            <h4>欣欣教育基金会项目申请（编辑）</h4>
+            <h4>欣欣教育基金会项目申请（{this.state.readonly?"阅览":"编辑"}）</h4>
             <form>
               <div className="form-group">
                 <label htmlFor="title">标题</label>
