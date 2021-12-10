@@ -92,7 +92,7 @@ exports.findAllSimple = (req, res) => {
 
   School.findAll({
     attributes: ['id', 'name', 'code', 'region'],
-    order: [ ['region', 'asc'], ['code', 'asc'], ['name', 'asc'] ]
+    order: [ ['code', 'asc'], ['name', 'asc'], ['region', 'asc'] ]
   })
       .then(data => {
         res.send(data);

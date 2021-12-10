@@ -125,18 +125,18 @@ exports.findAll2 = (req, res) => {
   const orderby = req.body.orderby;
 
   var orderbyObject = null;
-    if (orderby) {
-      orderbyObject = [];
-      for (var i = 0; i < orderby.length; i++) {
-        var s = orderby[i].id.split(".");
-        if (s.length == 1) orderbyObject.push([s[0], (orderby[i].desc ? "desc" : "asc")]);
-        if (s.length == 2) {
-          var m = null;
-          if (s[0] == 'school') m = School;
-          orderbyObject.push([m, s[1], (orderby[i].desc ? "desc" : "asc")]);
-        }
+  if (orderby) {
+    orderbyObject = [];
+    for (var i = 0; i < orderby.length; i++) {
+      var s = orderby[i].id.split(".");
+      if (s.length == 1) orderbyObject.push([s[0], (orderby[i].desc ? "desc" : "asc")]);
+      if (s.length == 2) {
+        var m = null;
+        if (s[0] == 'school') m = School;
+        orderbyObject.push([m, s[1], (orderby[i].desc ? "desc" : "asc")]);
       }
-    };
+    }
+  };
 
   //const { page, size, title } = req.query;
 
