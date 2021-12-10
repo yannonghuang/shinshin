@@ -21,6 +21,8 @@ const ResponsesList = (props) => {
   const responsesRef = useRef();
   responsesRef.current = responses;
 
+  const [totalItems, setTotalItems] = useState(0);
+
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
   const [pageSize, setPageSize] = useState(5);
@@ -80,10 +82,11 @@ const ResponsesList = (props) => {
 
     ResponseDataService.getAll2(params)
       .then((response) => {
-        const { responses, totalPages } = response.data;
+        const { responses, totalPages, totalItems } = response.data;
 
         setResponses(responses);
         setCount(totalPages);
+        setTotalItems(totalItems);
 
         console.log(response.data);
       })
@@ -277,7 +280,7 @@ const ResponsesList = (props) => {
   return (
     <div className="list row">
       <div className="col-md-8">
-        <h4>项目申请列表</h4>
+        <h4>项目申请列表(总数：{totalItems})</h4>
         <div className="input-group mb-3">
           <input
             type="text"
