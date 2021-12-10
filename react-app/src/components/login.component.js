@@ -83,6 +83,8 @@ export default class Login extends Component {
 
   render() {
     return (
+    <div>
+    { AuthService.getCurrentUser() ? (this.props.history.push('/schools')) : (
       <div className="col-md-12">
         <div className="card card-container">
           <img
@@ -149,6 +151,8 @@ export default class Login extends Component {
           </Form>
         </div>
       </div>
+     )}
+    </div>
     );
   }
 }
