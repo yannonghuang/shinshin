@@ -337,7 +337,7 @@ const ProjectsList = (props) => {
         accessor: "name",
       },
       {
-        Header: "项目预算",
+        Header: "项目费用",
         accessor: "budget",
         disableSortBy: true,
       },

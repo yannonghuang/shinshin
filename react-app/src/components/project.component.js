@@ -570,7 +570,7 @@ export default class Project extends Component {
                 <div class="w-100"></div>
 
                 <div class="col-md-4">
-                <label htmlFor="budget">预算</label>
+                <label htmlFor="budget">费用</label>
                 <input
                 readonly={this.state.readonly?"":false}
                 type="number" min="0.00" max="10000.00" step="0.01"
