@@ -241,7 +241,7 @@ var orderbyObject = null;
 //  order: [[Response, 'title', 'desc']]
   })
     .then(data => {
-        Project.count({where: condition, include: include})
+        Project.count({where: condition, include: include, distinct: true, col: 'id'})
           .then(count => {
             const response = getPagingData(count, data, page, limit);
             res.send(response);

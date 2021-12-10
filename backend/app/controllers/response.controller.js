@@ -144,7 +144,8 @@ exports.findAll2 = (req, res) => {
         [Op.and]: [
             title ? { title: { [Op.like]: `%${title}%` } } : null,
             formId ? { formId: { [Op.eq]: `${formId}` } } : null,
-            schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null
+            schoolId ? { '$school.id$': { [Op.eq]: `${schoolId}` } } : null
+            //schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null
         ]};
 
   var include = [
@@ -190,7 +191,7 @@ exports.findAll2 = (req, res) => {
   order: orderbyObject
   })
     .then(data => {
-      Response.count({where: condition, include: include})
+      Response.count({where: condition, include: include, distinct: true, col: 'id'})
         .then(count => {
           const response = getPagingData(count, data, page, limit);
           res.send(response);

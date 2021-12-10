@@ -12,6 +12,7 @@ import React, { Component, createRef } from "react"; //For react component
 import ReactDOM from "react-dom";
 import Select from 'react-select';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { Link } from "react-router-dom";
 
 window.jQuery = $; //JQuery alias
 window.$ = $; //JQuery alias
@@ -46,6 +47,8 @@ export default class Response extends Component {
       schools: [],
       message: "",
       readonly: true,
+
+      progress: 0,
     };
 
     //this.init();
@@ -59,7 +62,6 @@ optionOnSave = {
 
   fb = createRef();
   fRender = null;
-
   componentDidMount() {
     this.setState({readonly: window.location.pathname.includes('View')});
     this.getResponse(this.props.match.params.id);
@@ -89,9 +91,6 @@ optionOnSave = {
   getResponse(id) {
     ResponseDataService.get(id)
       .then(response => {
-        this.setState({
-          currentResponse: response.data
-        });
 
         try {
           const formData = JSON.stringify(response.data.fdata);
@@ -100,6 +99,10 @@ optionOnSave = {
         } catch (e) {
           alert(e);
         }
+
+        this.setState({
+          currentResponse: response.data
+        });
 
         this.getSchools();
 
@@ -298,7 +301,11 @@ optionOnSave = {
         this.state.currentResponse.attFiles[i].name);
     }
 */
-    ResponseDataService.uploadAttachments(this.state.currentResponse.id, data)
+    ResponseDataService.uploadAttachments(this.state.currentResponse.id, data, (event) => {
+      this.setState({
+        progress: Math.round((100 * event.loaded) / event.total),
+      });
+    })
     .then(response => {
       console.log(response.data);
     })
@@ -320,23 +327,14 @@ optionOnSave = {
       this.state.currentResponse.id,
       data
     )
-      .then(response => {
-      //if (this.state.currentResponse.attFiles)
-        this.uploadAttachments(attFiles);
-
+    .then(response => {
         console.log(response.data);
-        this.setState({
-          currentResponse: response.data,
-          message: "项目申请成功修改!"
-        });
-      })
-      .catch(e => {
-        console.log(e);
-      });
+        this.uploadAttachments(attFiles);
+    })
+    .catch(e => {
+      console.log(e);
+    });
 
-      this.props.history.push("/responses" +
-        (this.state.currentResponse.schoolId ? ('/school/' + this.state.currentResponse.schoolId) : '')
-      );
 
       //$('input[name="responseId"]').attr('value', this.state.currentResponse.id);
       //this.refs.formToSubmit.submit();
@@ -355,7 +353,7 @@ optionOnSave = {
 
 
   render() {
-    const { currentResponse } = this.state;
+    const { currentResponse, progress } = this.state;
 
     return (
       <div>
@@ -453,6 +451,31 @@ optionOnSave = {
           >
           Delete
           </button>
+
+          {(progress < 100 && progress > 0) && (
+            <div className="progress">
+              <div
+                className="progress-bar progress-bar-info progress-bar-striped"
+                role="progressbar"
+                aria-valuenow={progress}
+                aria-valuemin="0"
+                aria-valuemax="100"
+                style={{ width: progress + "%" }}
+              >
+                {progress}%
+              </div>
+            </div>
+          )}
+
+          {(progress >= 100) && (
+            <Link
+              to={("/responses" +
+                   (this.state.currentResponse.schoolId ? ('/school/' + this.state.currentResponse.schoolId) : ''))}
+              className="badge badge-success mr-2"
+            >
+              上传成功，转项目申请列表...
+            </Link>
+          )}
 
           <p>{this.state.message}</p>
         </div>
