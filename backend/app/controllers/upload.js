@@ -58,7 +58,8 @@ const attachmentsUpload = async (req, res) => {
     await upload(req, res);
     console.log(req.files);
     console.log("req.params.id: " + req.params.id);
-    description = req.body.description;
+    descriptions = JSON.parse(req.body.descriptions);
+
 /**
     if (req.files.length <= 0) {
       return res.send(`You must select at least 1 file.`);
@@ -76,7 +77,7 @@ const attachmentsUpload = async (req, res) => {
           filename: req.files[i].destination,
           path: req.files[i].path,
           responseId: req.params.id,
-          description: description
+          description: descriptions[i]
         };
         try {
           var data = Attachment.create(attachment);

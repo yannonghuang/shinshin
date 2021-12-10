@@ -282,11 +282,16 @@ optionOnSave = {
 
   uploadAttachments(attFiles) {
     var data = new FormData();
+    var descriptions = [];
     for (var i = 0; i < attFiles.length; i++) {
       data.append('multi-files', attFiles[i].file,
       attFiles[i].file.name);
+
+      descriptions.push(attFiles[i].description);
     }
-    if (attFiles[0]) data.append('description', attFiles[0].description);
+    data.append('descriptions', JSON.stringify(descriptions));
+
+    //if (attFiles[0]) data.append('description', attFiles[0].description);
 /**
     for (var i = 0; i < this.state.currentResponse.attFiles.length; i++) {
       data.append('multi-files', this.state.currentResponse.attFiles[i],
