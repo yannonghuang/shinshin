@@ -56,10 +56,14 @@ const ProjectsList = (props) => {
   };
 
   const onChangeSearchCreatedAt = (e) => {
-    const searchCreatedAt = e; //e.target.value;
+    const searchCreatedAt = e.target.value;
     setSearchCreatedAt(searchCreatedAt);
   };
 
+  const onChangeSearchInputCreatedAt = (e) => {
+    const searchCreatedAt = e; //e.target.value;
+    setSearchCreatedAt(searchCreatedAt);
+  };
 
   const onClearSearch = (e) => {
     setSearchName("");
@@ -600,7 +604,7 @@ const ProjectsList = (props) => {
             className="form-control"
             placeholder="项目年份"
             value={searchCreatedAt}
-            onChange={onChangeSearchCode}
+            onChange={onChangeSearchInputCreatedAt}
           />
           <YearPicker
             yearArray={['2019', '2020']}

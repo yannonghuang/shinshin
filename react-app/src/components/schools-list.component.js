@@ -59,6 +59,10 @@ const SchoolsList = (props) => {
     setSearchStartAt(searchStartAt);
   };
 
+  const onChangeSearchInputStartAt = (e) => {
+    const searchStartAt = e.target.value;
+    setSearchStartAt(searchStartAt);
+  };
 
   const onClearSearch = (e) => {
     setSearchName("");
@@ -595,7 +599,7 @@ const SchoolsList = (props) => {
             className="form-control"
             placeholder="创建年份"
             value={searchStartAt}
-            onChange={onChangeSearchCode}
+            onChange={onChangeSearchInputStartAt}
           />
           <YearPicker
             yearArray={['2019', '2020']}
