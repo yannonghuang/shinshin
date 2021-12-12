@@ -609,11 +609,18 @@ setOrderby(result);
             onChange={onChangeSearchCode}
           />
 
+          <input
+            type="text"
+            className="form-control"
+            placeholder="项目年份"
+            value={searchCreatedAt}
+            onChange={onChangeSearchCode}
+          />
           <YearPicker
             yearArray={['2019', '2020']}
             value={searchCreatedAt}
             onSelect={onChangeSearchCreatedAt}
-            hideInput={false}
+            hideInput={true}
             minRange={1995}
             maxRange={2022}
           />

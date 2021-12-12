@@ -621,18 +621,25 @@ const SchoolsList = (props) => {
             onChange={onChangeSearchCode}
           />
 
+          <input
+            type="text"
+            className="form-control"
+            placeholder="创建年份"
+            value={searchStartAt}
+            onChange={onChangeSearchCode}
+          />
           <YearPicker
             yearArray={['2019', '2020']}
             value={searchStartAt}
             onSelect={onChangeSearchStartAt}
-            hideInput={false}
+            hideInput={true}
             minRange={1995}
             maxRange={2022}
           />
 
           <select
             className="form-control"
-            placeholder=""
+            placeholder="...."
             value={searchRegion}
             onChange={onChangeSearchRegion}
           >
