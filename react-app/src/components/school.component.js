@@ -410,9 +410,6 @@ export default class School extends Component {
     )
       .then(response => {
         console.log(response.data);
-        this.setState({
-          message: "学校信息成功修改!"
-        });
 
         if (this.state.currentSchool.file) { // photo, followed by docs
           this.updatePhoto();
@@ -420,6 +417,10 @@ export default class School extends Component {
           if (this.state.currentSchool.docFiles) // docs
             this.uploadDocuments();
         }
+
+        this.setState({
+          message: "学校信息成功修改!"
+        });
 
       })
       .catch(e => {
@@ -460,6 +461,10 @@ export default class School extends Component {
     data.append('docCategory', this.state.currentSchool.docCategory);
     SchoolDataService.uploadDocuments(this.state.currentSchool.id, data)
     .then(response => {
+      this.setState(prevState => ({
+        message: prevState.message + " 学校信息附件成功上传!"
+      }));
+
       console.log(response.data);
     })
     .catch(e => {

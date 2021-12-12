@@ -8,11 +8,13 @@ import $ from "jquery"; //Load jquery
 import React, { Component, createRef } from "react"; //For react component
 import ReactDOM from "react-dom";
 import Select from 'react-select';
+import { Link } from "react-router-dom";
 
 window.jQuery = $; //JQuery alias
 window.$ = $; //JQuery alias
 require("jquery-ui-sortable"); //For FormBuilder Element Drag and Drop
 require("formBuilder");// For FormBuilder
+
 
 require('formBuilder/dist/form-render.min.js');
 
@@ -35,30 +37,29 @@ export default class Response extends Component {
         fdata: null,
         formId: null,
         schoolId: null,
-        attFiles: [],
+        //attFiles: [],
       },
 
       currentUser: null,
       schools: [],
-      message: ""
+      message: "",
+      progress: 0,
     };
 
     //this.init();
   }
 
-options = {
-  action: "http://localhost:8080/multiple-upload",
-  method: "POST",
-  enctype: "multipart/form-data",
-};
+  options = {
+    action: "http://localhost:8080/multiple-upload",
+    method: "POST",
+    enctype: "multipart/form-data",
+  };
 
   fb = createRef();
   fRender = null;
   componentDidMount() {
     this.getForm(this.props.match.params.id);
-    this.getSchools();
   }
-
 
   convert(schools) {
     const result = [];
@@ -176,39 +177,26 @@ options = {
       .then(response => {
         this.setState({
           currentResponse: response.data
-        });
+      });
 
-        try {
-          const formData = JSON.stringify(response.data.fdata);
-          this.fRender = $(this.fb.current).formRender({ formData });
-        } catch (e) {
-          alert(e);
-        }
+      try {
+        const formData = JSON.stringify(response.data.fdata);
+        this.fRender = $(this.fb.current).formRender({ formData });
+      } catch (e) {
+        alert(e);
+      }
 
-        this.setState(function(prevState) {
-          return {
-            currentResponse: {
-              ...prevState.currentResponse,
-              formId: id
-              }
-           };
-        });
-      })
-    }
+      this.setState(function(prevState) {
+        return {
+          currentResponse: {
+            ...prevState.currentResponse,
+            formId: id
+            }
+         };
+      });
 
-  SAVE_uploadAttachments(responseId) {
-    var data = new FormData();
-    for (var i = 0; i < this.state.currentResponse.attFiles.length; i++) {
-      data.append('multi-files', this.state.currentResponse.attFiles[i],
-        this.state.currentResponse.attFiles[i].name);
-    }
-    ResponseDataService.uploadAttachments(responseId /*this.state.currentResponse.id*/, data)
-    .then(response => {
-      console.log(response.data);
+      this.getSchools();
     })
-    .catch(e => {
-      console.log(e);
-    });
   }
 
   uploadAttachments(responseId, attFiles) {
@@ -221,14 +209,19 @@ options = {
       descriptions.push(attFiles[i].description);
     }
     data.append('descriptions', JSON.stringify(descriptions));
-/**
-    for (var i = 0; i < this.state.currentResponse.attFiles.length; i++) {
-      data.append('multi-files', this.state.currentResponse.attFiles[i],
-        this.state.currentResponse.attFiles[i].name);
-    }
-*/
-    ResponseDataService.uploadAttachments(responseId /*this.state.currentResponse.id*/, data)
+
+    //ResponseDataService.uploadAttachments(responseId, data)
+    ResponseDataService.uploadAttachments(responseId, data, (event) => {
+      this.setState({
+        progress: Math.round((100 * event.loaded) / event.total),
+      });
+    })
     .then(response => {
+      if (attFiles[0])
+        this.setState(prevState => ({
+          message: prevState.message + " 项目申请附件成功上传!"
+        }));
+
       console.log(response.data);
     })
     .catch(e => {
@@ -261,14 +254,14 @@ options = {
         }
       }
     }
-
+/**
     this.setState(prevState => ({
           currentResponse: {
             ...prevState.currentResponse,
             attFiles: attFiles
           }
         }));
-
+*/
     return attFiles;
   }
 
@@ -286,20 +279,14 @@ options = {
       data
     )
     .then(response => {
-      //if (this.state.currentResponse.attFiles)
-      this.uploadAttachments(response.data.id, attFiles);
-
-      console.log(response.data);
-
       this.setState({
         currentResponse: response.data,
         message: "项目申请成功提交!"
       });
 
-      this.props.history.push("/responses" +
-        (this.state.currentResponse.schoolId ? ('/school/' + this.state.currentResponse.schoolId) : '')
-      );
+      this.uploadAttachments(response.data.id, attFiles);
 
+      console.log(response.data);
     })
     .catch(e => {
       console.log(e);
@@ -322,7 +309,7 @@ options = {
 
 
   render() {
-    const { currentResponse } = this.state;
+    const { currentResponse, progress } = this.state;
 
     return (
       <div>
@@ -392,6 +379,31 @@ options = {
         >
           Submit
         </button>
+
+        {(progress < 100 && progress > 0) && (
+          <div className="progress">
+            <div
+              className="progress-bar progress-bar-info progress-bar-striped"
+              role="progressbar"
+              aria-valuenow={progress}
+              aria-valuemin="0"
+              aria-valuemax="100"
+              style={{ width: progress + "%" }}
+            >
+              {progress}%
+            </div>
+          </div>
+        )}
+
+        {(progress >= 100) && (
+          <Link
+            to={("/responses" +
+                 (this.state.currentResponse.schoolId ? ('/school/' + this.state.currentResponse.schoolId) : ''))}
+            className="badge badge-success mr-2"
+          >
+            点击转项目申请列表...
+          </Link>
+        )}
 
         <p>{this.state.message}</p>
       </div>

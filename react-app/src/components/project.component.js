@@ -337,12 +337,7 @@ export default class Project extends Component {
           currentProject: {
             ...prevState.currentProject,
             id: response.data.id,
-
-            //name: response.data.name,
-            //budget: response.data.budget,
-            //status: response.data.status,
           },
-
           submitted: true
         }));
 
@@ -352,6 +347,10 @@ export default class Project extends Component {
           if (this.state.currentProject.docFiles) // docs
             this.uploadDossiers();
         }
+
+        this.setState({
+          message: "项目信息成功提交!"
+        });
 
         console.log(response.data);
       })
@@ -379,10 +378,6 @@ export default class Project extends Component {
       //this.state.currentProject
     )
       .then(response => {
-        console.log(response.data);
-        this.setState({
-          message: "项目信息成功修改!"
-        });
 
         if (this.state.currentProject.file) { // photo, followed by docs
           this.updatePhoto();
@@ -391,6 +386,11 @@ export default class Project extends Component {
             this.uploadDossiers();
         }
 
+        this.setState({
+          message: "项目信息成功修改!"
+        });
+
+        console.log(response.data);
       })
       .catch(e => {
         console.log(e);
@@ -431,6 +431,11 @@ export default class Project extends Component {
     ProjectDataService.uploadDossiers(this.state.currentProject.id, data)
     .then(response => {
       console.log(response.data);
+
+      this.setState(prevState => ({
+        message: prevState.message + " 项目附件成功上传!"
+      }));
+
     })
     .catch(e => {
       console.log(e);

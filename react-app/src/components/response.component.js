@@ -40,7 +40,7 @@ export default class Response extends Component {
         fdata: null,
         formId: null,
         schoolId: null,
-        attFiles: [],
+        //attFiles: [],
       },
 
       currentUser: null,
@@ -113,39 +113,6 @@ optionOnSave = {
       });
   }
 
-/*
-  async SAVE_componentDidMount() {
-    this.setState({readonly: window.location.pathname.includes('View')});
-
-    await this.getResponse(this.props.match.params.id);
-    try {
-      const formData = JSON.stringify(this.state.currentResponse.fdata);
-      this.fRender = $(this.fb.current).formRender({ formData });
-      //this.fRender = $(this.fb.current).formRender(this.state.currentResponse.fdata);
-    } catch (e) {
-      alert(e);
-    }
-
-    const user = AuthService.getCurrentUser();
-    if (user) {
-      this.setState({
-        currentUser: user,
-      });
-
-      if (user.schoolId) {
-          this.setState(function(prevState) {
-            return {
-              currentResponse: {
-                ...prevState.currentResponse,
-                schoolId: user.schoolId
-              }
-            };
-          });
-      }
-    }
-    this.getSchools();
-  }
-*/
 
   getSchools() {
     SchoolDataService.getAllSimple()
@@ -227,13 +194,14 @@ optionOnSave = {
       }
     }
 
+/**
     this.setState(prevState => ({
           currentResponse: {
             ...prevState.currentResponse,
             attFiles: attFiles
           }
         }));
-
+*/
     return attFiles;
   }
 
@@ -274,15 +242,6 @@ optionOnSave = {
     });
   }
 
-/*
-   async SAVE_getResponse(id) {
-     const response = await ResponseDataService.get(id);
-     this.setState({
-       currentResponse: response.data
-     });
-   }
-*/
-
   uploadAttachments(attFiles) {
     var data = new FormData();
     var descriptions = [];
@@ -294,19 +253,17 @@ optionOnSave = {
     }
     data.append('descriptions', JSON.stringify(descriptions));
 
-    //if (attFiles[0]) data.append('description', attFiles[0].description);
-/**
-    for (var i = 0; i < this.state.currentResponse.attFiles.length; i++) {
-      data.append('multi-files', this.state.currentResponse.attFiles[i],
-        this.state.currentResponse.attFiles[i].name);
-    }
-*/
     ResponseDataService.uploadAttachments(this.state.currentResponse.id, data, (event) => {
       this.setState({
         progress: Math.round((100 * event.loaded) / event.total),
       });
     })
     .then(response => {
+      if (attFiles[0])
+        this.setState(prevState => ({
+          message: prevState.message + " 项目申请附件成功上传!"
+        }));
+
       console.log(response.data);
     })
     .catch(e => {
@@ -328,8 +285,12 @@ optionOnSave = {
       data
     )
     .then(response => {
-        console.log(response.data);
-        this.uploadAttachments(attFiles);
+      console.log(response.data);
+      this.uploadAttachments(attFiles);
+      this.setState({
+        //currentResponse: response.data,
+        message: "项目申请成功修改!"
+      });
     })
     .catch(e => {
       console.log(e);
@@ -473,7 +434,7 @@ optionOnSave = {
                    (this.state.currentResponse.schoolId ? ('/school/' + this.state.currentResponse.schoolId) : ''))}
               className="badge badge-success mr-2"
             >
-              上传成功，转项目申请列表...
+              点击转项目申请列表...
             </Link>
           )}
 
