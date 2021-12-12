@@ -278,6 +278,7 @@ const SchoolsList = (props) => {
   const exportHeaders = [
     {key: "id", label: "id"},
     {key: "name", label: "学校名称"},
+    {key: "code", label: "学校编码"},
     {key: "description", label: "说明"},
     {key: "principal", label: "校长"},
     {key: "region", label: "省（直辖市）"},
@@ -300,8 +301,8 @@ const SchoolsList = (props) => {
         console.log(response.data);
 
         const csv = toCSV(schools);
-        const url = window.URL.createObjectURL(new Blob([csv.header + csv.body]));
-        //const url = window.URL.createObjectURL(new Blob([translate(csv.header) + '\n' + csv.body]));
+        //const url = window.URL.createObjectURL(new Blob([csv.header + csv.body]));
+        const url = window.URL.createObjectURL(new Blob([translate(csv.header) + '\n' + csv.body]));
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download',
