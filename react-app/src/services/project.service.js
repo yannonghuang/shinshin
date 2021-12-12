@@ -87,6 +87,7 @@ class ProjectDataService {
   getAllSimple() {
     return http.get("/projectsSimple", { headers: authHeader() });
   }
+
 }
 
 export default new ProjectDataService();

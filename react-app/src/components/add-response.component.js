@@ -74,7 +74,7 @@ options = {
   display(schoolId) {
     if (this.state.schools) {
       for (var i = 0; i < this.state.schools.length; i++) {
-        if (this.state.schools[i].value == schoolId)
+        if (this.state.schools[i].value === schoolId)
           return this.state.schools[i];
       }
       return [];

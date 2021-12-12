@@ -70,7 +70,6 @@ const SchoolsList = (props) => {
     setExportSchools([]);
   };
 
-
   const getRequestParams = (searchName, page, pageSize, orderby,
     searchCode, searchRegion, searchStartAt, exportFlag) => {
     let params = {};
@@ -197,7 +196,100 @@ const SchoolsList = (props) => {
   };
 
 
-  const sync_retrieveExportSchools = () => {
+  const toCSV = (obj, path = '') => {
+    if (!(obj instanceof Object)) {
+      const p = path.substring(0, path.lastIndexOf('.')); // drop the last "."
+      return {header: p, body: (obj ? obj : '')};
+    }
+
+    if (obj instanceof Array) {
+      var body = '';
+      var header = '';
+      for (var i = 0; i < obj.length; i++) {
+        const result = toCSV(obj[i], path);
+        body = body + result.body + '\n';
+        if (!header.endsWith('\n'))
+          header = header + result.header + '\n';
+      }
+      return {header: header, body: body};
+    }
+
+    if (obj instanceof Object) {
+      var body = '';
+      var header = '';
+      Object.keys(obj).forEach(key => {
+        const result = toCSV(obj[key], path + key + '.');
+        body = body + result.body + ', ';
+        if (!header.endsWith('\n'))
+          header = header + result.header + ', ';
+      })
+      body = body.substring(0, body.lastIndexOf(',')); // drop last ', '
+      header = header.substring(0, header.lastIndexOf(',')); // drop last ', '
+      return {header: header, body: body};
+    }
+
+  }
+
+  const translate = (header) => {
+    const columns = header.split(',');
+    var result = "";
+    for (var i = 0; i < columns.length; i++) {
+      for (var j = 0; j < exportHeaders.length; j++) {
+        if (columns[i].trim() === exportHeaders[j].key) {
+          result = result + exportHeaders[j].label + ",";
+        }
+      }
+    }
+
+    result = result.substring(0, result.lastIndexOf(',')); // drop last ', '
+    return result;
+  }
+
+/*
+  const retrieveExportProjects = () => {
+    const params = getRequestParams(searchName, page, pageSize, orderby,
+        searchCode, searchRegion, searchCreatedAt, schoolId, true);
+
+    ProjectDataService.getAll2(params)
+      .then((response) => {
+        const { projects, totalPages, totalItems } = response.data;
+        setExportProjects(projects);
+        console.log(response.data);
+
+        const csv = toCSV(projects);
+        const url = window.URL.createObjectURL(new Blob([translate(csv.header) + '\n' + csv.body]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download',
+                'project.csv' //'file.file' response.headers["Content-Disposition"].split("filename=")[1]
+            ); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+      })
+      .catch((e) => {
+
+        console.log(e);
+      });
+  };
+*/
+
+  const exportHeaders = [
+    {key: "id", label: "id"},
+    {key: "name", label: "学校名称"},
+    {key: "description", label: "说明"},
+    {key: "principal", label: "校长"},
+    {key: "region", label: "省（直辖市）"},
+    {key: "address", label: "地址"},
+    {key: "phone", label: "电话"},
+    {key: "startAt", label: "创建年份"},
+    {key: "teachersCount", label: "教师人数"},
+    {key: "studentsCount", label: "学生人数"},
+    {key: "responsesCount", label: "申请项目数"},
+  ];
+
+  const retrieveExportSchools = () => {
     const params = getRequestParams(searchName, page, pageSize, orderby,
         searchCode, searchRegion, searchStartAt, true);
 
@@ -206,6 +298,20 @@ const SchoolsList = (props) => {
         const { schools, totalPages, totalItems } = response.data;
         setExportSchools(schools);
         console.log(response.data);
+
+        const csv = toCSV(schools);
+        const url = window.URL.createObjectURL(new Blob([csv.header + csv.body]));
+        //const url = window.URL.createObjectURL(new Blob([translate(csv.header) + '\n' + csv.body]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download',
+                'school.csv' //'file.file' response.headers["Content-Disposition"].split("filename=")[1]
+            ); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+
       })
       .catch((e) => {
         console.log(e);
@@ -561,6 +667,18 @@ const SchoolsList = (props) => {
             </button>
           </div>
 
+
+          <div>
+            <button
+              className="btn btn-primary"
+              type="button"
+              onClick={retrieveExportSchools}
+            >
+              导出
+            </button>
+          </div>
+
+{/*
           <CSVLink
 
           data={exportSchools}
@@ -576,18 +694,20 @@ const SchoolsList = (props) => {
             const { schools, totalPages, totalItems } = response.data;
             setExportSchools(schools);
             console.log(response.data);
-            done(false); // REQUIRED to invoke the logic of component
+            done(); // REQUIRED to invoke the logic of component
             });
           }}
-/*
+
           onClick={() => {
             sync_retrieveExportSchools();
             console.log("You click the link"); // 👍🏻 Your click handling logic
             }}
-*/
+
           >
             导出
           </CSVLink>
+*/}
+
         </div>
 
       </div>
