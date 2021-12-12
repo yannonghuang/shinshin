@@ -7,7 +7,6 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useTable, useSortBy, useFilters, useGlobalFilter, useAsyncDebounce } from "react-table";
 
 import YearPicker from 'react-single-year-picker';
-import { CSVLink, CSVDownload } from "react-csv";
 
 const ProjectsList = (props) => {
   const [projects, setProjects] = useState([]);
@@ -569,19 +568,6 @@ const ProjectsList = (props) => {
 
   useEffect(() => {
     setOrderby(sortBy);
-/**
-  }
-    const result = [];
-    for (var i = 0; i < sortBy.length; i++) {
-      result.push([sortBy[i].id, (sortBy[i].desc ? "desc" : "asc")]);
-
-      const s = sortBy[i].id.split(".");
-      if (s.length == 1) result.push([s[0], (sortBy[i].desc ? "desc" : "asc")]);
-      if (s.length == 2) result.push([s[0], s[1], (sortBy[i].desc ? "desc" : "asc")]);
-
-    }
-setOrderby(result);
-      */
   }, [sortBy]);
 
   useEffect(() => {
@@ -658,40 +644,7 @@ setOrderby(result);
               导出
             </button>
           </div>
-{/*
-          <CSVLink
-          data={exportProjects}
-          headers={exportHeaders}
-          enclosingCharacter={`'`}
-          separator={","}
-          filename={"Projects.csv"}
-          className="btn btn-primary"
-          target="_blank"
-
-
-          asyncOnClick={true}
-          onClick={(event, done) => {
-            async_retrieveExportProjects().then((response) => {
-            const { projects, totalPages, totalItems } = response.data;
-            setExportProjects(projects);
-            console.log(response.data);
-            done(); // REQUIRED to invoke the logic of component
-            });
-          }}
-
-          onClick={() => {
-            sync_retrieveExportProjects();
-
-            console.log("You click the link"); // 👍🏻 Your click handling logic
-            }}
-
-          >
-            导出
-          </CSVLink>
-*/}
-
         </div>
-
       </div>
 
       <div className="mt-3 col-md-3">
@@ -735,24 +688,24 @@ setOrderby(result);
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                                // Add the sorting props to control sorting. For this example
-                                // we can add them into the header props
-                                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                    {column.render('Header')}
-                                    {/* Add a sort direction indicator */}
-                                    <span>
-                                        {/*column.isSorted*/ (column.id === 'school.region' || column.id === 'school.code' ||
-                                        column.id === 'school.name' || column.id === 'createdAt' || column.id === 'status' ||
-                                        column.id === 'name')
-                                            ? column.isSortedDesc
-                                                ? ' 🔽'
-                                                : ' 🔼'
-                                            : ''}
-                                    </span>
-                                    {/* Render the columns filter UI */}
-                                    {/* <div>column.canFilter (column.id === 'region' || column.id === 'createdAt' ) ?
-                                        column.render('Filter') : null}</div> */}
-                                </th>
+                  // Add the sorting props to control sorting. For this example
+                  // we can add them into the header props
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                    {column.render('Header')}
+                    {/* Add a sort direction indicator */}
+                    <span>
+                      {/*column.isSorted*/ (column.id === 'school.region' || column.id === 'school.code' ||
+                      column.id === 'school.name' || column.id === 'createdAt' || column.id === 'status' ||
+                      column.id === 'name')
+                      ? column.isSortedDesc
+                        ? ' 🔽'
+                        : ' 🔼'
+                      : ''}
+                    </span>
+                    {/* Render the columns filter UI */}
+                    {/* <div>column.canFilter (column.id === 'region' || column.id === 'createdAt' ) ?
+                     column.render('Filter') : null}</div> */}
+                  </th>
                 ))}
               </tr>
             ))}

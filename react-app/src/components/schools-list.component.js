@@ -7,7 +7,6 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useTable, useSortBy, useFilters, useGlobalFilter, useAsyncDebounce } from "react-table";
 
 import YearPicker from 'react-single-year-picker';
-import { CSVLink, CSVDownload } from "react-csv";
 
 const SchoolsList = (props) => {
   const [schools, setSchools] = useState([]);
@@ -244,36 +243,6 @@ const SchoolsList = (props) => {
     result = result.substring(0, result.lastIndexOf(',')); // drop last ', '
     return result;
   }
-
-/*
-  const retrieveExportProjects = () => {
-    const params = getRequestParams(searchName, page, pageSize, orderby,
-        searchCode, searchRegion, searchCreatedAt, schoolId, true);
-
-    ProjectDataService.getAll2(params)
-      .then((response) => {
-        const { projects, totalPages, totalItems } = response.data;
-        setExportProjects(projects);
-        console.log(response.data);
-
-        const csv = toCSV(projects);
-        const url = window.URL.createObjectURL(new Blob([translate(csv.header) + '\n' + csv.body]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download',
-                'project.csv' //'file.file' response.headers["Content-Disposition"].split("filename=")[1]
-            ); //or any other extension
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-
-      })
-      .catch((e) => {
-
-        console.log(e);
-      });
-  };
-*/
 
   const exportHeaders = [
     {key: "id", label: "id"},
@@ -685,37 +654,6 @@ const SchoolsList = (props) => {
               导出
             </button>
           </div>
-
-{/*
-          <CSVLink
-
-          data={exportSchools}
-          enclosingCharacter={`'`}
-          separator={","}
-          filename={"Schools.csv"}
-          className="btn btn-primary"
-          target="_blank"
-
-          asyncOnClick={true}
-          onClick={(event, done) => {
-            async_retrieveExportSchools().then((response) => {
-            const { schools, totalPages, totalItems } = response.data;
-            setExportSchools(schools);
-            console.log(response.data);
-            done(); // REQUIRED to invoke the logic of component
-            });
-          }}
-
-          onClick={() => {
-            sync_retrieveExportSchools();
-            console.log("You click the link"); // 👍🏻 Your click handling logic
-            }}
-
-          >
-            导出
-          </CSVLink>
-*/}
-
         </div>
 
       </div>
@@ -761,24 +699,24 @@ const SchoolsList = (props) => {
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                                // Add the sorting props to control sorting. For this example
-                                // we can add them into the header props
-                                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                    {column.render('Header')}
-                                    {/* Add a sort direction indicator */}
-                                    <span>
-                                        {/*column.isSorted*/ (column.id === 'code' || column.id === 'region' ||
-                                        column.id === 'startAt' || column.id === 'teachersCount' ||
-                                        column.id === 'studentsCount' || column.id === 'name')
-                                            ? column.isSortedDesc
-                                                ? ' 🔽'
-                                                : ' 🔼'
-                                            : ''}
-                                    </span>
-                                    {/* Render the columns filter UI */}
-                                    {/* <div>column.canFilter (column.id === 'region' || column.id === 'startAt' ) ?
-                                        column.render('Filter') : null}</div> */}
-                                </th>
+                  // Add the sorting props to control sorting. For this example
+                  // we can add them into the header props
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                    {column.render('Header')}
+                    {/* Add a sort direction indicator */}
+                    <span>
+                      {/*column.isSorted*/ (column.id === 'code' || column.id === 'region' ||
+                      column.id === 'startAt' || column.id === 'teachersCount' ||
+                      column.id === 'studentsCount' || column.id === 'name')
+                      ? column.isSortedDesc
+                        ? ' 🔽'
+                        : ' 🔼'
+                      : ''}
+                    </span>
+                      {/* Render the columns filter UI */}
+                      {/* <div>column.canFilter (column.id === 'region' || column.id === 'startAt' ) ?
+                      column.render('Filter') : null}</div> */}
+                  </th>
                 ))}
               </tr>
             ))}
