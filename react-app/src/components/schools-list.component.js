@@ -305,18 +305,13 @@ const SchoolsList = (props) => {
         accessor: "name",
       },
       {
-        Header: "校长",
-        accessor: "principal",
-        disableSortBy: true,
-      },
-      {
         Header: "省/直辖市",
         accessor: "region",
         Filter: SelectRegionFilter,
       },
       {
-        Header: "地址",
-        accessor: "address",
+        Header: "校长",
+        accessor: "principal",
         disableSortBy: true,
       },
       {
@@ -331,6 +326,24 @@ const SchoolsList = (props) => {
       {
         Header: "学生人数",
         accessor: "studentsCount",
+      },
+      {
+        Header: "项目",
+        accessor: "projectsCount",
+        disableSortBy: true,
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+              <Link
+                to={"/projects/school/" + schoolsRef.current[rowIdx].id}
+                className="badge badge-success"
+              >
+                {schoolsRef.current[rowIdx].projectsCount}
+              </Link>
+            </div>
+          );
+        },
       },
       {
         Header: "项目申请",

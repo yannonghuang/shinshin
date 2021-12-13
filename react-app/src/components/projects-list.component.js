@@ -18,6 +18,7 @@ const ProjectsList = (props) => {
   const [searchCode, setSearchCode] = useState("");
   const [searchRegion, setSearchRegion] = useState("");
   const [searchCreatedAt, setSearchCreatedAt] = useState("");
+
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
 
   const projectsRef = useRef();

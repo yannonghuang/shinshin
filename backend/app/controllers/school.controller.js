@@ -1,6 +1,7 @@
 const db = require("../models");
 const School = db.schools;
 const Response = db.responses;
+const Project = db.projects;
 const Document = db.documents;
 const Op = db.Sequelize.Op;
 const REGIONS = db.REGIONS;
@@ -183,13 +184,30 @@ exports.findAll2 = (req, res) => {
 
   //var condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
 
-  var condition = {
+  const condition = {
         [Op.and]: [
             name ? { name: { [Op.like]: `%${name}%` } } : null,
             code ? { code: { [Op.like]: `%${code}%` } } : null,
             region ? { region: { [Op.eq]: `${region}` } } : null,
             startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('schools.startAt')), `${startAt}`) } } : null
         ]};
+
+  const inner_include = [
+        {
+           model: Response,
+           attributes: [],
+           required: false,
+        },
+      ];
+
+  const include = [
+        {
+           model: Project,
+           attributes: [],
+           required: false,
+           //include: inner_include,
+        },
+      ];
 
   const { limit, offset } = getPagination(page, size);
 
@@ -209,16 +227,11 @@ exports.findAll2 = (req, res) => {
   subQuery: false,
   attributes: ['id', 'code', 'name', 'description', 'principal', 'region', 'address', 'phone', 'teachersCount', 'studentsCount',
             [db.Sequelize.fn("year", db.Sequelize.col("schools.startAt")), "startAt"],
-            [db.Sequelize.fn("COUNT", db.Sequelize.col("responses.id")), "responsesCount"],
+            [db.Sequelize.fn("COUNT", db.Sequelize.col("projects.id")), "projectsCount"],
+            [db.Sequelize.fn("COUNT", db.Sequelize.col("projects.responseId")), "responsesCount"], //`projects->response`.`id`
   ],
 
-  include: [
-  {
-      model: Response,
-      attributes: [],
-      required: false,
-  },
-  ],
+  include: include,
   group: ['id'],
   order: orderby
   })

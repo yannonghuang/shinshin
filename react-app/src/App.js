@@ -229,7 +229,7 @@ class App extends Component {
             <Route path={["/schools/:id", "/schoolsView/:id", "/addS"]} component={School} />
             <Route exact path={["/documents", "/documents/school/:schoolId", "/documents/school/:schoolId/:docCategory"]} component={DocumentsList} />
 
-            <Route exact path={["/projects"]} component={ProjectsList} />
+            <Route exact path={["/projects", "/projects/school/:schoolId"]} component={ProjectsList} />
             <Route path={["/projects/:id", "/projectsView/:id", "/addP"]} component={Project} />
             <Route exact path={["/dossiers", "/dossiers/project/:projectId", "/dossiers/project/:projectId/:docCategory"]} component={DossiersList} />
 
