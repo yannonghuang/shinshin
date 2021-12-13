@@ -189,6 +189,7 @@ const SchoolsList = (props) => {
       });
   };
 
+/**
   const exportHeaders = [
     {key: "id", label: "id"},
     {key: "name", label: "学校名称"},
@@ -203,6 +204,7 @@ const SchoolsList = (props) => {
     {key: "studentsCount", label: "学生人数"},
     {key: "responsesCount", label: "申请项目数"},
   ];
+*/
 
   const retrieveExportSchools = () => {
     const params = getRequestParams(searchName, page, pageSize, orderby,
@@ -214,7 +216,7 @@ const SchoolsList = (props) => {
         setExportSchools(schools);
         console.log(response.data);
 
-        const csv = ProjectDataService.toCSV(schools, exportHeaders);
+        const csv = ProjectDataService.toCSV(schools, columns);
         const url = window.URL.createObjectURL(new Blob([csv.header + csv.body]));
         const link = document.createElement('a');
         link.href = url;

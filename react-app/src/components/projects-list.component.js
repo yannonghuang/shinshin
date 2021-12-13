@@ -207,7 +207,7 @@ const ProjectsList = (props) => {
         setExportProjects(projects);
         console.log(response.data);
 
-        const csv = ProjectDataService.toCSV(projects, exportHeaders);
+        const csv = ProjectDataService.toCSV(projects, columns);
         const url = window.URL.createObjectURL(new Blob([csv.header + csv.body]));
         const link = document.createElement('a');
         link.href = url;
@@ -225,6 +225,7 @@ const ProjectsList = (props) => {
       });
   };
 
+/**
   const exportHeaders = [
     {key: "id", label: "id"},
     {key: "name", label: "项目名称"},
@@ -238,7 +239,7 @@ const ProjectsList = (props) => {
     {key: "response.id", label: "项目申请id"},
     {key: "response.title", label: "项目申请"},
   ];
-
+*/
   useEffect(retrieveProjects, [page, pageSize, orderby]);
 
   const refreshList = () => {

@@ -89,15 +89,15 @@ class ProjectDataService {
   }
 
 
-  toCSV = (obj, mapper = null, path = '') => {
+  toCSV = (obj, mapper, path = '', newline = true) => {
     const translate = (column) => {
       if (mapper) {
         for (var i = 0; i < mapper.length; i++) {
-          if (column === mapper[i].key)
-            return mapper[i].label;
+          if (column === mapper[i].accessor)
+            return mapper[i].Header;
         }
       }
-      return column;
+      return null;
     }
 
     if (!(obj instanceof Object)) {
@@ -109,10 +109,10 @@ class ProjectDataService {
       var body = '';
       var header = '';
       for (var i = 0; i < obj.length; i++) {
-        const result = this.toCSV(obj[i], mapper, path);
-        body = body + result.body + '\n';
+        const result = this.toCSV(obj[i], mapper, path, false);
+        body = body + result.body + (newline ? '\n' : '');
         if (!header.endsWith('\n'))
-          header = header + result.header + '\n';
+          header = header + result.header + (newline ? '\n' : '');
       }
       return {header: header, body: body};
     }
@@ -121,11 +121,13 @@ class ProjectDataService {
       var body = '';
       var header = '';
       Object.keys(obj).forEach(key => {
-        const result = this.toCSV(obj[key], mapper, path + key + '.');
-        body = body + result.body + ', ';
-        if (!header.endsWith('\n'))
-          header = header + result.header + ', ';
-      })
+        const result = this.toCSV(obj[key], mapper, path + key + '.', false);
+        if (result.header) {
+          body = body + result.body + ', ';
+          if (!header.endsWith('\n'))
+            header = header + result.header + ', ';
+        }
+      });
       body = body.substring(0, body.lastIndexOf(',')); // drop last ', '
       header = header.substring(0, header.lastIndexOf(',')); // drop last ', '
       return {header: header, body: body};
