@@ -35,7 +35,6 @@ const ProjectsList = (props) => {
 
   const [regions, setRegions] = useState([]);
 
-
   const [createdAt, setCreatedAt] = useState(
   []
   );

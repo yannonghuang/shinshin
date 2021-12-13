@@ -333,7 +333,7 @@ const SchoolsList = (props) => {
         accessor: "studentsCount",
       },
       {
-        Header: "项目",
+        Header: "项目申请",
         accessor: "responsesCount",
         disableSortBy: true,
         Cell: (props) => {

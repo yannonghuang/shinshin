@@ -13,6 +13,7 @@ import DossiersList from './dossiers-list.component.js';
 import ProjectDataService from "../services/project.service";
 import DossierDataService from "../services/dossier.service";
 import SchoolDataService from "../services/school.service";
+import AuthService from "./../services/auth.service";
 //import ProjectDetails from './collapsible-project.component';
 
 export default class Project extends Component {
@@ -56,7 +57,7 @@ export default class Project extends Component {
         docFiles: [],
         docCategory: ""
       },
-
+      currentUser: null,
       schools: [],
       statuses: [],
 
@@ -105,6 +106,36 @@ export default class Project extends Component {
   }
 
   getSchools() {
+    SchoolDataService.getAllSimple()
+      .then(response => {
+        this.setState({
+          schools: this.convert(response.data)
+        });
+
+        const user = AuthService.getCurrentUser();
+        if (user) {
+          this.setState({
+          currentUser: user,
+          });
+          if (user.schoolId) {
+            this.setState(function(prevState) {
+              return {
+                currentProject: {
+                  ...prevState.currentProject,
+                  schoolId: user.schoolId
+                }
+              };
+            });
+          }
+        }
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  OLDgetSchools() {
     SchoolDataService.getAllSimple()
       .then(response => {
         this.setState({
