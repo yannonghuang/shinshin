@@ -35,10 +35,7 @@ const SchoolsList = (props) => {
 
   const [regions, setRegions] = useState([]);
 
-
-  const [startAt, setStartAt] = useState(
-  []
-  );
+  const [startAt, setStartAt] = useState([]);
 
   const onChangeSearchName = (e) => {
     const searchName = e.target.value;
@@ -223,7 +220,7 @@ const SchoolsList = (props) => {
         link.href = url;
         link.setAttribute('download',
                 'school.csv'
-            ); 
+            );
         document.body.appendChild(link);
         link.click();
         link.remove();

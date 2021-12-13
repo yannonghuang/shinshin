@@ -32,6 +32,7 @@ export default class Response extends Component {
     this.deleteResponse = this.deleteResponse.bind(this);
     this.onChangeSchoolId = this.onChangeSchoolId.bind(this);
     this.onChangeAttFiles = this.onChangeAttFiles.bind(this);
+    this.submitResponse = this.submitResponse.bind(this);
 
     this.state = {
       currentResponse: {
@@ -47,7 +48,7 @@ export default class Response extends Component {
       schools: [],
       message: "",
       readonly: true,
-
+      newresponse: true,
       progress: 0,
     };
 
@@ -63,8 +64,14 @@ optionOnSave = {
   fb = createRef();
   fRender = null;
   componentDidMount() {
+    const newresponse = window.location.pathname.includes('add');
+    this.setState({newresponse: newresponse});
     this.setState({readonly: window.location.pathname.includes('View')});
-    this.getResponse(this.props.match.params.id);
+
+    if (newresponse)
+      this.getForm(this.props.match.params.id);
+    else
+      this.getResponse(this.props.match.params.id);
   }
 
   convert(schools) {
@@ -88,10 +95,36 @@ optionOnSave = {
     }
   }
 
+  getForm(id) {
+    FormDataService.get(id)
+      .then(response => {
+        this.setState({
+          currentResponse: response.data
+      });
+
+      try {
+        const formData = JSON.stringify(response.data.fdata);
+        this.fRender = $(this.fb.current).formRender({ formData });
+      } catch (e) {
+        alert(e);
+      }
+
+      this.setState(function(prevState) {
+        return {
+          currentResponse: {
+            ...prevState.currentResponse,
+            formId: id
+            }
+         };
+      });
+
+      this.getSchools();
+    })
+  }
+
   getResponse(id) {
     ResponseDataService.get(id)
       .then(response => {
-
         try {
           const formData = JSON.stringify(response.data.fdata);
           this.fRender = $(this.fb.current).formRender({ formData });
@@ -137,9 +170,7 @@ optionOnSave = {
           });
         }
       }
-
       console.log(response);
-
       })
       .catch(e => {
         console.log(e);
@@ -184,24 +215,18 @@ optionOnSave = {
   collectFiles() {
     var inputs = document.getElementsByTagName("input");
     const attFiles = [];
+    if (inputs) {
     for (var i = 0; i < inputs.length; i++) {
       if (inputs[i].type === "file" && inputs[i].files) {
         let filesN = inputs[i].files.length;
         for (var j = 0; j < filesN; j++) {
           attFiles.push({description: this.getLabel(inputs[i].type, inputs[i].name),
             file: inputs[i].files[j]});
+          }
         }
       }
     }
 
-/**
-    this.setState(prevState => ({
-          currentResponse: {
-            ...prevState.currentResponse,
-            attFiles: attFiles
-          }
-        }));
-*/
     return attFiles;
   }
 
@@ -295,17 +320,51 @@ optionOnSave = {
     .catch(e => {
       console.log(e);
     });
-
-
       //$('input[name="responseId"]').attr('value', this.state.currentResponse.id);
       //this.refs.formToSubmit.submit();
   }
+
+
+  submitResponse() {
+    const attFiles = this.collectFiles();
+
+    var data = {
+      title: this.state.currentResponse.title,
+      formId: this.state.currentResponse.formId,
+      schoolId: this.state.currentResponse.schoolId,
+      fdata: this.fRender.userData
+    };
+
+    ResponseDataService.create(
+      data
+    )
+    .then(response => {
+      this.setState({
+        currentResponse: response.data,
+        message: "项目申请成功提交!",
+        newresponse: false
+      });
+
+      this.uploadAttachments(response.data.id, attFiles);
+
+      console.log(response.data);
+    })
+    .catch(e => {
+      console.log(e);
+    });
+
+      //$('input[name="responseId"]').attr('value', this.state.currentResponse.id);
+      //this.refs.formToSubmit.submit();
+   }
+
 
   deleteResponse() {
     ResponseDataService.delete(this.state.currentResponse.id)
       .then(response => {
         console.log(response.data);
-        this.props.history.push('/responses')
+        this.props.history.push("/responses" + (this.state.currentResponse.schoolId
+                                               ? ('/school/' + this.state.currentResponse.schoolId)
+                                               : ''))
       })
       .catch(e => {
         console.log(e);
@@ -370,48 +429,33 @@ optionOnSave = {
 
         ) : (
 
+        <div>
+          { this.state.newresponse? (
+            <button
+              type="submit"
+              className="badge badge-success"
+              onClick={this.submitResponse}
+            >
+              Submit
+            </button>
+          ) : (
           <div>
-{/*}
-            <div class="container">
-            <div class="row">
-              <div class="col-sm-8 mt-3">
-              <form ref="formToSubmit" action="http://localhost:8080/multiple-upload" method="POST" enctype="multipart/form-data">
-                <div class="form-group">
-                <label for="input-multi-files">上传附件:</label>
-                <input type="file"
-                  name="multi-files" multiple
-                  id="input-multi-files"
-                  class="form-control-file border"
-                  onChange={e => this.onChangeAttFiles(e)}
-                />
-                <input type="hidden" name="responseId" id="responseId"/>
-                </div>
-              </form>
-              </div>
+            <button
+            type="submit"
+            className="badge badge-success"
+            onClick={this.updateResponse}
+            >
+              Update
+            </button>
 
+            <button
+            className="badge badge-danger mr-2"
+            onClick={this.deleteResponse}
+            >
+              Delete
+            </button>
             </div>
-            <hr />
-            <div class="row">
-              <div class="col-sm-12">
-                <div class="preview-images"></div>
-              </div>
-            </div>
-          </div>
-*/}
-          <button
-          type="submit"
-          className="badge badge-success"
-          onClick={this.updateResponse}
-          >
-          Update
-          </button>
-
-          <button
-          className="badge badge-danger mr-2"
-          onClick={this.deleteResponse}
-          >
-          Delete
-          </button>
+          )}
 
           {(progress < 100 && progress > 0) && (
             <div className="progress">

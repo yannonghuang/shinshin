@@ -13,7 +13,7 @@ import AddTutorial from "./components/add-tutorial.component";
 import Tutorial from "./components/tutorial.component";
 import TutorialsList from "./components/tutorials-list.component";
 
-import AddSchool from "./components/add-school.component";
+//import AddSchool from "./components/add-school.component";
 import School from "./components/school.component";
 import SchoolsList from "./components/schools-list.component";
 import DocumentsList from "./components/documents-list.component";
@@ -26,11 +26,11 @@ import AddForm from "./components/add-form.component";
 import Form from "./components/form.component";
 import FormsList from "./components/forms-list.component";
 
-import AddResponse from "./components/add-response.component";
+//import AddResponse from "./components/add-response.component";
 import Response from "./components/response.component";
 import ResponsesList from "./components/responses-list.component";
 
-import AddAttachment from "./components/add-attachment.component";
+//import AddAttachment from "./components/add-attachment.component";
 import Attachment from "./components/attachment.component";
 import AttachmentsList from "./components/attachments-list.component";
 
@@ -238,11 +238,15 @@ class App extends Component {
             <Route path={["/forms/:id", "/formsView/:id"]} component={Form} />
 
             <Route exact path={["/responses", "/responses/form/:formId", "/responses/school/:schoolId"]} component={ResponsesList} />
+            {/*}
             <Route path="/addR/:id" component={AddResponse} />
-            <Route path={["/responses/:id", "/responsesView/:id"]} component={Response} />
+            */}
+            <Route path={["/responses/:id", "/responsesView/:id", "/addR/:id"]} component={Response} />
 
             <Route exact path={["/attachments", "/attachments/response/:responseId"]} component={AttachmentsList} />
+            {/*}
             <Route path="/addA/:id" component={AddAttachment} />
+            */}
             <Route path="/attachments/:id" component={Attachment} />
 
             <Route exact path={["/users"]} component={UsersList} />
