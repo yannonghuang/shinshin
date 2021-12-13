@@ -22,7 +22,7 @@ import Project from "./components/project.component";
 import ProjectsList from "./components/projects-list.component";
 import DossiersList from "./components/dossiers-list.component";
 
-import AddForm from "./components/add-form.component";
+//import AddForm from "./components/add-form.component";
 import Form from "./components/form.component";
 import FormsList from "./components/forms-list.component";
 
@@ -234,8 +234,10 @@ class App extends Component {
             <Route exact path={["/dossiers", "/dossiers/project/:projectId", "/dossiers/project/:projectId/:docCategory"]} component={DossiersList} />
 
             <Route exact path={["/forms"]} component={FormsList} />
+            {/*
             <Route exact path="/addF" component={AddForm} />
-            <Route path={["/forms/:id", "/formsView/:id"]} component={Form} />
+            */}
+            <Route path={["/forms/:id", "/formsView/:id", "/addF"]} component={Form} />
 
             <Route exact path={["/responses", "/responses/form/:formId", "/responses/school/:schoolId"]} component={ResponsesList} />
             {/*}

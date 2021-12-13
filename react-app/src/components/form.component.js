@@ -21,6 +21,8 @@ export default class Form extends Component {
     //this.updatePublished = this.updatePublished.bind(this);
     this.updateForm = this.updateForm.bind(this);
     this.deleteForm = this.deleteForm.bind(this);
+    this.saveForm = this.saveForm.bind(this);
+    this.newForm = this.newForm.bind(this);
 
     this.state = {
       currentForm: {
@@ -32,24 +34,49 @@ export default class Form extends Component {
         deadline: null,
         readonly: true
       },
-      message: ""
+      message: "",
+      newsform: true,
+      submitted: false
     };
   }
 
+  newFormOptions = {
+    id: "shinshin-form-id",
+    action: "http://localhost:8080/multiple-upload",
+    method: "POST",
+    enctype: "multipart/form-data",
 
+    formData: [
+    {
+      type: "header",
+      subtype: "h4",
+      label: "项目申请表"
+    },
+    ],
+    onSave: (e, formData) => {   //Auto binds `this`
+      this.saveForm(formData);
+    }
+  };
+
+  oldFormOptions = {
+    onSave: (e, formData) => {   //Auto binds `this`
+     this.updateForm();
+    },
+    showActionButtons: !window.location.pathname.includes('View')
+  };
 
   fb = createRef();
   fBuilder = null;
   componentDidMount() {
-    const optionOnSave = {
-      onSave: (e, formData) => {   //Auto binds `this`
-       this.updateForm();
-      },
-      showActionButtons: !window.location.pathname.includes('View')
-    };
-    this.fBuilder = $(this.fb.current).formBuilder(optionOnSave);
+    const newform = window.location.pathname.includes('add');
+    this.setState({newform: newform});
 
-    this.getForm(this.props.match.params.id);
+    if (newform)
+      this.fBuilder = $(this.fb.current).formBuilder(this.newFormOptions);
+    else {
+      this.fBuilder = $(this.fb.current).formBuilder(this.oldFormOptions);
+      this.getForm(this.props.match.params.id);
+    }
   }
 
 
@@ -137,6 +164,42 @@ export default class Form extends Component {
       });
   }
 
+  saveForm(formData) {
+    var data = {
+      title: this.state.currentForm.title,
+      description: this.state.currentForm.description,
+      deadline: this.state.currentForm.deadline,
+      fdata: this.fBuilder.actions.getData() /* formData */
+    };
+
+    FormDataService.create(data)
+      .then(response => {
+        this.setState(prevState => ({
+          currentForm: {
+            ...prevState.currentForm,
+            id: response.data.id,
+          },
+          submitted: true
+        }));
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  newForm() {
+    this.setState(prevState => ({
+      currentForm: {
+        id: null,
+        title: "",
+        description: "",
+        deadline: null,
+      },
+      submitted: false
+    }));
+  }
+
   deleteForm() {
     FormDataService.delete(this.state.currentForm.id)
       .then(response => {
@@ -148,20 +211,27 @@ export default class Form extends Component {
       });
   }
 
-
   render() {
     const { currentForm } = this.state;
 
     return (
       <div>
-        {currentForm ? (
+        {this.state.newform && this.state.submitted
+        ? (
+          <div>
+            <h4>You submitted successfully!</h4>
+              <button className="btn btn-success" onClick={this.newForm}>
+                Add
+              </button>
+          </div>
+          ) : (
           <div className="edit-form">
             <h4>申请表格设计</h4>
             <form>
               <div className="form-group">
                 <label htmlFor="title">标题</label>
                 <input
-                  readonly={currentForm.readonly?"":false}
+                  readonly={(!this.state.newform && currentForm.readonly) ? "" : false}
                   type="text"
                   className="form-control"
                   id="title"
@@ -172,7 +242,7 @@ export default class Form extends Component {
               <div className="form-group">
                 <label htmlFor="description">说明</label>
                 <input
-                  readonly={currentForm.readonly?"":false}
+                  readonly={(!this.state.newform && currentForm.readonly) ? "" : false}
                   type="text"
                   className="form-control"
                   id="description"
@@ -183,7 +253,7 @@ export default class Form extends Component {
               <div className="form-group">
                 <label htmlFor="deadline">截止日期</label>
                 <input
-                  readonly={currentForm.readonly?"":false}
+                  readonly={(!this.state.newform && currentForm.readonly) ? "" : false}
                   type="date"
                   className="form-control"
                   id="deadline"
@@ -193,12 +263,7 @@ export default class Form extends Component {
               </div>
             </form>
           </div>
-        ) : (
-          <div>
-            <br />
-            <p>Please click on a Form...</p>
-          </div>
-        )}
+          )}
 
         <div id="fb-editor" ref={this.fb} />
 
