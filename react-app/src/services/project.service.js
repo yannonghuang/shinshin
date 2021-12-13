@@ -88,6 +88,49 @@ class ProjectDataService {
     return http.get("/projectsSimple", { headers: authHeader() });
   }
 
+
+  toCSV = (obj, mapper = null, path = '') => {
+    const translate = (column) => {
+      if (mapper) {
+        for (var i = 0; i < mapper.length; i++) {
+          if (column === mapper[i].key)
+            return mapper[i].label;
+        }
+      }
+      return column;
+    }
+
+    if (!(obj instanceof Object)) {
+      const p = path.substring(0, path.lastIndexOf('.')); // drop the last "."
+      return {header: translate(p), body: (obj ? obj : '')};
+    }
+
+    if (obj instanceof Array) {
+      var body = '';
+      var header = '';
+      for (var i = 0; i < obj.length; i++) {
+        const result = this.toCSV(obj[i], mapper, path);
+        body = body + result.body + '\n';
+        if (!header.endsWith('\n'))
+          header = header + result.header + '\n';
+      }
+      return {header: header, body: body};
+    }
+
+    if (obj instanceof Object) {
+      var body = '';
+      var header = '';
+      Object.keys(obj).forEach(key => {
+        const result = this.toCSV(obj[key], mapper, path + key + '.');
+        body = body + result.body + ', ';
+        if (!header.endsWith('\n'))
+          header = header + result.header + ', ';
+      })
+      body = body.substring(0, body.lastIndexOf(',')); // drop last ', '
+      header = header.substring(0, header.lastIndexOf(',')); // drop last ', '
+      return {header: header, body: body};
+    }
+  }
 }
 
 export default new ProjectDataService();
