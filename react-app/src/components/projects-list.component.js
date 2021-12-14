@@ -337,9 +337,8 @@ const ProjectsList = (props) => {
         },
       },
       {
-        Header: "项目申请",
+        Header: "项目申请(项目名称)",
         accessor: "response.title",
-        disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -354,10 +353,6 @@ const ProjectsList = (props) => {
             </div>
           );
         },
-      },
-      {
-        Header: "项目名称",
-        accessor: "name",
       },
       {
         Header: "项目费用",
@@ -633,7 +628,7 @@ const ProjectsList = (props) => {
                     <span>
                       {/*column.isSorted*/ (column.id === 'school.region' || column.id === 'school.code' ||
                       column.id === 'school.name' || column.id === 'createdAt' || column.id === 'status' ||
-                      column.id === 'name')
+                      column.id === 'response.title')
                       ? column.isSortedDesc
                         ? ' 🔽'
                         : ' 🔼'
