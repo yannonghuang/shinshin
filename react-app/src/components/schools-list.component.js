@@ -216,8 +216,11 @@ const SchoolsList = (props) => {
         setExportSchools(schools);
         console.log(response.data);
 
-        const csv = ProjectDataService.toCSV(schools, columns);
-        const url = window.URL.createObjectURL(new Blob([csv.header + csv.body]));
+        //const csv = ProjectDataService.toCSV(schools, columns);
+        //const url = window.URL.createObjectURL(new Blob([csv.header + csv.body]));
+        const csv = ProjectDataService.exportCSV(schools, columns);
+        const url = window.URL.createObjectURL(new Blob([csv]));
+
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download',

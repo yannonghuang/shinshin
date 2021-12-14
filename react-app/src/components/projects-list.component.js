@@ -207,8 +207,9 @@ const ProjectsList = (props) => {
         setExportProjects(projects);
         console.log(response.data);
 
-        const csv = ProjectDataService.toCSV(projects, columns);
-        const url = window.URL.createObjectURL(new Blob([csv.header + csv.body]));
+        const csv = ProjectDataService.exportCSV(projects, columns);
+        const url = window.URL.createObjectURL(new Blob([csv]));
+
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download',

@@ -88,7 +88,6 @@ class ProjectDataService {
     return http.get("/projectsSimple", { headers: authHeader() });
   }
 
-
   toCSV = (obj, mapper, path = '', newline = true) => {
     const translate = (column) => {
       if (mapper) {
@@ -133,6 +132,73 @@ class ProjectDataService {
       return {header: header, body: body};
     }
   }
+
+  exportCSV = (obj, mapper) => {
+
+    const flatten = (obj, path = '', newline = true) => {
+      if (!(obj instanceof Object)) {
+        const p = path.substring(0, path.lastIndexOf('.')); // drop the last "."
+        return {header: p, body: (obj ? obj : '')};
+      }
+
+      if (obj instanceof Array) {
+        var body = '';
+        var header = '';
+        for (var i = 0; i < obj.length; i++) {
+          const result = flatten(obj[i], path, false);
+          body = body + result.body + (newline ? '\n' : '');
+          if (!header.endsWith('\n'))
+            header = header + result.header + (newline ? '\n' : '');
+        }
+        return {header: header, body: body};
+      }
+
+      if (obj instanceof Object) {
+        var body = '';
+        var header = '';
+        Object.keys(obj).forEach(key => {
+          const result = flatten(obj[key], path + key + '.', false);
+          body = body + result.body + ', ';
+          if (!header.endsWith('\n'))
+            header = header + result.header + ', ';
+        });
+        body = body.substring(0, body.lastIndexOf(',')); // drop last ', '
+        header = header.substring(0, header.lastIndexOf(',')); // drop last ', '
+        return {header: header, body: body};
+      }
+    }
+
+    const csv = flatten(obj);
+    const header = csv.header.split(',');
+
+    // build index
+    const index = [];
+    for (var i = 0; i < mapper.length; i++) {
+      for (var j = 0; j < header.length; j++)
+          if (mapper[i].accessor === header[j].trim())
+            index.push(j);
+    }
+
+    const order = (line, header = false) => {
+      const column = line.trim().split(',');
+      if (!column[0]) return "";
+
+      var result = "";
+      for (var i = 0; i < index.length; i++)
+        result = result + (header? mapper[i].Header : column[index[i]]) + ', ';
+
+      result = result.substring(0, result.lastIndexOf(',')) + '\n';
+      return result;
+    }
+
+    const body = csv.body.split('\n');
+    var newBody = "";
+    for (var i = 0; i < body.length; i++)
+        newBody = newBody + order(body[i]);
+    const newHeader = order(csv.header, true);
+    return (newHeader + newBody);
+  }
+
 }
 
 export default new ProjectDataService();
