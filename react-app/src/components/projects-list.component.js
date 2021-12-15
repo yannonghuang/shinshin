@@ -226,21 +226,6 @@ const ProjectsList = (props) => {
       });
   };
 
-/**
-  const exportHeaders = [
-    {key: "id", label: "id"},
-    {key: "name", label: "项目名称"},
-    {key: "budget", label: "费用"},
-    {key: "status", label: "状态"},
-    {key: "createdAt", label: "创建时间"},
-    {key: "school.id", label: "学校id"},
-    {key: "school.code", label: "学校编号"},
-    {key: "school.name", label: "学校名称"},
-    {key: "school.region", label: "省（直辖市）"},
-    {key: "response.id", label: "项目申请id"},
-    {key: "response.title", label: "项目申请"},
-  ];
-*/
   useEffect(retrieveProjects, [page, pageSize, orderby]);
 
   const refreshList = () => {

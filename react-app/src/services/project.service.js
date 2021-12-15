@@ -122,9 +122,9 @@ class ProjectDataService {
       Object.keys(obj).forEach(key => {
         const result = this.toCSV(obj[key], mapper, path + key + '.', false);
         if (result.header) {
-          body = body + result.body + ', ';
+          body = body + result.body + ',';
           if (!header.endsWith('\n'))
-            header = header + result.header + ', ';
+            header = header + result.header + ',';
         }
       });
       body = body.substring(0, body.lastIndexOf(',')); // drop last ', '
@@ -158,12 +158,12 @@ class ProjectDataService {
         var header = '';
         Object.keys(obj).forEach(key => {
           const result = flatten(obj[key], path + key + '.', false);
-          body = body + result.body + ', ';
+          body = body + result.body + ',';
           if (!header.endsWith('\n'))
-            header = header + result.header + ', ';
+            header = header + result.header + ',';
         });
-        body = body.substring(0, body.lastIndexOf(',')); // drop last ', '
-        header = header.substring(0, header.lastIndexOf(',')); // drop last ', '
+        body = body.substring(0, body.lastIndexOf(',')); // drop last ','
+        header = header.substring(0, header.lastIndexOf(',')); // drop last ','
         return {header: header, body: body};
       }
     }
@@ -175,17 +175,17 @@ class ProjectDataService {
     const index = [];
     for (var i = 0; i < mapper.length; i++) {
       for (var j = 0; j < header.length; j++)
-          if (mapper[i].accessor === header[j].trim())
+          if (mapper[i].accessor === header[j])
             index.push(j);
     }
 
     const order = (line, header = false) => {
-      const column = line.trim().split(',');
+      const column = line.split(',');
       if (!column[0]) return "";
 
       var result = "";
       for (var i = 0; i < index.length; i++)
-        result = result + (header? mapper[i].Header : column[index[i]]) + ', ';
+        result = result + (header? mapper[i].Header : column[index[i]]) + ',';
 
       result = result.substring(0, result.lastIndexOf(',')) + '\n';
       return result;
