@@ -643,7 +643,7 @@ export default class School extends Component {
                 </div>
 
                 <div class="form-group col-md-3">
-                <label htmlFor="startAt">创建时间</label>
+                <label htmlFor="startAt">建校年份</label>
                 <input
                 readonly={this.state.readonly?"":false}
                 type="date"

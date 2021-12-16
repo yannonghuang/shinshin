@@ -297,7 +297,7 @@ const SchoolsList = (props) => {
         disableSortBy: true,
       },
       {
-        Header: "创建年份",
+        Header: "建校年份",
         accessor: "startAt",
         //Filter: SelectStartAtFilter,
       },
@@ -515,7 +515,7 @@ const SchoolsList = (props) => {
           <input
             type="text"
             className="form-control"
-            placeholder="创建年份"
+            placeholder="建校年份"
             value={searchStartAt}
             onChange={onChangeSearchInputStartAt}
           />

@@ -85,7 +85,7 @@ class App extends Component {
 
         <nav class="navbar navbar-expand navbar-dark bg-dark">
           <Link to={"/"} class="navbar-brand">
-            欣欣教育基金会
+            学校项目管理系统
           </Link>
 
           <div class="collapse navbar-collapse navbar-nav mr-auto">
@@ -188,7 +188,7 @@ class App extends Component {
               </li>
               <li class="nav-item">
                 <a href="/login" class="nav-link" onClick={this.logOut}>
-                  LogOut
+                  退出
                 </a>
               </li>
             </div>
@@ -196,13 +196,13 @@ class App extends Component {
             <div class="navbar-nav ml-auto">
               <li class="nav-item">
                 <Link to={"/login"} class="nav-link">
-                  Login
+                  登陆
                 </Link>
               </li>
 
               <li class="nav-item">
                 <Link to={"/register"} class="nav-link">
-                  Sign Up
+                  注册
                 </Link>
               </li>
             </div>
