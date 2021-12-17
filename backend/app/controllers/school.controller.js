@@ -5,6 +5,10 @@ const Project = db.projects;
 const Document = db.documents;
 const Op = db.Sequelize.Op;
 const REGIONS = db.REGIONS;
+const SCHOOL_STAGES = db.SCHOOL_STAGES;
+const SCHOOL_STATUSES = db.SCHOOL_STATUSES;
+const SCHOOL_REQUESTS = db.SCHOOL_REQUESTS;
+const SCHOOL_CATEGORIES = db.SCHOOL_CATEGORIES;
 
 const getPagination = (page, size) => {
   const limit = size ? +size : 5;
@@ -26,6 +30,26 @@ const getPagingData = (count, data, page, limit) => {
 // return region list
 exports.getRegions = (req, res) => {
   res.send(REGIONS);
+}
+
+// return School stages
+exports.getSchoolStages = (req, res) => {
+  res.send(SCHOOL_STAGES);
+}
+
+// return School statuses
+exports.getSchoolStatuses = (req, res) => {
+  res.send(SCHOOL_STATUSES);
+}
+
+// return School request statuses
+exports.getSchoolRequests = (req, res) => {
+  res.send(SCHOOL_REQUESTS);
+}
+
+// return School categories
+exports.getSchoolCategories = (req, res) => {
+  res.send(SCHOOL_CATEGORIES);
 }
 
 // Create and Save a new School
@@ -51,6 +75,11 @@ exports.create = (req, res) => {
     studentsCount: req.body.studentsCount,
     teachersCount: req.body.teachersCount,
     startAt: req.body.startAt,
+
+    stage: req.body.stage,
+    status: req.body.status,
+    request: req.body.request,
+    category: req.body.category,
   };
 
   // Save School in the database
@@ -226,6 +255,7 @@ exports.findAll2 = (req, res) => {
 //  offset: offset,
   subQuery: false,
   attributes: ['id', 'code', 'name', 'description', 'principal', 'region', 'address', 'phone', 'teachersCount', 'studentsCount',
+            'stage', 'status', 'request', 'category',
             [db.Sequelize.fn("year", db.Sequelize.col("schools.startAt")), "startAt"],
             [db.Sequelize.fn("COUNT", db.Sequelize.col("projects.id")), "projectsCount"],
             [db.Sequelize.fn("COUNT", db.Sequelize.col("projects.responseId")), "responsesCount"], //`projects->response`.`id`
@@ -375,6 +405,10 @@ exports.findOne = (req, res) => {
                          'phone',
                          'studentsCount',
                          'teachersCount',
+                         'stage',
+                         'status',
+                         'request',
+                         'category',
                           [db.Sequelize.fn('date_format', db.Sequelize.col("startAt"), '%Y-%m-%d'), "startAt"],
                    ],
       raw: true,

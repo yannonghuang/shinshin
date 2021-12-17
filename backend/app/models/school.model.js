@@ -33,6 +33,18 @@ module.exports = (sequelize, Sequelize) => {
     startAt: {
       type: Sequelize.DATE
     },
+    stage: {
+      type: Sequelize.STRING
+    },
+    status: {
+      type: Sequelize.STRING
+    },
+    request: {
+      type: Sequelize.STRING
+    },
+    category: {
+      type: Sequelize.STRING
+    },
   });
 
   return School;

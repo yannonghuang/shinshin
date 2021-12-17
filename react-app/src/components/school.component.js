@@ -28,6 +28,11 @@ export default class School extends Component {
     this.onChangeRegion = this.onChangeRegion.bind(this);
     this.onChangeStartAt = this.onChangeStartAt.bind(this);
 
+    this.onChangeStage = this.onChangeStage.bind(this);
+    this.onChangeStatus = this.onChangeStatus.bind(this);
+    this.onChangeRequest = this.onChangeRequest.bind(this);
+    this.onChangeCategory = this.onChangeCategory.bind(this);
+
     this.getSchool = this.getSchool.bind(this);
     this.getSchoolPhoto = this.getSchoolPhoto.bind(this);
     this.updatePublished = this.updatePublished.bind(this);
@@ -58,13 +63,24 @@ export default class School extends Component {
         teachersCount: 0,
         docFiles: [],
         docCategory: "",
-        startAt: null
+        startAt: null,
+
+        stage: "",
+        status: "",
+        request: "",
+        category: "",
       },
 
       newschool: true,
       readonly: true,
       regions: [],
       docCategories: [],
+
+      stages: [],
+      statuses: [],
+      requests: [],
+      categories: [],
+
       message: "",
       submitted: false
     };
@@ -82,6 +98,63 @@ export default class School extends Component {
 
     this.getRegions();
     this.getDocCategories();
+
+    this.getCategories();
+    this.getRequests();
+    this.getStatuses();
+    this.getStages();
+  }
+
+  getCategories() {
+    SchoolDataService.getCategories()
+      .then(response => {
+        this.setState({
+          categories: response.data
+        });
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  getRequests() {
+    SchoolDataService.getRequests()
+      .then(response => {
+        this.setState({
+          requests: response.data
+        });
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  getStatuses() {
+    SchoolDataService.getStatuses()
+      .then(response => {
+        this.setState({
+          statuses: response.data
+        });
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  getStages() {
+    SchoolDataService.getStages()
+      .then(response => {
+        this.setState({
+          stages: response.data
+        });
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
   }
 
   getRegions() {
@@ -108,6 +181,51 @@ export default class School extends Component {
       .catch(e => {
         console.log(e);
       });
+  }
+
+
+  onChangeStage(e) {
+    const stage = e.target.value;
+
+    this.setState(prevState => ({
+      currentSchool: {
+        ...prevState.currentSchool,
+        stage: stage
+      }
+    }));
+  }
+
+  onChangeStatus(e) {
+    const status = e.target.value;
+
+    this.setState(prevState => ({
+      currentSchool: {
+        ...prevState.currentSchool,
+        status: status
+      }
+    }));
+  }
+
+  onChangeRequest(e) {
+    const request = e.target.value;
+
+    this.setState(prevState => ({
+      currentSchool: {
+        ...prevState.currentSchool,
+        request: request
+      }
+    }));
+  }
+
+  onChangeCategory(e) {
+    const category = e.target.value;
+
+    this.setState(prevState => ({
+      currentSchool: {
+        ...prevState.currentSchool,
+        category: category
+      }
+    }));
   }
 
   onChangeName(e) {
@@ -326,6 +444,11 @@ export default class School extends Component {
       teachersCount: 0,
       docFiles: [],
       docCategory: "",
+
+      stage: "",
+      status: "",
+      request: "",
+      category: "",
       },
 
       submitted: false
@@ -346,6 +469,11 @@ export default class School extends Component {
       studentsCount: this.state.currentSchool.studentsCount,
       teachersCount: this.state.currentSchool.teachersCount,
       startAt: this.state.currentSchool.startAt,
+
+      stage: this.state.currentSchool.stage,
+      status: this.state.currentSchool.status,
+      request: this.state.currentSchool.request,
+      category: this.state.currentSchool.category,
     };
 
     SchoolDataService.create(data)
@@ -355,17 +483,17 @@ export default class School extends Component {
             ...prevState.currentSchool,
             id: response.data.id,
 
-            name: response.data.name,
-            code: response.data.code,
-            description: response.data.description,
-            principal: response.data.principal,
+            //name: response.data.name,
+            //code: response.data.code,
+            //description: response.data.description,
+            //principal: response.data.principal,
             //photo: response.data.photo,
-            region: response.data.region,
-            address: response.data.address,
-            phone: response.data.phone,
-            studentsCount: response.data.studentsCount,
-            teachersCount: response.data.teachersCount,
-            startAt: response.data.startAt,
+            //region: response.data.region,
+            //address: response.data.address,
+            //phone: response.data.phone,
+            //studentsCount: response.data.studentsCount,
+            //teachersCount: response.data.teachersCount,
+            //startAt: response.data.startAt,
           },
 
           submitted: true
@@ -401,6 +529,11 @@ export default class School extends Component {
       studentsCount: this.state.currentSchool.studentsCount,
       teachersCount: this.state.currentSchool.teachersCount,
       startAt: this.state.currentSchool.startAt,
+
+      stage: this.state.currentSchool.stage,
+      status: this.state.currentSchool.status,
+      request: this.state.currentSchool.request,
+      category: this.state.currentSchool.category,
     };
 
     SchoolDataService.update(
@@ -598,7 +731,7 @@ export default class School extends Component {
             <div class="col-md-8">
               <div class="row">
                 <div class="form-group">
-                <label htmlFor="description">说明</label>
+                <label htmlFor="description">简介</label>
                 <input
                 readonly={this.state.readonly?"":false}
                 type="textarea"
@@ -660,7 +793,7 @@ export default class School extends Component {
 
                 <div class="select-container form-group col-md-3">
                 <label htmlFor="region">省/直辖市</label>
-                <select onChange={this.onChangeRegion}
+                <select
                 readonly={this.state.readonly?"":false}
                 class="form-control"
                 id="region"
@@ -717,6 +850,78 @@ export default class School extends Component {
                 onChange={this.onChangeTeachersCount}
                 name="teachersCount"
                 />
+                </div>
+
+                <div class="select-container form-group col-md-3">
+                <label htmlFor="stage">学校阶段</label>
+                <select
+                readonly={this.state.readonly?"":false}
+                class="form-control"
+                id="stage"
+                required
+                value={currentSchool.stage}
+                onChange={this.onChangeStage}
+                name="stage"
+                >
+                <option value="">请选择</option>
+                {this.state.stages.map((option) => (
+                  <option value={option}>{option}</option>
+                ))}
+                </select>
+                </div>
+
+                <div class="select-container form-group col-md-3">
+                <label htmlFor="status">学校状态</label>
+                <select
+                readonly={this.state.readonly?"":false}
+                class="form-control"
+                id="status"
+                required
+                value={currentSchool.status}
+                onChange={this.onChangeStatus}
+                name="status"
+                >
+                <option value="">请选择</option>
+                {this.state.statuses.map((option) => (
+                  <option value={option}>{option}</option>
+                ))}
+                </select>
+                </div>
+
+                <div class="select-container form-group col-md-3">
+                <label htmlFor="request">学校需求状态</label>
+                <select
+                readonly={this.state.readonly?"":false}
+                class="form-control"
+                id="request"
+                required
+                value={currentSchool.request}
+                onChange={this.onChangeRequest}
+                name="request"
+                >
+                <option value="">请选择</option>
+                {this.state.requests.map((option) => (
+                  <option value={option}>{option}</option>
+                ))}
+                </select>
+                </div>
+
+                <div class="select-container form-group col-md-3">
+                <label htmlFor="category">学校类型</label>
+                <select
+                readonly={this.state.readonly?"":false}
+                class="form-control"
+                id="category"
+                required
+                value={currentSchool.category}
+                onChange={this.onChangeCategory}
+                name="category"
+                >
+                <option value="">请选择</option>
+                {this.state.categories.map((option) => (
+                  <option value={option}>{option}</option>
+                ))}
+                </select>
                 </div>
 
               </div>

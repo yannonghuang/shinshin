@@ -25,6 +25,26 @@ module.exports = function(app) {
     schools.getRegions
   );
 
+  app.get("/api/schools/stages",
+    [authJwt.verifyToken],
+    schools.getSchoolStages
+  );
+
+  app.get("/api/schools/statuses",
+    [authJwt.verifyToken],
+    schools.getSchoolStatuses
+  );
+
+  app.get("/api/schools/requests",
+    [authJwt.verifyToken],
+    schools.getSchoolRequests
+  );
+
+  app.get("/api/schools/categories",
+    [authJwt.verifyToken],
+    schools.getSchoolCategories
+  );
+
   app.post("/api/schools/all",
     [authJwt.verifyToken],
     schools.findAll2

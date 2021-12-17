@@ -30,6 +30,22 @@ class SchoolDataService {
     return http.get("/schools/regions", { headers: authHeader() });
   }
 
+  getStages() {
+    return http.get("/schools/stages", { headers: authHeader() });
+  }
+
+  getStatuses() {
+    return http.get("/schools/statuses", { headers: authHeader() });
+  }
+
+  getRequests() {
+    return http.get("/schools/requests", { headers: authHeader() });
+  }
+
+  getCategories() {
+    return http.get("/schools/categories", { headers: authHeader() });
+  }
+
   get(id) {
     return http.get(`/schools/${id}`, { headers: authHeader() });
   }
