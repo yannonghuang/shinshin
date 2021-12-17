@@ -13,6 +13,8 @@ import SchoolDataService from "../services/school.service";
 import DocumentDataService from "../services/document.service";
 import SchoolDetails from './collapsible-school.component';
 
+import YearPicker from 'react-single-year-picker';
+
 export default class School extends Component {
   constructor(props) {
     super(props);
@@ -27,6 +29,7 @@ export default class School extends Component {
     this.onChangeTeachersCount = this.onChangeTeachersCount.bind(this);
     this.onChangeRegion = this.onChangeRegion.bind(this);
     this.onChangeStartAt = this.onChangeStartAt.bind(this);
+    this.onChangeYPStartAt = this.onChangeYPStartAt.bind(this);
 
     this.onChangeStage = this.onChangeStage.bind(this);
     this.onChangeStatus = this.onChangeStatus.bind(this);
@@ -254,6 +257,19 @@ export default class School extends Component {
     });
   }
 
+  onChangeYPStartAt(e) {
+    const startAt = e; //.target.value;
+
+    this.setState(function(prevState) {
+      return {
+        currentSchool: {
+          ...prevState.currentSchool,
+          startAt: startAt
+        }
+      };
+    });
+  }
+
   onChangeDocCategory(e) {
     const docCategory = e.target.value;
 
@@ -468,7 +484,7 @@ export default class School extends Component {
       phone: this.state.currentSchool.phone,
       studentsCount: this.state.currentSchool.studentsCount,
       teachersCount: this.state.currentSchool.teachersCount,
-      startAt: this.state.currentSchool.startAt,
+      startAt: this.state.currentSchool.startAt ? (this.state.currentSchool.startAt + '-01-01') : '',
 
       stage: this.state.currentSchool.stage,
       status: this.state.currentSchool.status,
@@ -528,7 +544,7 @@ export default class School extends Component {
       phone: this.state.currentSchool.phone,
       studentsCount: this.state.currentSchool.studentsCount,
       teachersCount: this.state.currentSchool.teachersCount,
-      startAt: this.state.currentSchool.startAt,
+      startAt: this.state.currentSchool.startAt ? (this.state.currentSchool.startAt + '-01-01') : '',
 
       stage: this.state.currentSchool.stage,
       status: this.state.currentSchool.status,
@@ -700,9 +716,8 @@ export default class School extends Component {
 
                 <div class="form-group">
                 <label htmlFor="name">学校名称</label>
-                <input
+                <textarea
                 readonly={this.state.readonly?"":false}
-                type="text"
                 class="form-control"
                 id="name"
                 required
@@ -730,12 +745,10 @@ export default class School extends Component {
 
             <div class="col-md-8">
               <div class="row">
-                <div class="form-group">
+                <div class="form-group col-md-12">
                 <label htmlFor="description">简介</label>
-                <input
+                <textarea
                 readonly={this.state.readonly?"":false}
-                type="textarea"
-                rows="5" cols="40"
                 class="form-control"
                 id="description"
                 required
@@ -747,7 +760,7 @@ export default class School extends Component {
 
                 <div class="w-100"></div>
 
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
                 <label htmlFor="principal">校长</label>
                 <input
                 readonly={this.state.readonly?"":false}
@@ -761,7 +774,7 @@ export default class School extends Component {
                 />
                 </div>
 
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
                 <label htmlFor="phone">电话</label>
                 <input
                 readonly={this.state.readonly?"":false}
@@ -779,7 +792,7 @@ export default class School extends Component {
                 <label htmlFor="startAt">建校年份</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="date"
+                type="text"
                 class="form-control"
                 id="startAt"
                 required
@@ -788,6 +801,15 @@ export default class School extends Component {
                 name="startAt"
                 />
                 </div>
+
+                <YearPicker
+                yearArray={['2019', '2020']}
+                value={currentSchool.startAt}
+                onSelect={this.onChangeYPStartAt}
+                hideInput={true}
+                minRange={1995}
+                maxRange={2022}
+                />
 
                 <div class="w-100"></div>
 
@@ -809,7 +831,7 @@ export default class School extends Component {
                 </select>
                 </div>
 
-                <div class="form-group col-md-5">
+                <div class="form-group col-md-9">
                 <label htmlFor="address">地址</label>
                 <input
                 readonly={this.state.readonly?"":false}
@@ -852,25 +874,25 @@ export default class School extends Component {
                 />
                 </div>
 
-                <div class="select-container form-group col-md-3">
-                <label htmlFor="stage">学校阶段</label>
+                <div class="select-container form-group col-md-4">
+                <label htmlFor="category">学校类型</label>
                 <select
                 readonly={this.state.readonly?"":false}
                 class="form-control"
-                id="stage"
+                id="category"
                 required
-                value={currentSchool.stage}
-                onChange={this.onChangeStage}
-                name="stage"
+                value={currentSchool.category}
+                onChange={this.onChangeCategory}
+                name="category"
                 >
                 <option value="">请选择</option>
-                {this.state.stages.map((option) => (
+                {this.state.categories.map((option) => (
                   <option value={option}>{option}</option>
                 ))}
                 </select>
                 </div>
 
-                <div class="select-container form-group col-md-3">
+                <div class="select-container form-group col-md-4">
                 <label htmlFor="status">学校状态</label>
                 <select
                 readonly={this.state.readonly?"":false}
@@ -888,7 +910,7 @@ export default class School extends Component {
                 </select>
                 </div>
 
-                <div class="select-container form-group col-md-3">
+                <div class="select-container form-group col-md-4">
                 <label htmlFor="request">学校需求状态</label>
                 <select
                 readonly={this.state.readonly?"":false}
@@ -906,23 +928,25 @@ export default class School extends Component {
                 </select>
                 </div>
 
-                <div class="select-container form-group col-md-3">
-                <label htmlFor="category">学校类型</label>
+
+                <div class="select-container form-group col-md-4">
+                <label htmlFor="stage">学校阶段</label>
                 <select
                 readonly={this.state.readonly?"":false}
                 class="form-control"
-                id="category"
+                id="stage"
                 required
-                value={currentSchool.category}
-                onChange={this.onChangeCategory}
-                name="category"
+                value={currentSchool.stage}
+                onChange={this.onChangeStage}
+                name="stage"
                 >
                 <option value="">请选择</option>
-                {this.state.categories.map((option) => (
+                {this.state.stages.map((option) => (
                   <option value={option}>{option}</option>
                 ))}
                 </select>
                 </div>
+
 
               </div>
             </div>

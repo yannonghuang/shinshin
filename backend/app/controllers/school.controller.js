@@ -21,7 +21,7 @@ const getPagingData = (count, data, page, limit) => {
   //const { count: totalItems, rows: schools } = data;
   const schools = data;
   const totalItems = count;
-  const currentPage = page ? +page : 0;
+  const currentPage = page ? + page : 0;
   const totalPages = Math.ceil(totalItems / limit);
 
   return { totalItems, schools, totalPages, currentPage };
@@ -409,7 +409,8 @@ exports.findOne = (req, res) => {
                          'status',
                          'request',
                          'category',
-                          [db.Sequelize.fn('date_format', db.Sequelize.col("startAt"), '%Y-%m-%d'), "startAt"],
+                          //[db.Sequelize.fn('date_format', db.Sequelize.col("startAt"), '%Y-%m-%d'), "startAt"],
+                          [db.Sequelize.fn("year", db.Sequelize.col("schools.startAt")), "startAt"],
                    ],
       raw: true,
     }
