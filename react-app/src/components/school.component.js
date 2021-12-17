@@ -710,7 +710,9 @@ export default class School extends Component {
 
               <div class="row">
                 <div onDragOver={this.onDrag} onDrop={this.onDrop}>
+                {this.state.readonly ? "" :
                 <p>上传照片（拖拽照片文件到下框中）</p>
+                }
                 <img src={currentSchool.photo} height="200" width="300" readonly={this.state.readonly?"":false} />
                 </div>
 
@@ -824,7 +826,7 @@ export default class School extends Component {
                 onChange={this.onChangeRegion}
                 name="region"
                 >
-                <option value="">请选择</option>
+                <option value="">{this.state.readonly ? '' : '请选择' }</option>
                 {this.state.regions.map((option) => (
                   <option value={option}>{option}</option>
                 ))}
@@ -885,7 +887,7 @@ export default class School extends Component {
                 onChange={this.onChangeCategory}
                 name="category"
                 >
-                <option value="">请选择</option>
+                <option value="">{this.state.readonly ? '' : '请选择' }</option>
                 {this.state.categories.map((option) => (
                   <option value={option}>{option}</option>
                 ))}
@@ -903,7 +905,7 @@ export default class School extends Component {
                 onChange={this.onChangeStatus}
                 name="status"
                 >
-                <option value="">请选择</option>
+                <option value="">{this.state.readonly ? '' : '请选择' }</option>
                 {this.state.statuses.map((option) => (
                   <option value={option}>{option}</option>
                 ))}
@@ -921,7 +923,7 @@ export default class School extends Component {
                 onChange={this.onChangeRequest}
                 name="request"
                 >
-                <option value="">请选择</option>
+                <option value="">{this.state.readonly ? '' : '请选择' }</option>
                 {this.state.requests.map((option) => (
                   <option value={option}>{option}</option>
                 ))}
@@ -940,7 +942,7 @@ export default class School extends Component {
                 onChange={this.onChangeStage}
                 name="stage"
                 >
-                <option value="">请选择</option>
+                <option value="">{this.state.readonly ? '' : '请选择' }</option>
                 {this.state.stages.map((option) => (
                   <option value={option}>{option}</option>
                 ))}
