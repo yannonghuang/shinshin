@@ -575,7 +575,7 @@ const SchoolsList = (props) => {
       </div>
 
       <div className="mt-3 col-md-3">
-        {"Items per Page: "}
+        {"每页显示行数: "}
         <select onChange={handlePageSizeChange} value={pageSize}>
           {pageSizes.map((size) => (
             <option key={size} value={size}>
