@@ -91,7 +91,7 @@ const RegionsList = (props) => {
             <div>
 
               <Link
-                to={"/schools/" + regionsRef.current[rowIdx].region}
+                to={"/schools/region/" + regionsRef.current[rowIdx].region}
                 className="badge badge-success"
               >
                 {regionsRef.current[rowIdx].schoolsCount}

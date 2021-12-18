@@ -183,6 +183,26 @@ class App extends Component {
 
           {currentUser ? (
             <div class="navbar-nav ml-auto">
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                我的欣欣({currentUser.chineseName ? currentUser.chineseName : currentUser.username})
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href={"/users/" + currentUser.id}>
+                  个人信息
+                </a>
+                {currentUser.schoolId
+                  ? <a class="dropdown-item" href={"/schoolsView/" + currentUser.schoolId}>我的学校</a>
+                  : ''
+                }
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href={"/login"} onClick={this.logOut}>退出</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </li>
+
+{/*}
               <li class="nav-item">
                 <Link to={"/profile"} class="nav-link">
                   {currentUser.username}
@@ -193,6 +213,7 @@ class App extends Component {
                   退出
                 </a>
               </li>
+*/}
             </div>
           ) : (
             <div class="navbar-nav ml-auto">
@@ -228,7 +249,7 @@ class App extends Component {
             <Route path="/tutorials/:id" component={Tutorial} />
 
             <Route exact path={["/regions"]} component={RegionsList} />
-            <Route exact path={["/schools", "/schools/:region"]} component={SchoolsList} />
+            <Route exact path={["/schools", "/schools/region/:region"]} component={SchoolsList} />
             <Route path={["/schools/:id", "/schoolsView/:id", "/addS"]} component={School} />
             <Route exact path={["/documents", "/documents/school/:schoolId", "/documents/school/:schoolId/:docCategory"]} component={DocumentsList} />
 
