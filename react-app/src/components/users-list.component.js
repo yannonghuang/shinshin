@@ -200,6 +200,10 @@ const UsersList = (props) => {
         },
       },
       {
+        Header: "上次登录时间",
+        accessor: "lastLogin",
+      },
+      {
         Header: "操作",
         accessor: "actions",
         Cell: (props) => {

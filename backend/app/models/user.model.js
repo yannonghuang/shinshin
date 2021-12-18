@@ -21,6 +21,9 @@ module.exports = (sequelize, Sequelize) => {
     startAt: {
       type: Sequelize.DATE
     },
+    lastLogin: {
+      type: Sequelize.DATE
+    },
   });
 
   return User;

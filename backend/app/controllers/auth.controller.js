@@ -77,6 +77,7 @@ exports.findOne = (req, res) => {
   attributes: [
         'id', 'username', 'email', 'chineseName', 'phone', 'wechat', 'schoolId',
         [db.Sequelize.fn('date_format', db.Sequelize.col("startAt"), '%Y-%m-%d'), "startAt"],
+        [db.Sequelize.fn('date_format', db.Sequelize.col("lastLogin"), '%Y-%m-%d'), "lastLogin"],
   ],
 
   include: [
@@ -121,6 +122,7 @@ exports.findAll2 = (req, res) => {
   attributes: [
         'id', 'username', 'email', 'chineseName', 'phone', 'wechat',
         [db.Sequelize.fn('date_format', db.Sequelize.col("users.startAt"), '%Y-%m-%d'), "startAt"],
+        [db.Sequelize.fn('date_format', db.Sequelize.col("lastLogin"), '%Y-%m-%d'), "lastLogin"],
   ],
   include: [
   {
@@ -252,6 +254,10 @@ exports.signin = (req, res) => {
 
       var token = jwt.sign({ id: user.id }, config.secret, {
         expiresIn: 86400 // 24 hours
+      });
+
+      user.update({
+        lastLogin: db.sequelize.literal('CURRENT_TIMESTAMP'),
       });
 
       var authorities = [];
