@@ -287,33 +287,30 @@ exports.findAll2 = (req, res) => {
     });
 };
 
-exports.SAVE_SAVE_findAll2 = (req, res) => {
-  const name = req.body.name;
+exports.findCountsByRegion = (req, res) => {
   const page = req.body.page;
   const size = req.body.size;
+  //const region = req.body.region;
 
   //const { page, size, title } = req.query;
-  var condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
+  //var condition = region ? { region: { [Op.eq]: `${region}` } } : null;
 
   const { limit, offset } = getPagination(page, size);
 
   School.findAndCountAll({
-  where: condition,
+  //where: condition,
   limit: limit,
   offset: offset,
-  subQuery: false,
-  attributes: ['id', 'name', 'description', 'principal', 'region', 'address', 'phone', 'teachersCount', 'studentsCount',
-      [db.Sequelize.fn("COUNT", db.Sequelize.col("responses.id")), "responsesCount"]
+  //subQuery: false,
+  attributes: ['region',
+      [db.Sequelize.fn("COUNT", db.Sequelize.col("id")), "schoolsCount"]
   ],
-  include: [{
-      model: Response,
-      attributes: [],
-      required: false,
-  }],
-  group: ['id']
+
+  group: ['region']
   })
     .then(data => {
-      const response = getPagingData(data, page, limit);
+      const { count: totalItems, rows: regions } = data;
+      const response = getPagingData(totalItems, regions, page, limit);
       res.send(response);
     })
     .catch(err => {

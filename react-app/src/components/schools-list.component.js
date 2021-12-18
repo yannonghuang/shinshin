@@ -17,7 +17,7 @@ const SchoolsList = (props) => {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [searchName, setSearchName] = useState("");
   const [searchCode, setSearchCode] = useState("");
-  const [searchRegion, setSearchRegion] = useState("");
+  const [searchRegion, setSearchRegion] = useState(props.match? props.match.params.region : props.region);
   const [searchStartAt, setSearchStartAt] = useState("");
 
   const schoolsRef = useRef();

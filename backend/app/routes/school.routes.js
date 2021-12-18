@@ -25,6 +25,11 @@ module.exports = function(app) {
     schools.getRegions
   );
 
+  app.get("/api/schools/countsByRegion",
+    [authJwt.verifyToken],
+    schools.findCountsByRegion
+  );
+
   app.get("/api/schools/stages",
     [authJwt.verifyToken],
     schools.getSchoolStages

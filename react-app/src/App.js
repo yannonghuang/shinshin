@@ -17,6 +17,7 @@ import TutorialsList from "./components/tutorials-list.component";
 import School from "./components/school.component";
 import SchoolsList from "./components/schools-list.component";
 import DocumentsList from "./components/documents-list.component";
+import RegionsList from "./components/regions-list.component";
 
 import Project from "./components/project.component";
 import ProjectsList from "./components/projects-list.component";
@@ -143,6 +144,7 @@ class App extends Component {
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href={"/schools"}>学校列表</a>
+                <a class="dropdown-item" href={"/regions"}>地区列表</a>
                 <a class="dropdown-item" href={"/addS"}>新增学校</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href={"/documents"}>学校文档</a>
@@ -225,7 +227,8 @@ class App extends Component {
             <Route exact path="/add" component={AddTutorial} />
             <Route path="/tutorials/:id" component={Tutorial} />
 
-            <Route exact path={["/schools"]} component={SchoolsList} />
+            <Route exact path={["/regions"]} component={RegionsList} />
+            <Route exact path={["/schools", "/schools/:region"]} component={SchoolsList} />
             <Route path={["/schools/:id", "/schoolsView/:id", "/addS"]} component={School} />
             <Route exact path={["/documents", "/documents/school/:schoolId", "/documents/school/:schoolId/:docCategory"]} component={DocumentsList} />
 
