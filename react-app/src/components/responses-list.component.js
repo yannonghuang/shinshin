@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import ResponseDataService from "../services/response.service";
 import AttachmentDataService from "../services/attachment.service";
+import AuthService from "../services/auth.service";
+
 import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
-
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useTable, useSortBy } from "react-table";
 
@@ -15,6 +16,7 @@ const ResponsesList = (props) => {
 
   const [formId, setFormId] = useState(props.match? props.match.params.formId : props.formId);
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
+  const [userId, setUserId] = useState(props.match? props.match.params.userId : props.userId);
 
   const [orderby, setOrderby] = useState([]);
 
@@ -34,7 +36,9 @@ const ResponsesList = (props) => {
     setSearchTitle(searchTitle);
   };
 
-  const getRequestParams = (searchTitle, page, pageSize, formId, schoolId, orderby) => {
+  const getRequestParams = (searchTitle, page, pageSize, formId, schoolId, userId, orderby) => {
+    //const user = AuthService.getCurrentUser();
+
     let params = {};
 
     if (searchTitle) {
@@ -61,6 +65,10 @@ const ResponsesList = (props) => {
       params["orderby"] = orderby;
     }
 
+    if (userId) {
+      params["userId"] = userId;
+    }
+
     return params;
   };
 
@@ -78,7 +86,7 @@ const ResponsesList = (props) => {
   };
 
   const retrieveResponses = () => {
-    const params = getRequestParams(searchTitle, page, pageSize, formId, schoolId, orderby);
+    const params = getRequestParams(searchTitle, page, pageSize, formId, schoolId, userId, orderby);
 
     ResponseDataService.getAll2(params)
       .then((response) => {
@@ -208,6 +216,25 @@ const ResponsesList = (props) => {
                 className="badge badge-success"
               >
                 {responsesRef.current[rowIdx].school.name}
+              </Link>
+            ) : ''}
+            </div>
+          );
+        },
+      },
+      {
+        Header: "申请人",
+        accessor: 'user.name',
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+            { (responsesRef.current[rowIdx].user) ? (
+              <Link
+                to={"/usersView/" + responsesRef.current[rowIdx].user.id}
+                className="badge badge-success"
+              >
+                {responsesRef.current[rowIdx].user.chineseName}
               </Link>
             ) : ''}
             </div>

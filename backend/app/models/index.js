@@ -136,6 +136,9 @@ db.documents.belongsTo(db.schools);
 db.schools.hasMany(db.responses, {foreignKey: 'schoolId'}, {as: 'Responses'})
 db.responses.belongsTo(db.schools);
 
+db.user.hasMany(db.responses, {foreignKey: 'userId'}, {as: 'Responses'})
+db.responses.belongsTo(db.user);
+
 db.schools.hasMany(db.user, {foreignKey: 'schoolId'}, {as: 'Users'});
 db.user.belongsTo(db.schools);
 

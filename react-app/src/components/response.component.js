@@ -332,7 +332,8 @@ optionOnSave = {
       title: this.state.currentResponse.title,
       formId: this.state.currentResponse.formId,
       schoolId: this.state.currentResponse.schoolId,
-      fdata: this.fRender.userData
+      fdata: this.fRender.userData,
+      userId: this.state.currentUser.id,
     };
 
     ResponseDataService.create(

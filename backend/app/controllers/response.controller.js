@@ -3,6 +3,7 @@ const Response = db.responses;
 const Project = db.projects;
 const Attachment = db.attachments;
 const School = db.schools;
+const User = db.user;
 const Op = db.Sequelize.Op;
 
 const getPagination = (page, size) => {
@@ -38,6 +39,7 @@ exports.create = (req, res) => {
     fdata: req.body.fdata,
     formId: req.body.formId,
     schoolId: req.body.schoolId,
+    userId: req.body.userId,
   };
 
   // Save Response in the database
@@ -123,6 +125,7 @@ exports.findAll2 = (req, res) => {
   const formId = req.body.formId;
   const schoolId = req.body.schoolId;
   const orderby = req.body.orderby;
+  const userId = req.body.userId;
 
   var orderbyObject = null;
   if (orderby) {
@@ -144,7 +147,8 @@ exports.findAll2 = (req, res) => {
         [Op.and]: [
             title ? { title: { [Op.like]: `%${title}%` } } : null,
             formId ? { formId: { [Op.eq]: `${formId}` } } : null,
-            schoolId ? { '$school.id$': { [Op.eq]: `${schoolId}` } } : null
+            schoolId ? { '$school.id$': { [Op.eq]: `${schoolId}` } } : null,
+            userId ? { userId: { [Op.eq]: `${userId}` } } : null,
             //schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null
         ]};
 
@@ -157,6 +161,11 @@ exports.findAll2 = (req, res) => {
           {
             model: School,
             attributes: ['code', 'name', 'region'],
+            required: false,
+          },
+          {
+            model: User,
+            attributes: ['id', 'username', 'chineseName'],
             required: false,
           },
         ];

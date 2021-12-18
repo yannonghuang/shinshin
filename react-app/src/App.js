@@ -196,6 +196,7 @@ class App extends Component {
                   ? <a class="dropdown-item" href={"/schoolsView/" + currentUser.schoolId}>我的学校</a>
                   : ''
                 }
+                <a class="dropdown-item" href={"/responses/user/" + currentUser.id}>我的申请</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href={"/login"} onClick={this.logOut}>退出</a>
                 <a class="dropdown-item" href="#">Something else here</a>
@@ -263,7 +264,7 @@ class App extends Component {
             */}
             <Route path={["/forms/:id", "/formsView/:id", "/addF"]} component={Form} />
 
-            <Route exact path={["/responses", "/responses/form/:formId", "/responses/school/:schoolId"]} component={ResponsesList} />
+            <Route exact path={["/responses", "/responses/form/:formId", "/responses/school/:schoolId", "/responses/user/:userId"]} component={ResponsesList} />
             {/*}
             <Route path="/addR/:id" component={AddResponse} />
             */}
