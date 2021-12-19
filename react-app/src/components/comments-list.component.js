@@ -217,12 +217,13 @@ const CommentsList = (props) => {
           value={text}
           onChange={onChangeText}
         />
-        <button className="btn btn-primary" onClick={save}>
+        <button className="btn btn-primary badge-success mb-5" onClick={save}>
           提交
         </button>
       </div>
 
       <div class="w-100"></div>
+
 
       <div className="col-md-6">
         <h6>评论列表</h6>
