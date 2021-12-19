@@ -33,7 +33,7 @@ import Response from "./components/response.component";
 import ResponsesList from "./components/responses-list.component";
 
 //import AddAttachment from "./components/add-attachment.component";
-import Attachment from "./components/attachment.component";
+//import Attachment from "./components/attachment.component";
 import AttachmentsList from "./components/attachments-list.component";
 
 import UsersList from "./components/users-list.component";
@@ -276,8 +276,8 @@ class App extends Component {
             <Route exact path={["/attachments", "/attachments/response/:responseId"]} component={AttachmentsList} />
             {/*}
             <Route path="/addA/:id" component={AddAttachment} />
-            */}
             <Route path="/attachments/:id" component={Attachment} />
+            */}
 
             <Route exact path={["/users"]} component={UsersList} />
             <Route exact path="/addU" component={Register} />
