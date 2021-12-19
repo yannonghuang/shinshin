@@ -18,6 +18,7 @@ import School from "./components/school.component";
 import SchoolsList from "./components/schools-list.component";
 import DocumentsList from "./components/documents-list.component";
 import RegionsList from "./components/regions-list.component";
+import CommentsList from "./components/comments-list.component";
 
 import Project from "./components/project.component";
 import ProjectsList from "./components/projects-list.component";
@@ -148,6 +149,7 @@ class App extends Component {
                 <a class="dropdown-item" href={"/addS"}>新增学校</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href={"/documents"}>学校文档</a>
+                <a class="dropdown-item" href={"/comments"}>留言</a>
                 <a class="dropdown-item" href="#">Something else here</a>
               </div>
             </li>
@@ -253,6 +255,7 @@ class App extends Component {
             <Route exact path={["/schools", "/schools/region/:region"]} component={SchoolsList} />
             <Route path={["/schools/:id", "/schoolsView/:id", "/addS"]} component={School} />
             <Route exact path={["/documents", "/documents/school/:schoolId", "/documents/school/:schoolId/:docCategory"]} component={DocumentsList} />
+            <Route exact path={["/comments", "/documents/school/:schoolId"]} component={CommentsList} />
 
             <Route exact path={["/projects", "/projects/school/:schoolId"]} component={ProjectsList} />
             <Route path={["/projects/:id", "/projectsView/:id", "/addP"]} component={Project} />

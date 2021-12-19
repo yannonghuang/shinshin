@@ -6,6 +6,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import $ from "jquery"; //Load jquery
 
+import CommentsList from './comments-list.component.js';
 import ProjectsList from './projects-list.component.js';
 import ResponsesList from './responses-list.component.js';
 import DocumentsList from './documents-list.component.js';
@@ -963,6 +964,7 @@ export default class School extends Component {
                 <Tab>项目申请列表</Tab>
                 <Tab>学校文档</Tab>
                 <Tab>学校照片</Tab>
+                <Tab>评论区</Tab>
               </TabList>
               <TabPanel>
                 <p>... 查看学校详情 ...</p>
@@ -978,6 +980,9 @@ export default class School extends Component {
               </TabPanel>
               <TabPanel>
                 <DocumentsList schoolId = {currentSchool.id} docCategory = {'照片'} />
+              </TabPanel>
+              <TabPanel>
+                <CommentsList schoolId = {currentSchool.id} />
               </TabPanel>
             </Tabs>
 

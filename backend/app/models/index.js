@@ -19,6 +19,7 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+db.comments = require("./comment.model.js")(sequelize, Sequelize);
 db.dossiers = require("./dossier.model.js")(sequelize, Sequelize);
 db.projects = require("./project.model.js")(sequelize, Sequelize);
 db.documents = require("./document.model.js")(sequelize, Sequelize);
@@ -138,6 +139,12 @@ db.responses.belongsTo(db.schools);
 
 db.user.hasMany(db.responses, {foreignKey: 'userId'}, {as: 'Responses'})
 db.responses.belongsTo(db.user);
+
+db.user.hasMany(db.comments, {foreignKey: 'userId'}, {as: 'Comments'})
+db.comments.belongsTo(db.user);
+
+db.schools.hasMany(db.comments, {foreignKey: 'schoolId'}, {as: 'Comments'})
+db.comments.belongsTo(db.schools);
 
 db.schools.hasMany(db.user, {foreignKey: 'schoolId'}, {as: 'Users'});
 db.user.belongsTo(db.schools);

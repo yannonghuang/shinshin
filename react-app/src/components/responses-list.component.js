@@ -225,6 +225,7 @@ const ResponsesList = (props) => {
       {
         Header: "申请人",
         accessor: 'user.name',
+        disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
