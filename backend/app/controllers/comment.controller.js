@@ -52,11 +52,26 @@ exports.findAll2 = (req, res) => {
   const text = req.body.text;
   const userId = req.body.userId;
   const schoolId = req.body.schoolId;
+  const orderby = req.body.orderby;
 
   const page = req.body.page;
   const size = req.body.size;
-
   //const { page, size, originalname } = req.query;
+
+  var orderbyObject = null;
+  if (orderby) {
+    orderbyObject = [];
+    for (var i = 0; i < orderby.length; i++) {
+      var s = orderby[i].id.split(".");
+      if (s.length == 1) orderbyObject.push([s[0], (orderby[i].desc ? "desc" : "asc")]);
+      if (s.length == 2) {
+        var m = null;
+        if (s[0] == 'user') m = User;
+        orderbyObject.push([m, s[1], (orderby[i].desc ? "desc" : "asc")]);
+      }
+    }
+  };
+
   var condition = {
         [Op.and]: [
             text ? { text: { [Op.like]: `%${text}%` } } : null,
@@ -77,6 +92,7 @@ exports.findAll2 = (req, res) => {
       required: false,
     },
   ],
+  order: orderbyObject
   })
     .then(data => {
       const comment = getPagingData(data, page, limit);

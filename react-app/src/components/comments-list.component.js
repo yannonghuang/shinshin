@@ -17,6 +17,8 @@ const CommentsList = (props) => {
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
   const [userId, setUserId] = useState(AuthService.getCurrentUser() ? AuthService.getCurrentUser().id : null);
 
+  const [orderby, setOrderby] = useState([]);
+
   const commentsRef = useRef();
   commentsRef.current = comments;
 
@@ -36,7 +38,7 @@ const CommentsList = (props) => {
     setSearchText(searchText);
   };
 
-  const getRequestParams = (searchText, page, pageSize, schoolId) => {
+  const getRequestParams = (searchText, page, pageSize, schoolId, orderby) => {
     let params = {};
 
     if (text) {
@@ -55,11 +57,15 @@ const CommentsList = (props) => {
       params["schoolId"] = schoolId;
     }
 
+    if (orderby) {
+      params["orderby"] = orderby;
+    }
+
     return params;
   };
 
   const retrieveComments = () => {
-    const params = getRequestParams(searchText, page, pageSize, schoolId);
+    const params = getRequestParams(searchText, page, pageSize, schoolId, orderby);
 
     CommentDataService.getAll2(params)
       .then((response) => {
@@ -75,7 +81,7 @@ const CommentsList = (props) => {
       });
   };
 
-  useEffect(retrieveComments, [page, pageSize]);
+  useEffect(retrieveComments, [page, pageSize, orderby]);
 
   const refreshList = () => {
     retrieveComments();
@@ -133,6 +139,7 @@ const CommentsList = (props) => {
       {
         Header: "评论",
         accessor: "text",
+        disableSortBy: true,
       },
       {
         Header: "时间",
@@ -140,8 +147,7 @@ const CommentsList = (props) => {
       },
       {
         Header: "评论人",
-        accessor: 'user.name',
-        disableSortBy: true,
+        accessor: 'user.username',
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -161,6 +167,7 @@ const CommentsList = (props) => {
       {
         Header: "Actions",
         accessor: "actions",
+        disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -182,9 +189,19 @@ const CommentsList = (props) => {
     headerGroups,
     rows,
     prepareRow,
+    state: {sortBy},
   } = useTable({
     columns,
     data: comments,
+    manualSortBy: true,
+    initialState: {
+        sortBy: [
+            {
+                id: 'createdAt',
+                desc: true
+            }
+        ]
+    },
   },
   useSortBy);
 
@@ -202,7 +219,9 @@ const CommentsList = (props) => {
     setPage(1);
   };
 
-
+  useEffect(() => {
+    setOrderby(sortBy);
+  }, [sortBy]);
 
   return (
     <div className="list row">
@@ -286,7 +305,7 @@ const CommentsList = (props) => {
                                     {column.render('Header')}
                                     {/* Add a sort direction indicator */}
                                     <span>
-                                        {/*column.isSorted*/ (column.id === 'createdAt')
+                                        {/*column.isSorted*/ (column.id === 'createdAt' || column.id === 'user.username')
                                             ? column.isSortedDesc
                                                 ? ' 🔽'
                                                 : ' 🔼'
