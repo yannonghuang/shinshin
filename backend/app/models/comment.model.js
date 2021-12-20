@@ -1,7 +1,7 @@
 module.exports = (sequelize, Sequelize) => {
   const Comment = sequelize.define("comment", {
     text: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING(1024)
     },
   });
 

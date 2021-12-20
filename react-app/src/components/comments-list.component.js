@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
 
 import { useState, useEffect, useMemo, useRef } from "react";
-import { useTable, useSortBy } from "react-table";
+import { useTable, useFlexLayout, useBlockLayout, useResizeColumns, useSortBy } from "react-table";
 
 const CommentsList = (props) => {
   const [comments, setComments] = useState([]);
@@ -139,15 +139,32 @@ const CommentsList = (props) => {
       {
         Header: "评论",
         accessor: "text",
+        maxWidth: 400,
+        minWidth: 140,
+        width: 300,
         disableSortBy: true,
       },
       {
         Header: "时间",
         accessor: "createdAt",
+        maxWidth: 50,
+        minWidth: 10,
+        width: 50,
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+              {commentsRef.current[rowIdx].createdAt.substring(0, 10)}
+            </div>
+          );
+        }
       },
       {
         Header: "评论人",
         accessor: 'user.username',
+        maxWidth: 40,
+        minWidth: 10,
+        width: 40,
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -165,8 +182,11 @@ const CommentsList = (props) => {
         },
       },
       {
-        Header: "Actions",
+        Header: "删除",
         accessor: "actions",
+        maxWidth: 30,
+        minWidth: 10,
+        width: 20,
         disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
@@ -183,26 +203,41 @@ const CommentsList = (props) => {
     []
   );
 
+  const defaultColumn = React.useMemo(
+    () => ({
+      minWidth: 30,
+      width: 150,
+      maxWidth: 400,
+    }),
+    []
+  );
+
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
     prepareRow,
+    //state,
+    //resetResizing,
     state: {sortBy},
   } = useTable({
     columns,
     data: comments,
+    //defaultColumn,
     manualSortBy: true,
     initialState: {
-        sortBy: [
-            {
-                id: 'createdAt',
-                desc: true
-            }
-        ]
+      sortBy: [
+        {
+          id: 'createdAt',
+          desc: true
+        }
+      ]
     },
   },
+  //useBlockLayout,
+  useFlexLayout,
+  //useResizeColumns,
   useSortBy);
 
   const search = () => {
@@ -226,7 +261,7 @@ const CommentsList = (props) => {
   return (
     <div className="list row">
 
-      <div class="form-group col-md-12">
+      <div class="form-group col-md-12" >
         <label htmlFor="text"><h4>评论</h4></label>
         <textarea
           rows="4"
@@ -299,19 +334,27 @@ const CommentsList = (props) => {
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                                // Add the sorting props to control sorting. For this example
-                                // we can add them into the header props
-                                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                    {column.render('Header')}
-                                    {/* Add a sort direction indicator */}
-                                    <span>
-                                        {/*column.isSorted*/ (column.id === 'createdAt' || column.id === 'user.username')
-                                            ? column.isSortedDesc
-                                                ? ' 🔽'
-                                                : ' 🔼'
-                                            : ''}
-                                    </span>
-                                </th>
+                // Add the sorting props to control sorting. For this example
+                // we can add them into the header props
+                <th {...column.getHeaderProps(column.getSortByToggleProps(), {
+                /*
+                  style: {
+                      minWidth: column.minWidth,
+                      width: column.width,
+                    },
+                */
+                  })}
+                >
+                  {column.render('Header')}
+                  {/* Add a sort direction indicator */}
+                  <span>
+                    {/*column.isSorted*/ (column.id === 'createdAt' || column.id === 'user.username')
+                     ? column.isSortedDesc
+                       ? ' 🔽'
+                       : ' 🔼'
+                     : ''}
+                  </span>
+                </th>
                 ))}
               </tr>
             ))}
@@ -323,7 +366,17 @@ const CommentsList = (props) => {
                 <tr {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                      <td {...cell.getCellProps({
+
+                          style: {
+                            minWidth: cell.column.minWidth,
+                            width: cell.column.width,
+                            whiteSpace: 'pre-wrap'
+                          },
+
+                        })}>
+                        {cell.render("Cell")}
+                      </td>
                     );
                   })}
                 </tr>
