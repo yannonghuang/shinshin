@@ -312,7 +312,7 @@ const SchoolsList = (props) => {
       {
         Header: "项目",
         accessor: "projectsCount",
-        disableSortBy: true,
+
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -330,7 +330,7 @@ const SchoolsList = (props) => {
       {
         Header: "项目申请",
         accessor: "responsesCount",
-        disableSortBy: true,
+
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -477,14 +477,7 @@ const SchoolsList = (props) => {
   };
 
   useEffect(() => {
-    const result = [];
-    for (var i = 0; i < sortBy.length; i++) {
-      result.push([sortBy[i].id, (sortBy[i].desc ? "desc" : "asc")]);
-    }
-    setOrderby(result);
-    //setOrderby(" order by " + sortBy[0].id + (sortBy[0].desc ? " desc " : " asc "));
-    //retrieveSchools();
-
+    setOrderby(sortBy);
   }, [sortBy]);
 
   useEffect(() => {
@@ -623,7 +616,8 @@ const SchoolsList = (props) => {
                     <span>
                       {/*column.isSorted*/ (column.id === 'code' || column.id === 'region' ||
                       column.id === 'startAt' || column.id === 'teachersCount' ||
-                      column.id === 'studentsCount' || column.id === 'name')
+                      column.id === 'studentsCount' || column.id === 'name' ||
+                      column.id === 'projectsCount' || column.id === 'responsesCount' )
                       ? column.isSortedDesc
                         ? ' 🔽'
                         : ' 🔼'

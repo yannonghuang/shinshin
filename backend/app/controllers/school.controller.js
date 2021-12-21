@@ -210,8 +210,21 @@ exports.findAll2 = (req, res) => {
   const region = req.body.region;
   const startAt = req.body.startAt;
   const exportFlag = req.body.exportFlag;
-
   //var condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
+
+  var orderbyObject = null;
+  if (orderby) {
+    orderbyObject = [];
+    for (var i = 0; i < orderby.length; i++) {
+      if (orderby[i].id == "projectsCount")
+        orderbyObject.push([db.Sequelize.fn("COUNT", db.Sequelize.col("projects.id")),
+          (orderby[i].desc ? "desc" : "asc")]);
+      else if (orderby[i].id == "responsesCount")
+        orderbyObject.push([db.Sequelize.fn("COUNT", db.Sequelize.col("projects.responseId")),
+          (orderby[i].desc ? "desc" : "asc")]);
+      else orderbyObject.push([orderby[i].id, (orderby[i].desc ? "desc" : "asc")]);
+    }
+  };
 
   const condition = {
         [Op.and]: [
@@ -263,7 +276,7 @@ exports.findAll2 = (req, res) => {
 
   include: include,
   group: ['id'],
-  order: orderby
+  order: orderbyObject
   })
     .then(data => {
         School.count({where: condition})
