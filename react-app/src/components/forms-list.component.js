@@ -213,7 +213,8 @@ const FormsList = (props) => {
   };
 
   useEffect(() => {
-    setOrderby(sortBy);
+    if (sortBy && sortBy[0])
+      setOrderby(sortBy);
   }, [sortBy]);
 
   return (
