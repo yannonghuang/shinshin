@@ -174,7 +174,10 @@ const CommentsList = (props) => {
                 to={"/usersView/" + commentsRef.current[rowIdx].user.id}
                 className="badge badge-success"
               >
-                {commentsRef.current[rowIdx].user.chineseName}
+                {commentsRef.current[rowIdx].user.chineseName
+                  ? commentsRef.current[rowIdx].user.chineseName
+                  : commentsRef.current[rowIdx].user.username
+                }
               </Link>
             ) : ''}
             </div>

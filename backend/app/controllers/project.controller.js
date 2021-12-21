@@ -238,7 +238,7 @@ var orderbyObject = null;
   //group: ['id'],
   order: orderbyObject
 // order: orderby
-//  order: [[Response, 'title', 'desc']]
+// order: [[Response, 'title', 'desc']]
   })
     .then(data => {
         Project.count({where: condition, include: include, distinct: true, col: 'id'})
