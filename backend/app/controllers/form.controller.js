@@ -83,6 +83,17 @@ exports.findAll2 = (req, res) => {
   if (orderby) {
     orderbyObject = [];
     for (var i = 0; i < orderby.length; i++) {
+      if (orderby[i].id == 'responsesCount')
+        orderbyObject.push([db.Sequelize.fn("COUNT", db.Sequelize.col("responses.id")),
+          (orderby[i].desc ? "desc" : "asc")]);
+      else
+        orderbyObject.push([orderby[i].id, (orderby[i].desc ? "desc" : "asc")]);
+    }
+  };
+/*
+  if (orderby) {
+    orderbyObject = [];
+    for (var i = 0; i < orderby.length; i++) {
       var s = orderby[i].id.split(".");
       if (s.length == 1) orderbyObject.push([s[0], (orderby[i].desc ? "desc" : "asc")]);
       if (s.length == 2) { // this should NEVER happen ...
@@ -92,6 +103,7 @@ exports.findAll2 = (req, res) => {
       }
     }
   };
+*/
 
   var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
 

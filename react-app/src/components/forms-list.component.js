@@ -126,7 +126,6 @@ const FormsList = (props) => {
       {
         Header: "项目申请数目",
         accessor: "responsesCount",
-        disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -278,7 +277,7 @@ const FormsList = (props) => {
                      {column.render('Header')}
                      {/* Add a sort direction indicator */}
                        <span>
-                         {column.isSorted
+                         {/*column.isSorted*/ (column.id === 'deadline' || column.id === 'responsesCount')
                            ? column.isSortedDesc
                              ? ' 🔽'
                              : ' 🔼'
