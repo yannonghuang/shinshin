@@ -19,6 +19,8 @@ const FormsList = (props) => {
   const [count, setCount] = useState(0);
   const [pageSize, setPageSize] = useState(5);
 
+  const [orderby, setOrderby] = useState([]);
+
   const pageSizes = [5, 10, 20];
 
   const onChangeSearchTitle = (e) => {
@@ -26,7 +28,7 @@ const FormsList = (props) => {
     setSearchTitle(searchTitle);
   };
 
-  const getRequestParams = (searchTitle, page, pageSize) => {
+  const getRequestParams = (searchTitle, page, pageSize, orderby) => {
     let params = {};
 
     if (searchTitle) {
@@ -41,11 +43,15 @@ const FormsList = (props) => {
       params["size"] = pageSize;
     }
 
+    if (orderby) {
+      params["orderby"] = orderby;
+    }
+
     return params;
   };
 
   const retrieveForms = () => {
-    const params = getRequestParams(searchTitle, page, pageSize);
+    const params = getRequestParams(searchTitle, page, pageSize, orderby);
 
     FormDataService.getAll2(params)
       .then((response) => {
@@ -61,7 +67,7 @@ const FormsList = (props) => {
       });
   };
 
-  useEffect(retrieveForms, [page, pageSize]);
+  useEffect(retrieveForms, [page, pageSize, orderby]);
 
   const refreshList = () => {
     retrieveForms();
@@ -81,7 +87,6 @@ const FormsList = (props) => {
 
   const openForm = (rowIndex) => {
     const id = formsRef.current[rowIndex].id;
-
     props.history.push("/forms/" + id);
   };
 
@@ -107,10 +112,12 @@ const FormsList = (props) => {
       {
         Header: "标题",
         accessor: "title",
+        disableSortBy: true,
       },
       {
         Header: "说明",
         accessor: "description",
+        disableSortBy: true,
       },
       {
         Header: "截止日期",
@@ -119,6 +126,7 @@ const FormsList = (props) => {
       {
         Header: "项目申请数目",
         accessor: "responsesCount",
+        disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -134,15 +142,9 @@ const FormsList = (props) => {
         },
       },
       {
-        Header: "Status",
-        accessor: "published",
-        Cell: (props) => {
-          return props.value ? "Published" : "Pending";
-        },
-      },
-      {
         Header: "操作",
         accessor: "actions",
+        disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -181,9 +183,19 @@ const FormsList = (props) => {
     headerGroups,
     rows,
     prepareRow,
+    state: {sortBy},
   } = useTable({
     columns,
     data: forms,
+    manualSortBy: true,
+    initialState: {
+      sortBy: [
+        {
+          id: 'deadline',
+          desc: true
+        }
+      ]
+    },
   },
   useSortBy);
 
@@ -201,6 +213,9 @@ const FormsList = (props) => {
     setPage(1);
   };
 
+  useEffect(() => {
+    setOrderby(sortBy);
+  }, [sortBy]);
 
   return (
     <div className="list row">
@@ -210,7 +225,7 @@ const FormsList = (props) => {
           <input
             type="text"
             className="form-control"
-            placeholder="Search by title"
+            placeholder="标题查找。。。"
             value={searchTitle}
             onChange={onChangeSearchTitle}
           />
@@ -257,19 +272,19 @@ const FormsList = (props) => {
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                                // Add the sorting props to control sorting. For this example
-                                // we can add them into the header props
-                                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                    {column.render('Header')}
-                                    {/* Add a sort direction indicator */}
-                                    <span>
-                                        {column.isSorted
-                                            ? column.isSortedDesc
-                                                ? ' 🔽'
-                                                : ' 🔼'
-                                            : ''}
-                                    </span>
-                                </th>
+                   // Add the sorting props to control sorting. For this example
+                   // we can add them into the header props
+                   <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                     {column.render('Header')}
+                     {/* Add a sort direction indicator */}
+                       <span>
+                         {column.isSorted
+                           ? column.isSortedDesc
+                             ? ' 🔽'
+                             : ' 🔼'
+                         : ''}
+                       </span>
+                   </th>
                 ))}
               </tr>
             ))}

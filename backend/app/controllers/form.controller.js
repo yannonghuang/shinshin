@@ -76,8 +76,23 @@ exports.findAll2 = (req, res) => {
   const title = req.body.title;
   const page = req.body.page;
   const size = req.body.size;
-
+  const orderby = req.body.orderby;
   //const { page, size, title } = req.query;
+
+  var orderbyObject = null;
+  if (orderby) {
+    orderbyObject = [];
+    for (var i = 0; i < orderby.length; i++) {
+      var s = orderby[i].id.split(".");
+      if (s.length == 1) orderbyObject.push([s[0], (orderby[i].desc ? "desc" : "asc")]);
+      if (s.length == 2) { // this should NEVER happen ...
+        var m = null;
+        if (s[0] == 'response') m = Response;
+        orderbyObject.push([m, s[1], (orderby[i].desc ? "desc" : "asc")]);
+      }
+    }
+  };
+
   var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
 
   const { limit, offset } = getPagination(page, size);
@@ -96,7 +111,8 @@ exports.findAll2 = (req, res) => {
       attributes: [],
       required: false,
   }],
-  group: ['id']
+  group: ['id'],
+  order: orderbyObject
   })
     .then(data => {
       Form.count({where: condition})
