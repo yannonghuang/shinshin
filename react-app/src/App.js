@@ -156,12 +156,14 @@ class App extends Component {
 
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                项目征集
+                项目申请
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href={"/forms"}>项目征集列表</a>
                 <a class="dropdown-item" href={"/addF"}>新增项目征集</a>
+                <a class="dropdown-item" href={"/responses"}>项目申请列表</a>
                 <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href={"/attachments"}>项目申请附件</a>
                 <a class="dropdown-item" href="#">Something else here</a>
               </div>
             </li>
@@ -173,10 +175,8 @@ class App extends Component {
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href={"/projects"}>项目列表</a>
                 <a class="dropdown-item" href={"/addP"}>新增项目</a>
-                <a class="dropdown-item" href={"/dossiers"}>项目文档</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href={"/responses"}>项目申请列表</a>
-                <a class="dropdown-item" href={"/attachments"}>项目申请附件</a>
+                <a class="dropdown-item" href={"/dossiers"}>项目文档</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Something else here</a>
               </div>
