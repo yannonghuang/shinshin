@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
 
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
-import { useTable, useSortBy, useFilters, useGlobalFilter, useAsyncDebounce } from "react-table";
+import { useTable, useSortBy } from "react-table";
 
 import YearPicker from 'react-single-year-picker';
 
@@ -118,50 +118,6 @@ const ProjectsList = (props) => {
     return params;
   };
 
-  // Define a default UI for filtering
-  function GlobalFilter({
-    preGlobalFilteredRows,
-    globalFilter,
-    setGlobalFilter,
-  }) {
-    const count = preGlobalFilteredRows.length
-    const [value, setValue] = React.useState(globalFilter)
-    const onChange = useAsyncDebounce(value => {
-        setGlobalFilter(value || undefined)
-    }, 200)
-
-    return (
-        <span>
-            Search:{' '}
-            <input
-                className="form-control"
-                value={value || ""}
-                onChange={e => {
-                    setValue(e.target.value);
-                    onChange(e.target.value);
-                }}
-                placeholder={`${count} records...`}
-            />
-        </span>
-    )
-  }
-
-  function DefaultColumnFilter({
-      column: { filterValue, preFilteredRows, setFilter },
-    }) {
-      const count = preFilteredRows.length
-
-      return (
-        <input
-            className="form-control"
-            value={filterValue || ''}
-            onChange={e => {
-                setFilter(e.target.value || undefined)
-            }}
-            placeholder={`Search ${count} records...`}
-        />
-      )
-  }
 
   const getRegions = () => {
     if (regions.length == 0) {
@@ -214,7 +170,7 @@ const ProjectsList = (props) => {
         link.href = url;
         link.setAttribute('download',
                 'project.csv'
-            );
+        );
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -382,61 +338,6 @@ const ProjectsList = (props) => {
     []
   );
 
-  function SelectRegionFilter({
-    column: { filterValue, setFilter, preFilteredRows, id },
-  }) {
-  // Render a multi-select box
-    return (
-      <select
-        name={id}
-        id={id}
-        value={filterValue}
-        onChange={(e) => {
-          setFilter(e.target.value || undefined);
-        }}
-      >
-        <option value="">请选择</option>
-        {regions.map((option, i) => (
-          <option key={i} value={option}>
-          {option}
-        </option>
-        ))}
-      </select>
-    );
-  }
-
-
-  function SelectCreatedAtFilter({
-    column: { filterValue, setFilter, preFilteredRows, id },
-  }) {
-  // Render a multi-select box
-    return (
-      <select
-        name={id}
-        id={id}
-        value={filterValue}
-        onChange={(e) => {
-          setFilter(e.target.value || undefined);
-        }}
-      >
-        <option value="">请选择</option>
-        {createdAt.map((option, i) => (
-          <option key={i} value={option}>
-          {option}
-        </option>
-        ))}
-      </select>
-    );
-  }
-
-  const defaultColumn = React.useMemo(
-      () => ({
-          // Default Filter UI
-          Filter: DefaultColumnFilter,
-      }),
-      []
-  );
-
   const {
     getTableProps,
     getTableBodyProps,
@@ -444,29 +345,21 @@ const ProjectsList = (props) => {
     rows,
     prepareRow,
     state,
-    state: {filters},
     state: {sortBy},
-    preGlobalFilteredRows,
-    setGlobalFilter,
   } = useTable({
     columns,
     data: projects,
-    manualFilters: true,
-    autoResetFilters: false,
-    defaultColumn,
-
+    disableSortRemove: true,
     manualSortBy: true,
     initialState: {
-        sortBy: [
-            {
-                id: 'id',
-                desc: false
-            }
-        ]
+      sortBy: [
+        {
+          id: 'id',
+          desc: false
+        }
+      ]
     },
   },
-  useFilters,
-  useGlobalFilter,
   useSortBy,
   );
 
@@ -488,9 +381,6 @@ const ProjectsList = (props) => {
     if (sortBy && sortBy[0])
       setOrderby(sortBy);
   }, [sortBy]);
-
-  useEffect(() => {
-  }, [filters]);
 
 
   return (
@@ -591,14 +481,6 @@ const ProjectsList = (props) => {
         <div class="w-100"></div>
 
       <div className="col-md-12 list">
-
-{/*
-        <GlobalFilter
-            preGlobalFilteredRows={preGlobalFilteredRows}
-            globalFilter={state.globalFilter}
-            setGlobalFilter={setGlobalFilter}
-        />
-*/}
         <table
           className="table table-striped table-bordered"
           {...getTableProps()}
@@ -621,9 +503,6 @@ const ProjectsList = (props) => {
                         : ' 🔼'
                       : ''}
                     </span>
-                    {/* Render the columns filter UI */}
-                    {/* <div>column.canFilter (column.id === 'region' || column.id === 'createdAt' ) ?
-                     column.render('Filter') : null}</div> */}
                   </th>
                 ))}
               </tr>

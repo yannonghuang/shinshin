@@ -116,6 +116,7 @@ const RegionsList = (props) => {
   } = useTable({
     columns,
     data: regions,
+    disableSortRemove: true,
   },
   useSortBy);
 

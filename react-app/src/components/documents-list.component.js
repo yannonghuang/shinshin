@@ -13,7 +13,6 @@ const DocumentsList = (props) => {
   const [searchOriginalname, setSearchOriginalname] = useState("");
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
   const [docCategory, setDocCategory] = useState(props.match? props.match.params.docCategory : props.docCategory);
-  //const [schoolId, setSchoolId] = useState(props.match.params.schoolId);
 
   const documentsRef = useRef();
   documentsRef.current = documents;
@@ -130,6 +129,7 @@ const DocumentsList = (props) => {
       {
         Header: "学校",
         accessor: 'school',
+        disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -145,8 +145,9 @@ const DocumentsList = (props) => {
         }
       },
       {
-        Header: "Actions",
+        Header: "操作",
         accessor: "actions",
+        disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -175,6 +176,7 @@ const DocumentsList = (props) => {
   } = useTable({
     columns,
     data: documents,
+    disableSortRemove: true,
   },
   useSortBy);
 
@@ -202,7 +204,7 @@ const DocumentsList = (props) => {
         link.href = url;
         link.setAttribute('download',
                 originalname
-            ); //or any other extension
+        ); //or any other extension
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -268,19 +270,19 @@ const DocumentsList = (props) => {
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                                // Add the sorting props to control sorting. For this example
-                                // we can add them into the header props
-                                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                    {column.render('Header')}
-                                    {/* Add a sort direction indicator */}
-                                    <span>
-                                        {/*column.isSorted*/ (column.id === 'docCategory' || column.id === 'createdAt')
-                                            ? column.isSortedDesc
-                                                ? ' 🔽'
-                                                : ' 🔼'
-                                            : ''}
-                                    </span>
-                                </th>
+                // Add the sorting props to control sorting. For this example
+                // we can add them into the header props
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                    {column.render('Header')}
+                    {/* Add a sort direction indicator */}
+                      <span>
+                        {column.isSorted
+                        ? column.isSortedDesc
+                          ? ' 🔽'
+                          : ' 🔼'
+                        : ''}
+                      </span>
+                    </th>
                 ))}
               </tr>
             ))}

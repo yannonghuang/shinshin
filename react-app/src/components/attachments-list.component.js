@@ -112,41 +112,25 @@ const AttachmentsList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: "Originalname",
+        Header: "文件名",
         accessor: "originalname",
       },
       {
-        Header: "Description",
+        Header: "说明",
         accessor: "description",
+        disableSortBy: true,
       },
       {
-        Header: "Status",
-        accessor: "published",
-        Cell: (props) => {
-          return props.value ? "Published" : "Pending";
-        },
-      },
-      {
-        Header: "Actions",
+        Header: "操作",
         accessor: "actions",
+        disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
-{/*}
-              <span onClick={() => openAttachment(rowIdx)}>
-                <i className="far fa-edit action mr-2"></i>
-              </span>
-*/}
-
-{/*}
-
-*/}
-
               <a href="#" onClick={() => download(attachmentsRef.current[rowIdx].id, attachmentsRef.current[rowIdx].originalname)} >
                 <i className="fas fa-download action mr-2"></i>
               </a>
-
               <span onClick={() => deleteAttachment(rowIdx)}>
                 <i className="fas fa-trash action"></i>
               </span>
@@ -167,6 +151,7 @@ const AttachmentsList = (props) => {
   } = useTable({
     columns,
     data: attachments,
+    disableSortRemove: true,
   },
   useSortBy);
 

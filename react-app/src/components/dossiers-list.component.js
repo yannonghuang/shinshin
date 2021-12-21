@@ -13,7 +13,6 @@ const DossiersList = (props) => {
   const [searchOriginalname, setSearchOriginalname] = useState("");
   const [projectId, setProjectId] = useState(props.match? props.match.params.projectId : props.projectId);
   const [docCategory, setDocCategory] = useState(props.match? props.match.params.docCategory : props.docCategory);
-  //const [projectId, setProjectId] = useState(props.match.params.projectId);
 
   const dossiersRef = useRef();
   dossiersRef.current = dossiers;
@@ -127,26 +126,10 @@ const DossiersList = (props) => {
         Header: "类别",
         accessor: "docCategory",
       },
-      /*{
-        Header: "学校",
-        accessor: 'project',
-        Cell: (props) => {
-          const rowIdx = props.row.id;
-          return (
-            <div>
-              <Link
-                to={"/projectsView/" + dossiersRef.current[rowIdx].projectId}
-                className="badge badge-success"
-              >
-                {"点击查看学校"}
-              </Link>
-            </div>
-          );
-        }
-      },*/
       {
-        Header: "Actions",
+        Header: "操作",
         accessor: "actions",
+        disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -175,6 +158,7 @@ const DossiersList = (props) => {
   } = useTable({
     columns,
     data: dossiers,
+    disableSortRemove: true,
   },
   useSortBy);
 
@@ -201,8 +185,8 @@ const DossiersList = (props) => {
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download',
-                originalname
-            ); //or any other extension
+          originalname
+        ); //or any other extension
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -268,19 +252,19 @@ const DossiersList = (props) => {
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                                // Add the sorting props to control sorting. For this example
-                                // we can add them into the header props
-                                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                    {column.render('Header')}
-                                    {/* Add a sort direction indicator */}
-                                    <span>
-                                        {/*column.isSorted*/ (column.id === 'docCategory' || column.id === 'createdAt')
-                                            ? column.isSortedDesc
-                                                ? ' 🔽'
-                                                : ' 🔼'
-                                            : ''}
-                                    </span>
-                                </th>
+                // Add the sorting props to control sorting. For this example
+                // we can add them into the header props
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                    {column.render('Header')}
+                    {/* Add a sort direction indicator */}
+                    <span>
+                      {column.isSorted
+                      ? column.isSortedDesc
+                        ? ' 🔽'
+                        : ' 🔼'
+                      : ''}
+                    </span>
+                  </th>
                 ))}
               </tr>
             ))}

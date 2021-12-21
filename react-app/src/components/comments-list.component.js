@@ -229,6 +229,7 @@ const CommentsList = (props) => {
     columns,
     data: comments,
     //defaultColumn,
+    disableSortRemove: true,
     manualSortBy: true,
     initialState: {
       sortBy: [

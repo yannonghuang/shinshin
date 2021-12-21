@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
 
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
-import { useTable, useSortBy, useFilters, useGlobalFilter, useAsyncDebounce } from "react-table";
+import { useTable, useSortBy } from "react-table";
 
 import YearPicker from 'react-single-year-picker';
 
@@ -109,51 +109,6 @@ const SchoolsList = (props) => {
 
     return params;
   };
-
-  // Define a default UI for filtering
-  function GlobalFilter({
-    preGlobalFilteredRows,
-    globalFilter,
-    setGlobalFilter,
-  }) {
-    const count = preGlobalFilteredRows.length
-    const [value, setValue] = React.useState(globalFilter)
-    const onChange = useAsyncDebounce(value => {
-        setGlobalFilter(value || undefined)
-    }, 200)
-
-    return (
-      <span>
-        Search:{' '}
-          <input
-            className="form-control"
-            value={value || ""}
-            onChange={e => {
-                setValue(e.target.value);
-                onChange(e.target.value);
-            }}
-            placeholder={`${count} records...`}
-          />
-      </span>
-    )
-  }
-
-  function DefaultColumnFilter({
-      column: { filterValue, preFilteredRows, setFilter },
-    }) {
-      const count = preFilteredRows.length
-
-      return (
-        <input
-          className="form-control"
-          value={filterValue || ''}
-          onChange={e => {
-            setFilter(e.target.value || undefined)
-          }}
-          placeholder={`Search ${count} records...`}
-        />
-      )
-  }
 
   const getRegions = () => {
     if (regions.length == 0) {
@@ -287,9 +242,8 @@ const SchoolsList = (props) => {
         accessor: "name",
       },
       {
-        Header: "省/直辖市",
+        Header: "省/自治区",
         accessor: "region",
-        Filter: SelectRegionFilter,
       },
       {
         Header: "校长",
@@ -374,60 +328,6 @@ const SchoolsList = (props) => {
     []
   );
 
-  function SelectRegionFilter({
-    column: { filterValue, setFilter, preFilteredRows, id },
-  }) {
-  // Render a multi-select box
-    return (
-      <select
-        name={id}
-        id={id}
-        value={filterValue}
-        onChange={(e) => {
-          setFilter(e.target.value || undefined);
-        }}
-      >
-        <option value="">请选择</option>
-        {regions.map((option, i) => (
-          <option key={i} value={option}>
-          {option}
-        </option>
-        ))}
-      </select>
-    );
-  }
-
-
-  function SelectStartAtFilter({
-    column: { filterValue, setFilter, preFilteredRows, id },
-  }) {
-  // Render a multi-select box
-    return (
-      <select
-        name={id}
-        id={id}
-        value={filterValue}
-        onChange={(e) => {
-          setFilter(e.target.value || undefined);
-        }}
-      >
-        <option value="">请选择</option>
-        {startAt.map((option, i) => (
-          <option key={i} value={option}>
-          {option}
-        </option>
-        ))}
-      </select>
-    );
-  }
-
-  const defaultColumn = React.useMemo(
-      () => ({
-          // Default Filter UI
-          Filter: DefaultColumnFilter,
-      }),
-      []
-  );
 
   const {
     getTableProps,
@@ -436,17 +336,11 @@ const SchoolsList = (props) => {
     rows,
     prepareRow,
     state,
-    state: {filters},
     state: {sortBy},
-    preGlobalFilteredRows,
-    setGlobalFilter,
   } = useTable({
     columns,
     data: schools,
-    manualFilters: true,
-    autoResetFilters: false,
-    defaultColumn,
-
+    disableSortRemove: true,
     manualSortBy: true,
     initialState: {
       sortBy: [
@@ -457,8 +351,6 @@ const SchoolsList = (props) => {
       ]
     },
   },
-  useFilters,
-  useGlobalFilter,
   useSortBy,
   );
 
@@ -481,8 +373,8 @@ const SchoolsList = (props) => {
       setOrderby(sortBy);
   }, [sortBy]);
 
-  useEffect(() => {
-  }, [filters]);
+  //useEffect(() => {
+  //}, [filters]);
 
 
   return (
@@ -593,14 +485,6 @@ const SchoolsList = (props) => {
         <div class="w-100"></div>
 
       <div className="col-md-12 list">
-
-{/*
-        <GlobalFilter
-            preGlobalFilteredRows={preGlobalFilteredRows}
-            globalFilter={state.globalFilter}
-            setGlobalFilter={setGlobalFilter}
-        />
-*/}
         <table
           className="table table-striped table-bordered"
           {...getTableProps()}
@@ -624,9 +508,6 @@ const SchoolsList = (props) => {
                         : ' 🔼'
                       : ''}
                     </span>
-                      {/* Render the columns filter UI */}
-                      {/* <div>column.canFilter (column.id === 'region' || column.id === 'startAt' ) ?
-                      column.render('Filter') : null}</div> */}
                   </th>
                 ))}
               </tr>

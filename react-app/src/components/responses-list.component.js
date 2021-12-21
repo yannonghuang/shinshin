@@ -282,6 +282,7 @@ const ResponsesList = (props) => {
   } = useTable({
     columns,
     data: responses,
+    disableSortRemove: true,
     manualSortBy: true,
   },
   useSortBy);

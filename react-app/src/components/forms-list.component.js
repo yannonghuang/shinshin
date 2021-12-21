@@ -186,6 +186,7 @@ const FormsList = (props) => {
   } = useTable({
     columns,
     data: forms,
+    disableSortRemove: true,
     manualSortBy: true,
     initialState: {
       sortBy: [
