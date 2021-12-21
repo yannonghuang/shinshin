@@ -85,6 +85,7 @@ const CommentsList = (props) => {
 
   const refreshList = () => {
     retrieveComments();
+    setText("");
   };
 
 
