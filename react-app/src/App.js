@@ -200,21 +200,23 @@ class App extends Component {
                 }
                 <a class="dropdown-item" href={"/responses/user/" + currentUser.id}>我的申请</a>
                 <div class="dropdown-divider"></div>
+{/*}
                 <a class="dropdown-item" href={"/login"} onClick={this.logOut}>退出</a>
+*/}
                 <a class="dropdown-item" href="#">Something else here</a>
               </div>
             </li>
 
+            <li class="nav-item">
+              <a href="/login" class="nav-link" onClick={this.logOut}>
+                退出
+              </a>
+            </li>
 {/*}
               <li class="nav-item">
                 <Link to={"/profile"} class="nav-link">
                   {currentUser.username}
                 </Link>
-              </li>
-              <li class="nav-item">
-                <a href="/login" class="nav-link" onClick={this.logOut}>
-                  退出
-                </a>
               </li>
 */}
             </div>
@@ -222,7 +224,7 @@ class App extends Component {
             <div class="navbar-nav ml-auto">
               <li class="nav-item">
                 <Link to={"/login"} class="nav-link">
-                  登陆
+                  登录
                 </Link>
               </li>
 
