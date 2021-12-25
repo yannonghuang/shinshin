@@ -55,6 +55,18 @@ class AuthService {
     return JSON.parse(localStorage.getItem('user'));
   }
 
+  isValid() {
+    if (!localStorage.getItem('user'))
+      return false;
+
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    if (!user.thisLogin || !user.validity)
+        return true;
+
+    return (user.thisLogin + user.validity) > Math.floor(Date.now()/1000);
+  }
+
   getRoles() {
     return axios.get(API_URL + "roles");
   }

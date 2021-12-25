@@ -253,7 +253,7 @@ exports.signin = (req, res) => {
       }
 
       var token = jwt.sign({ id: user.id }, config.secret, {
-        expiresIn: 86400 // 24 hours
+        expiresIn: config.validity //86400  24 hours
       });
 
       const lastLastLogin = user.lastLogin;
@@ -276,7 +276,9 @@ exports.signin = (req, res) => {
             : '',
           schoolId: user.schoolId,
           roles: authorities,
-          accessToken: token
+          accessToken: token,
+          thisLogin: Math.floor(Date.now()/1000),
+          validity: config.validity
         });
       });
     })

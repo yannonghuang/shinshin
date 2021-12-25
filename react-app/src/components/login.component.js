@@ -84,7 +84,7 @@ export default class Login extends Component {
   render() {
     return (
     <div>
-    { AuthService.getCurrentUser() ? (this.props.history.push('/schools')) : (
+    { /* AuthService.getCurrentUser() */ AuthService.isValid() ? (this.props.history.push('/schools')) : (
       <div className="col-md-12">
         <div className="card card-container">
           <img
