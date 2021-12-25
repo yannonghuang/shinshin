@@ -19,7 +19,21 @@ class AuthService {
   }
 
   logout() {
+    if (!localStorage.getItem('user')) return;
+
+    const username = JSON.parse(localStorage.getItem('user')).username;
     localStorage.removeItem("user");
+
+    return axios
+      .post(API_URL + "signout", {
+        username,
+      })
+      .then(response => {
+        return response.data;
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   register(username, email, password, roles, schoolId,

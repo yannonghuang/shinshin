@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route, Link } from "react-router-dom";
+import { Switch, Route, Link, Redirect, withRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'bootstrap/dist/js/bootstrap.min.js'
 import "@fortawesome/fontawesome-free/css/all.css";
@@ -74,6 +74,7 @@ class App extends Component {
 
   logOut() {
     AuthService.logout();
+    this.props.history.push('/login');
   }
 
   render() {
@@ -188,7 +189,13 @@ class App extends Component {
 
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                我的欣欣({currentUser.chineseName ? currentUser.chineseName : currentUser.username})
+
+                {currentUser.lastLogin
+                  ? <span title={"上次登录时间: " + currentUser.lastLogin}>
+                    我的欣欣({currentUser.chineseName ? currentUser.chineseName : currentUser.username})
+                    </span>
+                  : <span> 我的欣欣({currentUser.chineseName ? currentUser.chineseName : currentUser.username}) </span>
+                }
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href={"/users/" + currentUser.id}>
@@ -208,7 +215,7 @@ class App extends Component {
             </li>
 
             <li class="nav-item">
-              <a href="/login" class="nav-link" onClick={this.logOut}>
+              <a href="#" class="nav-link" onClick={this.logOut}>
                 退出
               </a>
             </li>
@@ -291,4 +298,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);

@@ -256,6 +256,7 @@ exports.signin = (req, res) => {
         expiresIn: 86400 // 24 hours
       });
 
+      const lastLastLogin = user.lastLogin;
       user.update({
         lastLogin: db.sequelize.literal('CURRENT_TIMESTAMP'),
       });
@@ -270,10 +271,33 @@ exports.signin = (req, res) => {
           username: user.username,
           chineseName: user.chineseName,
           email: user.email,
+          lastLogin: lastLastLogin
+            ? lastLastLogin.toLocaleDateString('zh-cn', { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })
+            : '',
           schoolId: user.schoolId,
           roles: authorities,
           accessToken: token
         });
+      });
+    })
+    .catch(err => {
+      res.status(500).send({ message: err.message });
+    });
+};
+
+exports.signout = (req, res) => {
+  User.findOne({
+    where: {
+      username: req.body.username
+    }
+  })
+    .then(user => {
+      if (!user) {
+        console.log("logout: " + username);
+        return res.status(404).send({ message: "User Not found." });
+      }
+      user.update({
+        lastLogin: db.sequelize.literal('CURRENT_TIMESTAMP'),
       });
     })
     .catch(err => {
