@@ -319,13 +319,17 @@ const ProjectsList = (props) => {
             <div>
               <Link
                 to={"/projectsView/" + projectsRef.current[rowIdx].id}
+                target='_blank'
               >
                 <i className="fas fa-eye action mr-2"></i>
               </Link>
 
-              <span onClick={() => openProject(rowIdx)}>
+              <Link
+                to={"/projects/" + projectsRef.current[rowIdx].id}
+                target='_blank'
+              >
                 <i className="far fa-edit action mr-2"></i>
-              </span>
+              </Link>
 
               <span onClick={() => deleteProject(rowIdx)}>
                 <i className="fas fa-trash action"></i>

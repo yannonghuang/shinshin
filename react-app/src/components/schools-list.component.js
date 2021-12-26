@@ -310,13 +310,17 @@ const SchoolsList = (props) => {
             <div>
               <Link
                 to={"/schoolsView/" + schoolsRef.current[rowIdx].id}
+                target='_blank'
               >
                 <i className="fas fa-eye action mr-2"></i>
               </Link>
 
-              <span onClick={() => openSchool(rowIdx)}>
+              <Link
+                to={"/schools/" + schoolsRef.current[rowIdx].id}
+                target='_blank'
+              >
                 <i className="far fa-edit action mr-2"></i>
-              </span>
+              </Link>
 
               <span onClick={() => deleteSchool(rowIdx)}>
                 <i className="fas fa-trash action"></i>
