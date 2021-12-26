@@ -76,6 +76,7 @@ class App extends Component {
   logOut() {
     AuthService.logout();
     this.props.history.push('/login');
+    window.location.reload();
   }
 
   render() {
