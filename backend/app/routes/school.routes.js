@@ -72,7 +72,7 @@ module.exports = function(app) {
 
   // Retrieve "simple" list of Schools
   app.get("/api/schoolsSimple",
-    [authJwt.verifyToken],
+    //[authJwt.verifyToken],
     schools.findAllSimple);
 
   // Update a School with id
