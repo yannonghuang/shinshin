@@ -96,8 +96,8 @@ export default class School extends Component {
     this.setState({readonly: window.location.pathname.includes('View')});
 
     if (!newschool) {
-      this.getSchool(this.props.match.params.id);
-      this.getSchoolPhoto(this.props.match.params.id);
+      this.getSchool(this.props.match? this.props.match.params.id : this.props.id);
+      this.getSchoolPhoto(this.props.match? this.props.match.params.id : this.props.id);
     }
 
     this.getRegions();

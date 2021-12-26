@@ -93,7 +93,7 @@ export default class Register extends Component {
 
     this.getRoles();
     this.getSchools();
-    if (this.props.match.params.id) {
+    if (this.props.match /*.params.id*/) {
       this.getUser(this.props.match.params.id);
     }
   }

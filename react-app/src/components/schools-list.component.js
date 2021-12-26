@@ -3,6 +3,7 @@ import SchoolDataService from "../services/school.service";
 import ProjectDataService from "../services/project.service";
 import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
+import { withRouter } from "react-router-dom";
 
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useTable, useSortBy } from "react-table";
@@ -539,4 +540,4 @@ const SchoolsList = (props) => {
   );
 };
 
-export default SchoolsList;
+export default withRouter(SchoolsList);
