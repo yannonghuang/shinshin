@@ -5,8 +5,14 @@ import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 import Select from 'react-select';
 
+import emailjs, { init } from "emailjs-com";
+
 import AuthService from "../services/auth.service";
 import SchoolDataService from "../services/school.service";
+
+init("user_xpt3ehC4nNeGJBgM579gJ");
+
+const jwt = require("jsonwebtoken");
 
 const required = value => {
   if (!value) {
@@ -287,6 +293,8 @@ export default class Register extends Component {
         this.state.startAt
       ).then(
         response => {
+          this.emailVerification();
+
           this.setState({
             message: response.data.message,
             successful: true
@@ -306,6 +314,33 @@ export default class Register extends Component {
           });
         }
       );
+    }
+  }
+
+  emailVerification() {
+    if (this.state.email) {
+      var token = jwt.sign({ email: this.state.email }, "config.secret", {
+        expiresIn: 900 // 15 minutes
+      });
+
+      var templateParams = {
+            to: this.state.email,
+            username: this.state.chineseName ?this.state.chineseName : this.state.username,
+            link: "http://localhost:8081/login?token=" + token
+      };
+
+      emailjs.send("icloud_2021_12_27","template_vye2wfs", templateParams)
+      .then((result) => {
+        console.log(result.text);
+        this.setState({
+          message: "注册确认邮件已发至您的邮箱 。。。"
+        });
+      }, (error) => {
+        console.log(error.text);
+        this.setState({
+          message: error.text
+        });
+      });
     }
   }
 

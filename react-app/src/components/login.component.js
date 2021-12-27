@@ -30,6 +30,7 @@ export default class Login extends Component {
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onReset = this.onReset.bind(this);
     this.handleReset = this.handleReset.bind(this);
+    this.handleEmailVerification = this.handleEmailVerification.bind(this);
 
     this.state = {
       username: "",
@@ -44,10 +45,22 @@ export default class Login extends Component {
   componentDidMount() {
     const search = this.props.location.search;
     const username = new URLSearchParams(search).get('username');
+    const token = new URLSearchParams(search).get('token');
 
-    this.setState({
-      username: username
-    });
+    if (token) { // email verification
+      var email = null;
+      jwt.verify(token, "config.secret", (err, decoded) => {
+        if (!err)
+          email = decoded.email;
+      });
+      if (email)
+        this.handleEmailVerification(email);
+    }
+
+    if (username)
+      this.setState({
+        username: username
+      });
   }
 
   onChangeUsername(e) {
@@ -115,6 +128,20 @@ export default class Login extends Component {
         });
       });
     }
+  }
+
+  handleEmailVerification(email) {
+      AuthService.findByEmail(email)
+      .then(r => {
+        this.setState({
+          username: r.data.username
+        });
+      })
+      .catch(e => {
+        this.setState({
+          message: e.toString()
+        });
+      });
   }
 
   handleReset(e) {

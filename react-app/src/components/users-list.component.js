@@ -213,7 +213,7 @@ const UsersList = (props) => {
               <Link
                 to={"/usersView/" + usersRef.current[rowIdx].id}
               >
-                <i className="fas fa-glasses action mr-2"></i>
+                <i className="fas fa-eye action mr-2"></i>
               </Link>
 
               <span onClick={() => openUser(rowIdx)}>
