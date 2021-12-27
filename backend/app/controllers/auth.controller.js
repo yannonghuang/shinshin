@@ -323,7 +323,7 @@ exports.reset = (req, res) => {
       })
       .then(r => {
         //console.log(r);
-        res.status(200).send();
+        res.status(200).send(user);
       })
       .catch(e => {
         res.status(500).send({ message: e.message });

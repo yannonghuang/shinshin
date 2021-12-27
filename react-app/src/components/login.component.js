@@ -3,7 +3,11 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 
+import emailjs, { init } from "emailjs-com";
+
 import AuthService from "../services/auth.service";
+
+init("user_xpt3ehC4nNeGJBgM579gJ");
 
 const jwt = require("jsonwebtoken");
 
@@ -37,6 +41,15 @@ export default class Login extends Component {
     };
   }
 
+  componentDidMount() {
+    const search = this.props.location.search;
+    const username = new URLSearchParams(search).get('username');
+
+    this.setState({
+      username: username
+    });
+  }
+
   onChangeUsername(e) {
     this.setState({
       username: e.target.value
@@ -61,7 +74,7 @@ export default class Login extends Component {
     });
   }
 
-  handleReset(e) {
+  smtpjs_handleReset(e) {
     e.preventDefault();
 
     if (this.state.email) {
@@ -77,10 +90,10 @@ export default class Login extends Component {
 
         window.Email.send({
           Host : "smtp.elasticemail.com",
-          Username : "yannonghuang@gmail.com",
-          Password : "40A68FA1B029F5C861FE5B309B68D436C040",
+          Username : "yannonghaung@icloud.com",
+          Password : "A2D3763E94CA053F9F340EEC9900FB7ACD21",
           To : this.state.email, // 'yannonghuang@icloud.com',
-          From : "yannonghuang@gmail.com",
+          From : "yannonghaung@icloud.com",
           Subject : "欣欣教育基金会学校项目管理系统",
           Body : body //"And this is the body test"
         })
@@ -93,6 +106,44 @@ export default class Login extends Component {
         .catch((err) => {
           this.setState({
           message: err.toString()
+          });
+        });
+      })
+      .catch(e => {
+        this.setState({
+          message: e.toString()
+        });
+      });
+    }
+  }
+
+  handleReset(e) {
+    e.preventDefault();
+
+    if (this.state.email) {
+      var token = jwt.sign({ email: this.state.email }, "config.secret", {
+        expiresIn: 900 // 15 minutes
+      });
+
+      AuthService.findByEmail(this.state.email)
+      .then(r => {
+
+        var templateParams = {
+              to: this.state.email,
+              username: r.data.chineseName ? r.data.chineseName : r.data.username,
+              link: "http://localhost:8081/reset?token=" + token
+        };
+
+        emailjs.send("icloud_2021_12_27","template_ae0k3bj", templateParams)
+        .then((result) => {
+          console.log(result.text);
+          this.setState({
+            message: "密码重置邮件已发至您的邮箱。。。"
+          });
+        }, (error) => {
+          console.log(error.text);
+          this.setState({
+            message: error.text
           });
         });
       })

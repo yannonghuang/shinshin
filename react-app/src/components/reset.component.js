@@ -70,7 +70,7 @@ export default class Reset extends Component {
       .then(response => {
         alert('您的密码已经成功重置');
         //this.props.history.push("/profile");
-        this.props.history.push("/login");
+        this.props.history.push("/login?username=" + response.data.username);
         window.location.reload();
         this.setState({
           message: '您的密码已经成功重置！'
@@ -84,7 +84,7 @@ export default class Reset extends Component {
 
     } else {
       this.setState({
-        message: '请再次确认密码。。。' + this.state.email
+        message: '请再次确认密码。。。'
       });
     }
   }
