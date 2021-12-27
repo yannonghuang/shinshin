@@ -306,3 +306,48 @@ exports.signout = (req, res) => {
       res.status(500).send({ message: err.message });
     });
 };
+
+exports.reset = (req, res) => {
+  User.findOne({
+    where: {
+      email: req.body.email
+    }
+  })
+    .then(user => {
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
+
+      user.update({
+        password: bcrypt.hashSync(req.body.password, 8),
+      })
+      .then(r => {
+        //console.log(r);
+        res.status(200).send();
+      })
+      .catch(e => {
+        res.status(500).send({ message: e.message });
+      });
+
+    })
+    .catch(err => {
+      res.status(500).send({ message: err.message });
+    });
+};
+
+exports.findByEmail = (req, res) => {
+  User.findOne({
+    where: {
+      email: req.body.email
+    }
+  })
+    .then(user => {
+      if (!user)
+        res.status(404).send({ message: "User Not found." });
+      else
+        res.status(200).send(user);
+    })
+    .catch(err => {
+      res.status(500).send({ message: err.message });
+    });
+};

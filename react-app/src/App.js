@@ -41,6 +41,7 @@ import UsersList from "./components/users-list.component";
 import AuthService from "./services/auth.service";
 import AutoLogoutTimer from "./services/timer.service";
 
+import Reset from "./components/reset.component";
 import Login from "./components/login.component";
 import Register from "./components/register.component";
 import Home from "./components/home.component";
@@ -251,6 +252,8 @@ class App extends Component {
           {/*}
             <Route exact path={["/", "/home"]} component={Home} />
           */}
+            <Route exact path={["/reset"]} component={Reset} />
+
             <Route exact path={["/login", "/", "/home"]} component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />

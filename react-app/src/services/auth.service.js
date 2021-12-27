@@ -18,6 +18,28 @@ class AuthService {
       });
   }
 
+  reset(email, password) {
+    return axios
+      .post(API_URL + "reset", {
+        email,
+        password
+      });
+/*
+      .then(response => {
+        return response.data;
+      })
+      .catch(err => {
+      });
+*/
+  }
+
+  findByEmail(email) {
+    return axios
+      .post(API_URL + "findByEmail", {
+        email,
+      });
+  }
+
   logout() {
     if (!localStorage.getItem('user')) return;
 

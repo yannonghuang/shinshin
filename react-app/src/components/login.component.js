@@ -5,11 +5,13 @@ import CheckButton from "react-validation/build/button";
 
 import AuthService from "../services/auth.service";
 
+const jwt = require("jsonwebtoken");
+
 const required = value => {
   if (!value) {
     return (
       <div className="alert alert-danger" role="alert">
-        This field is required!
+        必须填写!
       </div>
     );
   }
@@ -21,10 +23,15 @@ export default class Login extends Component {
     this.handleLogin = this.handleLogin.bind(this);
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onReset = this.onReset.bind(this);
+    this.handleReset = this.handleReset.bind(this);
 
     this.state = {
       username: "",
       password: "",
+      email: "",
+      isReset: false,
       loading: false,
       message: ""
     };
@@ -40,6 +47,61 @@ export default class Login extends Component {
     this.setState({
       password: e.target.value
     });
+  }
+
+  onChangeEmail(e) {
+    this.setState({
+      email: e.target.value
+    });
+  }
+
+  onReset() {
+    this.setState({
+      isReset: true
+    });
+  }
+
+  handleReset(e) {
+    e.preventDefault();
+
+    if (this.state.email) {
+      var token = jwt.sign({ email: this.state.email }, "config.secret", {
+        expiresIn: 900 // 15 minutes
+      });
+
+      AuthService.findByEmail(this.state.email)
+      .then(r => {
+        const body = "<html><h2>欣欣教育基金会学校项目管理系统</h2><a href='http://localhost:8081/reset?token=" +
+                    token +
+                    "'><strong>请点击重置密码</strong></a><br></br></html>";
+
+        window.Email.send({
+          Host : "smtp.elasticemail.com",
+          Username : "yannonghuang@gmail.com",
+          Password : "40A68FA1B029F5C861FE5B309B68D436C040",
+          To : this.state.email, // 'yannonghuang@icloud.com',
+          From : "yannonghuang@gmail.com",
+          Subject : "欣欣教育基金会学校项目管理系统",
+          Body : body //"And this is the body test"
+        })
+        .then(() => {
+          this.setState({
+          message: "密码重置邮件已发至您的邮箱。。。"
+        });
+        //message => alert(message)
+        })
+        .catch((err) => {
+          this.setState({
+          message: err.toString()
+          });
+        });
+      })
+      .catch(e => {
+        this.setState({
+          message: e.toString()
+        });
+      });
+    }
   }
 
   handleLogin(e) {
@@ -94,34 +156,57 @@ export default class Login extends Component {
           />
 
           <Form
-            onSubmit={this.handleLogin}
+            onSubmit={this.state.isReset? this.handleReset : this.handleLogin}
             ref={c => {
               this.form = c;
             }}
           >
-            <div className="form-group">
-              <label htmlFor="username">用户名</label>
-              <Input
-                type="text"
-                className="form-control"
-                name="username"
-                value={this.state.username}
-                onChange={this.onChangeUsername}
-                validations={[required]}
-              />
-            </div>
+            {this.state.isReset
+            ? (
+              <div className="form-group">
+                <label htmlFor="email">您的注册邮箱</label>
+                <Input
+                  type="text"
+                  className="form-control"
+                  name="email"
+                  value={this.state.email}
+                  onChange={this.onChangeEmail}
+                  validations={[required]}
+                />
+              </div>
+            )
+            : (<div>
+              <div className="form-group">
+                <label htmlFor="username">用户名</label>
+                <Input
+                  type="text"
+                  className="form-control"
+                  name="username"
+                  value={this.state.username}
+                  onChange={this.onChangeUsername}
+                  validations={[required]}
+                />
+              </div>
 
-            <div className="form-group">
-              <label htmlFor="password">密码</label>
-              <Input
-                type="password"
-                className="form-control"
-                name="password"
-                value={this.state.password}
-                onChange={this.onChangePassword}
-                validations={[required]}
-              />
-            </div>
+              <div className="form-group">
+                <label htmlFor="password">密码</label>
+                <Input
+                  type="password"
+                  className="form-control"
+                  name="password"
+                  value={this.state.password}
+                  onChange={this.onChangePassword}
+                  validations={[required]}
+                />
+                <button
+                  className="btn btn-primary badge "
+                  type="button"
+                  onClick={this.onReset}
+                >
+                  忘记密码？
+                </button>
+              </div>
+            </div>)}
 
             <div className="form-group">
               <button
@@ -131,7 +216,7 @@ export default class Login extends Component {
                 {this.state.loading && (
                   <span className="spinner-border spinner-border-sm"></span>
                 )}
-                <span>登录</span>
+                <span>{this.state.isReset? '重置密码' : '登录'}</span>
               </button>
             </div>
 
