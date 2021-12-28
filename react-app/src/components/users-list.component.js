@@ -30,12 +30,14 @@ const UsersList = (props) => {
 
   const pageSizes = [5, 10, 20];
 
+  const [orderby, setOrderby] = useState([]);
+
   const onChangeSearchUsername = (e) => {
     const searchUsername = e.target.value;
     setSearchUsername(searchUsername);
   };
 
-  const getRequestParams = (searchUsername, page, pageSize) => {
+  const getRequestParams = (searchUsername, page, pageSize, orderby) => {
     let params = {};
 
     if (searchUsername) {
@@ -48,6 +50,10 @@ const UsersList = (props) => {
 
     if (pageSize) {
       params["size"] = pageSize;
+    }
+
+    if (orderby) {
+      params["orderby"] = orderby;
     }
 
     return params;
@@ -96,7 +102,7 @@ const UsersList = (props) => {
   useEffect(getRoles, []);
 
   const retrieveUsers = () => {
-    const params = getRequestParams(searchUsername, page, pageSize);
+    const params = getRequestParams(searchUsername, page, pageSize, orderby);
 
     UserDataService.getAll2(params)
       .then((response) => {
@@ -112,7 +118,7 @@ const UsersList = (props) => {
       });
   };
 
-  useEffect(retrieveUsers, [page, pageSize]);
+  useEffect(retrieveUsers, [page, pageSize, orderby]);
 
   const refreshList = () => {
     retrieveUsers();
@@ -155,6 +161,7 @@ const UsersList = (props) => {
       {
         Header: "id",
         accessor: "id",
+        disableSortBy: true,
       },
       {
         Header: "用户名",
@@ -167,10 +174,12 @@ const UsersList = (props) => {
       {
         Header: "电子邮件",
         accessor: "email",
+        disableSortBy: true,
       },
       {
         Header: "角色",
         accessor: 'roles',
+        disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -229,6 +238,7 @@ const UsersList = (props) => {
       {
         Header: "操作",
         accessor: "actions",
+        disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -260,9 +270,13 @@ const UsersList = (props) => {
     headerGroups,
     rows,
     prepareRow,
+    state,
+    state: {sortBy},
   } = useTable({
     columns,
     data: users,
+    disableSortRemove: true,
+    manualSortBy: true,
   },
   useSortBy);
 
@@ -280,6 +294,11 @@ const UsersList = (props) => {
     setPage(1);
   };
 
+  useEffect(() => {
+    if (sortBy && sortBy[0])
+      setOrderby(sortBy);
+  }, [sortBy]);
+
 
   return (
     <div className="list row">
@@ -289,7 +308,7 @@ const UsersList = (props) => {
           <input
             type="text"
             className="form-control"
-            placeholder="Search by username"
+            placeholder="用户名或者中文名查找。。。"
             value={searchUsername}
             onChange={onChangeSearchUsername}
           />
@@ -299,7 +318,7 @@ const UsersList = (props) => {
               type="button"
               onClick={findByName}
             >
-              Search
+              查找
             </button>
           </div>
         </div>

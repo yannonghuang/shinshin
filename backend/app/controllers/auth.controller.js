@@ -111,9 +111,31 @@ exports.findAll2 = (req, res) => {
   const username = req.body.username;
   const page = req.body.page;
   const size = req.body.size;
+  const orderby = req.body.orderby;
+
+var orderbyObject = null;
+  if (orderby) {
+    orderbyObject = [];
+    for (var i = 0; i < orderby.length; i++) {
+      var s = orderby[i].id.split(".");
+      if (s.length == 1) orderbyObject.push([s[0], (orderby[i].desc ? "desc" : "asc")]);
+      if (s.length == 2) {
+        var m = null;
+        if (s[0] == 'school') m = School;
+        orderbyObject.push([m, s[1], (orderby[i].desc ? "desc" : "asc")]);
+      }
+    }
+  }
 
   //const { page, size, title } = req.query;
-  var condition = username ? { username: { [Op.like]: `%${username}%` } } : null;
+  //var condition = username ? { username: { [Op.like]: `%${username}%` } } : null;
+  var condition = username
+                    ? {
+                      [Op.or] : [
+                        {username: { [Op.like]: `%${username}%` }},
+                        {chineseName: { [Op.like]: `%${username}%` }},
+                      ] }
+                    : null;
 
   const { limit, offset } = getPagination(page, size);
 
@@ -143,6 +165,7 @@ exports.findAll2 = (req, res) => {
   /**
   group: ['id']
   */
+  order: orderbyObject
   })
     .then(data => {
       User.count({where: condition})

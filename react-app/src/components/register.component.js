@@ -82,6 +82,7 @@ export default class Register extends Component {
       phone: "",
       wechat: "",
       startAt: null,
+      createdAt: null,
       lastLogin: null,
 
       newuser: true,
@@ -160,6 +161,7 @@ export default class Register extends Component {
           phone: response.data.phone,
           wechat: response.data.wechat,
           startAt: response.data.startAt,
+          createdAt: response.data.createdAt,
           lastLogin: response.data.lastLogin,
 
           newuser: false
@@ -487,6 +489,17 @@ export default class Register extends Component {
                     class="form-control"
                     name="lastLogin"
                     value={this.state.lastLogin}
+                  />
+                </div>
+
+                <div class="form-group col-md-4">
+                  <label htmlFor="createdAt">创建时间</label>
+                  <Input
+                    readonly={""}
+                    type="date"
+                    class="form-control"
+                    name="createdAt"
+                    value={this.state.createdAt}
                   />
                 </div>
 
