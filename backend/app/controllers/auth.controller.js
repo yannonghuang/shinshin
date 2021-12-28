@@ -79,6 +79,7 @@ exports.findOne = (req, res) => {
   attributes: [
         'id', 'username', 'email', 'chineseName', 'phone', 'wechat', 'schoolId',
         [db.Sequelize.fn('date_format', db.Sequelize.col("startAt"), '%Y-%m-%d'), "startAt"],
+        [db.Sequelize.fn('date_format', db.Sequelize.col("users.createdAt"), '%Y-%m-%d'), "createdAt"],
         [db.Sequelize.fn('date_format', db.Sequelize.col("lastLogin"), '%Y-%m-%d'), "lastLogin"],
   ],
 
@@ -124,6 +125,7 @@ exports.findAll2 = (req, res) => {
   attributes: [
         'id', 'username', 'email', 'chineseName', 'phone', 'wechat',
         [db.Sequelize.fn('date_format', db.Sequelize.col("users.startAt"), '%Y-%m-%d'), "startAt"],
+        [db.Sequelize.fn('date_format', db.Sequelize.col("users.createdAt"), '%Y-%m-%d'), "createdAt"],
         [db.Sequelize.fn('date_format', db.Sequelize.col("lastLogin"), '%Y-%m-%d'), "lastLogin"],
   ],
   include: [

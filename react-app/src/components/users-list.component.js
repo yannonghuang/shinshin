@@ -170,7 +170,7 @@ const UsersList = (props) => {
       },
       {
         Header: "角色",
-        accessor: '',
+        accessor: 'roles',
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -181,8 +181,8 @@ const UsersList = (props) => {
         },
       },
       {
-        Header: "学校",
-        accessor: 'school',
+        Header: "学校编号",
+        accessor: 'school.code',
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -192,7 +192,26 @@ const UsersList = (props) => {
                 to={"/schoolsView/" + usersRef.current[rowIdx].school.id}
                 className="badge badge-success"
               >
-                {renderSchool(rowIdx)}
+                {usersRef.current[rowIdx].school.code}
+              </Link>
+            ) : ''}
+            </div>
+          );
+        },
+      },
+      {
+        Header: "学校名称",
+        accessor: 'school.name',
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+            {usersRef.current[rowIdx].school ? (
+              <Link
+                to={"/schoolsView/" + usersRef.current[rowIdx].school.id}
+                className="badge badge-success"
+              >
+                {usersRef.current[rowIdx].school.name}
               </Link>
             ) : ''}
             </div>
@@ -202,6 +221,10 @@ const UsersList = (props) => {
       {
         Header: "上次登录时间",
         accessor: "lastLogin",
+      },
+      {
+        Header: "创建时间",
+        accessor: "createdAt",
       },
       {
         Header: "操作",
