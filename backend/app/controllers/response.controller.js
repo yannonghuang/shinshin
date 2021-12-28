@@ -160,7 +160,7 @@ exports.findAll2 = (req, res) => {
           },
           {
             model: School,
-            attributes: ['code', 'name', 'region'],
+            attributes: ['id', 'code', 'name', 'region'],
             required: false,
           },
           {
