@@ -125,10 +125,13 @@ export default class Register extends Component {
       .then(response => {
         console.log(response.data);
         this.setState({
-          message: "The user was updated successfully!"
+          message: "用户信息成功更新!"
         });
       })
       .catch(e => {
+        this.setState({
+          message: "用户信息修改失败：" + e
+        });
         console.log(e);
       });
   }
@@ -362,7 +365,7 @@ export default class Register extends Component {
                 <div class="form-group col-md-4">
                   <label htmlFor="username">用户名</label>
                   <Input
-                    readonly={this.state.readonly?"":false}
+                    readonly={!this.state.newuser?"":false}
                     type="text"
                     class="form-control"
                     name="username"
@@ -375,7 +378,7 @@ export default class Register extends Component {
                 <div class="form-group col-md-4">
                   <label htmlFor="email">电子邮箱</label>
                   <Input
-                    readonly={this.state.readonly?"":false}
+                    readonly={!this.state.newuser?"":false}
                     type="text"
                     class="form-control"
                     name="email"
