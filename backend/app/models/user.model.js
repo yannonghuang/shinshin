@@ -24,6 +24,12 @@ module.exports = (sequelize, Sequelize) => {
     lastLogin: {
       type: Sequelize.DATE
     },
+    title: {
+      type: Sequelize.STRING
+    },
+    emailVerified: {
+      type: Sequelize.BOOLEAN
+    },
   });
 
   return User;

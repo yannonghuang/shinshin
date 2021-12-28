@@ -177,6 +177,11 @@ const UsersList = (props) => {
         disableSortBy: true,
       },
       {
+        Header: "职务",
+        accessor: "title",
+        disableSortBy: true,
+      },
+      {
         Header: "角色",
         accessor: 'roles',
         disableSortBy: true,

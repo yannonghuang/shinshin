@@ -52,6 +52,13 @@ db.ROLES = [
   {name: "volunteer", label: "欣欣义工"},
 ];
 
+db.USER_TITLES = [
+  "校长",
+  "副校长",
+  "主任",
+  "老师",
+];
+
 db.DOCUMENT_CATEGORIES = [
   "访校",
   "活动",

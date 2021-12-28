@@ -20,6 +20,10 @@ module.exports = function(app) {
     controller.signup
   );
 
+  app.get("/api/auth/userTitles",
+    controller.getUserTitles
+  );
+
   app.post("/api/auth/signin", controller.signin);
 
   app.post("/api/auth/reset", controller.reset);

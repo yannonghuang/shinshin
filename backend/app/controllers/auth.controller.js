@@ -5,6 +5,7 @@ const School = db.schools;
 const Role = db.role;
 const ROLES = db.ROLES;
 const Op = db.Sequelize.Op;
+const USER_TITLES = db.USER_TITLES;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -81,7 +82,7 @@ exports.findOne = (req, res) => {
 
   User.findByPk(id, {
   attributes: [
-        'id', 'username', 'email', 'chineseName', 'phone', 'wechat', 'schoolId',
+        'id', 'username', 'email', 'chineseName', 'phone', 'wechat', 'schoolId', 'title',
         [db.Sequelize.fn('date_format', db.Sequelize.col("startAt"), '%Y-%m-%d'), "startAt"],
         [db.Sequelize.fn('date_format', db.Sequelize.col("users.createdAt"), '%Y-%m-%d'), "createdAt"],
         [db.Sequelize.fn('date_format', db.Sequelize.col("lastLogin"), '%Y-%m-%d'), "lastLogin"],
@@ -149,7 +150,7 @@ var orderbyObject = null;
   offset: offset,
   subQuery: false,
   attributes: [
-        'id', 'username', 'email', 'chineseName', 'phone', 'wechat',
+        'id', 'username', 'email', 'chineseName', 'phone', 'wechat', 'title',
         [db.Sequelize.fn('date_format', db.Sequelize.col("users.startAt"), '%Y-%m-%d'), "startAt"],
         [db.Sequelize.fn('date_format', db.Sequelize.col("users.createdAt"), '%Y-%m-%d'), "createdAt"],
         [db.Sequelize.fn('date_format', db.Sequelize.col("lastLogin"), '%Y-%m-%d'), "lastLogin"],
@@ -234,6 +235,7 @@ exports.signup = (req, res) => {
     phone: req.body.phone,
     wechat: req.body.wechat,
     startAt: req.body.startAt,
+    title: req.body.title,
   })
     .then(user => {
       if (req.body.roles) {
@@ -382,3 +384,8 @@ exports.findByEmail = (req, res) => {
       res.status(500).send({ message: err.message });
     });
 };
+
+// return user title list
+exports.getUserTitles = (req, res) => {
+  res.send(USER_TITLES);
+}

@@ -61,6 +61,7 @@ export default class Register extends Component {
     this.updateUser = this.updateUser.bind(this);
     this.getUser = this.getUser.bind(this);
 
+    this.onChangeTitle = this.onChangeTitle.bind(this);
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
@@ -84,9 +85,11 @@ export default class Register extends Component {
       startAt: null,
       createdAt: null,
       lastLogin: null,
-
+      lastLogin: null,
+      title: "",
       newuser: true,
 
+      titles: [],
       schools: [],
       rolesFull: [],
       successful: false,
@@ -98,11 +101,14 @@ export default class Register extends Component {
   componentDidMount() {
     this.setState({readonly: window.location.pathname.includes('View')});
 
-    this.getRoles();
-    this.getSchools();
-    if (this.props.match /*.params.id*/) {
+    if (this.props.match && this.props.match.params.id) {
+      this.setState({newuser: false});
       this.getUser(this.props.match.params.id);
     }
+
+    this.getRoles();
+    this.getSchools();
+    this.getTitles();
   }
 
   updateUser(e) {
@@ -113,11 +119,11 @@ export default class Register extends Component {
       successful: false
     });
 
+/**
     this.form.validateAll();
-
     if (this.checkBtn.context._errors.length !== 0)
         return;
-
+*/
     var data = {
       username: this.state.username,
       email: this.state.email,
@@ -127,7 +133,8 @@ export default class Register extends Component {
       chineseName: this.state.chineseName,
       phone: this.state.phone,
       wechat: this.state.wechat,
-      startAt: this.state.startAt
+      startAt: this.state.startAt,
+      title: this.state.title
     };
 
     AuthService.update(
@@ -176,8 +183,9 @@ export default class Register extends Component {
           startAt: response.data.startAt,
           createdAt: response.data.createdAt,
           lastLogin: response.data.lastLogin,
+          title: response.data.title,
 
-          newuser: false
+          //newuser: false
         });
         console.log(response.data);
       })
@@ -233,6 +241,19 @@ export default class Register extends Component {
       });
   }
 
+  getTitles() {
+    AuthService.getUserTitles()
+      .then(response => {
+        this.setState({
+          titles: response.data
+        });
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
   onChangeRoles(event) {
     const selected = [...event.target.selectedOptions].map(opt => opt.value);
     this.setState({
@@ -243,6 +264,12 @@ export default class Register extends Component {
   onChangeChineseName(e) {
     this.setState({
       chineseName: e.target.value
+    });
+  }
+
+  onChangeTitle(e) {
+    this.setState({
+      title: e.target.value
     });
   }
 
@@ -308,7 +335,8 @@ export default class Register extends Component {
         this.state.chineseName,
         this.state.phone,
         this.state.wechat,
-        this.state.startAt
+        this.state.startAt,
+        this.state.title
       ).then(
         response => {
           this.emailVerification();
@@ -467,6 +495,22 @@ export default class Register extends Component {
                 </div>
 
                 <div class="form-group col-md-4">
+                  <label htmlFor="title">职务</label>
+                  <select onChange={this.onChangeTitle.bind(this)}
+                    readonly={this.state.readonly?"":false}
+                    class="form-control"
+                    id="title"
+                    required
+                    value={this.state.title}
+                    name="title"
+                >
+                    {this.state.titles.map((option) => (
+                      <option value={option}>{option}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div class="form-group col-md-4">
                   <label htmlFor="roles">角色</label>
                   <select multiple onChange={this.onChangeRoles.bind(this)}
                     readonly={this.state.readonly?"":false}
@@ -481,7 +525,6 @@ export default class Register extends Component {
                     ))}
                   </select>
                 </div>
-
 
                 <div class="form-group col-md-4">
                   <label htmlFor="schoolId">所属学校</label>

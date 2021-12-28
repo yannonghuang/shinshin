@@ -110,6 +110,9 @@ class AuthService {
     return axios.put(API_URL + "users/update/" + `${id}`, data, { headers: authHeader() });
   }
 
+  getUserTitles() {
+    return axios.get(API_URL + "userTitles");
+  }
 }
 
 export default new AuthService();
