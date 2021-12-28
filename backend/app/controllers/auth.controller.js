@@ -31,9 +31,13 @@ const getPagingData = (count, data, page, limit) => {
 exports.update = (req, res) => {
   const id = req.params.id;
 
-  const {password, ...otherParameters} = req.body;
   //User.update(req.body, {
-  User.update({password: bcrypt.hashSync(password, 8), ...otherParameters}, {
+  const {password, ...otherParameters} = req.body;
+  const updateParams = (password && password.length >= 6)
+    ? {password: bcrypt.hashSync(password, 8), ...otherParameters}
+    : { ...otherParameters};
+
+  User.update(updateParams, {
     where: { id: id }
   })
     .then(num => {

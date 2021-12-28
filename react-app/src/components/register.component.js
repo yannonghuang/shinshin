@@ -18,7 +18,7 @@ const required = value => {
   if (!value) {
     return (
       <div className="alert alert-danger" role="alert">
-        This field is required!
+        请填写!
       </div>
     );
   }
@@ -28,7 +28,7 @@ const email = value => {
   if (!isEmail(value)) {
     return (
       <div className="alert alert-danger" role="alert">
-        This is not a valid email.
+        邮件地址不正确
       </div>
     );
   }
@@ -38,7 +38,7 @@ const vusername = value => {
   if (value.length < 3 || value.length > 20) {
     return (
       <div className="alert alert-danger" role="alert">
-        The username must be between 3 and 20 characters.
+        用户名应含3至20个字节
       </div>
     );
   }
@@ -48,7 +48,7 @@ const vpassword = value => {
   if (value.length < 6 || value.length > 40) {
     return (
       <div className="alert alert-danger" role="alert">
-        The password must be between 6 and 40 characters.
+        密码应含6至40个字节
       </div>
     );
   }
@@ -75,7 +75,7 @@ export default class Register extends Component {
       id: null,
       username: "",
       email: "",
-      password: "",
+      password: null,
       roles: [],
       schoolId: null,
       chineseName: "",
@@ -107,6 +107,17 @@ export default class Register extends Component {
 
   updateUser(e) {
     e.preventDefault();
+
+    this.setState({
+      message: "",
+      successful: false
+    });
+
+    this.form.validateAll();
+
+    if (this.checkBtn.context._errors.length !== 0)
+        return;
+
     var data = {
       username: this.state.username,
       email: this.state.email,
@@ -126,12 +137,14 @@ export default class Register extends Component {
       .then(response => {
         console.log(response.data);
         this.setState({
-          message: "用户信息成功更新!"
+          message: "用户信息成功更新!",
+          successful: true
         });
       })
       .catch(e => {
         this.setState({
-          message: "用户信息修改失败：" + e
+          message: "用户信息修改失败：" + e,
+          successful: false
         });
         console.log(e);
       });
@@ -154,7 +167,7 @@ export default class Register extends Component {
           id: response.data.id,
           username: response.data.username,
           email: response.data.email,
-          password: response.data.password,
+          //password: response.data.password,
           roles: this.getRoleNames(response.data.roles),
           schoolId: response.data.schoolId,
           chineseName: response.data.chineseName,
@@ -338,12 +351,14 @@ export default class Register extends Component {
       .then((result) => {
         console.log(result.text);
         this.setState({
-          message: "注册确认邮件已发至您的邮箱 。。。"
+          message: "注册确认邮件已发至您的邮箱 。。。",
+          successful: true
         });
       }, (error) => {
         console.log(error.text);
         this.setState({
-          message: error.text
+          message: error.text,
+          successful: false
         });
       });
     }
