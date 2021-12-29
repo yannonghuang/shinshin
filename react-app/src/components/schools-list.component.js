@@ -59,7 +59,7 @@ const SchoolsList = (props) => {
   };
 
   const onChangeSearchInputStartAt = (e) => {
-    const searchStartAt = e.target.value;
+    const searchStartAt = e; //e.target.value;
     setSearchStartAt(searchStartAt);
   };
 
@@ -174,7 +174,7 @@ const SchoolsList = (props) => {
       });
   };
 
-  useEffect(retrieveSchools, [page, pageSize, orderby]);
+  useEffect(retrieveSchools, [page, pageSize, orderby, searchName, searchCode, searchRegion, searchStartAt]);
 
   const refreshList = () => {
     retrieveSchools();
@@ -405,6 +405,7 @@ const SchoolsList = (props) => {
 
           <input
             type="text"
+            readonly=""
             className="form-control"
             placeholder="建校年份"
             value={searchStartAt}

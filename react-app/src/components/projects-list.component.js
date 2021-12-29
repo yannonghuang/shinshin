@@ -56,7 +56,7 @@ const ProjectsList = (props) => {
   };
 
   const onChangeSearchCreatedAt = (e) => {
-    const searchCreatedAt = e.target.value;
+    const searchCreatedAt = e; // e.target.value;
     setSearchCreatedAt(searchCreatedAt);
   };
 
@@ -182,7 +182,7 @@ const ProjectsList = (props) => {
       });
   };
 
-  useEffect(retrieveProjects, [page, pageSize, orderby]);
+  useEffect(retrieveProjects, [page, pageSize, orderby, searchCode, searchName, searchCreatedAt]);
 
   const refreshList = () => {
     retrieveProjects();
@@ -367,7 +367,7 @@ const ProjectsList = (props) => {
   useSortBy,
   );
 
-  const findByName = () => {
+  const search = () => {
     setPage(1);
     retrieveProjects();
   };
@@ -410,6 +410,7 @@ const ProjectsList = (props) => {
 
           <input
             type="text"
+            readonly=""
             className="form-control"
             placeholder="项目年份"
             value={searchCreatedAt}
@@ -423,6 +424,7 @@ const ProjectsList = (props) => {
             minRange={1995}
             maxRange={2022}
           />
+
 
           <div>
             <button
@@ -442,7 +444,7 @@ const ProjectsList = (props) => {
             <button
               className="btn btn-primary badge-success"
               type="button"
-              onClick={findByName}
+              onClick={search}
             >
               查询
             </button>
