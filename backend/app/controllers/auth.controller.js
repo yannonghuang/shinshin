@@ -277,7 +277,7 @@ exports.signup = (req, res) => {
       }
     })
     .catch(err => {
-      res.status(500).send({ message: err.message });
+      res.status(500).send({ message: '创建用户异常，密码是必填项。。。' + err.message });
     });
 };
 

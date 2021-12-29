@@ -87,9 +87,9 @@ const UsersList = (props) => {
     return params;
   };
 
-  const getRoleLabel = (name, rolesFull) => {
+  const getRoleLabel = (name) => {
     for (var i = 0; i < rolesFull.length; i++) {
-      if (rolesFull[i].name === name) {
+      if (rolesFull[i].name.trim() === name.trim()) {
         return rolesFull[i].label;
       }
     }
@@ -98,13 +98,12 @@ const UsersList = (props) => {
 
   const renderRoles = (rowIdx) => {
     let r = "";
-    if (usersRef.current[rowIdx].roles && usersRef.current[rowIdx].roles[0]) {
-      r = getRoleLabel(usersRef.current[rowIdx].roles[0].name, rolesFull);
-      for (var i = 1; i < usersRef.current[rowIdx].roles.length; i++) {
-        r = r + ", " + getRoleLabel(usersRef.current[rowIdx].roles[i].name, rolesFull);
+    if (usersRef.current[rowIdx].roles) {
+      for (var i = 0; i < usersRef.current[rowIdx].roles.length; i++) {
+        r = r + ", " + getRoleLabel(usersRef.current[rowIdx].roles[i].name);
       }
     }
-    return r;
+    return r.substring(r.indexOf(',') + 2);
   }
 
   const renderSchool = (rowIdx) => {

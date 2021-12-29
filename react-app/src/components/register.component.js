@@ -45,7 +45,7 @@ const vusername = value => {
 };
 
 const vpassword = value => {
-  if (value.length < 6 || value.length > 40) {
+  if (value && value.length > 0 && (value.length < 6 || value.length > 40)) {
     return (
       <div className="alert alert-danger" role="alert">
         密码应含6至40个字节
@@ -119,11 +119,10 @@ export default class Register extends Component {
       successful: false
     });
 
-/**
     this.form.validateAll();
     if (this.checkBtn.context._errors.length !== 0)
         return;
-*/
+
     var data = {
       username: this.state.username,
       email: this.state.email,
@@ -356,7 +355,7 @@ export default class Register extends Component {
 
           this.setState({
             successful: false,
-            message: resMessage
+            message: '创建用户异常，密码是必填项。。。' + resMessage
           });
         }
       );
@@ -433,6 +432,7 @@ export default class Register extends Component {
                   />
                 </div>
 
+
                 <div class="form-group col-md-4">
                   <label htmlFor="password">密码</label>
                   <Input
@@ -442,7 +442,7 @@ export default class Register extends Component {
                     name="password"
                     value={this.state.password}
                     onChange={this.onChangePassword}
-                    validations={[required, vpassword]}
+                    validations={[vpassword]}
                   />
                 </div>
 
