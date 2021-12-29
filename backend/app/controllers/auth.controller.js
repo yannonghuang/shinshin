@@ -115,6 +115,7 @@ exports.findOne = (req, res) => {
 exports.findAll2 = (req, res) => {
   const username = req.body.username;
   const searchRole = req.body.searchRole;
+  const searchSchoolCode = req.body.searchSchoolCode;
   const page = req.body.page;
   const size = req.body.size;
   const schoolId = req.body.schoolId;
@@ -143,10 +144,10 @@ var orderbyObject = null;
                       [Op.or] : [
                         {username: { [Op.like]: `%${username}%` }},
                         {chineseName: { [Op.like]: `%${username}%` }},
-                        {'$school.code$': { [Op.like]: `%${username}%` }}
                       ] } : null,
             schoolId ? { schoolId: { [Op.eq]: `${schoolId}` }} : null,
-            searchRole ? {'$roles.name$': { [Op.eq]: `${searchRole}` }} : null
+            searchRole ? {'$roles.name$': { [Op.eq]: `${searchRole}` }} : null,
+            searchSchoolCode ? {'$school.code$': { [Op.like]: `%${searchSchoolCode}%` }} : null
         ]};
 /**
   var condition = username ? {

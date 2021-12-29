@@ -37,12 +37,8 @@ const UsersList = (props) => {
 
   const [searchRole, setSearchRole] = useState("");
   const onChangeSearchRole = (e) => {
-    //e.preventDefault();
-
     const searchRole = e.target.value;
     setSearchRole(searchRole);
-
-    retrieveUsers();
   };
 
   const [searchUsername, setSearchUsername] = useState("");
@@ -51,7 +47,13 @@ const UsersList = (props) => {
     setSearchUsername(searchUsername);
   };
 
-  const getRequestParams = (searchUsername, searchRole, page, pageSize, schoolId, orderby) => {
+  const [searchSchoolCode, setSearchSchoolCode] = useState("");
+  const onChangeSearchSchoolCode = (e) => {
+    const searchSchoolCode = e.target.value;
+    setSearchSchoolCode(searchSchoolCode);
+  };
+
+  const getRequestParams = (searchUsername, searchRole, searchSchoolCode, page, pageSize, schoolId, orderby) => {
     let params = {};
 
     if (searchUsername) {
@@ -60,6 +62,10 @@ const UsersList = (props) => {
 
     if (searchRole) {
       params["searchRole"] = searchRole;
+    }
+
+    if (searchSchoolCode) {
+      params["searchSchoolCode"] = searchSchoolCode;
     }
 
     if (page) {
@@ -124,7 +130,7 @@ const UsersList = (props) => {
   useEffect(getRoles, []);
 
   const retrieveUsers = () => {
-    const params = getRequestParams(searchUsername, searchRole, page, pageSize, schoolId, orderby);
+    const params = getRequestParams(searchUsername, searchRole, searchSchoolCode, page, pageSize, schoolId, orderby);
 
     UserDataService.getAll2(params)
       .then((response) => {
@@ -141,7 +147,7 @@ const UsersList = (props) => {
       });
   };
 
-  useEffect(retrieveUsers, [page, pageSize, orderby]);
+  useEffect(retrieveUsers, [page, pageSize, orderby, searchRole, searchUsername, searchSchoolCode]);
 
   const refreshList = () => {
     retrieveUsers();
@@ -352,10 +358,19 @@ const UsersList = (props) => {
           <input
             type="text"
             className="form-control"
-            placeholder="用户名/中文名/学校编码。。。"
+            placeholder="学校编码。。。"
+            value={searchSchoolCode}
+            onChange={onChangeSearchSchoolCode}
+          />
+
+          <input
+            type="text"
+            className="form-control"
+            placeholder="用户名/中文名。。。"
             value={searchUsername}
             onChange={onChangeSearchUsername}
           />
+
           <div className="input-group-append">
             <button
               className="btn btn-outline-secondary"
