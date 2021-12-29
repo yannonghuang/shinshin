@@ -336,18 +336,15 @@ const UsersList = (props) => {
 
   return (
     <div className="list row">
-      <div className="col-md-6">
+      <div className="col-md-9">
         <h4>用户列表(总数：{totalItems})</h4>
-
-
-
         <div className="input-group mb-3">
           <select
             className="form-control"
             value={searchRole}
             onChange={onChangeSearchRole}
           >
-            <option value="">角色查询 。。。</option>
+            <option value="">角色查询</option>
             {rolesFull.map((option) => (
               <option value={option.name}>
                 {option.label}
@@ -358,7 +355,7 @@ const UsersList = (props) => {
           <input
             type="text"
             className="form-control"
-            placeholder="学校编码。。。"
+            placeholder="学校编码"
             value={searchSchoolCode}
             onChange={onChangeSearchSchoolCode}
           />
@@ -366,7 +363,7 @@ const UsersList = (props) => {
           <input
             type="text"
             className="form-control"
-            placeholder="用户名/中文名。。。"
+            placeholder="用户名/中文名"
             value={searchUsername}
             onChange={onChangeSearchUsername}
           />
@@ -383,7 +380,7 @@ const UsersList = (props) => {
         </div>
       </div>
 
-      <div className="mb-3 col-md-6">
+      <div className="mb-3 col-md-3">
         {"每页显示行数: "}
         <select onChange={handlePageSizeChange} value={pageSize}>
           {pageSizes.map((size) => (
