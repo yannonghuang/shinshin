@@ -142,6 +142,7 @@ var orderbyObject = null;
                       [Op.or] : [
                         {username: { [Op.like]: `%${username}%` }},
                         {chineseName: { [Op.like]: `%${username}%` }},
+                        {'$school.code$': { [Op.like]: `%${username}%` }}
                       ] } : null,
             schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null,
         ]};

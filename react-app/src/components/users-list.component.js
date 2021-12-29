@@ -322,7 +322,7 @@ const UsersList = (props) => {
           <input
             type="text"
             className="form-control"
-            placeholder="用户名或者中文名查找。。。"
+            placeholder="用户名/中文名/学校编码关键字查找。。。"
             value={searchUsername}
             onChange={onChangeSearchUsername}
           />
