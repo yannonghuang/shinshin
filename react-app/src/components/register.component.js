@@ -322,6 +322,13 @@ export default class Register extends Component {
       successful: false
     });
 
+    if (!this.state.password) {
+      this.setState({
+        message: '密码是必填项。。。'
+      });
+      return;
+    }
+
     this.form.validateAll();
 
     if (this.checkBtn.context._errors.length === 0) {
