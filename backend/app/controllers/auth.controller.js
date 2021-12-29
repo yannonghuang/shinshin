@@ -116,6 +116,7 @@ exports.findAll2 = (req, res) => {
   const username = req.body.username;
   const page = req.body.page;
   const size = req.body.size;
+  const schoolId = req.body.schoolId;
   const orderby = req.body.orderby;
 
 var orderbyObject = null;
@@ -134,13 +135,36 @@ var orderbyObject = null;
 
   //const { page, size, title } = req.query;
   //var condition = username ? { username: { [Op.like]: `%${username}%` } } : null;
-  var condition = username
-                    ? {
+
+  var condition = {
+        [Op.and]: [
+            username ? {
                       [Op.or] : [
                         {username: { [Op.like]: `%${username}%` }},
                         {chineseName: { [Op.like]: `%${username}%` }},
-                      ] }
-                    : null;
+                      ] } : null,
+            schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null,
+        ]};
+/**
+  var condition = username ? {
+                      [Op.or] : [
+                        {username: { [Op.like]: `%${username}%` }},
+                        {chineseName: { [Op.like]: `%${username}%` }},
+                      ] } : null;
+*/
+
+  const include = [
+                    {
+                        model: Role,
+                        attributes: ['name'],
+                        required: false,
+                    },
+                    {
+                        model: School,
+                        attributes: ['id', 'code', 'name', 'region'],
+                        required: false,
+                    },
+  ];
 
   const { limit, offset } = getPagination(page, size);
 
@@ -155,25 +179,16 @@ var orderbyObject = null;
         [db.Sequelize.fn('date_format', db.Sequelize.col("users.createdAt"), '%Y-%m-%d'), "createdAt"],
         [db.Sequelize.fn('date_format', db.Sequelize.col("lastLogin"), '%Y-%m-%d'), "lastLogin"],
   ],
-  include: [
-  {
-      model: Role,
-      attributes: ['name'],
-      required: false,
-  },
-  {
-      model: School,
-      attributes: ['id', 'code', 'name', 'region'],
-      required: false,
-  },
-  ],
+  include: include,
   /**
   group: ['id']
   */
   order: orderbyObject
   })
     .then(data => {
-      User.count({where: condition})
+      // Project.count({where: condition, include: include, distinct: true, col: 'id'})
+      // User.count({where: condition})
+      User.count({where: condition, include: include, distinct: true, col: 'id'})
         .then(count => {
           const response = getPagingData(count, data, page, limit);
           res.send(response);

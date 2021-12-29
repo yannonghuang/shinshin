@@ -21,6 +21,8 @@ const UsersList = (props) => {
   const [count, setCount] = useState(0);
   const [pageSize, setPageSize] = useState(5);
 
+  const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
+
   const [rolesFull, setRolesFull] = useState([
                                                {name: "user", label: "学校用户"},
                                                {name: "admin", label: "管理员"},
@@ -32,12 +34,14 @@ const UsersList = (props) => {
 
   const [orderby, setOrderby] = useState([]);
 
+  const [totalItems, setTotalItems] = useState(0);
+
   const onChangeSearchUsername = (e) => {
     const searchUsername = e.target.value;
     setSearchUsername(searchUsername);
   };
 
-  const getRequestParams = (searchUsername, page, pageSize, orderby) => {
+  const getRequestParams = (searchUsername, page, pageSize, schoolId, orderby) => {
     let params = {};
 
     if (searchUsername) {
@@ -50,6 +54,10 @@ const UsersList = (props) => {
 
     if (pageSize) {
       params["size"] = pageSize;
+    }
+
+    if (schoolId) {
+      params["schoolId"] = schoolId;
     }
 
     if (orderby) {
@@ -102,14 +110,15 @@ const UsersList = (props) => {
   useEffect(getRoles, []);
 
   const retrieveUsers = () => {
-    const params = getRequestParams(searchUsername, page, pageSize, orderby);
+    const params = getRequestParams(searchUsername, page, pageSize, schoolId, orderby);
 
     UserDataService.getAll2(params)
       .then((response) => {
-        const { users, totalPages } = response.data;
+        const { users, totalPages, totalItems } = response.data;
 
         setUsers(users);
         setCount(totalPages);
+        setTotalItems(totalItems);
 
         console.log(response.data);
       })
@@ -308,7 +317,7 @@ const UsersList = (props) => {
   return (
     <div className="list row">
       <div className="col-md-6">
-        <h4>用户列表</h4>
+        <h4>用户列表(总数：{totalItems})</h4>
         <div className="input-group mb-3">
           <input
             type="text"

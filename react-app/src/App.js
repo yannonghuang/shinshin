@@ -332,7 +332,7 @@ class App extends Component {
             <Route path="/attachments/:id" component={Attachment} />
             */}
 
-            <Route exact path={["/users"]} component={UsersList} >
+            <Route exact path={["/users", "/users/school/:schoolId"]} component={UsersList} >
                 <AutoLogoutTimer ComposedClass={UsersList} />
             </Route>
 

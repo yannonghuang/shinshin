@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import $ from "jquery"; //Load jquery
+import { Link } from "react-router-dom";
 
 import CommentsList from './comments-list.component.js';
 import ProjectsList from './projects-list.component.js';
@@ -743,8 +744,24 @@ export default class School extends Component {
                 name="code"
                 />
                 </div>
+
+                <div class="w-100"></div>
+
+                <div class="form-group">
+                <label htmlFor="users">学校用户</label>
+                <Link
+                  to={"/users/school/" + currentSchool.id}
+                  id="users"
+                  name="users"
+                >
+                  {"点击查看学校用户"}
+                </Link>
+                </div>
+
               </div>
             </div>
+
+
 
             <div class="col-md-8">
               <div class="row">
