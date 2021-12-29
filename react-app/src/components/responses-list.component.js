@@ -36,7 +36,7 @@ const ResponsesList = (props) => {
     setSearchTitle(searchTitle);
   };
 
-  const getRequestParams = (searchTitle, page, pageSize, formId, schoolId, userId, orderby) => {
+  const getRequestParams = (/*searchTitle, page, pageSize, formId, schoolId, userId, orderby*/) => {
     //const user = AuthService.getCurrentUser();
 
     let params = {};
@@ -86,7 +86,7 @@ const ResponsesList = (props) => {
   };
 
   const retrieveResponses = () => {
-    const params = getRequestParams(searchTitle, page, pageSize, formId, schoolId, userId, orderby);
+    const params = getRequestParams(/*searchTitle, page, pageSize, formId, schoolId, userId, orderby*/);
 
     ResponseDataService.getAll2(params)
       .then((response) => {

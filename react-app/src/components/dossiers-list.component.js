@@ -28,7 +28,7 @@ const DossiersList = (props) => {
     setSearchOriginalname(searchOriginalname);
   };
 
-  const getRequestParams = (searchOriginalname, page, pageSize, projectId, docCategory) => {
+  const getRequestParams = (/*searchOriginalname, page, pageSize, projectId, docCategory*/) => {
     let params = {};
 
     if (searchOriginalname) {
@@ -55,7 +55,7 @@ const DossiersList = (props) => {
   };
 
   const retrieveDossiers = () => {
-    const params = getRequestParams(searchOriginalname, page, pageSize, projectId, docCategory);
+    const params = getRequestParams(/*searchOriginalname, page, pageSize, projectId, docCategory*/);
 
     DossierDataService.getAll2(params)
       .then((response) => {

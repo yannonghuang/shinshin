@@ -28,7 +28,7 @@ const FormsList = (props) => {
     setSearchTitle(searchTitle);
   };
 
-  const getRequestParams = (searchTitle, page, pageSize, orderby) => {
+  const getRequestParams = (/*searchTitle, page, pageSize, orderby*/) => {
     let params = {};
 
     if (searchTitle) {
@@ -51,7 +51,7 @@ const FormsList = (props) => {
   };
 
   const retrieveForms = () => {
-    const params = getRequestParams(searchTitle, page, pageSize, orderby);
+    const params = getRequestParams(/*searchTitle, page, pageSize, orderby*/);
 
     FormDataService.getAll2(params)
       .then((response) => {

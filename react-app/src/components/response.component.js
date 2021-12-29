@@ -5,7 +5,7 @@ import FormDataService from "../services/form.service";
 import AttachmentsList from './attachments-list.component.js';
 import SchoolDataService from "../services/school.service";
 import AuthService from "./../services/auth.service";
-import TheCollapsible from './collapsible-attachments-list.component';
+//import TheCollapsible from './collapsible-attachments-list.component';
 
 import $ from "jquery"; //Load jquery
 import React, { Component, createRef } from "react"; //For react component

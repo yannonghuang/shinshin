@@ -53,7 +53,7 @@ const UsersList = (props) => {
     setSearchSchoolCode(searchSchoolCode);
   };
 
-  const getRequestParams = (searchUsername, searchRole, searchSchoolCode, page, pageSize, schoolId, orderby) => {
+  const getRequestParams = (/*searchUsername, searchRole, searchSchoolCode, page, pageSize, schoolId, orderby*/) => {
     let params = {};
 
     if (searchUsername) {
@@ -96,6 +96,7 @@ const UsersList = (props) => {
     return null;
   }
 
+
   const renderRoles = (rowIdx) => {
     let r = "";
     if (usersRef.current[rowIdx].roles) {
@@ -125,11 +126,10 @@ const UsersList = (props) => {
       });
   }
 
-  //useEffect(() => { getRoles(); });
   useEffect(getRoles, []);
 
   const retrieveUsers = () => {
-    const params = getRequestParams(searchUsername, searchRole, searchSchoolCode, page, pageSize, schoolId, orderby);
+    const params = getRequestParams(/*searchUsername, searchRole, searchSchoolCode, page, pageSize, schoolId, orderby*/);
 
     UserDataService.getAll2(params)
       .then((response) => {

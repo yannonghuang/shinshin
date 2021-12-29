@@ -38,7 +38,7 @@ const CommentsList = (props) => {
     setSearchText(searchText);
   };
 
-  const getRequestParams = (searchText, page, pageSize, schoolId, orderby) => {
+  const getRequestParams = (/*searchText, page, pageSize, schoolId, orderby*/) => {
     let params = {};
 
     if (text) {
@@ -65,7 +65,7 @@ const CommentsList = (props) => {
   };
 
   const retrieveComments = () => {
-    const params = getRequestParams(searchText, page, pageSize, schoolId, orderby);
+    const params = getRequestParams(/*searchText, page, pageSize, schoolId, orderby*/);
 
     CommentDataService.getAll2(params)
       .then((response) => {

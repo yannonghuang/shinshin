@@ -72,8 +72,8 @@ const SchoolsList = (props) => {
     setExportSchools([]);
   };
 
-  const getRequestParams = (searchName, page, pageSize, orderby,
-    searchCode, searchRegion, searchStartAt, exportFlag) => {
+  const getRequestParams = (/*searchName, page, pageSize, orderby,
+    searchCode, searchRegion, searchStartAt, */exportFlag) => {
     let params = {};
 
     if (searchName) {
@@ -127,8 +127,8 @@ const SchoolsList = (props) => {
   useEffect(getRegions, [orderby]);
 
   const retrieveSchools = () => {
-    const params = getRequestParams(searchName, page, pageSize, orderby,
-        searchCode, searchRegion, searchStartAt, false);
+    const params = getRequestParams(/*searchName, page, pageSize, orderby,
+        searchCode, searchRegion, searchStartAt, */false);
 
     SchoolDataService.getAll2(params)
       .then((response) => {
@@ -146,8 +146,8 @@ const SchoolsList = (props) => {
   };
 
   const retrieveExportSchools = () => {
-    const params = getRequestParams(searchName, page, pageSize, orderby,
-        searchCode, searchRegion, searchStartAt, true);
+    const params = getRequestParams(/*searchName, page, pageSize, orderby,
+        searchCode, searchRegion, searchStartAt, */true);
 
     SchoolDataService.getAll2(params)
       .then((response) => {

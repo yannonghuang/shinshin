@@ -28,7 +28,7 @@ const DocumentsList = (props) => {
     setSearchOriginalname(searchOriginalname);
   };
 
-  const getRequestParams = (searchOriginalname, page, pageSize, schoolId, docCategory) => {
+  const getRequestParams = (/*searchOriginalname, page, pageSize, schoolId, docCategory*/) => {
     let params = {};
 
     if (searchOriginalname) {
@@ -55,7 +55,7 @@ const DocumentsList = (props) => {
   };
 
   const retrieveDocuments = () => {
-    const params = getRequestParams(searchOriginalname, page, pageSize, schoolId, docCategory);
+    const params = getRequestParams(/*searchOriginalname, page, pageSize, schoolId, docCategory*/);
 
     DocumentDataService.getAll2(params)
       .then((response) => {

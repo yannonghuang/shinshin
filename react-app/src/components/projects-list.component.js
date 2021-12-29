@@ -75,8 +75,8 @@ const ProjectsList = (props) => {
   };
 
 
-  const getRequestParams = (searchName, page, pageSize, orderby,
-    searchCode, searchRegion, searchCreatedAt, schoolId, exportFlag) => {
+  const getRequestParams = (/*searchName, page, pageSize, orderby,
+    searchCode, searchRegion, searchCreatedAt, schoolId, */exportFlag) => {
     let params = {};
 
     if (searchName) {
@@ -135,8 +135,8 @@ const ProjectsList = (props) => {
   useEffect(getRegions, [orderby]);
 
   const retrieveProjects = () => {
-    const params = getRequestParams(searchName, page, pageSize, orderby,
-        searchCode, searchRegion, searchCreatedAt, schoolId, false);
+    const params = getRequestParams(/*searchName, page, pageSize, orderby,
+        searchCode, searchRegion, searchCreatedAt, schoolId, */false);
 
     ProjectDataService.getAll2(params)
       .then((response) => {
@@ -154,8 +154,8 @@ const ProjectsList = (props) => {
   };
 
   const retrieveExportProjects = () => {
-    const params = getRequestParams(searchName, page, pageSize, orderby,
-        searchCode, searchRegion, searchCreatedAt, schoolId, true);
+    const params = getRequestParams(/*searchName, page, pageSize, orderby,
+        searchCode, searchRegion, searchCreatedAt, schoolId, */true);
 
     ProjectDataService.getAll2(params)
       .then((response) => {

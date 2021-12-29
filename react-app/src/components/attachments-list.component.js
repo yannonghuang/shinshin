@@ -29,7 +29,7 @@ const AttachmentsList = (props) => {
     setSearchOriginalname(searchOriginalname);
   };
 
-  const getRequestParams = (searchOriginalname, page, pageSize, responseId) => {
+  const getRequestParams = (/*searchOriginalname, page, pageSize, responseId*/) => {
     let params = {};
 
     if (searchOriginalname) {
@@ -52,7 +52,7 @@ const AttachmentsList = (props) => {
   };
 
   const retrieveAttachments = () => {
-    const params = getRequestParams(searchOriginalname, page, pageSize, responseId);
+    const params = getRequestParams(/*searchOriginalname, page, pageSize, responseId*/);
 
     AttachmentDataService.getAll2(params)
       .then((response) => {

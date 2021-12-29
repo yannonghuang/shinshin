@@ -13,7 +13,7 @@ import ResponsesList from './responses-list.component.js';
 import DocumentsList from './documents-list.component.js';
 import SchoolDataService from "../services/school.service";
 import DocumentDataService from "../services/document.service";
-import SchoolDetails from './collapsible-school.component';
+//import SchoolDetails from './collapsible-school.component';
 
 import YearPicker from 'react-single-year-picker';
 
