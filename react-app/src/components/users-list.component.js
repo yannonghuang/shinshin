@@ -12,7 +12,6 @@ const UsersList = (props) => {
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
-  const [searchUsername, setSearchUsername] = useState("");
 
   const usersRef = useRef();
   usersRef.current = users;
@@ -36,16 +35,31 @@ const UsersList = (props) => {
 
   const [totalItems, setTotalItems] = useState(0);
 
+  const [searchRole, setSearchRole] = useState("");
+  const onChangeSearchRole = (e) => {
+    //e.preventDefault();
+
+    const searchRole = e.target.value;
+    setSearchRole(searchRole);
+
+    retrieveUsers();
+  };
+
+  const [searchUsername, setSearchUsername] = useState("");
   const onChangeSearchUsername = (e) => {
     const searchUsername = e.target.value;
     setSearchUsername(searchUsername);
   };
 
-  const getRequestParams = (searchUsername, page, pageSize, schoolId, orderby) => {
+  const getRequestParams = (searchUsername, searchRole, page, pageSize, schoolId, orderby) => {
     let params = {};
 
     if (searchUsername) {
       params["username"] = searchUsername;
+    }
+
+    if (searchRole) {
+      params["searchRole"] = searchRole;
     }
 
     if (page) {
@@ -110,7 +124,7 @@ const UsersList = (props) => {
   useEffect(getRoles, []);
 
   const retrieveUsers = () => {
-    const params = getRequestParams(searchUsername, page, pageSize, schoolId, orderby);
+    const params = getRequestParams(searchUsername, searchRole, page, pageSize, schoolId, orderby);
 
     UserDataService.getAll2(params)
       .then((response) => {
@@ -294,7 +308,7 @@ const UsersList = (props) => {
   },
   useSortBy);
 
-  const findByName = () => {
+  const search = () => {
     setPage(1);
     retrieveUsers();
   };
@@ -318,11 +332,27 @@ const UsersList = (props) => {
     <div className="list row">
       <div className="col-md-6">
         <h4>用户列表(总数：{totalItems})</h4>
+
+
+
         <div className="input-group mb-3">
+          <select
+            className="form-control"
+            value={searchRole}
+            onChange={onChangeSearchRole}
+          >
+            <option value="">角色查询 。。。</option>
+            {rolesFull.map((option) => (
+              <option value={option.name}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+
           <input
             type="text"
             className="form-control"
-            placeholder="用户名/中文名/学校编码关键字查找。。。"
+            placeholder="用户名/中文名/学校编码。。。"
             value={searchUsername}
             onChange={onChangeSearchUsername}
           />
@@ -330,15 +360,15 @@ const UsersList = (props) => {
             <button
               className="btn btn-outline-secondary"
               type="button"
-              onClick={findByName}
+              onClick={search}
             >
-              查找
+              查询
             </button>
           </div>
         </div>
       </div>
 
-      <div className="mt-3 col-md-6">
+      <div className="mb-3 col-md-6">
         {"每页显示行数: "}
         <select onChange={handlePageSizeChange} value={pageSize}>
           {pageSizes.map((size) => (
