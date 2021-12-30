@@ -983,8 +983,8 @@ export default class School extends Component {
                 <Tab>学校照片</Tab>
                 <Tab>评论区</Tab>
               </TabList>
+
               <TabPanel>
-                <p>... 查看学校详情 ...</p>
               </TabPanel>
               <TabPanel>
                 <ProjectsList schoolId = {currentSchool.id} />

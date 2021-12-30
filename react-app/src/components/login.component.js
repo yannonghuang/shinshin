@@ -123,7 +123,7 @@ export default class Login extends Component {
         .then((result) => {
           console.log(result.text);
           this.setState({
-            message: "密码重置邮件已发至您的邮箱。。。"
+            message: "邮件已发至您的邮箱，请在15分钟内完成密码重置。。。"
           });
         }, (error) => {
           console.log(error.text);

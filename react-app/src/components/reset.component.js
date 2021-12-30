@@ -37,7 +37,7 @@ export default class Reset extends Component {
     this.state = {
       passwordVerified: "",
       password: "",
-      email: "",
+      email: null,
       loading: false,
       message: ""
     };
@@ -53,9 +53,16 @@ export default class Reset extends Component {
         email = decoded.email;
     });
 
-    this.setState({
-      email: email
-    });
+    if (!email) {
+      this.setState({
+        message: '您的密码重置请求失效，请到登录页面重新提供注册邮箱。。。',
+        email: null
+      });
+    } else {
+      this.setState({
+        email: email
+      });
+    }
   }
 
   onChangePasswordVerified(e) {
@@ -76,7 +83,10 @@ export default class Reset extends Component {
     this.form.validateAll();
     if (this.checkBtn.context._errors.length > 0) return;
 
-    if (this.state.email && (this.state.passwordVerified === this.state.password)) {
+    if (!this.state.email)
+      return;
+
+    if (this.state.passwordVerified === this.state.password) {
       AuthService.reset(this.state.email, this.state.password)
       .then(response => {
         alert('您的密码已经成功重置');
