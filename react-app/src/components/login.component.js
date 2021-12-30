@@ -87,48 +87,6 @@ export default class Login extends Component {
     });
   }
 
-  smtpjs_handleReset(e) {
-    e.preventDefault();
-
-    if (this.state.email) {
-      var token = jwt.sign({ email: this.state.email }, "config.secret", {
-        expiresIn: 900 // 15 minutes
-      });
-
-      AuthService.findByEmail(this.state.email)
-      .then(r => {
-        const body = "<html><h2>欣欣教育基金会学校项目管理系统</h2><a href='http://localhost:8081/reset?token=" +
-                    token +
-                    "'><strong>请点击重置密码</strong></a><br></br></html>";
-
-        window.Email.send({
-          Host : "smtp.elasticemail.com",
-          Username : "yannonghaung@icloud.com",
-          Password : "A2D3763E94CA053F9F340EEC9900FB7ACD21",
-          To : this.state.email, // 'yannonghuang@icloud.com',
-          From : "yannonghaung@icloud.com",
-          Subject : "欣欣教育基金会学校项目管理系统",
-          Body : body //"And this is the body test"
-        })
-        .then(() => {
-          this.setState({
-          message: "密码重置邮件已发至您的邮箱。。。"
-        });
-        //message => alert(message)
-        })
-        .catch((err) => {
-          this.setState({
-          message: err.toString()
-          });
-        });
-      })
-      .catch(e => {
-        this.setState({
-          message: e.toString()
-        });
-      });
-    }
-  }
 
   handleEmailVerification(email) {
       AuthService.findByEmail(email)

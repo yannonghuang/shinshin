@@ -199,11 +199,13 @@ const UsersList = (props) => {
         Header: "中文名",
         accessor: "chineseName",
       },
+/*
       {
         Header: "电子邮件",
         accessor: "email",
         disableSortBy: true,
       },
+*/
       {
         Header: "职务",
         accessor: "title",

@@ -17,6 +17,16 @@ const required = value => {
   }
 };
 
+const vpassword = value => {
+  if (value && value.length > 0 && (value.length < 6 || value.length > 40)) {
+    return (
+      <div className="alert alert-danger" role="alert">
+        密码应含6至40个字节
+      </div>
+    );
+  }
+};
+
 export default class Reset extends Component {
   constructor(props) {
     super(props);
@@ -64,6 +74,7 @@ export default class Reset extends Component {
     e.preventDefault();
 
     this.form.validateAll();
+    if (this.checkBtn.context._errors.length > 0) return;
 
     if (this.state.email && (this.state.passwordVerified === this.state.password)) {
       AuthService.reset(this.state.email, this.state.password)
@@ -81,7 +92,6 @@ export default class Reset extends Component {
           message: JSON.stringify(error)
         });
       });
-
     } else {
       this.setState({
         message: '请再次确认密码。。。'
@@ -117,7 +127,7 @@ export default class Reset extends Component {
                 name="password"
                 value={this.state.password}
                 onChange={this.onChangePassword}
-                validations={[required]}
+                validations={[required, vpassword]}
               />
             </div>
 
