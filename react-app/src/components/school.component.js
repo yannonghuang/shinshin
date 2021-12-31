@@ -976,7 +976,7 @@ export default class School extends Component {
             {this.state.readonly ? (
             <Tabs>
               <TabList>
-                <Tab>学校详情</Tab>
+                <Tab><h4>学校详情 <i class="fas fa-hand-point-right"></i></h4></Tab>
                 <Tab>项目列表</Tab>
                 <Tab>项目申请列表</Tab>
                 <Tab>学校文档</Tab>
