@@ -698,7 +698,6 @@ export default class School extends Component {
 
     return (
       <div>
-         <h4>学校信息</h4>
         {(this.state.submitted && this.state.newschool) ? (
           <div>
             <h4>学校信息成功提交!</h4>
@@ -709,8 +708,8 @@ export default class School extends Component {
         ) : (
           <div class="row">
             <div class="col-md-4">
-
               <div class="row">
+                <h4>学校基本信息</h4>
                 <div onDragOver={this.onDrag} onDrop={this.onDrop}>
                 {this.state.readonly ? "" :
                 <p>上传照片（拖拽照片文件到下框中）</p>
