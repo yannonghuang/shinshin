@@ -19,6 +19,7 @@ import SchoolsList from "./components/schools-list.component";
 import DocumentsList from "./components/documents-list.component";
 import RegionsList from "./components/regions-list.component";
 import CommentsList from "./components/comments-list.component";
+import LogsList from "./components/logs-list.component";
 
 import Project from "./components/project.component";
 import ProjectsList from "./components/projects-list.component";
@@ -154,6 +155,7 @@ class App extends Component {
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href={"/documents"}>学校文档</a>
                 <a class="dropdown-item" href={"/comments"}>留言</a>
+                <a class="dropdown-item" href={"/logs"}>修改记录</a>
                 <a class="dropdown-item" href="#">Something else here</a>
               </div>
             </li>
@@ -283,8 +285,12 @@ class App extends Component {
                 <AutoLogoutTimer ComposedClass={DocumentsList} />
             </Route>
 
-            <Route exact path={["/comments", "/documents/school/:schoolId"]} component={CommentsList} >
+            <Route exact path={["/comments", "/comments/school/:schoolId"]} component={CommentsList} >
                 <AutoLogoutTimer ComposedClass={CommentsList} />
+            </Route>
+
+            <Route exact path={["/logs", "/logs/school/:schoolId"]} component={LogsList} >
+                <AutoLogoutTimer ComposedClass={LogsList} />
             </Route>
 
             <Route exact path={["/projects", "/projects/school/:schoolId"]} component={ProjectsList} >

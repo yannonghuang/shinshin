@@ -1,5 +1,6 @@
 const db = require("../models");
 const School = db.schools;
+const Log = db.logs;
 const Response = db.responses;
 const Project = db.projects;
 const Document = db.documents;
@@ -25,6 +26,43 @@ const getPagingData = (count, data, page, limit) => {
   const totalPages = Math.ceil(totalItems / limit);
 
   return { totalItems, schools, totalPages, currentPage };
+};
+
+const updateAndLog = (newObj, oldObj, schoolId, userId, res) => {
+  var updates = [];
+  Object.keys(newObj).forEach(key => {
+    var newv = null;
+    if (newObj[key]) newv = JSON.stringify(newObj[key]).trim();
+    var oldv = null;
+    if (oldObj && oldObj[key]) oldv = JSON.stringify(oldObj[key]).trim();
+    if (newv &&
+        (!oldObj || !oldObj[key] || (oldv != newv)) &&
+        !(key == 'startAt' && oldv && oldv.substring(0, 4) == newv.substring(0, 4))
+        ) {
+      updates.push({field: key, oldv: oldv, newv: newv, schoolId, userId});
+      oldObj.set(key, newObj[key]);
+    }
+  });
+
+  oldObj.save()
+  .then(r => {
+    Log.bulkCreate(updates)
+    .then(rr => {
+      res.send({
+        message: "School was updated successfully."
+      });
+    })
+    .catch(ee => {
+      res.send({
+        message: "failed updating School with id=" + schoolId + "..." + ee.toString()
+      });
+    });
+  })
+  .catch(e => {
+    res.send({
+      message: "failed updating School with id=" + schoolId + "..." + e.toString()
+    });
+  });
 };
 
 // return region list
@@ -442,7 +480,7 @@ exports.findOne = (req, res) => {
 };
 
 // Update a School by the id in the request
-exports.update = (req, res) => {
+exports.SAVE_update = (req, res) => {
   const id = req.params.id;
 
   School.update(req.body, {
@@ -466,6 +504,33 @@ exports.update = (req, res) => {
         message: "Error updating School with id=" + id
       });
     });
+};
+
+// Update a School by the id in the request
+exports.update = (req, res) => {
+  const schoolId = req.params.id;
+  const userId = req.userId;
+  const newObj = req.body;
+
+  School.findByPk(schoolId)
+  .then(oldObj => {
+    if (oldObj) {
+
+      updateAndLog(newObj, oldObj, schoolId, userId, res);
+
+    } else {
+      console.log("Cannot update School with id=${schoolId}. Maybe School was not found or req.body is empty!");
+      res.send({
+        message: "Cannot update School with id=" + schoolId + ". Maybe School was not found or req.body is empty!"
+      });
+    }
+  })
+  .catch(err => {
+    console.log(err.message || "Error finding School with id=" + schoolId);
+    res.status(500).send({
+      message: "Error finding School with id=" + schoolId
+    });
+  });
 };
 
 // Delete a school with the specified id in the request
