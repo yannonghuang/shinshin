@@ -749,7 +749,6 @@ export default class School extends Component {
                   <div class="w-100"></div>
 
                   <div class="form-group">
-                  <label htmlFor="users">学校用户</label>
                   <Link
                     to={"/users/school/" + currentSchool.id}
                     id="users"
@@ -762,7 +761,6 @@ export default class School extends Component {
                   <div class="w-100"></div>
 
                   <div class="form-group">
-                  <label htmlFor="logs">学校信息修改记录</label>
                   <Link
                     to={"/logs/school/" + currentSchool.id}
                     id="logs"

@@ -28,7 +28,7 @@ const getPagingData = (count, data, page, limit) => {
   return { totalItems, schools, totalPages, currentPage };
 };
 
-const updateAndLog = (newObj, oldObj, schoolId, userId, res) => {
+const updateAndLog = async (newObj, oldObj, schoolId, userId, res) => {
   var updates = [];
   Object.keys(newObj).forEach(key => {
     var newv = null;
@@ -37,28 +37,32 @@ const updateAndLog = (newObj, oldObj, schoolId, userId, res) => {
     if (oldObj && oldObj[key]) oldv = JSON.stringify(oldObj[key]).trim();
     if (newv &&
         (!oldObj || !oldObj[key] || (oldv != newv)) &&
-        !(key == 'startAt' && oldv && oldv.substring(0, 4) == newv.substring(0, 4))
+        !(key == 'startAt' && oldv && oldv.substring(0, 4) == newv.substring(0, 4)) // ugly, but for datetype handling
         ) {
       updates.push({field: key, oldv: oldv, newv: newv, schoolId, userId});
       oldObj.set(key, newObj[key]);
     }
   });
 
-  oldObj.save()
-  .then(r => {
-    Log.bulkCreate(updates)
-    .then(rr => {
+  const t = await db.sequelize.transaction();
+  oldObj.save({ transaction: t })
+  .then(async (r) => {
+    Log.bulkCreate(updates, { transaction: t })
+    .then(async (rr) => {
+      await t.commit();
       res.send({
         message: "School was updated successfully."
       });
     })
-    .catch(ee => {
+    .catch(async (ee) => {
+      await t.rollback();
       res.send({
         message: "failed updating School with id=" + schoolId + "..." + ee.toString()
       });
     });
   })
-  .catch(e => {
+  .catch(async (e) => {
+    await t.rollback();
     res.send({
       message: "failed updating School with id=" + schoolId + "..." + e.toString()
     });
