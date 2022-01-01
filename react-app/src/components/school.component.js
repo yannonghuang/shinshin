@@ -744,31 +744,35 @@ export default class School extends Component {
                 />
                 </div>
 
-                <div class="w-100"></div>
+                {this.state.readonly && (
+                <div>
+                  <div class="w-100"></div>
 
-                <div class="form-group">
-                <label htmlFor="users">学校用户</label>
-                <Link
-                  to={"/users/school/" + currentSchool.id}
-                  id="users"
-                  name="users"
-                >
-                  {"点击查看学校用户"}
-                </Link>
+                  <div class="form-group">
+                  <label htmlFor="users">学校用户</label>
+                  <Link
+                    to={"/users/school/" + currentSchool.id}
+                    id="users"
+                    name="users"
+                  >
+                    {"点击查看学校用户"}
+                  </Link>
+                  </div>
+
+                  <div class="w-100"></div>
+
+                  <div class="form-group">
+                  <label htmlFor="logs">学校信息修改记录</label>
+                  <Link
+                    to={"/logs/school/" + currentSchool.id}
+                    id="logs"
+                    name="logs"
+                  >
+                    {"点击查看学校信息修改记录"}
+                  </Link>
+                  </div>
                 </div>
-
-                <div class="w-100"></div>
-
-                <div class="form-group">
-                <label htmlFor="logs">学校信息修改记录</label>
-                <Link
-                  to={"/logs/school/" + currentSchool.id}
-                  id="logs"
-                  name="logs"
-                >
-                  {"点击查看学校信息修改记录"}
-                </Link>
-                </div>
+                )}
 
               </div>
             </div>

@@ -41,7 +41,7 @@ const LogsList = (props) => {
   const getRequestParams = (/*searchText, page, pageSize, schoolId, orderby*/) => {
     let params = {};
 
-    if (text) {
+    if (searchText) {
       params["text"] = searchText;
     }
 
@@ -138,21 +138,17 @@ const LogsList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: "修改字段",
-        accessor: "field",
-        disableSortBy: true,
-      },
-      {
-        Header: "老值",
-        accessor: "oldv",
-      },
-      {
-        Header: "新值",
-        accessor: "newv",
-      },
-      {
         Header: "时间",
         accessor: "createdAt",
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          const d = new Date(logsRef.current[rowIdx].createdAt);
+          return (
+            <div>
+              {d.toLocaleDateString('zh-cn', { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+            </div>
+          );
+        },
       },
       {
         Header: "修改人",
@@ -175,6 +171,19 @@ const LogsList = (props) => {
             </div>
           );
         },
+      },
+      {
+        Header: "修改字段",
+        accessor: "field",
+        disableSortBy: true,
+      },
+      {
+        Header: "老值",
+        accessor: "oldv",
+      },
+      {
+        Header: "新值",
+        accessor: "newv",
       },
       {
         Header: "删除",
@@ -241,15 +250,13 @@ const LogsList = (props) => {
 
   return (
     <div className="list row">
-
-
       <div className="col-md-6">
         <h6>修改记录</h6>
         <div className="input-group mb-3">
           <input
             type="text"
             className="form-control"
-            placeholder="搜索 。。。"
+            placeholder="新值或老值"
             value={searchText}
             onChange={onChangeSearchText}
           />
@@ -259,7 +266,7 @@ const LogsList = (props) => {
               type="button"
               onClick={search}
             >
-              Search
+              查找
             </button>
           </div>
         </div>

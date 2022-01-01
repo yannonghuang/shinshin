@@ -74,7 +74,9 @@ exports.findAll2 = (req, res) => {
 
   var condition = {
         [Op.and]: [
-            text ? { text: { [Op.like]: `%${text}%` } } : null,
+            text
+              ?  {[Op.or]: [{ newv: { [Op.like]: `%${text}%` } }, { oldv: { [Op.like]: `%${text}%` } }]}
+              : null,
             userId ? { userId: { [Op.eq]: `${userId}` } } : null,
             schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null
         ]};

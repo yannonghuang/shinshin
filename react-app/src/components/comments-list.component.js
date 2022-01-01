@@ -41,7 +41,7 @@ const CommentsList = (props) => {
   const getRequestParams = (/*searchText, page, pageSize, schoolId, orderby*/) => {
     let params = {};
 
-    if (text) {
+    if (searchText) {
       params["text"] = searchText;
     }
 
@@ -301,7 +301,7 @@ const CommentsList = (props) => {
               type="button"
               onClick={search}
             >
-              Search
+              查找
             </button>
           </div>
         </div>
