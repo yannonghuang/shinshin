@@ -28,7 +28,7 @@ const getPagingData = (count, data, page, limit) => {
   return { totalItems, schools, totalPages, currentPage };
 };
 
-const updateAndLog = async (newObj, oldObj, schoolId, userId, res) => {
+const updateAndLog = async (newObj, oldObj, schoolId, userId) => {
   var updates = [];
   Object.keys(newObj).forEach(key => {
     var newv = null;
@@ -44,29 +44,15 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, res) => {
     }
   });
 
-  const t = await db.sequelize.transaction();
-  oldObj.save({ transaction: t })
-  .then(async (r) => {
-    Log.bulkCreate(updates, { transaction: t })
-    .then(async (rr) => {
-      await t.commit();
-      res.send({
-        message: "School was updated successfully."
-      });
-    })
-    .catch(async (ee) => {
-      await t.rollback();
-      res.send({
-        message: "failed updating School with id=" + schoolId + "..." + ee.toString()
-      });
-    });
-  })
-  .catch(async (e) => {
+  try {
+    const t = await db.sequelize.transaction();
+    await oldObj.save({ transaction: t });
+    await Log.bulkCreate(updates, { transaction: t });
+    await t.commit();
+  } catch (error) {
     await t.rollback();
-    res.send({
-      message: "failed updating School with id=" + schoolId + "..." + e.toString()
-    });
-  });
+    throw error;
+  }
 };
 
 // return region list
@@ -511,30 +497,30 @@ exports.SAVE_update = (req, res) => {
 };
 
 // Update a School by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
   const schoolId = req.params.id;
   const userId = req.userId;
   const newObj = req.body;
 
-  School.findByPk(schoolId)
-  .then(oldObj => {
+  try {
+    let oldObj = await School.findByPk(schoolId);
     if (oldObj) {
-
-      updateAndLog(newObj, oldObj, schoolId, userId, res);
-
+      await updateAndLog(newObj, oldObj, schoolId, userId);
+      res.send({
+        message: "School was updated successfully."
+      });
     } else {
       console.log("Cannot update School with id=${schoolId}. Maybe School was not found or req.body is empty!");
       res.send({
         message: "Cannot update School with id=" + schoolId + ". Maybe School was not found or req.body is empty!"
       });
     }
-  })
-  .catch(err => {
-    console.log(err.message || "Error finding School with id=" + schoolId);
+  } catch(err) {
+    console.log(err.message || "Error updating School with id=" + schoolId);
     res.status(500).send({
-      message: "Error finding School with id=" + schoolId
+      message: err.message || "Error updating School with id=" + schoolId
     });
-  });
+  }
 };
 
 // Delete a school with the specified id in the request
