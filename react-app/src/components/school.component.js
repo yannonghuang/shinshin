@@ -710,6 +710,12 @@ export default class School extends Component {
             <div class="col-md-4">
               <div class="row">
                 <h4>学校基本信息</h4>
+
+                {this.state.readonly &&
+                (<a href={"/schools/" + currentSchool.id}>
+                  <i className="far fa-edit action mr-2"></i>
+                </a>)}
+
                 <div onDragOver={this.onDrag} onDrop={this.onDrop}>
                 {this.state.readonly ? "" :
                 <p>上传照片（拖拽照片文件到下框中）</p>
