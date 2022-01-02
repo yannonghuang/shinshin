@@ -486,7 +486,7 @@ export default class School extends Component {
       phone: this.state.currentSchool.phone,
       studentsCount: this.state.currentSchool.studentsCount,
       teachersCount: this.state.currentSchool.teachersCount,
-      startAt: this.state.currentSchool.startAt ? (this.state.currentSchool.startAt + '-01-01') : '',
+      startAt: this.state.currentSchool.startAt ? (this.state.currentSchool.startAt + '-01-01') : null,
 
       stage: this.state.currentSchool.stage,
       status: this.state.currentSchool.status,
@@ -527,6 +527,9 @@ export default class School extends Component {
         console.log(response.data);
       })
       .catch(e => {
+        this.setState({
+          message: "学校信息保存失败! " + e.message
+        });
         console.log(e);
       });
 
@@ -546,7 +549,7 @@ export default class School extends Component {
       phone: this.state.currentSchool.phone,
       studentsCount: this.state.currentSchool.studentsCount,
       teachersCount: this.state.currentSchool.teachersCount,
-      startAt: this.state.currentSchool.startAt ? (this.state.currentSchool.startAt + '-01-01') : '',
+      startAt: this.state.currentSchool.startAt ? (this.state.currentSchool.startAt + '-01-01') : null,
 
       stage: this.state.currentSchool.stage,
       status: this.state.currentSchool.status,
@@ -575,6 +578,9 @@ export default class School extends Component {
 
       })
       .catch(e => {
+        this.setState({
+          message: "学校信息修改失败! " + e.message
+        });
         console.log(e);
       });
 

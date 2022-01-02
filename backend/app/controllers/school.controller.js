@@ -28,7 +28,7 @@ const getPagingData = (count, data, page, limit) => {
   return { totalItems, schools, totalPages, currentPage };
 };
 
-const updateAndLog = async (newObj, oldObj, schoolId, userId) => {
+const updateAndLog = async (newObj, oldObj, schoolId, userId, t) => {
   var updates = [];
   Object.keys(newObj).forEach(key => {
     var newv = null;
@@ -40,13 +40,13 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId) => {
         !(key == 'startAt' && oldv && oldv.substring(0, 4) == newv.substring(0, 4)) // ugly, but for datetype handling
         ) {
       updates.push({field: key, oldv: oldv, newv: newv, schoolId, userId});
-      oldObj.set(key, newObj[key]);
+      if (oldObj) oldObj.set(key, newObj[key]);
     }
   });
 
   try {
-    const t = await db.sequelize.transaction();
-    await oldObj.save({ transaction: t });
+    //const t = await db.sequelize.transaction();
+    if (oldObj) await oldObj.save({ transaction: t });
     await Log.bulkCreate(updates, { transaction: t });
     await t.commit();
   } catch (error) {
@@ -85,7 +85,7 @@ exports.create = (req, res) => {
   // Validate request
   if (!req.body.name) {
     res.status(400).send({
-      message: "Content can not be empty!"
+      message: "学校名称必须填写!"
     });
     return;
   }
@@ -503,9 +503,10 @@ exports.update = async (req, res) => {
   const newObj = req.body;
 
   try {
-    let oldObj = await School.findByPk(schoolId);
+    const t = await db.sequelize.transaction();
+    let oldObj = await School.findByPk(schoolId, {transaction: t});
     if (oldObj) {
-      await updateAndLog(newObj, oldObj, schoolId, userId);
+      await updateAndLog(newObj, oldObj, schoolId, userId, t);
       res.send({
         message: "School was updated successfully."
       });
