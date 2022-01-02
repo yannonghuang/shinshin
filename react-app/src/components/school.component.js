@@ -723,6 +723,8 @@ export default class School extends Component {
         {(this.state.submitted /*&& this.state.newschool*/) ? (
           <div>
             <h4>{this.state.message}</h4>
+
+            <a href={"/schoolsView/" + currentSchool.id} class="btn btn-success">返回</a>
 {/*}
             <h4>学校信息成功提交!</h4>
             <button class="btn btn-success" onClick={this.newSchool}>
@@ -740,7 +742,7 @@ export default class School extends Component {
                 {this.state.readonly ? "" :
                 <p>上传照片（拖拽照片文件到下框中）</p>
                 }
-                <img src={currentSchool.photo} height="200" width="300" readonly={this.state.readonly?"":false} />
+                <img src={currentSchool.photo} height="250" width="350" readonly={this.state.readonly?"":false} />
                 </div>
 
                 <div class="form-group">
@@ -749,6 +751,7 @@ export default class School extends Component {
                 readonly={this.state.readonly?"":false}
                 class="form-control"
                 id="name"
+                cols="31"
                 required
                 value={currentSchool.name}
                 onChange={this.onChangeName}
@@ -774,16 +777,9 @@ export default class School extends Component {
 
                 {this.state.readonly && (
                 <div class="box">
-
-
-
-<a href={"/users/school/" + currentSchool.id} class="btn btn-primary">用户</a>
-<a href={"/logs/school/" + currentSchool.id} class="btn btn-primary">历史</a>
-<a href={"/schools/" + currentSchool.id} class="btn btn-primary">编辑</a>
-
-
-
-
+                  <a target="_blank" href={"/users/school/" + currentSchool.id} class="btn btn-primary">用户</a>
+                  <a target="_blank" href={"/logs/school/" + currentSchool.id} class="btn btn-primary">历史</a>
+                  <a target="_blank" href={"/schools/" + currentSchool.id} class="btn btn-primary mb-4">编辑</a>
                 </div>
                 )}
 
@@ -835,7 +831,7 @@ export default class School extends Component {
                 />
                 </div>
 
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
                 <div>
                 <div class="side"><label htmlFor="startAt">建校年份</label></div>
                 <div class="side">
@@ -850,9 +846,6 @@ export default class School extends Component {
                 />)}
                 </div>
                 </div>
-
-
-
                 <input
                 readonly=""
                 type="text"
