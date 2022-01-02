@@ -45,6 +45,7 @@ exports.create = (req, res) => {
     budget: req.body.budget,
     status: req.body.status,
     schoolId: req.body.schoolId,
+    description: req.body.description,
   };
 
   // Save Project in the database
@@ -228,7 +229,7 @@ var orderbyObject = null;
 //  limit: limit,
 //  offset: offset,
   subQuery: false,
-  attributes: ['id', 'name', 'budget', 'status', //'schoolId', 'responseId'
+  attributes: ['id', 'name', 'budget', 'status', 'description', //'schoolId', 'responseId'
             [db.Sequelize.fn("year", db.Sequelize.col("projects.createdAt")), "createdAt"],
   //          [db.Sequelize.fn("COUNT", db.Sequelize.col("responses.id")), "responsesCount"],
   ],
@@ -371,7 +372,7 @@ exports.findOne = (req, res) => {
   const id = req.params.id;
 
   Project.findByPk(id, {
-      attributes: ['id', 'name', 'budget', 'status',
+      attributes: ['id', 'name', 'budget', 'status', 'description',
                     [db.Sequelize.fn("year", db.Sequelize.col("projects.createdAt")), "createdAt"],
                   ],
 

@@ -27,6 +27,7 @@ export default class Project extends Component {
 
     this.onChangePhoto = this.onChangePhoto.bind(this);
     this.onChangeStatus = this.onChangeStatus.bind(this);
+    this.onChangeDescription = this.onChangeDescription.bind(this);
 
     this.getProject = this.getProject.bind(this);
     this.getProjectPhoto = this.getProjectPhoto.bind(this);
@@ -53,6 +54,7 @@ export default class Project extends Component {
         photo: null,
         file: null, // for photo
         status: "",
+        description: "",
 
         docFiles: [],
         docCategory: ""
@@ -261,6 +263,16 @@ export default class Project extends Component {
     }));
   }
 
+  onChangeDescription(e) {
+    const description = e.target.value;
+
+    this.setState(prevState => ({
+      currentProject: {
+        ...prevState.currentProject,
+        description: description
+      }
+    }));
+  }
 
   getProject(id) {
     ProjectDataService.get(id)
@@ -346,6 +358,7 @@ export default class Project extends Component {
       status: "",
       docFiles: [],
       docCategory: "",
+      description: "",
       },
 
       submitted: false
@@ -360,6 +373,7 @@ export default class Project extends Component {
       schoolId: this.state.currentProject.schoolId,
       responseId: this.state.currentProject.responseId,
       status: this.state.currentProject.status,
+      description: this.state.currentProject.description,
     };
 
     ProjectDataService.create(data)
@@ -401,6 +415,7 @@ export default class Project extends Component {
       status: this.state.currentProject.status,
       schoolId: this.state.currentProject.schoolId,
       responseId: this.state.currentProject.responseId,
+      description: this.state.currentProject.description,
     };
 
     ProjectDataService.update(
@@ -584,6 +599,22 @@ export default class Project extends Component {
 
             <div class="col-md-8">
               <div class="row">
+                <div class="form-group col-md-12">
+                <label htmlFor="description">项目描述</label>
+                <textarea
+                readonly={this.state.readonly?"":false}
+                class="form-control"
+                id="description"
+                required
+                value={currentProject.description}
+                onChange={this.onChangeDescription}
+                name="description"
+                />
+                </div>
+
+                <div class="w-100"></div>
+
+
                 <div class="col-md-8">
                   <label htmlFor="schoolId">学校</label>
                   <Select onChange={this.onChangeSchoolId.bind(this)}

@@ -234,6 +234,43 @@ const ProjectsList = (props) => {
   const columns = useMemo(
     () => [
       {
+        Header: "项目年份",
+        accessor: "createdAt",
+      },
+      {
+        Header: "项目状态",
+        accessor: "status",
+      },
+      {
+        Header: "项目申请(项目名称)",
+        accessor: "response.title",
+        disableSortBy: true,
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+            {(projectsRef.current[rowIdx].response) ? (
+              <Link
+                to={"/responsesView/" + projectsRef.current[rowIdx].response.id}
+              >
+                {projectsRef.current[rowIdx].response.title}
+              </Link>
+              ) : ''}
+            </div>
+          );
+        },
+      },
+      {
+        Header: "项目费用",
+        accessor: "budget",
+        disableSortBy: true,
+      },
+      {
+        Header: "项目描述",
+        accessor: "description",
+        disableSortBy: true,
+      },
+      {
         Header: "ID",
         accessor: "id",
         disableSortBy: true,
@@ -277,37 +314,6 @@ const ProjectsList = (props) => {
             </div>
           );
         },
-      },
-      {
-        Header: "项目申请(项目名称)",
-        accessor: "response.title",
-        Cell: (props) => {
-          const rowIdx = props.row.id;
-          return (
-            <div>
-            {(projectsRef.current[rowIdx].response) ? (
-              <Link
-                to={"/responsesView/" + projectsRef.current[rowIdx].response.id}
-              >
-                {projectsRef.current[rowIdx].response.title}
-              </Link>
-              ) : ''}
-            </div>
-          );
-        },
-      },
-      {
-        Header: "项目费用",
-        accessor: "budget",
-        disableSortBy: true,
-      },
-      {
-        Header: "项目年份",
-        accessor: "createdAt",
-      },
-      {
-        Header: "项目状态",
-        accessor: "status",
       },
       {
         Header: "操作",
@@ -358,7 +364,7 @@ const ProjectsList = (props) => {
     initialState: {
       sortBy: [
         {
-          id: 'id',
+          id: 'createdAt',
           desc: false
         }
       ]
@@ -502,8 +508,7 @@ const ProjectsList = (props) => {
                     {/* Add a sort direction indicator */}
                     <span>
                       {/*column.isSorted*/ (column.id === 'school.region' || column.id === 'school.code' ||
-                      column.id === 'school.name' || column.id === 'createdAt' || column.id === 'status' ||
-                      column.id === 'response.title')
+                      column.id === 'school.name' || column.id === 'createdAt' || column.id === 'status' )
                       ? column.isSortedDesc
                         ? ' 🔽'
                         : ' 🔼'

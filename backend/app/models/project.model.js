@@ -12,6 +12,9 @@ module.exports = (sequelize, Sequelize) => {
     status: {
       type: Sequelize.STRING
     },
+    description: {
+      type: Sequelize.STRING
+    },
   });
 
   return Project;
