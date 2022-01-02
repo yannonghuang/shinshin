@@ -90,7 +90,10 @@ exports.create = (req, res) => {
     return;
   }
 
-  // Create a School
+  const userId = req.userId;
+  const newObj = req.body;
+
+/* Create a School
   const school = {
     name: req.body.name,
     code: req.body.code,
@@ -109,11 +112,14 @@ exports.create = (req, res) => {
     request: req.body.request,
     category: req.body.category,
   };
+*/
 
   // Save School in the database
-  School.create(school)
-    .then(data => {
+  School.create(newObj)
+    .then(async (data) => {
       res.send(data);
+      const t = await db.sequelize.transaction();
+      updateAndLog(newObj, null, data.id, userId, t);
     })
     .catch(err => {
       console.log(err.message || "Some error occurred while creating the School.");
