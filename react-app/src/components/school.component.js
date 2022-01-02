@@ -707,9 +707,11 @@ export default class School extends Component {
         {(this.state.submitted && this.state.newschool) ? (
           <div>
             <h4>学校信息成功提交!</h4>
+{/*}
             <button class="btn btn-success" onClick={this.newSchool}>
               Add
             </button>
+*/}
           </div>
         ) : (
           <div class="row">
