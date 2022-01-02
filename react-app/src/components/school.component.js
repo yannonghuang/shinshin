@@ -736,11 +736,6 @@ export default class School extends Component {
               <div class="row">
                 <h4>学校基本信息</h4>
 
-                {this.state.readonly &&
-                (<a href={"/schools/" + currentSchool.id}>
-                  <i className="far fa-edit action mr-2"></i>
-                </a>)}
-
                 <div onDragOver={this.onDrag} onDrop={this.onDrop}>
                 {this.state.readonly ? "" :
                 <p>上传照片（拖拽照片文件到下框中）</p>
@@ -775,31 +770,20 @@ export default class School extends Component {
                 />
                 </div>
 
+                <div class="w-100"></div>
+
                 {this.state.readonly && (
-                <div>
-                  <div class="w-100"></div>
+                <div class="box">
 
-                  <div class="form-group">
-                  <Link
-                    to={"/users/school/" + currentSchool.id}
-                    id="users"
-                    name="users"
-                  >
-                    {"点击查看学校用户"}
-                  </Link>
-                  </div>
 
-                  <div class="w-100"></div>
 
-                  <div class="form-group">
-                  <Link
-                    to={"/logs/school/" + currentSchool.id}
-                    id="logs"
-                    name="logs"
-                  >
-                    {"点击查看学校信息修改记录"}
-                  </Link>
-                  </div>
+<a href={"/users/school/" + currentSchool.id} class="btn btn-primary">用户</a>
+<a href={"/logs/school/" + currentSchool.id} class="btn btn-primary">历史</a>
+<a href={"/schools/" + currentSchool.id} class="btn btn-primary">编辑</a>
+
+
+
+
                 </div>
                 )}
 

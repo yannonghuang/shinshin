@@ -129,3 +129,10 @@ font-size: 14px;
     width: 100%;
 }
 
+.box {
+  display: grid;
+  width: 300px;
+  grid-template-columns: 80px 80px 80px;
+  align-items: start;
+  justify-content: space-between;
+}
