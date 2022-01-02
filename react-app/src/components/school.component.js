@@ -40,7 +40,7 @@ export default class School extends Component {
 
     this.getSchool = this.getSchool.bind(this);
     this.getSchoolPhoto = this.getSchoolPhoto.bind(this);
-    this.updatePublished = this.updatePublished.bind(this);
+    //this.updatePublished = this.updatePublished.bind(this);
     this.updateSchool = this.updateSchool.bind(this);
     this.updatePhoto = this.updatePhoto.bind(this);
     this.deleteSchool = this.deleteSchool.bind(this);
@@ -421,6 +421,7 @@ export default class School extends Component {
       });
   }
 
+/**
   updatePublished(status) {
     var data = {
       id: this.state.currentSchool.id,
@@ -443,7 +444,7 @@ export default class School extends Component {
         console.log(e);
       });
   }
-
+*/
   newSchool() {
   this.setState(prevState => ({
     currentSchool: {
@@ -486,7 +487,7 @@ export default class School extends Component {
       phone: this.state.currentSchool.phone,
       studentsCount: this.state.currentSchool.studentsCount,
       teachersCount: this.state.currentSchool.teachersCount,
-      startAt: this.state.currentSchool.startAt ? (this.state.currentSchool.startAt + '-01-01') : null,
+      startAt: this.state.currentSchool.startAt ? (this.state.currentSchool.startAt + '-03-10') : null,
 
       stage: this.state.currentSchool.stage,
       status: this.state.currentSchool.status,
@@ -557,7 +558,7 @@ export default class School extends Component {
       phone: this.state.currentSchool.phone,
       studentsCount: this.state.currentSchool.studentsCount,
       teachersCount: this.state.currentSchool.teachersCount,
-      startAt: this.state.currentSchool.startAt ? (this.state.currentSchool.startAt + '-01-01') : null,
+      startAt: this.state.currentSchool.startAt ? (this.state.currentSchool.startAt + '-03-10') : null,
 
       stage: this.state.currentSchool.stage,
       status: this.state.currentSchool.status,

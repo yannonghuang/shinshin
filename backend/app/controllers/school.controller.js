@@ -35,9 +35,10 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t) => {
     if (newObj[key]) newv = JSON.stringify(newObj[key]).trim();
     var oldv = null;
     if (oldObj && oldObj[key]) oldv = JSON.stringify(oldObj[key]).trim();
+
     if (newv &&
         (!oldObj || !oldObj[key] || (oldv != newv)) &&
-        !(key == 'startAt' && oldv && oldv.substring(0, 4) == newv.substring(0, 4)) // ugly, but for datetype handling
+        !(key == 'startAt' && oldv && (oldv.substring(0, 5) == newv.substring(0, 5))) // ugly, but for datetype handling
         ) {
       updates.push({field: key, oldv: oldv, newv: newv, schoolId, userId});
       if (oldObj) oldObj.set(key, newObj[key]);
