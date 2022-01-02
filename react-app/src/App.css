@@ -131,7 +131,7 @@ font-size: 14px;
 
 .box {
   display: grid;
-  width: 300px;
+  width: 350px;
   grid-template-columns: 80px 80px 80px;
   align-items: start;
   justify-content: space-between;
