@@ -848,15 +848,15 @@ export default class School extends Component {
                 name="startAt"
                 />
                 </div>
-
-                <YearPicker
+                {!this.state.readonly &&
+                (<YearPicker
                 yearArray={['2019', '2020']}
                 value={currentSchool.startAt}
                 onSelect={this.onChangeYPStartAt}
                 hideInput={true}
                 minRange={1995}
                 maxRange={2022}
-                />
+                />)}
 
                 <div class="w-100"></div>
 
