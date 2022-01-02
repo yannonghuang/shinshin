@@ -514,6 +514,7 @@ export default class School extends Component {
             //startAt: response.data.startAt,
           },
 
+          message: "学校信息成功提交!",
           submitted: true
         }));
 
@@ -527,8 +528,15 @@ export default class School extends Component {
         console.log(response.data);
       })
       .catch(e => {
+        const resMessage =
+          (e.response &&
+            e.response.data &&
+            e.response.data.message) ||
+          e.message ||
+          e.toString();
+
         this.setState({
-          message: "学校信息保存失败! " + e.message
+          message: "学校信息保存失败! " + resMessage
         });
         console.log(e);
       });
@@ -573,13 +581,21 @@ export default class School extends Component {
         }
 
         this.setState({
-          message: "学校信息成功修改!"
+          message: "学校信息成功修改!",
+          submitted: true
         });
 
       })
       .catch(e => {
+        const resMessage =
+          (e.response &&
+            e.response.data &&
+            e.response.data.message) ||
+          e.message ||
+          e.toString();
+
         this.setState({
-          message: "学校信息修改失败! " + e.message
+          message: "学校信息修改失败! " + resMessage
         });
         console.log(e);
       });
@@ -704,10 +720,11 @@ export default class School extends Component {
 
     return (
       <div>
-        {(this.state.submitted && this.state.newschool) ? (
+        {(this.state.submitted /*&& this.state.newschool*/) ? (
           <div>
-            <h4>学校信息成功提交!</h4>
+            <h4>{this.state.message}</h4>
 {/*}
+            <h4>学校信息成功提交!</h4>
             <button class="btn btn-success" onClick={this.newSchool}>
               Add
             </button>
@@ -789,8 +806,6 @@ export default class School extends Component {
               </div>
             </div>
 
-
-
             <div class="col-md-8">
               <div class="row">
                 <div class="form-group col-md-12">
@@ -839,7 +854,7 @@ export default class School extends Component {
                 <div class="form-group col-md-3">
                 <label htmlFor="startAt">建校年份</label>
                 <input
-                readonly={this.state.readonly?"":false}
+                readonly=""
                 type="text"
                 class="form-control"
                 id="startAt"

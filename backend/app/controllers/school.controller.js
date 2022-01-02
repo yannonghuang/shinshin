@@ -83,9 +83,9 @@ exports.getSchoolCategories = (req, res) => {
 // Create and Save a new School
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.name) {
+  if (!req.body.code) {
     res.status(400).send({
-      message: "学校名称必须填写!"
+      message: "学校编码必须填写!"
     });
     return;
   }
