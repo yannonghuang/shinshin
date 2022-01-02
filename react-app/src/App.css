@@ -136,3 +136,9 @@ font-size: 14px;
   align-items: start;
   justify-content: space-between;
 }
+
+.side {
+   display:inline-block;
+   vertical-align:top;
+   margin-right: 5px;
+}

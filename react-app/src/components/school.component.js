@@ -836,7 +836,23 @@ export default class School extends Component {
                 </div>
 
                 <div class="form-group col-md-3">
-                <label htmlFor="startAt">建校年份</label>
+                <div>
+                <div class="side"><label htmlFor="startAt">建校年份</label></div>
+                <div class="side">
+                {!this.state.readonly &&
+                (<YearPicker
+                yearArray={['2019', '2020']}
+                value={currentSchool.startAt}
+                onSelect={this.onChangeYPStartAt}
+                hideInput={true}
+                minRange={1995}
+                maxRange={2022}
+                />)}
+                </div>
+                </div>
+
+
+
                 <input
                 readonly=""
                 type="text"
@@ -848,15 +864,7 @@ export default class School extends Component {
                 name="startAt"
                 />
                 </div>
-                {!this.state.readonly &&
-                (<YearPicker
-                yearArray={['2019', '2020']}
-                value={currentSchool.startAt}
-                onSelect={this.onChangeYPStartAt}
-                hideInput={true}
-                minRange={1995}
-                maxRange={2022}
-                />)}
+
 
                 <div class="w-100"></div>
 
