@@ -21,7 +21,9 @@ const ProjectsList = (props) => {
 
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
 
-  const [embedded, setEmbedded] = useState(props.embedded ? true : false);
+  const [embedded, setEmbedded] = useState(props.embedded ? props.embedded : false);
+
+  const [readonly, setReadonly] = useState(props.readonly ? props.readonly : false);
 
   const projectsRef = useRef();
   projectsRef.current = projects;
@@ -333,16 +335,16 @@ const ProjectsList = (props) => {
                 <i className="fas fa-eye action mr-2"></i>
               </Link>
 
-              <Link
+              {!readonly && (<Link
                 to={"/projects/" + projectsRef.current[rowIdx].id}
                 target='_blank'
               >
                 <i className="far fa-edit action mr-2"></i>
-              </Link>
+              </Link>)}
 
-              <span onClick={() => deleteProject(rowIdx)}>
+              {!readonly && (<span onClick={() => deleteProject(rowIdx)}>
                 <i className="fas fa-trash action"></i>
-              </span>
+              </span>)}
             </div>
           );
         },
@@ -545,9 +547,6 @@ const ProjectsList = (props) => {
       </div>
 
       <div className="col-md-8">
-        <button className="btn btn-sm btn-danger" onClick={removeAllProjects}>
-          Remove All
-        </button>
       </div>
     </div>
   );

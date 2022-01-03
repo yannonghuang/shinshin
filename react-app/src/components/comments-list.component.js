@@ -19,6 +19,8 @@ const CommentsList = (props) => {
 
   const [orderby, setOrderby] = useState([]);
 
+  const [readonly, setReadonly] = useState(props.readonly ? props.readonly : false);
+
   const commentsRef = useRef();
   commentsRef.current = comments;
 
@@ -196,9 +198,9 @@ const CommentsList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
-              <span onClick={() => deleteComment(rowIdx)}>
+              {!readonly && (<span onClick={() => deleteComment(rowIdx)}>
                 <i className="fas fa-trash action"></i>
-              </span>
+              </span>)}
             </div>
           );
         },
@@ -393,9 +395,6 @@ const CommentsList = (props) => {
       </div>
 
       <div className="col-md-8">
-        <button className="btn btn-sm btn-danger" onClick={removeAllComments}>
-          Remove All
-        </button>
       </div>
     </div>
   );

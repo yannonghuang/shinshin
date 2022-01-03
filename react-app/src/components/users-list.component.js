@@ -449,9 +449,6 @@ const UsersList = (props) => {
       </div>
 
       <div className="col-md-8">
-        <button className="btn btn-sm btn-danger" onClick={removeAllUsers}>
-          Remove All
-        </button>
       </div>
     </div>
   );

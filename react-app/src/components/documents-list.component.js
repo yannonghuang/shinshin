@@ -14,6 +14,8 @@ const DocumentsList = (props) => {
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
   const [docCategory, setDocCategory] = useState(props.match? props.match.params.docCategory : props.docCategory);
 
+  const [readonly, setReadonly] = useState(props.readonly ? props.readonly : false);
+
   const documentsRef = useRef();
   documentsRef.current = documents;
 
@@ -156,9 +158,9 @@ const DocumentsList = (props) => {
                 <i className="fas fa-download action mr-2"></i>
               </a>
 
-              <span onClick={() => deleteDocument(rowIdx)}>
+              {!readonly && (<span onClick={() => deleteDocument(rowIdx)}>
                 <i className="fas fa-trash action"></i>
-              </span>
+              </span>)}
             </div>
           );
         },
@@ -305,9 +307,6 @@ const DocumentsList = (props) => {
       </div>
 
       <div className="col-md-8">
-        <button className="btn btn-sm btn-danger" onClick={removeAllDocuments}>
-          Remove All
-        </button>
       </div>
     </div>
   );

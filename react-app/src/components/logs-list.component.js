@@ -358,9 +358,6 @@ const LogsList = (props) => {
       </div>
 
       <div className="col-md-8">
-        <button className="btn btn-sm btn-danger" onClick={removeAllLogs}>
-          Remove All
-        </button>
       </div>
     </div>
   );

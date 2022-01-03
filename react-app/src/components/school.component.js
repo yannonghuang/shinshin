@@ -6,6 +6,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import $ from "jquery"; //Load jquery
 import { Link } from "react-router-dom";
+import Divider from '@material-ui/core/Divider';
 
 import CommentsList from './comments-list.component.js';
 import ProjectsList from './projects-list.component.js';
@@ -995,49 +996,28 @@ export default class School extends Component {
                 ))}
                 </select>
                 </div>
-
-
               </div>
             </div>
 
             <div class="w-100"></div>
 
-            {this.state.readonly ? (
-            <Tabs>
-              <TabList>
-                <Tab>更多信息 <i class="fas fa-hand-point-right"></i></Tab>
-                <Tab>学校详情</Tab>
-                <Tab>项目列表</Tab>
-                <Tab>项目申请列表</Tab>
-                <Tab>学校文档</Tab>
-                <Tab>学校照片</Tab>
-                <Tab>评论区</Tab>
-              </TabList>
-
-              <TabPanel>
-              </TabPanel>
-              <TabPanel>
-              </TabPanel>
-              <TabPanel>
-                <ProjectsList schoolId = {currentSchool.id} embedded = {true} />
-              </TabPanel>
-              <TabPanel>
-                <ResponsesList schoolId = {currentSchool.id} />
-              </TabPanel>
-              <TabPanel>
-                <DocumentsList schoolId = {currentSchool.id} />
-              </TabPanel>
-              <TabPanel>
-                <DocumentsList schoolId = {currentSchool.id} docCategory = {'照片'} />
-              </TabPanel>
-              <TabPanel>
-                <CommentsList schoolId = {currentSchool.id} />
-              </TabPanel>
-            </Tabs>
-
-            ) : (
+            {!this.state.readonly && (
 
             <div>
+
+            <button onClick={this.saveSchool} class="btn btn-success" hidden={!this.state.newschool}>
+              提交
+            </button>
+
+            <button hidden={this.state.newschool}
+              type="submit"
+              className="btn btn-success"
+              onClick={this.updateSchool}
+            >
+              更新
+            </button>
+
+            <div class="w-100"></div>
 
             <form ref="formToSubmit" action="http://localhost:8080/api/documents-upload" method="POST" enctype="multipart/form-data">
                 <div class="form-group input-group">
@@ -1067,30 +1047,63 @@ export default class School extends Component {
                 </div>
             </form>
 
-
-            <button onClick={this.saveSchool} class="btn btn-success" hidden={!this.state.newschool}>
-              Submit
-            </button>
-
-            <button hidden={this.state.newschool}
-              className="badge badge-danger mr-2"
-              onClick={this.deleteSchool}
-            >
-              Delete
-            </button>
-
-            <button hidden={this.state.newschool}
-              type="submit"
-              className="badge badge-success"
-              onClick={this.updateSchool}
-            >
-              Update
-            </button>
-
             <p>{this.state.message}</p>
             </div>
 
             )}
+
+            <div class="w-100"></div>
+
+
+            <Tabs>
+              <TabList>
+                <Tab>更多信息 <i class="fas fa-hand-point-right"></i></Tab>
+                <Tab>学校详情</Tab>
+                <Tab>项目列表</Tab>
+                <Tab>项目申请列表</Tab>
+                <Tab>学校文档</Tab>
+                <Tab>学校照片</Tab>
+                <Tab>评论区</Tab>
+              </TabList>
+
+              <TabPanel>
+              </TabPanel>
+              <TabPanel>
+              </TabPanel>
+              <TabPanel>
+                <ProjectsList
+                  schoolId = {currentSchool.id}
+                  embedded = {true}
+                  readonly = {this.state.readonly}
+                />
+              </TabPanel>
+              <TabPanel>
+                <ResponsesList
+                  schoolId = {currentSchool.id}
+                  readonly = {this.state.readonly}
+                />
+              </TabPanel>
+              <TabPanel>
+                <DocumentsList
+                  schoolId = {currentSchool.id}
+                  readonly = {this.state.readonly}
+                />
+              </TabPanel>
+              <TabPanel>
+                <DocumentsList
+                  schoolId = {currentSchool.id}
+                  docCategory = {'照片'}
+                  readonly = {this.state.readonly}
+                />
+              </TabPanel>
+              <TabPanel>
+                <CommentsList
+                  schoolId = {currentSchool.id}
+                  readonly = {this.state.readonly}
+                />
+              </TabPanel>
+            </Tabs>
+
           </div>
         ) }
       </div>

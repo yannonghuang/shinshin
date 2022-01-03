@@ -287,9 +287,6 @@ const DossiersList = (props) => {
       </div>
 
       <div className="col-md-8">
-        <button className="btn btn-sm btn-danger" onClick={removeAllDossiers}>
-          Remove All
-        </button>
       </div>
     </div>
   );

@@ -20,6 +20,8 @@ const ResponsesList = (props) => {
 
   const [orderby, setOrderby] = useState([]);
 
+  const [readonly, setReadonly] = useState(props.readonly ? props.readonly : false);
+
   const responsesRef = useRef();
   responsesRef.current = responses;
 
@@ -255,15 +257,15 @@ const ResponsesList = (props) => {
               >
                 <i className="fas fa-eye action mr-2"></i>
               </Link>
-              <Link
+              {!readonly && (<Link
                 to={"/responses/" + responsesRef.current[rowIdx].id}
               >
                 <i className="far fa-edit action mr-2"></i>
-              </Link>
+              </Link>)}
 
-              <span onClick={() => deleteResponse(rowIdx)}>
+              {!readonly && (<span onClick={() => deleteResponse(rowIdx)}>
                 <i className="fas fa-trash action"></i>
-              </span>
+              </span>)}
             </div>
           );
         },
@@ -397,9 +399,7 @@ const ResponsesList = (props) => {
       </div>
 
       <div className="col-md-8">
-        <button className="btn btn-sm btn-danger" onClick={removeAllResponses}>
-          Remove All
-        </button>
+
       </div>
     </div>
   );
