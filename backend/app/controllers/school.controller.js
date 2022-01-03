@@ -31,16 +31,47 @@ const getPagingData = (count, data, page, limit) => {
 const updateAndLog = async (newObj, oldObj, schoolId, userId, t) => {
   var updates = [];
   Object.keys(newObj).forEach(key => {
+    var newv = newObj[key];
+    var oldv = oldObj ? oldObj[key] : null;
+
+    if (key == 'startAt' && newv && oldv) {
+      newv = JSON.stringify(newv).substring(1, 5);
+      oldv = JSON.stringify(oldv).substring(1, 5);
+    }
+
+    if (newv && (!oldObj || !oldObj[key] || (oldv != newv))) {
+      updates.push({field: key, oldv: oldv, newv: newv, schoolId, userId});
+      if (oldObj) oldObj.set(key, newv);
+    }
+  });
+
+  try {
+    if (oldObj) await oldObj.save({ transaction: t });
+    await Log.bulkCreate(updates, { transaction: t });
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
+    throw error;
+  }
+};
+
+const SAVE_updateAndLog = async (newObj, oldObj, schoolId, userId, t) => {
+  var updates = [];
+  Object.keys(newObj).forEach(key => {
     var newv = null;
     if (newObj[key]) newv = JSON.stringify(newObj[key]).trim();
     var oldv = null;
     if (oldObj && oldObj[key]) oldv = JSON.stringify(oldObj[key]).trim();
 
     if (newv &&
-        (!oldObj || !oldObj[key] || (oldv != newv)) &&
-        !(key == 'startAt' && oldv && (oldv.substring(0, 5) == newv.substring(0, 5))) // ugly, but for datetype handling
+        (!oldObj || !oldObj[key] || (oldv != newv))
         ) {
-      updates.push({field: key, oldv: oldv, newv: newv, schoolId, userId});
+      if (key == 'startAt') { // ugly, but for datetype handling)
+        if (oldv && (oldv.substring(0, 5) != newv.substring(0, 5)))
+        updates.push({field: key, oldv: oldv.substring(0, 5), newv: newv.substring(0, 5), schoolId, userId});
+      } else
+        updates.push({field: key, oldv: oldv, newv: newv, schoolId, userId});
+
       if (oldObj) oldObj.set(key, newObj[key]);
     }
   });
