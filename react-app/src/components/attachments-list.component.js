@@ -97,7 +97,7 @@ const AttachmentsList = (props) => {
 
     AttachmentDataService.delete(id)
       .then((response) => {
-        props.history.push("/attachments");
+        //props.history.push("/attachments");
 
         let newAttachments = [...attachmentsRef.current];
         newAttachments.splice(rowIndex, 1);

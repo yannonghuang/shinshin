@@ -174,7 +174,7 @@ const UsersList = (props) => {
 
     UserDataService.delete(id)
       .then((response) => {
-        props.history.push("/users");
+        //props.history.push("/users");
         let newUsers = [...usersRef.current];
         newUsers.splice(rowIndex, 1);
         setUsers(newUsers);

@@ -132,7 +132,7 @@ const ResponsesList = (props) => {
 
     ResponseDataService.delete(id)
       .then((response) => {
-        props.history.push("/responses");
+        //props.history.push("/responses");
 
         let newResponses = [...responsesRef.current];
         newResponses.splice(rowIndex, 1);

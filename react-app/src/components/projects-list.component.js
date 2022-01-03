@@ -213,7 +213,8 @@ const ProjectsList = (props) => {
 
     ProjectDataService.delete(id)
       .then((response) => {
-        props.history.push("/projects");
+
+        //props.history.push("/projects");
 
         let newProjects = [...projectsRef.current];
         newProjects.splice(rowIndex, 1);

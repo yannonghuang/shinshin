@@ -100,7 +100,7 @@ const DossiersList = (props) => {
 
     DossierDataService.delete(id)
       .then((response) => {
-        props.history.push("/dossiers");
+        //props.history.push("/dossiers");
 
         let newDossiers = [...dossiersRef.current];
         newDossiers.splice(rowIndex, 1);

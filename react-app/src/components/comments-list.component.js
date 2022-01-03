@@ -123,7 +123,7 @@ const CommentsList = (props) => {
 
     CommentDataService.delete(id)
       .then((response) => {
-        props.history.push("/comments");
+        //props.history.push("/comments");
 
         let newComments = [...commentsRef.current];
         newComments.splice(rowIndex, 1);

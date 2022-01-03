@@ -95,7 +95,7 @@ const FormsList = (props) => {
 
     FormDataService.delete(id)
       .then((response) => {
-        props.history.push("/forms");
+        //props.history.push("/forms");
 
         let newForms = [...formsRef.current];
         newForms.splice(rowIndex, 1);

@@ -123,7 +123,7 @@ const LogsList = (props) => {
 
     LogDataService.delete(id)
       .then((response) => {
-        props.history.push("/logs");
+        //props.history.push("/logs");
 
         let newLogs = [...logsRef.current];
         newLogs.splice(rowIndex, 1);

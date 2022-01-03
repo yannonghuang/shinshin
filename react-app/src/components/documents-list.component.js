@@ -100,7 +100,7 @@ const DocumentsList = (props) => {
 
     DocumentDataService.delete(id)
       .then((response) => {
-        props.history.push("/documents");
+        //props.history.push("/documents");
 
         let newDocuments = [...documentsRef.current];
         newDocuments.splice(rowIndex, 1);

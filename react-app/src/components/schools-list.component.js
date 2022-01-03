@@ -203,7 +203,7 @@ const SchoolsList = (props) => {
 
     SchoolDataService.delete(id)
       .then((response) => {
-        props.history.push("/schools");
+        //props.history.push("/schools");
 
         let newSchools = [...schoolsRef.current];
         newSchools.splice(rowIndex, 1);
