@@ -366,7 +366,7 @@ export default class Project extends Component {
 
   }
 
-  saveProject() {
+  SAVE_saveProject() {
     var data = {
       name: this.state.currentProject.name,
       budget: this.state.currentProject.budget,
@@ -407,7 +407,80 @@ export default class Project extends Component {
       //this.refs.formToSubmit.submit();
   }
 
-  updateProject() {
+  async saveProject() {
+    var data = {
+      name: this.state.currentProject.name,
+      budget: this.state.currentProject.budget,
+      schoolId: this.state.currentProject.schoolId,
+      responseId: this.state.currentProject.responseId,
+      status: this.state.currentProject.status,
+      description: this.state.currentProject.description,
+    };
+
+    try {
+      let response = await ProjectDataService.create(data);
+
+      await this.setState(prevState => ({
+        currentProject: {
+          ...prevState.currentProject,
+          id: response.data.id,
+        },
+      }));
+
+      if (this.state.currentProject.file)
+        await this.updatePhoto();
+
+      if (this.state.currentProject.docFiles) // docs
+        await this.uploadDossiers();
+
+      this.setState({
+        message: "项目信息成功提交!",
+        submitted: true
+      });
+
+    } catch (e) {
+      console.log(e);
+      this.setState({
+        message: "项目信息提交失败!" || e.message,
+      });
+    };
+
+  }
+
+  async updateProject() {
+    var data = {
+      name: this.state.currentProject.name,
+      budget: this.state.currentProject.budget,
+      //photo: this.state.currentProject.photo,
+      status: this.state.currentProject.status,
+      schoolId: this.state.currentProject.schoolId,
+      responseId: this.state.currentProject.responseId,
+      description: this.state.currentProject.description,
+    };
+
+    try {
+      await ProjectDataService.update(this.state.currentProject.id, data);
+
+      if (this.state.currentProject.file)
+        await this.updatePhoto();
+
+      if (this.state.currentProject.docFiles) // docs
+        await this.uploadDossiers();
+
+      this.setState({
+        message: "项目信息成功修改!",
+        submitted: true
+      });
+
+    } catch (e) {
+        this.setState({
+          message: "项目信息修改失败!" || e.message
+        });
+        console.log(e);
+    }
+  }
+
+  SAVE_updateProject() {
     var data = {
       name: this.state.currentProject.name,
       budget: this.state.currentProject.budget,
@@ -433,7 +506,8 @@ export default class Project extends Component {
         }
 
         this.setState({
-          message: "项目信息成功修改!"
+          message: "项目信息成功修改!",
+          submitted: true
         });
 
         console.log(response.data);
@@ -452,40 +526,20 @@ export default class Project extends Component {
   }
 
 
-  updatePhoto() {
+  async updatePhoto() {
     var data = new FormData();
     data.append('multi-files', this.state.currentProject.file, this.state.currentProject.file.name);
-    ProjectDataService.updatePhoto(this.state.currentProject.id, data)
-    .then(response => {
-      if (this.state.currentProject.docFiles) { // docs
-        this.uploadDossiers();
-      }
-      console.log(response.data);
-    })
-    .catch(e => {
-      console.log(e);
-    });
+    await ProjectDataService.updatePhoto(this.state.currentProject.id, data);
   }
 
-  uploadDossiers() {
+  async uploadDossiers() {
     var data = new FormData();
     for (var i = 0; i < this.state.currentProject.docFiles.length; i++) {
       data.append('multi-files', this.state.currentProject.docFiles[i],
         this.state.currentProject.docFiles[i].name);
     }
     data.append('docCategory', this.state.currentProject.docCategory);
-    ProjectDataService.uploadDossiers(this.state.currentProject.id, data)
-    .then(response => {
-      console.log(response.data);
-
-      this.setState(prevState => ({
-        message: prevState.message + " 项目附件成功上传!"
-      }));
-
-    })
-    .catch(e => {
-      console.log(e);
-    });
+    await ProjectDataService.uploadDossiers(this.state.currentProject.id, data);
   }
 
   deleteProject() {
@@ -563,13 +617,16 @@ export default class Project extends Component {
 
     return (
       <div>
-         <h4>项目信息</h4>
-        {(this.state.submitted && this.state.newproject) ? (
+        {(this.state.submitted /*&& this.state.newproject*/) ? (
           <div>
+            <h4>{this.state.message}</h4>
+            <a href={"/projectsView/" + currentProject.id} class="btn btn-success">返回</a>
+{/*}
             <h4>项目信息成功提交!</h4>
             <button class="btn btn-success" onClick={this.newProject}>
               Add
             </button>
+*/}
           </div>
         ) : (
           <div class="row">
@@ -691,11 +748,10 @@ export default class Project extends Component {
             {this.state.readonly ? (
             <Tabs>
               <TabList>
-                <Tab>项目详情</Tab>
+                <Tab>更多信息 <i class="fas fa-hand-point-right"></i></Tab>
                 <Tab>项目文档</Tab>
               </TabList>
               <TabPanel>
-                <p>... 查看学校详情 ...</p>
               </TabPanel>
               <TabPanel>
                 <DossiersList projectId = {currentProject.id} />
