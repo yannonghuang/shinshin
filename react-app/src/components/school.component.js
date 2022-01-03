@@ -1019,7 +1019,7 @@ export default class School extends Component {
               <TabPanel>
               </TabPanel>
               <TabPanel>
-                <ProjectsList schoolId = {currentSchool.id} />
+                <ProjectsList schoolId = {currentSchool.id} embedded = {true} />
               </TabPanel>
               <TabPanel>
                 <ResponsesList schoolId = {currentSchool.id} />

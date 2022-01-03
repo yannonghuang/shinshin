@@ -21,6 +21,8 @@ const ProjectsList = (props) => {
 
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
 
+  const [embedded, setEmbedded] = useState(props.embedded ? true : false);
+
   const projectsRef = useRef();
   projectsRef.current = projects;
 
@@ -348,6 +350,10 @@ const ProjectsList = (props) => {
     []
   );
 
+  const hiddenColumns = embedded
+    ? ['id', 'school.region', 'school.code', 'school.name']
+    : [];
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -362,6 +368,7 @@ const ProjectsList = (props) => {
     disableSortRemove: true,
     manualSortBy: true,
     initialState: {
+      hiddenColumns: hiddenColumns,
       sortBy: [
         {
           id: 'createdAt',
