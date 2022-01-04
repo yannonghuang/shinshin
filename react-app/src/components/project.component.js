@@ -652,6 +652,13 @@ export default class Project extends Component {
                 />
                 </div>
               </div>
+
+                {this.state.readonly && (
+                <div class="box">
+                  <a target="_blank" href={"/projects/" + currentProject.id} class="btn btn-primary mb-4">编辑</a>
+                </div>
+                )}
+
             </div>
 
             <div class="col-md-8">
@@ -743,26 +750,27 @@ export default class Project extends Component {
               </div>
             </div>
 
+
+
             <div class="w-100"></div>
 
-            {this.state.readonly ? (
-            <Tabs>
-              <TabList>
-                <Tab>更多信息 <i class="fas fa-hand-point-right"></i></Tab>
-                <Tab>项目文档</Tab>
-              </TabList>
-              <TabPanel>
-              </TabPanel>
-              <TabPanel>
-                <DossiersList projectId = {currentProject.id} />
-              </TabPanel>
-            </Tabs>
-
-            ) : (
+            {!this.state.readonly && (
 
             <div>
+              <button onClick={this.saveProject} class="btn btn-success" hidden={!this.state.newproject}>
+                提交
+              </button>
 
-            <form ref="formToSubmit" action="http://localhost:8080/api/dossiers-upload" method="POST" enctype="multipart/form-data">
+
+              <button hidden={this.state.newproject}
+                type="submit"
+                className="btn btn-success"
+                onClick={this.updateProject}
+              >
+                更新
+              </button>
+
+              <form ref="formToSubmit" action="http://localhost:8080/api/dossiers-upload" method="POST" enctype="multipart/form-data">
                 <div class="form-group input-group">
                 <label for="input-multi-files">上传文件:</label>
                 <input type="file" name="multi-files"
@@ -788,32 +796,32 @@ export default class Project extends Component {
 
                 <input type="hidden" name="projectId" id="projectId"/>
                 </div>
-            </form>
+              </form>
+
+              <p>{this.state.message}</p>
+            </div>)}
 
 
-            <button onClick={this.saveProject} class="btn btn-success" hidden={!this.state.newproject}>
-              Submit
-            </button>
 
-            <button hidden={this.state.newproject}
-              className="badge badge-danger mr-2"
-              onClick={this.deleteProject}
-            >
-              Delete
-            </button>
+            <div class="w-100"></div>
 
-            <button hidden={this.state.newproject}
-              type="submit"
-              className="badge badge-success"
-              onClick={this.updateProject}
-            >
-              Update
-            </button>
+            <Tabs>
+              <TabList>
+                <Tab>更多信息 <i class="fas fa-hand-point-right"></i></Tab>
+                <Tab>项目文档</Tab>
+              </TabList>
+              <TabPanel>
+              </TabPanel>
+              <TabPanel>
+                <DossiersList
+                  projectId = {currentProject.id}
+                  readonly = {this.state.readonly}
+                />
+              </TabPanel>
+            </Tabs>
 
-            <p>{this.state.message}</p>
-            </div>
 
-            )}
+
           </div>
         ) }
       </div>

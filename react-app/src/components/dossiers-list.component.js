@@ -14,6 +14,8 @@ const DossiersList = (props) => {
   const [projectId, setProjectId] = useState(props.match? props.match.params.projectId : props.projectId);
   const [docCategory, setDocCategory] = useState(props.match? props.match.params.docCategory : props.docCategory);
 
+  const [readonly, setReadonly] = useState(props.readonly ? props.readonly : false);
+
   const dossiersRef = useRef();
   dossiersRef.current = dossiers;
 
@@ -138,9 +140,9 @@ const DossiersList = (props) => {
                 <i className="fas fa-download action mr-2"></i>
               </a>
 
-              <span onClick={() => deleteDossier(rowIdx)}>
+              {!readonly && (<span onClick={() => deleteDossier(rowIdx)}>
                 <i className="fas fa-trash action"></i>
-              </span>
+              </span>)}
             </div>
           );
         },
