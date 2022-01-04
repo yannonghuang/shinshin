@@ -813,6 +813,7 @@ export default class Project extends Component {
               <TabPanel>
                 <DossiersList
                   projectId = {currentProject.id}
+                  embedded = {true}
                   readonly = {this.state.readonly}
                 />
               </TabPanel>

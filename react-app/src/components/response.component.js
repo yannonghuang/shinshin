@@ -429,6 +429,7 @@ optionOnSave = {
           <TabPanel>
             <AttachmentsList
               responseId = {currentResponse.id}
+              embedded = {true}
               readonly = {this.state.readonly}
             />
           </TabPanel>
