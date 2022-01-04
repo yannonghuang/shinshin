@@ -718,7 +718,7 @@ export default class Project extends Component {
                 <div class="col-md-4">
                 <label htmlFor="response">项目申请</label>
                 <Link
-                  to={"/responsesView/" + currentProject.responseId}
+                  to={(this.state.readonly ? "/responsesView/" : "/responses/") + currentProject.responseId}
                   id="response"
                   name="response"
                 >
