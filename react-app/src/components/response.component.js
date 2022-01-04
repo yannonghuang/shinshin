@@ -66,12 +66,13 @@ optionOnSave = {
   componentDidMount() {
     const newresponse = window.location.pathname.includes('add');
     this.setState({newresponse: newresponse});
-    this.setState({readonly: window.location.pathname.includes('View')});
+    const readonly = window.location.pathname.includes('View');
+    this.setState({readonly: readonly});
 
     if (newresponse)
       this.getForm(this.props.match.params.id);
     else
-      this.getResponse(this.props.match.params.id);
+      this.getResponse(this.props.match.params.id, readonly);
   }
 
   convert(schools) {
@@ -122,13 +123,15 @@ optionOnSave = {
     })
   }
 
-  getResponse(id) {
+  getResponse(id, readonly) {
     ResponseDataService.get(id)
       .then(response => {
         try {
           const formData = JSON.stringify(response.data.fdata);
           this.fRender = $(this.fb.current).formRender({ formData });
           //this.fRender = $(this.fb.current).formRender(this.state.currentResponse.fdata);
+          if (readonly)
+            $('input, textarea, select', '.rendered-form').attr('readonly', true).attr('disabled', true);
         } catch (e) {
           alert(e);
         }
@@ -380,7 +383,7 @@ optionOnSave = {
       <div>
         {currentResponse ? (
           <div className="edit-form">
-            <h4>欣欣教育基金会项目申请（{this.state.readonly?"阅览":"编辑"}）</h4>
+            <h4>欣欣教育基金会项目申请（{this.state.readonly?"浏览":"编辑"}）</h4>
 
             <form>
               <div className="form-group">
