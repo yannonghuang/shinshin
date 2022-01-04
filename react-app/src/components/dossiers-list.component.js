@@ -119,8 +119,17 @@ const DossiersList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: "创建时间",
+        Header: "时间",
         accessor: "createdAt",
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          const d = new Date(dossiersRef.current[rowIdx].createdAt);
+          return (
+            <div>
+              {d.toLocaleDateString('zh-cn', { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+            </div>
+          );
+        },
       },
       {
         Header: "文档名",

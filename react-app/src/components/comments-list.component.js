@@ -155,11 +155,12 @@ const CommentsList = (props) => {
         width: 50,
         Cell: (props) => {
           const rowIdx = props.row.id;
-          return (
-            <div>
-              {commentsRef.current[rowIdx].createdAt.substring(0, 10)}
-            </div>
-          );
+            const d = new Date(commentsRef.current[rowIdx].createdAt);
+            return (
+              <div>
+                {d.toLocaleDateString('zh-cn', { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+              </div>
+            );
         }
       },
       {
