@@ -1080,12 +1080,14 @@ export default class School extends Component {
               <TabPanel>
                 <ResponsesList
                   schoolId = {currentSchool.id}
+                  embedded = {true}
                   readonly = {this.state.readonly}
                 />
               </TabPanel>
               <TabPanel>
                 <DocumentsList
                   schoolId = {currentSchool.id}
+                  embedded = {true}
                   readonly = {this.state.readonly}
                 />
               </TabPanel>
@@ -1093,6 +1095,7 @@ export default class School extends Component {
                 <DocumentsList
                   schoolId = {currentSchool.id}
                   docCategory = {'照片'}
+                  embedded = {true}
                   readonly = {this.state.readonly}
                 />
               </TabPanel>

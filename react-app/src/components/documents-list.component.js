@@ -16,6 +16,8 @@ const DocumentsList = (props) => {
 
   const [readonly, setReadonly] = useState(props.readonly ? props.readonly : false);
 
+  const [embedded, setEmbedded] = useState(props.embedded ? props.embedded : false);
+
   const documentsRef = useRef();
   documentsRef.current = documents;
 
@@ -117,12 +119,12 @@ const DocumentsList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: "文档名",
-        accessor: "originalname",
-      },
-      {
         Header: "创建时间",
         accessor: "createdAt",
+      },
+      {
+        Header: "文档名",
+        accessor: "originalname",
       },
       {
         Header: "类别",
@@ -169,6 +171,10 @@ const DocumentsList = (props) => {
     []
   );
 
+  const hiddenColumns = embedded
+    ? ['school']
+    : [];
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -179,6 +185,15 @@ const DocumentsList = (props) => {
     columns,
     data: documents,
     disableSortRemove: true,
+    initialState: {
+      hiddenColumns: hiddenColumns,
+      sortBy: [
+        {
+          id: 'createdAt',
+          desc: false
+        }
+      ]
+    },
   },
   useSortBy);
 
@@ -219,7 +234,7 @@ const DocumentsList = (props) => {
 
   return (
     <div className="list row">
-      <div className="col-md-8">
+      {!embedded && (<div className="col-md-8">
         <h4>附件列表</h4>
         <div className="input-group mb-3">
           <input
@@ -239,31 +254,29 @@ const DocumentsList = (props) => {
             </button>
           </div>
         </div>
-      </div>
+
+        {"每页显示行数: "}
+        <select onChange={handlePageSizeChange} value={pageSize}>
+          {pageSizes.map((size) => (
+            <option key={size} value={size}>
+              {size}
+            </option>
+          ))}
+        </select>
+
+        <Pagination
+          className="my-3"
+          count={count}
+          page={page}
+          siblingCount={1}
+          boundaryCount={1}
+          variant="outlined"
+          shape="rounded"
+          onChange={handlePageChange}
+        />
+      </div>)}
 
       <div className="col-md-12 list">
-        <div className="mt-3">
-          {"每页显示行数: "}
-          <select onChange={handlePageSizeChange} value={pageSize}>
-            {pageSizes.map((size) => (
-              <option key={size} value={size}>
-                {size}
-              </option>
-            ))}
-          </select>
-
-          <Pagination
-            className="my-3"
-            count={count}
-            page={page}
-            siblingCount={1}
-            boundaryCount={1}
-            variant="outlined"
-            shape="rounded"
-            onChange={handlePageChange}
-          />
-        </div>
-
         <table
           className="table table-striped table-bordered"
           {...getTableProps()}

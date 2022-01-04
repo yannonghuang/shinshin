@@ -22,6 +22,8 @@ const ResponsesList = (props) => {
 
   const [readonly, setReadonly] = useState(props.readonly ? props.readonly : false);
 
+  const [embedded, setEmbedded] = useState(props.embedded ? props.embedded : false);
+
   const responsesRef = useRef();
   responsesRef.current = responses;
 
@@ -157,12 +159,12 @@ const ResponsesList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: "标题",
-        accessor: "title",
-      },
-      {
         Header: "创建时间",
         accessor: "createdAt",
+      },
+      {
+        Header: "标题",
+        accessor: "title",
       },
       {
         Header: "附件数目",
@@ -274,6 +276,10 @@ const ResponsesList = (props) => {
     []
   );
 
+  const hiddenColumns = embedded
+    ? ['school.region', 'school.code', 'school.name']
+    : [];
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -286,6 +292,15 @@ const ResponsesList = (props) => {
     data: responses,
     disableSortRemove: true,
     manualSortBy: true,
+    initialState: {
+      hiddenColumns: hiddenColumns,
+      sortBy: [
+        {
+          id: 'createdAt',
+          desc: false
+        }
+      ]
+    },
   },
   useSortBy);
 
@@ -332,28 +347,28 @@ const ResponsesList = (props) => {
         </div>
       </div>
 
-      <div className="col-md-12 list">
-        <div className="mt-3">
-          {"每页显示行数: "}
-          <select onChange={handlePageSizeChange} value={pageSize}>
-            {pageSizes.map((size) => (
-              <option key={size} value={size}>
-                {size}
-              </option>
-            ))}
-          </select>
+      <div className="col-md-4 mt-3">
+        {"每页显示行数: "}
+        <select onChange={handlePageSizeChange} value={pageSize}>
+          {pageSizes.map((size) => (
+            <option key={size} value={size}>
+              {size}
+            </option>
+          ))}
+        </select>
+        <Pagination
+          className="my-3"
+          count={count}
+          page={page}
+          siblingCount={1}
+          boundaryCount={1}
+          variant="outlined"
+          shape="rounded"
+          onChange={handlePageChange}
+        />
+      </div>
 
-          <Pagination
-            className="my-3"
-            count={count}
-            page={page}
-            siblingCount={1}
-            boundaryCount={1}
-            variant="outlined"
-            shape="rounded"
-            onChange={handlePageChange}
-          />
-        </div>
+      <div className="col-md-12 list">
 
         <table
           className="table table-striped table-bordered"
@@ -396,10 +411,6 @@ const ResponsesList = (props) => {
             })}
           </tbody>
         </table>
-      </div>
-
-      <div className="col-md-8">
-
       </div>
     </div>
   );
