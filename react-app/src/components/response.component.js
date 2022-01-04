@@ -381,6 +381,7 @@ optionOnSave = {
         {currentResponse ? (
           <div className="edit-form">
             <h4>欣欣教育基金会项目申请（{this.state.readonly?"阅览":"编辑"}）</h4>
+
             <form>
               <div className="form-group">
                 <label htmlFor="title">标题</label>
@@ -412,50 +413,45 @@ optionOnSave = {
 
         <div id="fb-editor" ref={this.fb} />
 
-        {this.state.readonly ? (
+        {this.state.readonly && (
+          <div class="box">
+            <a target="_blank" href={"/responses/" + currentResponse.id} class="btn btn-primary mb-4">编辑</a>
+          </div>
+        )}
 
-            <Tabs>
-              <TabList>
-                <Tab>...</Tab>
-                <Tab>项目申请附件</Tab>
-              </TabList>
-              <TabPanel>
-                <p>... 查看项目申请附件 ...</p>
-              </TabPanel>
-              <TabPanel>
-                <AttachmentsList responseId = {currentResponse.id} />
-              </TabPanel>
+        <Tabs>
+          <TabList>
+            <Tab>更多信息 <i class="fas fa-hand-point-right"></i></Tab>
+            <Tab>项目申请附件</Tab>
+          </TabList>
+          <TabPanel>
+          </TabPanel>
+          <TabPanel>
+            <AttachmentsList
+              responseId = {currentResponse.id}
+              readonly = {this.state.readonly}
+            />
+          </TabPanel>
+        </Tabs>
 
-            </Tabs>
-
-        ) : (
-
+       {!this.state.readonly && (
         <div>
           { this.state.newresponse? (
             <button
               type="submit"
-              className="badge badge-success"
+              className="btn btn-success"
               onClick={this.submitResponse}
             >
               Submit
             </button>
           ) : (
-          <div>
             <button
             type="submit"
-            className="badge badge-success"
+            className="btn btn-success"
             onClick={this.updateResponse}
             >
               Update
             </button>
-
-            <button
-            className="badge badge-danger mr-2"
-            onClick={this.deleteResponse}
-            >
-              Delete
-            </button>
-            </div>
           )}
 
           {(progress < 100 && progress > 0) && (
@@ -486,6 +482,7 @@ optionOnSave = {
           <p>{this.state.message}</p>
         </div>
         )}
+
       </div>
     );
   }

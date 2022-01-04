@@ -750,8 +750,6 @@ export default class Project extends Component {
               </div>
             </div>
 
-
-
             <div class="w-100"></div>
 
             {!this.state.readonly && (

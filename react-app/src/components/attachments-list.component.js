@@ -15,6 +15,8 @@ const AttachmentsList = (props) => {
   const [responseId, setResponseId] = useState(props.match? props.match.params.responseId : props.responseId);
   //const [responseId, setResponseId] = useState(props.match.params.responseId);
 
+  const [readonly, setReadonly] = useState(props.readonly ? props.readonly : false);
+
   const attachmentsRef = useRef();
   attachmentsRef.current = attachments;
 
@@ -131,9 +133,9 @@ const AttachmentsList = (props) => {
               <a href="#" onClick={() => download(attachmentsRef.current[rowIdx].id, attachmentsRef.current[rowIdx].originalname)} >
                 <i className="fas fa-download action mr-2"></i>
               </a>
-              <span onClick={() => deleteAttachment(rowIdx)}>
+              {!readonly && (<span onClick={() => deleteAttachment(rowIdx)}>
                 <i className="fas fa-trash action"></i>
-              </span>
+              </span>)}
             </div>
           );
         },
