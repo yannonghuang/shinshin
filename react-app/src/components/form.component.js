@@ -130,9 +130,10 @@ export default class Form extends Component {
           const formData = JSON.stringify(response.data.fdata);
           this.fRender = $(this.fb.current).formRender({ formData });
         } else {
-          this.fBuilder = $(this.fb.current).formBuilder(this.oldFormOptions).promise
+          $(this.fb.current).formBuilder(this.oldFormOptions).promise
             .then(formBuilder => {
               formBuilder.actions.setData(response.data.fdata);
+              this.fBuilder = formBuilder;
             });
         }
         console.log(response.data);
@@ -157,7 +158,8 @@ export default class Form extends Component {
       .then(response => {
         console.log(response.data);
         this.setState({
-          message: "The form was updated successfully!"
+          message: "项目申请表成功更新!",
+          submitted: true,
         });
       })
       .catch(e => {
@@ -180,7 +182,8 @@ export default class Form extends Component {
             ...prevState.currentForm,
             id: response.data.id,
           },
-          submitted: true
+          submitted: true,
+          message: '项目申请表成功提交!'
         }));
         console.log(response.data);
       })
@@ -217,15 +220,19 @@ export default class Form extends Component {
 
     return (
       <div>
-        {this.state.newform && this.state.submitted
+        {/*this.state.newform && */this.state.submitted
         ? (
           <div>
-            <h4>You submitted successfully!</h4>
+            <p><h4>{this.state.message}</h4></p>
+{/*}
+            <h4>成功提交!</h4>
+
               <button className="btn btn-success" onClick={this.newForm}>
                 Add
               </button>
+*/}
           </div>
-          ) : (
+          ) : (<div>
           <div className="edit-form">
             <h4>申请表格设计</h4>
             <form>
@@ -263,13 +270,13 @@ export default class Form extends Component {
               </div>
             </form>
           </div>
-          )}
 
-        <div id="fb-editor" ref={this.fb} />
+          <div id="fb-editor" ref={this.fb} />
 
-
-        <p>{this.state.message}</p>
-
+          </div>)}
+{/*}
+          <p>{this.state.message}</p>
+*/}
       </div>
     );
   }

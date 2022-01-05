@@ -483,7 +483,7 @@ optionOnSave = {
             </div>
           )}
 
-          <p>{this.state.message}</p>
+          <p><h4>{this.state.message}</h4></p>
 {/*
           { (progress >= 100) && (this.reload())}
 
