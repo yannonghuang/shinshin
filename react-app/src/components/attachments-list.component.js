@@ -19,6 +19,11 @@ const AttachmentsList = (props) => {
 
   const [embedded, setEmbedded] = useState(props.embedded ? props.embedded : false);
 
+  const [reload, setReload] = useState(props.reload);
+
+  //useEffect(setReload, [props.reload]);
+  useEffect(() => { setReload(props.reload) }, [props.reload]);
+
   const attachmentsRef = useRef();
   attachmentsRef.current = attachments;
 
@@ -72,7 +77,7 @@ const AttachmentsList = (props) => {
       });
   };
 
-  useEffect(retrieveAttachments, [page, pageSize]);
+  useEffect(retrieveAttachments, [page, pageSize, reload]);
 
   const refreshList = () => {
     retrieveAttachments();

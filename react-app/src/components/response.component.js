@@ -33,6 +33,7 @@ export default class Response extends Component {
     this.onChangeSchoolId = this.onChangeSchoolId.bind(this);
     this.onChangeAttFiles = this.onChangeAttFiles.bind(this);
     this.submitResponse = this.submitResponse.bind(this);
+    this.reload = this.reload.bind(this);
 
     this.state = {
       currentResponse: {
@@ -50,6 +51,7 @@ export default class Response extends Component {
       readonly: true,
       newresponse: true,
       progress: 0,
+      reload: false,
     };
 
     //this.init();
@@ -161,19 +163,19 @@ optionOnSave = {
         if (user) {
           this.setState({
           currentUser: user,
-        });
-        if (user.schoolId) {
-          this.setState(function(prevState) {
-            return {
-              currentResponse: {
-                ...prevState.currentResponse,
-                schoolId: user.schoolId
-              }
-            };
           });
+          if (user.schoolId) {
+            this.setState(function(prevState) {
+              return {
+                currentResponse: {
+                  ...prevState.currentResponse,
+                  schoolId: user.schoolId
+                }
+              };
+            });
+          }
         }
-      }
-      console.log(response);
+        console.log(response);
       })
       .catch(e => {
         console.log(e);
@@ -292,6 +294,7 @@ optionOnSave = {
           message: prevState.message + " 项目申请附件成功上传!"
         }));
 
+      this.reload();
       console.log(response.data);
     })
     .catch(e => {
@@ -375,6 +378,12 @@ optionOnSave = {
       });
   }
 
+  reload() {
+    //const c = Date.now();
+    const c = !this.state.reload;
+    this.setState({reload: c});
+  }
+
 
   render() {
     const { currentResponse, progress } = this.state;
@@ -434,6 +443,7 @@ optionOnSave = {
               responseId = {currentResponse.id}
               embedded = {true}
               readonly = {this.state.readonly}
+              reload = {this.state.reload}
             />
           </TabPanel>
         </Tabs>
@@ -446,7 +456,7 @@ optionOnSave = {
               className="btn btn-success"
               onClick={this.submitResponse}
             >
-              Submit
+              提交
             </button>
           ) : (
             <button
@@ -454,7 +464,7 @@ optionOnSave = {
             className="btn btn-success"
             onClick={this.updateResponse}
             >
-              Update
+              更新
             </button>
           )}
 
@@ -473,7 +483,10 @@ optionOnSave = {
             </div>
           )}
 
-          {(progress >= 100) && (
+          <p>{this.state.message}</p>
+{/*
+          { (progress >= 100) && (this.reload())}
+
             <Link
               to={("/responses" +
                    (this.state.currentResponse.schoolId ? ('/school/' + this.state.currentResponse.schoolId) : ''))}
@@ -481,9 +494,9 @@ optionOnSave = {
             >
               点击转项目申请列表...
             </Link>
-          )}
 
-          <p>{this.state.message}</p>
+          )}
+*/}
         </div>
         )}
 
