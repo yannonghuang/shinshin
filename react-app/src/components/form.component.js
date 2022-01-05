@@ -32,10 +32,10 @@ export default class Form extends Component {
         published: false,
         fdata: null,
         deadline: null,
-        readonly: true
       },
       message: "",
       newsform: true,
+      readonly: true,      
       submitted: false
     };
   }
@@ -67,15 +67,19 @@ export default class Form extends Component {
 
   fb = createRef();
   fBuilder = null;
+  fRender = null;
   componentDidMount() {
+    const readonly = window.location.pathname.includes('View')
     const newform = window.location.pathname.includes('add');
     this.setState({newform: newform});
+    this.setState({readonly: readonly});
 
     if (newform)
       this.fBuilder = $(this.fb.current).formBuilder(this.newFormOptions);
     else {
-      this.fBuilder = $(this.fb.current).formBuilder(this.oldFormOptions);
-      this.getForm(this.props.match.params.id);
+      //if (!readonly)
+        //this.fBuilder = $(this.fb.current).formBuilder(this.oldFormOptions);
+      this.getForm(this.props.match.params.id, readonly);
     }
   }
 
@@ -115,25 +119,22 @@ export default class Form extends Component {
     }));
   }
 
-  getForm(id) {
+  getForm(id, readonly) {
     FormDataService.get(id)
       .then(response => {
         this.setState({
           currentForm: response.data
         });
 
-        //this.fBuilder.actions.setData(this.state.currentForm.fdata);
-        this.fBuilder.actions.setData(response.data.fdata);
-
-        this.setState(function(prevState) {
-          return {
-            currentForm: {
-              ...prevState.currentForm,
-              readonly: window.location.pathname.includes('View')
-            }
-          };
-        });
-
+        if (readonly) {
+          const formData = JSON.stringify(response.data.fdata);
+          this.fRender = $(this.fb.current).formRender({ formData });
+        } else {
+          this.fBuilder = $(this.fb.current).formBuilder(this.oldFormOptions).promise
+            .then(formBuilder => {
+              formBuilder.actions.setData(response.data.fdata);
+            });
+        }
         console.log(response.data);
       })
       .catch(e => {
@@ -231,7 +232,7 @@ export default class Form extends Component {
               <div className="form-group">
                 <label htmlFor="title">标题</label>
                 <input
-                  readonly={(!this.state.newform && currentForm.readonly) ? "" : false}
+                  readonly={(!this.state.newform && this.state.readonly) ? "" : false}
                   type="text"
                   className="form-control"
                   id="title"
@@ -242,7 +243,7 @@ export default class Form extends Component {
               <div className="form-group">
                 <label htmlFor="description">说明</label>
                 <input
-                  readonly={(!this.state.newform && currentForm.readonly) ? "" : false}
+                  readonly={(!this.state.newform && this.state.readonly) ? "" : false}
                   type="text"
                   className="form-control"
                   id="description"
@@ -253,7 +254,7 @@ export default class Form extends Component {
               <div className="form-group">
                 <label htmlFor="deadline">截止日期</label>
                 <input
-                  readonly={(!this.state.newform && currentForm.readonly) ? "" : false}
+                  readonly={(!this.state.newform && this.state.readonly) ? "" : false}
                   type="date"
                   className="form-control"
                   id="deadline"
@@ -267,14 +268,7 @@ export default class Form extends Component {
 
         <div id="fb-editor" ref={this.fb} />
 
-        {currentForm.readonly ? '' : (
-        <button
-          className="badge badge-danger mr-2"
-          onClick={this.deleteForm}
-        >
-          Delete
-        </button>
-        )}
+
         <p>{this.state.message}</p>
 
       </div>

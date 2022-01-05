@@ -342,14 +342,14 @@ optionOnSave = {
     ResponseDataService.create(
       data
     )
-    .then(response => {
-      this.setState({
+    .then(async (response) => {
+      await this.setState({
         currentResponse: response.data,
         message: "项目申请成功提交!",
-        newresponse: false
+        //newresponse: false
       });
 
-      this.uploadAttachments(response.data.id, attFiles);
+      this.uploadAttachments(/*response.data.id, */attFiles);
 
       console.log(response.data);
     })
