@@ -242,9 +242,8 @@ export default class Form extends Component {
               </div>
               <div className="form-group">
                 <label htmlFor="description">说明</label>
-                <input
+                <textarea
                   readonly={(!this.state.newform && this.state.readonly) ? "" : false}
-                  type="text"
                   className="form-control"
                   id="description"
                   value={currentForm.description}
