@@ -98,11 +98,13 @@ optionOnSave = {
     }
   }
 
-  getForm(id) {
-    FormDataService.get(id)
+  getForm(formId) {
+    FormDataService.get(formId)
       .then(response => {
-        this.setState({
-          currentResponse: response.data
+      const {id, ...otherParameters} = response.data;
+
+      this.setState({
+        currentResponse: otherParameters
       });
 
       try {
@@ -116,7 +118,7 @@ optionOnSave = {
         return {
           currentResponse: {
             ...prevState.currentResponse,
-            formId: id
+            formId: formId
             }
          };
       });
@@ -301,22 +303,17 @@ optionOnSave = {
       });
     })
     .then(response => {
-      if (attFiles[0])
-        this.setState(prevState => ({
-          message: prevState.message + " 项目申请附件成功上传!"
-        }));
-
-      this.reload();
       console.log(response.data);
 
+      if (attFiles[0]) {
+      //this.reload();
+        this.setState(prevState => ({
+          message: prevState.message + " 项目申请附件成功上传!",
+          reload: !this.state.reload,
+        }))
+      }
       alert(this.state.message);
-
-      if (this.state.newresponse) {
-        this.props.history.push("/responses/" + this.state.currentResponse.id);
-        window.location.reload();
-      } else
-        this.clearFiles();
-
+      this.clearFiles();
     })
     .catch(e => {
       console.log(e);
@@ -367,15 +364,20 @@ optionOnSave = {
       data
     )
     .then(async (response) => {
-      await this.setState({
-        currentResponse: response.data,
-        message: "项目申请成功提交!",
-        //newresponse: false
-      });
-
-      this.uploadAttachments(/*response.data.id, */attFiles);
-
       console.log(response.data);
+
+      await this.setState(prevState => ({
+        //currentResponse: response.data,
+        currentResponse: {
+          ...prevState.currentResponse,
+          id: response.data.id
+        },
+        message: "项目申请成功提交!",
+        newresponse: false
+      }));
+
+      this.uploadAttachments(attFiles);
+      this.props.history.push("/responses/" + response.data.id);
     })
     .catch(e => {
       console.log(e);
@@ -401,8 +403,7 @@ optionOnSave = {
 
   reload() {
     //const c = Date.now();
-    const c = !this.state.reload;
-    this.setState({reload: c});
+    this.setState({reload: !this.state.reload});
   }
 
 
@@ -504,12 +505,12 @@ optionOnSave = {
           <TabPanel>
           </TabPanel>
           <TabPanel>
-            <AttachmentsList
-              responseId = {currentResponse.id}
+            {this.state.currentResponse.id && (<AttachmentsList
+              responseId = {this.state.currentResponse.id}
               embedded = {true}
               readonly = {this.state.readonly}
               reload = {this.state.reload}
-            />
+            />)}
           </TabPanel>
         </Tabs>
 
