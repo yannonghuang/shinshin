@@ -235,6 +235,18 @@ optionOnSave = {
     return attFiles;
   }
 
+  clearFiles() {
+    var inputs = document.getElementsByTagName("input");
+
+    if (inputs) {
+    for (var i = 0; i < inputs.length; i++) {
+      if (inputs[i].type === "file" && inputs[i].files) {
+        inputs[i].value = null;
+        }
+      }
+    }
+  }
+
   onChangeAttFiles(e) {
     e.preventDefault();
     var attFiles = e.target.files;
@@ -298,6 +310,13 @@ optionOnSave = {
       console.log(response.data);
 
       alert(this.state.message);
+
+      if (this.state.newresponse) {
+        this.props.history.push("/responses/" + this.state.currentResponse.id);
+        window.location.reload();
+      } else
+        this.clearFiles();
+
     })
     .catch(e => {
       console.log(e);
