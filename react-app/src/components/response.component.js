@@ -296,6 +296,8 @@ optionOnSave = {
 
       this.reload();
       console.log(response.data);
+
+      alert(this.state.message);
     })
     .catch(e => {
       console.log(e);
@@ -445,7 +447,7 @@ optionOnSave = {
                     className="btn btn-success"
                     onClick={this.updateResponse}
                   >
-                    更新
+                    保存
                   </button>
                 )}
 
@@ -464,8 +466,9 @@ optionOnSave = {
                   </div>
                 )}
 
+{/*
                 <p><h4>{this.state.message}</h4></p>
-
+*/}
               </div>)}
 
             </div>
