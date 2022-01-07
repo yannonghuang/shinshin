@@ -67,7 +67,7 @@ export default class Login extends Component {
 
   togglePasswordShown() {
     this.setState({
-      passwordShown: !this.state.passwordShown
+      passwordShown: this.state.passwordShown? false : true
     });
   };
 
@@ -244,7 +244,7 @@ export default class Login extends Component {
                   validations={[required]}
                 />
 
-                <div>
+                <div className="mt-2" >
                   <button type="button" style={{ float: "left", width: "12%", background: "transparent", border: "none !important" }}
                     onClick={this.togglePasswordShown}>
                     {this.state.passwordShown
@@ -252,8 +252,9 @@ export default class Login extends Component {
                       : (<i className= "fas fa-eye"></i>)
                     }
                   </button>
+
                   <button
-                    style={{ float: "right", width: "28%" }}
+                    style={{ float: "right", width: "25%" }}
                     className="btn btn-primary badge"
                     type="button"
                     onClick={this.onReset}
