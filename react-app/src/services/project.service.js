@@ -169,7 +169,7 @@ class ProjectDataService {
     }
 
     const csv = flatten(obj);
-    const header = csv.header.split(',');
+    const header = csv.header.trim().split(',');
 
     // build index
     const index = [];
