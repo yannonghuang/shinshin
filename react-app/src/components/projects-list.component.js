@@ -416,13 +416,14 @@ const ProjectsList = (props) => {
             value={searchName}
             onChange={onChangeSearchName}
           />
-          <input
+
+          {!embedded && (<input
             type="text"
             className="form-control"
             placeholder="学校编号"
             value={searchCode}
             onChange={onChangeSearchCode}
-          />
+          />)}
 
           <input
             type="text"
