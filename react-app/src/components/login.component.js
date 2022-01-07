@@ -246,12 +246,30 @@ export default class Login extends Component {
                     validations={[required]}
                   />
 
-                  <button type="button" style={{ margin: "0px",  float: "right", display: "inline-block", background: "transparent", border: "none" }}
-                    onClick={this.togglePasswordShown}>
+                  <button type="button"
+                    style={{ margin: "0px",  float: "right", display: "inline-block",
+                      background: "transparent", border: "none" }}
+
+                    onClick={this.togglePasswordShown}
+/*
+                    onClick={() => {
+                      const shown = this.state.passwordShown;
+                      this.togglePasswordShown();
+                      return (<div>
+                        shown
+                          ? (<i className= "fas fa-eye-slash"></i>)
+                          : (<i className= "fas fa-eye"></i>)
+                        </div>)
+                      }
+                    }
+*/
+                  >
+
                     {this.state.passwordShown
                       ? (<i className= "fas fa-eye-slash"></i>)
                       : (<i className= "fas fa-eye"></i>)
                     }
+
                   </button>
                 </div>
 
