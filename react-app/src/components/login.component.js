@@ -237,7 +237,7 @@ export default class Login extends Component {
                 <label htmlFor="password">密码</label>
                 <div style={{ width: "100%"}} >
                   <Input
-                    style={{ display: "inline-block", width: "90%", float: "left"}}
+                    style={{ display: "inline-block", width: "88%", float: "left"}}
                     type={this.state.passwordShown ? "text" : "password"}
                     className="form-control"
                     name="password"
