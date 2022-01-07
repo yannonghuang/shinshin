@@ -34,6 +34,7 @@ export default class Response extends Component {
     this.onChangeAttFiles = this.onChangeAttFiles.bind(this);
     this.submitResponse = this.submitResponse.bind(this);
     this.reload = this.reload.bind(this);
+    this.hasFiles = this.hasFiles.bind(this);
 
     this.state = {
       currentResponse: {
@@ -52,6 +53,7 @@ export default class Response extends Component {
       newresponse: true,
       progress: 0,
       reload: false,
+      hasFiles: null,
     };
 
     //this.init();
@@ -119,7 +121,8 @@ optionOnSave = {
           currentResponse: {
             ...prevState.currentResponse,
             formId: formId
-            }
+          },
+          hasFiles: this.hasFiles()
          };
       });
 
@@ -141,7 +144,8 @@ optionOnSave = {
         }
 
         this.setState({
-          currentResponse: response.data
+          currentResponse: response.data,
+          hasFiles: this.hasFiles()
         });
 
         this.getSchools();
@@ -235,6 +239,18 @@ optionOnSave = {
     }
 
     return attFiles;
+  }
+
+  hasFiles() {
+    var inputs = document.getElementsByTagName("input");
+    const attFiles = [];
+    if (!inputs) return false;
+
+    for (var i = 0; i < inputs.length; i++)
+      if (inputs[i].type === "file")
+        return true;
+
+    return false;
   }
 
   clearFiles() {
@@ -497,7 +513,8 @@ optionOnSave = {
 
         <div id="fb-editor" ref={this.fb} />
 
-        <Tabs>
+        {this.state.hasFiles &&
+        (<Tabs>
           <TabList>
             <Tab>更多信息 <i class="fas fa-hand-point-right"></i></Tab>
             <Tab>项目申请附件</Tab>
@@ -512,9 +529,7 @@ optionOnSave = {
               reload = {this.state.reload}
             />)}
           </TabPanel>
-        </Tabs>
-
-
+        </Tabs>)}
 
       </div>
     );
