@@ -276,6 +276,21 @@ const ProjectsList = (props) => {
         disableSortBy: true,
       },
       {
+        Header: "学校学生数",
+        accessor: 'school.studentsCount',
+        disableSortBy: true,
+      },
+      {
+        Header: "学校教师数",
+        accessor: 'school.teachersCount',
+        disableSortBy: true,
+      },
+      {
+        Header: "学校类型",
+        accessor: 'school.category',
+        disableSortBy: true,
+      },
+      {
         Header: "ID",
         accessor: "id",
         disableSortBy: true,
@@ -353,8 +368,14 @@ const ProjectsList = (props) => {
     []
   );
 
+  const onlineOnlyColumns =
+    ['id', 'school.region', 'school.code', 'school.name'];
+
+  const exportOnlyColumns =
+    ['school.studentsCount', 'school.teachersCount', 'school.category'];
+
   const hiddenColumns = embedded
-    ? ['id', 'school.region', 'school.code', 'school.name']
+    ? [...onlineOnlyColumns, ...exportOnlyColumns]
     : [];
 
   const {

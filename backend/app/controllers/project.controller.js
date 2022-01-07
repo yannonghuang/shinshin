@@ -203,7 +203,7 @@ var orderbyObject = null;
   var include = [
                     {
                       model: School,
-                      attributes: ['id', 'name', 'code', 'region'],
+                      attributes: ['id', 'studentsCount', 'teachersCount', 'category', 'name', 'code', 'region'],
                       required: false,
                     },
                     {
