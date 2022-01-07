@@ -31,6 +31,7 @@ export default class Login extends Component {
     this.onReset = this.onReset.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.handleEmailVerification = this.handleEmailVerification.bind(this);
+    this.togglePasswordShown = this.togglePasswordShown.bind(this);
 
     this.state = {
       username: "",
@@ -38,7 +39,8 @@ export default class Login extends Component {
       email: "",
       isReset: false,
       loading: false,
-      message: ""
+      message: "",
+      passwordShown: false
     };
   }
 
@@ -62,6 +64,12 @@ export default class Login extends Component {
         username: username
       });
   }
+
+  togglePasswordShown() {
+    this.setState({
+      passwordShown: !this.state.passwordShown
+    });
+  };
 
   onChangeUsername(e) {
     this.setState({
@@ -225,22 +233,34 @@ export default class Login extends Component {
               </div>
 
               <div className="form-group">
+
                 <label htmlFor="password">密码</label>
                 <Input
-                  type="password"
+                  type={this.state.passwordShown ? "text" : "password"}
                   className="form-control"
                   name="password"
                   value={this.state.password}
                   onChange={this.onChangePassword}
                   validations={[required]}
                 />
-                <button
-                  className="btn btn-primary badge "
-                  type="button"
-                  onClick={this.onReset}
-                >
-                  忘记密码？
-                </button>
+
+                <div>
+                  <button type="button" style={{ float: "left", width: "12%", background: "transparent", border: "none !important" }}
+                    onClick={this.togglePasswordShown}>
+                    {this.state.passwordShown
+                      ? (<i className= "fas fa-eye-slash"></i>)
+                      : (<i className= "fas fa-eye"></i>)
+                    }
+                  </button>
+                  <button
+                    style={{ float: "right", width: "28%" }}
+                    className="btn btn-primary badge"
+                    type="button"
+                    onClick={this.onReset}
+                  >
+                    忘记密码？
+                  </button>
+                </div>
               </div>
             </div>)}
 
