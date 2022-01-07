@@ -235,34 +235,37 @@ export default class Login extends Component {
               <div className="form-group">
 
                 <label htmlFor="password">密码</label>
-                <Input
-                  type={this.state.passwordShown ? "text" : "password"}
-                  className="form-control"
-                  name="password"
-                  value={this.state.password}
-                  onChange={this.onChangePassword}
-                  validations={[required]}
-                />
+                <div style={{ width: "100%"}} >
+                  <Input
+                    style={{ display: "inline-block", width: "90%", float: "left"}}
+                    type={this.state.passwordShown ? "text" : "password"}
+                    className="form-control"
+                    name="password"
+                    value={this.state.password}
+                    onChange={this.onChangePassword}
+                    validations={[required]}
+                  />
 
-                <div className="mt-2" >
-                  <button type="button" style={{ float: "left", width: "12%", background: "transparent", border: "none !important" }}
+                  <button type="button" style={{ margin: "0px",  float: "right", display: "inline-block", background: "transparent", border: "none" }}
                     onClick={this.togglePasswordShown}>
                     {this.state.passwordShown
                       ? (<i className= "fas fa-eye-slash"></i>)
                       : (<i className= "fas fa-eye"></i>)
                     }
                   </button>
-
-                  <button
-                    style={{ float: "right", width: "25%" }}
-                    className="btn btn-primary badge"
-                    type="button"
-                    onClick={this.onReset}
-                  >
-                    忘记密码
-                  </button>
                 </div>
+
+                <button
+                  style={{ float: "left", width: "25%" }}
+                  className="btn btn-primary badge mt-2"
+                  type="button"
+                  onClick={this.onReset}
+                >
+                  忘记密码
+                </button>
+
               </div>
+
             </div>)}
 
             <div className="form-group">
