@@ -153,7 +153,7 @@ const AttachmentsList = (props) => {
               <a href="#" onClick={() => download(attachmentsRef.current[rowIdx].id, attachmentsRef.current[rowIdx].originalname)} >
                 <i className="fas fa-download action mr-2"></i>
               </a>
-              {!readonly && (<span onClick={() => deleteAttachment(rowIdx)}>
+              {!readonly && (<span onClick={() => window.confirm("您确定要删除吗 ?") && deleteAttachment(rowIdx)}>
                 <i className="fas fa-trash action"></i>
               </span>)}
             </div>

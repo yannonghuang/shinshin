@@ -193,7 +193,7 @@ const LogsList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
-              <span onClick={() => deleteLog(rowIdx)}>
+              <span onClick={() => window.confirm("您确定要删除吗 ?") && deleteLog(rowIdx)}>
                 <i className="fas fa-trash action"></i>
               </span>
             </div>

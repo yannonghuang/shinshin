@@ -322,7 +322,7 @@ const SchoolsList = (props) => {
                 <i className="far fa-edit action mr-2"></i>
               </Link>
 
-              <span onClick={() => deleteSchool(rowIdx)}>
+              <span onClick={() => window.confirm("您确定要删除吗 ?") && deleteSchool(rowIdx)}>
                 <i className="fas fa-trash action"></i>
               </span>
             </div>

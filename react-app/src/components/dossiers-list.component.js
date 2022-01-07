@@ -151,7 +151,7 @@ const DossiersList = (props) => {
                 <i className="fas fa-download action mr-2"></i>
               </a>
 
-              {!readonly && (<span onClick={() => deleteDossier(rowIdx)}>
+              {!readonly && (<span onClick={() => window.confirm("您确定要删除吗 ?") && deleteDossier(rowIdx)}>
                 <i className="fas fa-trash action"></i>
               </span>)}
             </div>

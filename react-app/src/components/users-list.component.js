@@ -288,7 +288,7 @@ const UsersList = (props) => {
                 <i className="far fa-edit action mr-2"></i>
               </span>
 
-              <span onClick={() => deleteUser(rowIdx)}>
+              <span onClick={() => window.confirm("您确定要删除吗 ?") && deleteUser(rowIdx)}>
                 <i className="fas fa-trash action"></i>
               </span>
             </div>

@@ -357,7 +357,7 @@ const ProjectsList = (props) => {
                 <i className="far fa-edit action mr-2"></i>
               </Link>)}
 
-              {!readonly && (<span onClick={() => deleteProject(rowIdx)}>
+              {!readonly && (<span onClick={() => window.confirm("您确定要删除吗 ?") && deleteProject(rowIdx)}>
                 <i className="fas fa-trash action"></i>
               </span>)}
             </div>

@@ -199,7 +199,7 @@ const CommentsList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
-              {!readonly && (<span onClick={() => deleteComment(rowIdx)}>
+              {!readonly && (<span onClick={() => window.confirm("您确定要删除吗 ?") && deleteComment(rowIdx)}>
                 <i className="fas fa-trash action"></i>
               </span>)}
             </div>
