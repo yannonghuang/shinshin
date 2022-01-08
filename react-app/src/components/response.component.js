@@ -471,6 +471,7 @@ optionOnSave = {
              {!this.state.readonly && (<div>
                 { this.state.newresponse? (
                   <button
+                    style={{ position: "absolute", right: "10px" }}
                     type="submit"
                     className="btn btn-success"
                     onClick={this.submitResponse}
@@ -479,6 +480,7 @@ optionOnSave = {
                   </button>
                 ) : (
                   <button
+                    style={{ position: "absolute", right: "10px" }}
                     type="submit"
                     className="btn btn-success"
                     onClick={this.updateResponse}
@@ -531,6 +533,25 @@ optionOnSave = {
           </TabPanel>
         </Tabs>)}
 
+        {!this.state.readonly && (<div>
+          { this.state.newresponse? (
+            <button
+              type="submit"
+              className="btn btn-success"
+              onClick={this.submitResponse}
+            >
+              提交
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="btn btn-success"
+              onClick={this.updateResponse}
+            >
+              保存
+            </button>
+          )}
+        </div>)}
       </div>
     );
   }
