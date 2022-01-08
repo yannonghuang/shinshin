@@ -120,6 +120,8 @@ exports.SAVE_findAll2 = (req, res) => {
 
 exports.findAll2 = (req, res) => {
   const title = req.body.title;
+  const createdAt = req.body.createdAt;
+  const code = req.body.code;
   const page = req.body.page;
   const size = req.body.size;
   const formId = req.body.formId;
@@ -148,7 +150,10 @@ exports.findAll2 = (req, res) => {
             title ? { title: { [Op.like]: `%${title}%` } } : null,
             formId ? { formId: { [Op.eq]: `${formId}` } } : null,
             schoolId ? { '$school.id$': { [Op.eq]: `${schoolId}` } } : null,
+            code ? { '$school.code$': { [Op.eq]: `${code}` } } : null,
             userId ? { userId: { [Op.eq]: `${userId}` } } : null,
+            createdAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('response.createdAt')), `${createdAt}`) } } : null
+
             //schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null
         ]};
 
@@ -177,8 +182,8 @@ exports.findAll2 = (req, res) => {
   limit: limit,
   offset: offset,
   subQuery: false,
-  attributes: ['id', 'title', //'createdAt',
-      [db.Sequelize.fn('date_format', db.Sequelize.col("response.createdAt"), '%Y-%m-%d'), "createdAt"],
+  attributes: ['id', 'title', 'createdAt',
+      //[db.Sequelize.fn('date_format', db.Sequelize.col("response.createdAt"), '%Y-%m-%d'), "createdAt"],
       [db.Sequelize.fn("COUNT", db.Sequelize.col("attachments.id")), "attachmentsCount"]
   ],
   include: include,

@@ -8,11 +8,15 @@ import Pagination from "@material-ui/lab/Pagination";
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useTable, useSortBy } from "react-table";
 
+import YearPicker from 'react-single-year-picker';
+
 const ResponsesList = (props) => {
   const [responses, setResponses] = useState([]);
   const [currentResponse, setCurrentResponse] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [searchTitle, setSearchTitle] = useState("");
+  const [searchCode, setSearchCode] = useState("");
+  const [searchCreatedAt, setSearchCreatedAt] = useState("");
 
   const [formId, setFormId] = useState(props.match? props.match.params.formId : props.formId);
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
@@ -40,6 +44,21 @@ const ResponsesList = (props) => {
     setSearchTitle(searchTitle);
   };
 
+  const onChangeSearchCode = (e) => {
+    const searchCode = e.target.value;
+    setSearchCode(searchCode);
+  };
+
+  const onChangeSearchCreatedAt = (e) => {
+    const searchCreatedAt = e; // e.target.value;
+    setSearchCreatedAt(searchCreatedAt);
+  };
+
+  const onChangeSearchInputCreatedAt = (e) => {
+    const searchCreatedAt = e; //e.target.value;
+    setSearchCreatedAt(searchCreatedAt);
+  };
+
   const getRequestParams = (/*searchTitle, page, pageSize, formId, schoolId, userId, orderby*/) => {
     //const user = AuthService.getCurrentUser();
 
@@ -47,6 +66,14 @@ const ResponsesList = (props) => {
 
     if (searchTitle) {
       params["title"] = searchTitle;
+    }
+
+    if (searchCode) {
+      params["code"] = searchCode;
+    }
+
+    if (searchCreatedAt) {
+      params["createdAt"] = searchCreatedAt;
     }
 
     if (page) {
@@ -74,6 +101,13 @@ const ResponsesList = (props) => {
     }
 
     return params;
+  };
+
+  const onClearSearch = (e) => {
+    setSearchTitle("");
+    setSearchCode("");
+    setSearchCreatedAt("");
+    setOrderby([]);
   };
 
   const getAttachmentsCount = async (responseId) => {
@@ -107,7 +141,7 @@ const ResponsesList = (props) => {
       });
   };
 
-  useEffect(retrieveResponses, [page, pageSize, orderby]);
+  useEffect(retrieveResponses, [page, pageSize, orderby, searchTitle, searchCode, searchCreatedAt]);
 
   const refreshList = () => {
     retrieveResponses();
@@ -161,6 +195,15 @@ const ResponsesList = (props) => {
       {
         Header: "创建时间",
         accessor: "createdAt",
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+            const d = new Date(responsesRef.current[rowIdx].createdAt);
+            return (
+              <div>
+                {d.toLocaleDateString('zh-cn', { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+              </div>
+            );
+        }
       },
       {
         Header: "标题",
@@ -330,18 +373,54 @@ const ResponsesList = (props) => {
         <div className="input-group mb-3">
           <input
             type="text"
+            readonly=""
             className="form-control"
-            placeholder="Search by title"
+            placeholder="项目年份"
+            value={searchCreatedAt}
+            onChange={onChangeSearchInputCreatedAt}
+          />
+          <YearPicker
+            yearArray={['2019', '2020']}
+            value={searchCreatedAt}
+            onSelect={onChangeSearchCreatedAt}
+            hideInput={true}
+            minRange={1995}
+            maxRange={2022}
+          />
+
+          <input
+            type="text"
+            className="form-control"
+            placeholder="标题查找"
             value={searchTitle}
             onChange={onChangeSearchTitle}
           />
+
+          <input
+            type="text"
+            className="form-control"
+            placeholder="学校编码"
+            value={searchCode}
+            onChange={onChangeSearchCode}
+          />
+
+          <div>
+            <button
+              className="btn btn-primary badge btn-block"
+              type="button"
+              onClick={onClearSearch}
+            >
+              清空
+            </button>
+          </div>
+
           <div className="input-group-append">
             <button
               className="btn btn-outline-secondary"
               type="button"
               onClick={findByTitle}
             >
-              Search
+              查找
             </button>
           </div>
         </div>
