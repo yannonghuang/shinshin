@@ -235,9 +235,9 @@ export default class Login extends Component {
               <div className="form-group">
 
                 <label htmlFor="password">密码</label>
-                <div style={{ width: "100%"}} >
+                <div style={{position: "relative", width: "100%"}} >
                   <Input
-                    style={{ display: "inline-block", width: "88%", float: "left"}}
+                    style={{ width: "100%" }}
                     type={this.state.passwordShown ? "text" : "password"}
                     className="form-control"
                     name="password"
@@ -247,30 +247,13 @@ export default class Login extends Component {
                   />
 
                   <button type="button"
-                    style={{ margin: "0px",  float: "right", display: "inline-block",
+                    style={{ position: "absolute", right: "10px", top: "5px", cursor: "pointer",
                       background: "transparent", border: "none" }}
-
                     onClick={this.togglePasswordShown}
-/*
-                    onClick={() => {
-                      const shown = this.state.passwordShown;
-                      this.togglePasswordShown();
-                      return (<div>
-                        shown
-                          ? (<i className= "fas fa-eye-slash"></i>)
-                          : (<i className= "fas fa-eye"></i>)
-                        </div>)
-                      }
-                    }
-*/
                   >
-
-                    {this.state.passwordShown
-                      ? (<i className= "fas fa-eye-slash"></i>)
-                      : (<i className= "fas fa-eye"></i>)
-                    }
-
+                    <i className={this.state.passwordShown ? "fas fa-eye-slash" : "fas fa-eye"} ></i>
                   </button>
+
                 </div>
 
                 <button
