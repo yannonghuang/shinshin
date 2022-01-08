@@ -74,6 +74,7 @@ exports.findAll = (req, res) => {
 
 exports.findAll2 = (req, res) => {
   const title = req.body.title;
+  const createdAt = req.body.createdAt;
   const page = req.body.page;
   const size = req.body.size;
   const orderby = req.body.orderby;
@@ -105,7 +106,12 @@ exports.findAll2 = (req, res) => {
   };
 */
 
-  var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+  //var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+  var condition = {
+        [Op.and]: [
+            title ? { title: { [Op.like]: `%${title}%` } } : null,
+            createdAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('form.createdAt')), `${createdAt}`) } } : null
+        ]};
 
   const { limit, offset } = getPagination(page, size);
 
@@ -117,6 +123,7 @@ exports.findAll2 = (req, res) => {
   attributes: ['id', 'title', 'description',// 'deadline',
       [db.Sequelize.fn("COUNT", db.Sequelize.col("responses.id")), "responsesCount"],
       [db.Sequelize.fn('date_format', db.Sequelize.col("deadline"), '%Y-%m-%d'), "deadline"],
+      [db.Sequelize.fn('date_format', db.Sequelize.col("form.createdAt"), '%Y-%m-%d'), "createdAt"],
   ],
   include: [{
       model: Response,
@@ -196,6 +203,7 @@ exports.findOne = (req, res) => {
   Form.findByPk(id, {
     attributes: ['id', 'title', 'description', 'fdata', // 'deadline',
       [db.Sequelize.fn('date_format', db.Sequelize.col("deadline"), '%Y-%m-%d'), "deadline"],
+      [db.Sequelize.fn('date_format', db.Sequelize.col("createdAt"), '%Y-%m-%d'), "createdAt"],
   ]
   })
     .then(data => {

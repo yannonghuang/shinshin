@@ -6,11 +6,14 @@ import Pagination from "@material-ui/lab/Pagination";
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useTable, useSortBy } from "react-table";
 
+import YearPicker from 'react-single-year-picker';
+
 const FormsList = (props) => {
   const [forms, setForms] = useState([]);
   const [currentForm, setCurrentForm] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [searchTitle, setSearchTitle] = useState("");
+  const [searchCreatedAt, setSearchCreatedAt] = useState("");
 
   const formsRef = useRef();
   formsRef.current = forms;
@@ -23,9 +26,21 @@ const FormsList = (props) => {
 
   const pageSizes = [5, 10, 20];
 
+  const [totalItems, setTotalItems] = useState(0);
+
   const onChangeSearchTitle = (e) => {
     const searchTitle = e.target.value;
     setSearchTitle(searchTitle);
+  };
+
+  const onChangeSearchCreatedAt = (e) => {
+    const searchCreatedAt = e; // e.target.value;
+    setSearchCreatedAt(searchCreatedAt);
+  };
+
+  const onChangeSearchInputCreatedAt = (e) => {
+    const searchCreatedAt = e; //e.target.value;
+    setSearchCreatedAt(searchCreatedAt);
   };
 
   const getRequestParams = (/*searchTitle, page, pageSize, orderby*/) => {
@@ -33,6 +48,10 @@ const FormsList = (props) => {
 
     if (searchTitle) {
       params["title"] = searchTitle;
+    }
+
+    if (searchCreatedAt) {
+      params["createdAt"] = searchCreatedAt;
     }
 
     if (page) {
@@ -50,15 +69,22 @@ const FormsList = (props) => {
     return params;
   };
 
+  const onClearSearch = (e) => {
+    setSearchTitle("");
+    setSearchCreatedAt("");
+    setOrderby([]);
+  };
+
   const retrieveForms = () => {
     const params = getRequestParams(/*searchTitle, page, pageSize, orderby*/);
 
     FormDataService.getAll2(params)
       .then((response) => {
-        const { forms, totalPages } = response.data;
+        const { forms, totalPages, totalItems  } = response.data;
 
         setForms(forms);
         setCount(totalPages);
+        setTotalItems(totalItems);
 
         console.log(response.data);
       })
@@ -67,7 +93,7 @@ const FormsList = (props) => {
       });
   };
 
-  useEffect(retrieveForms, [page, pageSize, orderby]);
+  useEffect(retrieveForms, [page, pageSize, orderby, searchTitle, searchCreatedAt]);
 
   const refreshList = () => {
     retrieveForms();
@@ -110,18 +136,17 @@ const FormsList = (props) => {
   const columns = useMemo(
     () => [
       {
+        Header: "截止日期",
+        accessor: "deadline",
+      },
+      {
+        Header: "创建时间",
+        accessor: "createdAt",
+      },
+      {
         Header: "标题",
         accessor: "title",
         disableSortBy: true,
-      },
-      {
-        Header: "说明",
-        accessor: "description",
-        disableSortBy: true,
-      },
-      {
-        Header: "截止日期",
-        accessor: "deadline",
       },
       {
         Header: "项目申请数目",
@@ -221,22 +246,50 @@ const FormsList = (props) => {
   return (
     <div className="list row">
       <div className="col-md-8">
-        <h4>项目征集列表</h4>
+        <h4>项目征集列表(总数：{totalItems})</h4>
         <div className="input-group mb-3">
           <input
             type="text"
+            readonly=""
             className="form-control"
-            placeholder="标题查找。。。"
+            placeholder="项目年份"
+            value={searchCreatedAt}
+            onChange={onChangeSearchInputCreatedAt}
+          />
+          <YearPicker
+            yearArray={['2019', '2020']}
+            value={searchCreatedAt}
+            onSelect={onChangeSearchCreatedAt}
+            hideInput={true}
+            minRange={1995}
+            maxRange={2022}
+          />
+
+          <input
+            type="text"
+            className="form-control"
+            placeholder="标题查找"
             value={searchTitle}
             onChange={onChangeSearchTitle}
           />
+
+          <div>
+            <button
+              className="btn btn-primary badge btn-block"
+              type="button"
+              onClick={onClearSearch}
+            >
+              清空
+            </button>
+          </div>
+
           <div className="input-group-append">
             <button
               className="btn btn-outline-secondary"
               type="button"
               onClick={findByTitle}
             >
-              Search
+              查找
             </button>
           </div>
         </div>
@@ -279,7 +332,7 @@ const FormsList = (props) => {
                      {column.render('Header')}
                      {/* Add a sort direction indicator */}
                        <span>
-                         {/*column.isSorted*/ (column.id === 'deadline' || column.id === 'responsesCount')
+                         {/*column.isSorted*/ (column.id === 'createdAt' || column.id === 'deadline' || column.id === 'responsesCount')
                            ? column.isSortedDesc
                              ? ' 🔽'
                              : ' 🔼'
