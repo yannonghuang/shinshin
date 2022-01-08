@@ -142,6 +142,15 @@ const FormsList = (props) => {
       {
         Header: "创建时间",
         accessor: "createdAt",
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+            const d = new Date(formsRef.current[rowIdx].createdAt);
+            return (
+              <div>
+                {d.toLocaleDateString('zh-cn', { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+              </div>
+            );
+        }
       },
       {
         Header: "标题",

@@ -230,7 +230,7 @@ var orderbyObject = null;
 //  offset: offset,
   subQuery: false,
   attributes: ['id', 'name', 'budget', 'status', 'description', //'schoolId', 'responseId'
-            [db.Sequelize.fn("year", db.Sequelize.col("projects.createdAt")), "createdAt"],
+            "createdAt", //[db.Sequelize.fn("year", db.Sequelize.col("projects.createdAt")), "createdAt"],
   //          [db.Sequelize.fn("COUNT", db.Sequelize.col("responses.id")), "responsesCount"],
   ],
 

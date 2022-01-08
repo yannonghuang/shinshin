@@ -239,8 +239,17 @@ const ProjectsList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: "项目年份",
+        Header: "创建时间",
         accessor: "createdAt",
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+            const d = new Date(projectsRef.current[rowIdx].createdAt);
+            return (
+              <div>
+                {d.toLocaleDateString('zh-cn', { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+              </div>
+            );
+        }
       },
       {
         Header: "项目状态",

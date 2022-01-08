@@ -123,7 +123,7 @@ exports.findAll2 = (req, res) => {
   attributes: ['id', 'title', 'description',// 'deadline',
       [db.Sequelize.fn("COUNT", db.Sequelize.col("responses.id")), "responsesCount"],
       [db.Sequelize.fn('date_format', db.Sequelize.col("deadline"), '%Y-%m-%d'), "deadline"],
-      [db.Sequelize.fn('date_format', db.Sequelize.col("form.createdAt"), '%Y-%m-%d'), "createdAt"],
+      "createdAt", //[db.Sequelize.fn('date_format', db.Sequelize.col("form.createdAt"), '%Y-%m-%d'), "createdAt"],
   ],
   include: [{
       model: Response,
