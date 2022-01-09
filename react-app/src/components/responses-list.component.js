@@ -196,41 +196,6 @@ const ResponsesList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: "创建时间",
-        accessor: "createdAt",
-        Cell: (props) => {
-          const rowIdx = props.row.id;
-            const d = new Date(responsesRef.current[rowIdx].createdAt);
-            return (
-              <div>
-                {d.toLocaleDateString('zh-cn', { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })}
-              </div>
-            );
-        }
-      },
-      {
-        Header: "标题",
-        accessor: "title",
-      },
-      {
-        Header: "附件数目",
-        accessor: "attachmentsCount",
-        disableSortBy: true,
-        Cell: (props) => {
-          const rowIdx = props.row.id;
-          return (
-            <div>
-              <Link
-                to={"/attachments/response/" + responsesRef.current[rowIdx].id}
-                className="badge badge-success"
-              >
-                {responsesRef.current[rowIdx].attachmentsCount}
-              </Link>
-            </div>
-          );
-        },
-      },
-      {
         Header: "省（直辖市）",
         accessor: 'school.region',
       },
@@ -292,6 +257,56 @@ const ResponsesList = (props) => {
           );
         },
       },
+      {
+        Header: "标题",
+        accessor: "title",
+      },
+      {
+        Header: "创建时间",
+        accessor: "createdAt",
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+            const d = new Date(responsesRef.current[rowIdx].createdAt);
+            return (
+              <div>
+                {d.toLocaleDateString('zh-cn', { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+              </div>
+            );
+        }
+      },
+      {
+        Header: "修改时间",
+        accessor: "updatedAt",
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+            const d = new Date(responsesRef.current[rowIdx].updatedAt);
+            return (
+              <div>
+                {d.toLocaleDateString('zh-cn', { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+              </div>
+            );
+        }
+      },
+/**
+      {
+        Header: "附件数目",
+        accessor: "attachmentsCount",
+        disableSortBy: true,
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+              <Link
+                to={"/attachments/response/" + responsesRef.current[rowIdx].id}
+                className="badge badge-success"
+              >
+                {responsesRef.current[rowIdx].attachmentsCount}
+              </Link>
+            </div>
+          );
+        },
+      },
+*/
       {
         Header: "操作",
         accessor: "actions",
@@ -471,7 +486,8 @@ const ResponsesList = (props) => {
                     {/* Add a sort direction indicator */}
                       <span>
                         {/*column.isSorted*/ (column.id === 'school.region' || column.id === 'school.code' ||
-                        column.id === 'school.name' || column.id === 'createdAt' || column.id === 'title')
+                        column.id === 'school.name' || column.id === 'createdAt' || column.id === 'updatedAt' ||
+                        column.id === 'title')
                           ? column.isSortedDesc
                             ? ' 🔽'
                             : ' 🔼'

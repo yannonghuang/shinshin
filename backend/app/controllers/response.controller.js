@@ -182,7 +182,7 @@ exports.findAll2 = (req, res) => {
   limit: limit,
   offset: offset,
   subQuery: false,
-  attributes: ['id', 'title', 'createdAt',
+  attributes: ['id', 'title', 'createdAt', 'updatedAt',
       //[db.Sequelize.fn('date_format', db.Sequelize.col("response.createdAt"), '%Y-%m-%d'), "createdAt"],
       [db.Sequelize.fn("COUNT", db.Sequelize.col("attachments.id")), "attachmentsCount"]
   ],
