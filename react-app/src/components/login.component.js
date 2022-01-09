@@ -3,6 +3,8 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 
+import $ from "jquery"; //Load jquery
+
 import emailjs, { init } from "emailjs-com";
 
 import AuthService from "../services/auth.service";
@@ -31,7 +33,7 @@ export default class Login extends Component {
     this.onReset = this.onReset.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.handleEmailVerification = this.handleEmailVerification.bind(this);
-    this.togglePasswordShown = this.togglePasswordShown.bind(this);
+
 
     this.state = {
       username: "",
@@ -40,8 +42,10 @@ export default class Login extends Component {
       isReset: false,
       loading: false,
       message: "",
-      passwordShown: false
+
     };
+
+    this.init();
   }
 
   componentDidMount() {
@@ -65,11 +69,23 @@ export default class Login extends Component {
       });
   }
 
-  togglePasswordShown() {
-    this.setState({
-      passwordShown: this.state.passwordShown? false : true
+  init() {
+    $(document).ready(function() {
+      $('#toggle').addClass('fas fa-eye-slash');
+
+      $('#toggle').click(function() {
+        if($(this).hasClass('fas fa-eye-slash')){
+          $(this).removeClass('fas fa-eye-slash');
+          $(this).addClass('fas fa-eye');
+          $('#password').attr('type','text');
+        } else {
+          $(this).removeClass('fas fa-eye');
+          $(this).addClass('fas fa-eye-slash');
+          $('#password').attr('type','password');
+        }
+      });
     });
-  };
+  }
 
   onChangeUsername(e) {
     this.setState({
@@ -233,26 +249,23 @@ export default class Login extends Component {
               </div>
 
               <div className="form-group">
-
                 <label htmlFor="password">密码</label>
                 <div style={{position: "relative", width: "100%"}} >
                   <Input
                     style={{ width: "100%" }}
-                    type={this.state.passwordShown ? "text" : "password"}
+                    type="password"
                     className="form-control"
                     name="password"
+                    id="password"
                     value={this.state.password}
                     onChange={this.onChangePassword}
                     validations={[required]}
                   />
 
-                  <button type="button"
-                    style={{ position: "absolute", right: "10px", top: "5px", cursor: "pointer",
-                      background: "transparent", border: "none" }}
-                    onClick={this.togglePasswordShown}
-                  >
-                    <i className={this.state.passwordShown ? "fas fa-eye-slash" : "fas fa-eye"} ></i>
-                  </button>
+                  <button type="button" id="toggle" class="toggle"
+                    style={{ position: "absolute", right: "10px", top: "10px",
+                    background: 'transparent', border: 'none'}}
+                  />
 
                 </div>
 
