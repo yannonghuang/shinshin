@@ -180,13 +180,16 @@ const FormsList = (props) => {
         disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
+          const expired = formsRef.current[rowIdx].deadline
+            ? new Date(formsRef.current[rowIdx].deadline) < new Date()
+            : false;
           return (
             <div>
               <Link
                 to={"/addR/" + formsRef.current[rowIdx].id}
-                className="badge badge-success mr-2"
+                className= {expired ? "disabled-link" : "badge badge-success mr-2"}
               >
-                申请
+                {expired ? "逾期 " : "申请"}
               </Link>
 
               <Link
