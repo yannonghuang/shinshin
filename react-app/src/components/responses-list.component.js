@@ -17,6 +17,7 @@ const ResponsesList = (props) => {
   const [searchTitle, setSearchTitle] = useState("");
   const [searchCode, setSearchCode] = useState("");
   const [searchCreatedAt, setSearchCreatedAt] = useState("");
+  const [title, setTitle] = useState(null);
 
   const [formId, setFormId] = useState(props.match? props.match.params.formId : props.formId);
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
@@ -133,6 +134,8 @@ const ResponsesList = (props) => {
         setResponses(responses);
         setCount(totalPages);
         setTotalItems(totalItems);
+
+        if (formId && responses[0]) setTitle(responses[0].title);
 
         console.log(response.data);
       })
@@ -319,9 +322,13 @@ const ResponsesList = (props) => {
     []
   );
 
-  const hiddenColumns = embedded
-    ? ['school.region', 'school.code', 'school.name']
-    : [];
+  const formKnownColumns = ['title'];
+
+  const schoolKnownColumns = ['school.region', 'school.code', 'school.name'];
+
+  var hiddenColumns = [];
+  if (embedded) hiddenColumns = schoolKnownColumns;
+  if (formId) hiddenColumns = formKnownColumns;
 
   const {
     getTableProps,
@@ -369,7 +376,7 @@ const ResponsesList = (props) => {
   return (
     <div className="list row">
       <div className="col-md-8">
-        <h4>项目申请列表(总数：{totalItems})</h4>
+        <h4>{title ? title + " - " : ""}项目申请列表(总数：{totalItems})</h4>
         <div className="input-group mb-3">
           <input
             type="text"
@@ -388,21 +395,21 @@ const ResponsesList = (props) => {
             maxRange={2022}
           />
 
-          <input
+          {!formId && (<input
             type="text"
             className="form-control"
             placeholder="标题查找"
             value={searchTitle}
             onChange={onChangeSearchTitle}
-          />
+          />)}
 
-          <input
+          {!embedded && (<input
             type="text"
             className="form-control"
             placeholder="学校编码"
             value={searchCode}
             onChange={onChangeSearchCode}
-          />
+          />)}
 
           <div>
             <button

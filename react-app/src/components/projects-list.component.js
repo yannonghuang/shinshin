@@ -377,14 +377,14 @@ const ProjectsList = (props) => {
     []
   );
 
-  const onlineOnlyColumns =
+  const schoolKnownColumns =
     ['id', 'school.region', 'school.code', 'school.name'];
 
   const exportOnlyColumns =
     ['school.studentsCount', 'school.teachersCount', 'school.category'];
 
   const hiddenColumns = embedded
-    ? [...onlineOnlyColumns, ...exportOnlyColumns]
+    ? [...schoolKnownColumns, ...exportOnlyColumns]
     : [];
 
   const {
