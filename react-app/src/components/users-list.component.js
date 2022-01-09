@@ -35,6 +35,8 @@ const UsersList = (props) => {
 
   const [totalItems, setTotalItems] = useState(0);
 
+  const [schoolTitle, setSchoolTitle] = useState(null);
+
   const [searchRole, setSearchRole] = useState("");
   const onChangeSearchRole = (e) => {
     const searchRole = e.target.value;
@@ -139,6 +141,9 @@ const UsersList = (props) => {
         setCount(totalPages);
         setTotalItems(totalItems);
 
+
+        if (schoolId && users[0]) setSchoolTitle(users[0].school.name + "(" + users[0].school.code + ")");
+
         console.log(response.data);
       })
       .catch((e) => {
@@ -183,6 +188,12 @@ const UsersList = (props) => {
         console.log(e);
       });
   };
+
+  const schoolKnownColumns =
+    [ 'school.code', 'school.name'];
+
+  var hiddenColumns = [];
+  if (schoolId) hiddenColumns = schoolKnownColumns;
 
   const columns = useMemo(
     () => [
@@ -312,6 +323,9 @@ const UsersList = (props) => {
     data: users,
     disableSortRemove: true,
     manualSortBy: true,
+    initialState: {
+      hiddenColumns: hiddenColumns,
+    },
   },
   useSortBy);
 
@@ -338,7 +352,7 @@ const UsersList = (props) => {
   return (
     <div className="list row">
       <div className="col-md-9">
-        <h4>用户列表(总数：{totalItems})</h4>
+        <h4>{schoolTitle ? schoolTitle + " - " : ""}用户列表(总数：{totalItems})</h4>
         <div className="input-group mb-3">
           <select
             className="form-control"
@@ -353,13 +367,13 @@ const UsersList = (props) => {
             ))}
           </select>
 
-          <input
+          {!schoolId && (<input
             type="text"
             className="form-control"
             placeholder="学校编码"
             value={searchSchoolCode}
             onChange={onChangeSearchSchoolCode}
-          />
+          />)}
 
           <input
             type="text"
