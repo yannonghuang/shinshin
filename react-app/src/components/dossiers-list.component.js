@@ -147,7 +147,13 @@ const DossiersList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
-              <a href="#" onClick={() => download(dossiersRef.current[rowIdx].id, dossiersRef.current[rowIdx].originalname)} >
+              <a href="#" onClick={() => download(dossiersRef.current[rowIdx].id,
+                                                dossiersRef.current[rowIdx].originalname, true)} >
+                <i className="fas fa-eye action mr-2"></i>
+              </a>
+
+              <a href="#" onClick={() => download(dossiersRef.current[rowIdx].id,
+                                                dossiersRef.current[rowIdx].originalname, false)} >
                 <i className="fas fa-download action mr-2"></i>
               </a>
 
@@ -189,7 +195,7 @@ const DossiersList = (props) => {
     setPage(1);
   };
 
-  const download = (id, originalname) => {
+  const download = (id, originalname, previewOnly) => {
     DossierDataService.getContent(id)
 	  .then(response => {
         console.log(response.data);
@@ -197,9 +203,10 @@ const DossiersList = (props) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download',
-          originalname
-        ); //or any other extension
+        if (!previewOnly)
+          link.setAttribute('download',
+            originalname
+          ); //or any other extension
         document.body.appendChild(link);
         link.click();
         link.remove();
