@@ -165,11 +165,14 @@ const DocumentsList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
+              {(documentsRef.current[rowIdx].mimetype.startsWith('image') ||
+                documentsRef.current[rowIdx].mimetype.indexOf('pdf') > 0) && (
               <a href="#" onClick={() => download(documentsRef.current[rowIdx].id,
                                                 documentsRef.current[rowIdx].originalname,
                                                 documentsRef.current[rowIdx].mimetype, true)} >
                 <i className="fas fa-eye action mr-2"></i>
               </a>
+              )}
               
               <a href="#" onClick={() => download(documentsRef.current[rowIdx].id,
                                                 documentsRef.current[rowIdx].originalname,

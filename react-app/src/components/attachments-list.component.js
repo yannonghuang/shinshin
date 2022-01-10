@@ -150,11 +150,14 @@ const AttachmentsList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
+              {(attachmentsRef.current[rowIdx].mimetype.startsWith('image') ||
+                attachmentsRef.current[rowIdx].mimetype.indexOf('pdf') > 0) && (
               <a href="#" onClick={() => download(attachmentsRef.current[rowIdx].id,
                                                 attachmentsRef.current[rowIdx].originalname,
                                                 attachmentsRef.current[rowIdx].mimetype, true)} >
                 <i className="fas fa-eye action mr-2"></i>
               </a>
+              )}
 
               <a href="#" onClick={() => download(attachmentsRef.current[rowIdx].id,
                                                 attachmentsRef.current[rowIdx].originalname,
