@@ -151,12 +151,14 @@ const AttachmentsList = (props) => {
           return (
             <div>
               <a href="#" onClick={() => download(attachmentsRef.current[rowIdx].id,
-                                                attachmentsRef.current[rowIdx].originalname, true)} >
+                                                attachmentsRef.current[rowIdx].originalname,
+                                                attachmentsRef.current[rowIdx].mimetype, true)} >
                 <i className="fas fa-eye action mr-2"></i>
               </a>
 
               <a href="#" onClick={() => download(attachmentsRef.current[rowIdx].id,
-                                                attachmentsRef.current[rowIdx].originalname, false)} >
+                                                attachmentsRef.current[rowIdx].originalname,
+                                                attachmentsRef.current[rowIdx].mimetype, false)} >
                 <i className="fas fa-download action mr-2"></i>
               </a>
 
@@ -198,12 +200,12 @@ const AttachmentsList = (props) => {
     setPage(1);
   };
 
-  const download = (id, originalname, previewOnly) => {
+  const download = (id, originalname, mimetype, previewOnly) => {
     AttachmentDataService.getContent(id)
 	  .then(response => {
         console.log(response.data);
 
-        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const url = window.URL.createObjectURL(new Blob([response.data], { type: mimetype }));
         const link = document.createElement('a');
         link.href = url;
         if (!previewOnly)

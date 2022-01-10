@@ -148,12 +148,14 @@ const DossiersList = (props) => {
           return (
             <div>
               <a href="#" onClick={() => download(dossiersRef.current[rowIdx].id,
-                                                dossiersRef.current[rowIdx].originalname, true)} >
+                                                dossiersRef.current[rowIdx].originalname,
+                                                dossiersRef.current[rowIdx].mimetype, true)} >
                 <i className="fas fa-eye action mr-2"></i>
               </a>
 
               <a href="#" onClick={() => download(dossiersRef.current[rowIdx].id,
-                                                dossiersRef.current[rowIdx].originalname, false)} >
+                                                dossiersRef.current[rowIdx].originalname,
+                                                dossiersRef.current[rowIdx].mimetype, false)} >
                 <i className="fas fa-download action mr-2"></i>
               </a>
 
@@ -195,12 +197,12 @@ const DossiersList = (props) => {
     setPage(1);
   };
 
-  const download = (id, originalname, previewOnly) => {
+  const download = (id, originalname, mimetype, previewOnly) => {
     DossierDataService.getContent(id)
 	  .then(response => {
         console.log(response.data);
 
-        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const url = window.URL.createObjectURL(new Blob([response.data], { type: mimetype }));
         const link = document.createElement('a');
         link.href = url;
         if (!previewOnly)

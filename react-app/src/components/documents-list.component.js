@@ -166,12 +166,14 @@ const DocumentsList = (props) => {
           return (
             <div>
               <a href="#" onClick={() => download(documentsRef.current[rowIdx].id,
-                                                documentsRef.current[rowIdx].originalname, true)} >
+                                                documentsRef.current[rowIdx].originalname,
+                                                documentsRef.current[rowIdx].mimetype, true)} >
                 <i className="fas fa-eye action mr-2"></i>
               </a>
               
               <a href="#" onClick={() => download(documentsRef.current[rowIdx].id,
-                                                documentsRef.current[rowIdx].originalname, false)} >
+                                                documentsRef.current[rowIdx].originalname,
+                                                documentsRef.current[rowIdx].mimetype, false)} >
                 <i className="fas fa-download action mr-2"></i>
               </a>
 
@@ -226,15 +228,14 @@ const DocumentsList = (props) => {
     setPage(1);
   };
 
-  const download = (id, originalname, previewOnly) => {
+  const download = (id, originalname, mimetype, previewOnly) => {
     DocumentDataService.getContent(id)
 	  .then(response => {
         console.log(response.data);
 
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-
+        const url = window.URL.createObjectURL(new Blob([response.data], { type: mimetype }));
         const link = document.createElement('a');
-        link.href = url;
+        link.href = url; //+ originalname.substring(originalname.lastIndexOf('.'));
 
         if (!previewOnly)
           link.setAttribute('download',

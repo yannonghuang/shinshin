@@ -94,7 +94,7 @@ exports.findAll2 = (req, res) => {
    where: condition,
    limit: limit,
    offset: offset,
-   attributes: ['id', 'originalname', 'docCategory', 'projectId',
+   attributes: ['id', 'originalname', 'docCategory', 'projectId', 'mimetype',
                'createdAt', //[db.Sequelize.fn('date_format', db.Sequelize.col("createdAt"), '%Y-%m-%d'), "createdAt"],
 
    ],
