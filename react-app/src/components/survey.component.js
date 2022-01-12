@@ -635,7 +635,7 @@ export default class Survey extends Component {
         ) : (
           <div class="row">
             <div class="col-md-3">
-              <h4>学校调查表</h4>
+              <h4>学校详情</h4>
               <div class="row">
 
                 {!this.state.embedded && (<div class="form-group" style={{width: "100%"}}>
@@ -650,57 +650,59 @@ export default class Survey extends Component {
                   />
                 </div>)}
 
-            {!this.state.readonly && (
-            <div>
-            <div class="w-100"></div>
-
-            <form ref="formToSubmit" action="http://localhost:8080/api/documents-upload" method="POST" enctype="multipart/form-data">
-                <div class="form-group input-group">
-                <label for="input-multi-files">上传文件:</label>
-                <input type="file" name="multi-files"
-                multiple
-                id="input-multi-files"
-                class="form-control-file border"
-                onChange={e => this.onChangeDocFiles(e)}
-                />
-
-                <select
-                  className="form-control input-group-append"
-                  placeholder=""
-                  value={currentSurvey.docCategory}
-                  onChange={e => this.onChangeDocCategory(e)}
-                >
-                  <option value="">附件类别</option>
-                  {this.state.docCategories.map((option) => (
-                    <option value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-
-                <input type="hidden" name="surveyId" id="surveyId"/>
-                </div>
-            </form>
-
-            <button onClick={this.saveSurvey} class="btn btn-success" hidden={!this.state.newsurvey}>
-              提交
-            </button>
-            <button hidden={this.state.newsurvey}
-              type="submit"
-              className="btn btn-success"
-              onClick={this.updateSurvey}
-            >
-              更新
-            </button>
-
-            <p>{this.state.message}</p>
-            </div>
-
-            )}
+                {!this.state.readonly && (<div>
                 <div class="w-100"></div>
 
-                {(this.state.readonly && !this.state.embedded) && (
-                  <a target="_blank" href={"/surveys/" + currentSurvey.schoolId} class="btn btn-primary mb-4">编辑</a>
+                  <form ref="formToSubmit" action="http://localhost:8080/api/documents-upload" method="POST" enctype="multipart/form-data">
+                    <div class="form-group input-group">
+                    <label for="input-multi-files">上传文件:</label>
+                    <input type="file" name="multi-files"
+                    multiple
+                    id="input-multi-files"
+                    class="form-control-file border"
+                    onChange={e => this.onChangeDocFiles(e)}
+                  />
+
+                  <select
+                    className="form-control input-group-append"
+                    placeholder=""
+                    value={currentSurvey.docCategory}
+                    onChange={e => this.onChangeDocCategory(e)}
+                  >
+                    <option value="">附件类别</option>
+                    {this.state.docCategories.map((option) => (
+                      <option value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+
+                  <input type="hidden" name="surveyId" id="surveyId"/>
+                  </div>
+                  </form>
+
+                  <button onClick={this.saveSurvey} class="btn btn-success" hidden={!this.state.newsurvey}>
+                    提交
+                  </button>
+                  <button hidden={this.state.newsurvey}
+                    type="submit"
+                    className="btn btn-success"
+                    onClick={this.updateSurvey}
+                  >
+                    更新
+                  </button>
+
+                  <p>{this.state.message}</p>
+                </div>)}
+
+                <div class="w-100"></div>
+
+                {(this.state.readonly) && (
+                  <a target="_blank" style={{position: "relative", left: "15px"}}
+                  href={"/surveys/" + currentSurvey.schoolId}
+                  class="btn btn-primary mb-4">
+                    编辑
+                  </a>
                 )}
 
               </div>
