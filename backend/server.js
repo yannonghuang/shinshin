@@ -31,6 +31,7 @@ app.get("/", (req, res) => {
 });
 */
 
+require("./app/routes/survey.routes")(app);
 require("./app/routes/log.routes")(app);
 require("./app/routes/comment.routes")(app);
 require("./app/routes/dossier.routes")(app);

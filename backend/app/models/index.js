@@ -19,6 +19,7 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+db.surveys = require("./survey.model.js")(sequelize, Sequelize);
 db.logs = require("./log.model.js")(sequelize, Sequelize);
 db.comments = require("./comment.model.js")(sequelize, Sequelize);
 db.dossiers = require("./dossier.model.js")(sequelize, Sequelize);
@@ -81,27 +82,33 @@ db.PROJECT_STATUSES = [
 ];
 
 db.SCHOOL_STAGES = [
-  "阶段1",
-  "阶段2",
-  "阶段3",
+  "捐款到位",
+  "一期支票",
+  "合同签订",
+  "后续计划",
+  "项目冻结",
 ];
 
 db.SCHOOL_STATUSES = [
-  "学校状态1",
-  "学校状态2",
-  "学校状态3",
+  "原欣欣学校",
+  "并校",
+  "重建",
+  "迁移",
 ];
 
 db.SCHOOL_REQUESTS = [
-  "需求状态1",
-  "需求状态2",
-  "需求状态3",
+  "基本设施",
+  "教学设备",
+  "教育软件",
 ];
 
 db.SCHOOL_CATEGORIES = [
-  "学校类型1",
-  "学校类型2",
-  "学校类型3",
+  "村小",
+  "教学点",
+  "完全小学",
+  "中心小学",
+  "九年制",
+  "初中",
 ];
 
 db.REGIONS = [
@@ -110,9 +117,9 @@ db.REGIONS = [
 "河南省",
 "陕西省",
 "湖南省",
+"湖南湘西",
 "重庆市",
 "福建省",
-"天津市",
 "云南省",
 "四川省",
 "广西壮族自治区",
@@ -128,7 +135,7 @@ db.REGIONS = [
 "甘肃省",
 "青海省",
 "新疆维吾尔自治区",
-"西藏区",
+"西藏",
 "吉林省",
 "宁夏回族自治区"
 ];
@@ -141,6 +148,9 @@ db.attachments.belongsTo(db.responses);
 
 db.schools.hasMany(db.documents, {foreignKey: 'schoolId'}, {as: 'Documents'})
 db.documents.belongsTo(db.schools);
+
+db.schools.hasMany(db.surveys, {foreignKey: 'schoolId'}, {as: 'Surveys'})
+db.surveys.belongsTo(db.schools);
 
 db.schools.hasMany(db.responses, {foreignKey: 'schoolId'}, {as: 'Responses'})
 db.responses.belongsTo(db.schools);

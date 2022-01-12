@@ -8,6 +8,7 @@ import $ from "jquery"; //Load jquery
 import { Link } from "react-router-dom";
 import Divider from '@material-ui/core/Divider';
 
+import Survey from './survey.component.js';
 import CommentsList from './comments-list.component.js';
 import ProjectsList from './projects-list.component.js';
 import ResponsesList from './responses-list.component.js';
@@ -1069,6 +1070,11 @@ export default class School extends Component {
               <TabPanel>
               </TabPanel>
               <TabPanel>
+                <Survey
+                  schoolId = {currentSchool.id}
+                  embedded = {true}
+                  readonly = {this.state.readonly}
+                />
               </TabPanel>
               <TabPanel>
                 <ProjectsList

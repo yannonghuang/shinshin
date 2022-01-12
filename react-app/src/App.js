@@ -14,6 +14,9 @@ import logo from './shinshin-logo.png';
 //import TutorialsList from "./components/tutorials-list.component";
 
 //import AddSchool from "./components/add-school.component";
+import Survey from "./components/survey.component";
+import SurveysList from "./components/surveys-list.component";
+
 import School from "./components/school.component";
 import SchoolsList from "./components/schools-list.component";
 import DocumentsList from "./components/documents-list.component";
@@ -150,10 +153,12 @@ class App extends Component {
                 <a class="dropdown-item" href={"/schools"}>学校列表</a>
                 <a class="dropdown-item" href={"/regions"}>地区列表</a>
                 <a class="dropdown-item" href={"/addS"}>新增学校</a>
+                <a class="dropdown-item" href={"/addSurvey"}>新增调查表</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href={"/documents"}>学校文档</a>
                 <a class="dropdown-item" href={"/comments"}>留言</a>
                 <a class="dropdown-item" href={"/logs"}>修改记录</a>
+                <a class="dropdown-item" href={"/surveys"}>调查表列表</a>
               </div>
             </li>
 
@@ -270,6 +275,13 @@ class App extends Component {
             </Route>
             <Route path={["/schools/:id", "/schoolsView/:id", "/addS"]} component={School} >
                 <AutoLogoutTimer ComposedClass={School} />
+            </Route>
+
+            <Route path={["/surveys/:id", "/surveysView/:id", "/addSurvey", "/surveys/school/:schoolId"]} component={Survey} >
+                <AutoLogoutTimer ComposedClass={Survey} />
+            </Route>
+            <Route exact path={["/surveys"]} component={SurveysList} >
+                <AutoLogoutTimer ComposedClass={SurveysList} />
             </Route>
 
             <Route exact path={["/documents", "/documents/school/:schoolId",
