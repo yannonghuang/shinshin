@@ -635,9 +635,8 @@ export default class Survey extends Component {
         ) : (
           <div class="row">
             <div class="col-md-3">
-              <h4>学校详情</h4>
               <div class="row">
-
+              <h4>学校详情</h4>
                 {!this.state.embedded && (<div class="form-group" style={{width: "100%"}}>
                   <label htmlFor="schoolId">学校</label>
                   <Select onChange={this.onChangeSchoolId.bind(this)}
@@ -698,9 +697,7 @@ export default class Survey extends Component {
                 <div class="w-100"></div>
 
                 {(this.state.readonly) && (
-                  <a target="_blank" style={{position: "relative", left: "15px"}}
-                  href={"/surveys/" + currentSurvey.schoolId}
-                  class="btn btn-primary mb-4">
+                  <a target="_blank" href={"/surveys/" + currentSurvey.schoolId} class="btn btn-primary mb-4">
                     编辑
                   </a>
                 )}
