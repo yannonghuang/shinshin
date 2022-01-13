@@ -17,15 +17,6 @@ module.exports = {
           allowNull: true,
         },
       ),
-
-      queryInterface.addColumn(
-        'schools',
-        'donor',
-        {
-          type: Sequelize.STRING,
-          allowNull: true,
-        },
-      ),
     ]);
   },
 
@@ -38,7 +29,6 @@ module.exports = {
      */
     return Promise.all([
       queryInterface.removeColumn('schools', 'lastVisit'),
-      queryInterface.removeColumn('schools', 'donor'),
     ]);
   }
 };
