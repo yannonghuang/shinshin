@@ -769,7 +769,9 @@ export default class Survey extends Component {
             <div class="col-md-3">
               <div class="row">
               <h4>学校详情</h4>
-                {!this.state.embedded && (<div class="form-group" style={{width: "100%"}}>
+              {!this.state.embedded &&
+              (<div>
+                <div class="form-group" style={{width: "100%"}}>
                   <label htmlFor="schoolId">学校</label>
                   <Select onChange={this.onChangeSchoolId.bind(this)}
                     readonly={this.state.readonly?"":false}
@@ -779,7 +781,7 @@ export default class Survey extends Component {
                     name="schoolId"
                     options={this.state.schools}
                   />
-                </div>)}
+                </div>
 
                 <div class="form-group">
                 <label htmlFor="schoolBoardRegisteredName">教育局校名</label>
@@ -808,14 +810,13 @@ export default class Survey extends Component {
                 name="schoolBoard"
                 />
                 </div>
-
-
-
+              </div>)}
 
                 {!this.state.readonly && (<div>
                 <div class="w-100"></div>
 
-                  <form ref="formToSubmit" action="http://localhost:8080/api/documents-upload" method="POST" enctype="multipart/form-data">
+                  {!this.state.embedded && (<form ref="formToSubmit"
+                    action="http://localhost:8080/api/documents-upload" method="POST" enctype="multipart/form-data">
                     <div class="form-group input-group">
                     <label for="input-multi-files">上传文件:</label>
                     <input type="file" name="multi-files"
@@ -838,10 +839,10 @@ export default class Survey extends Component {
                       </option>
                     ))}
                   </select>
-
                   <input type="hidden" name="surveyId" id="surveyId"/>
                   </div>
-                  </form>
+                  </form>)}
+
 
                   <button onClick={this.saveSurvey} class="btn btn-success" hidden={!this.state.newsurvey}>
                     提交
