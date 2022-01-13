@@ -533,21 +533,32 @@ export default class School extends Component {
     }));
   }
 
-  getSchool(id) {
-    SchoolDataService.get(id)
+  getSchool(schoolId) {
+    const {
+      id,
+      photo,
+      file,
+      docFiles,
+      docCategory,
+      ...others} = this.state.currentSchool;
+
+    SchoolDataService.get(schoolId)
       .then(response => {
 
-        SurveyDataService.get(id)
+        SurveyDataService.get(schoolId)
         .then (r => {
-          this.setState({currentSchool: response.data}, () => {
-            const {id, ...others} = SchoolDataService.reduce(r.data, this.state.currentSchool);
+          this.setState({
+              currentSchool: {...others, ...response.data}
+            }, () => {
+            const {id, ...others2} = SchoolDataService.reduce(r.data, this.state.currentSchool);
             this.setState(prevState => ({
                     currentSchool: {
                       id: prevState.currentSchool.id,
-                      ...others
+                      ...others2
                     }
             }));
           });
+
         })
         .catch (err => {
           alert(err.message);
