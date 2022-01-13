@@ -14,6 +14,7 @@ import ProjectsList from './projects-list.component.js';
 import ResponsesList from './responses-list.component.js';
 import DocumentsList from './documents-list.component.js';
 import SchoolDataService from "../services/school.service";
+import SurveyDataService from "../services/survey.service";
 import DocumentDataService from "../services/document.service";
 //import SchoolDetails from './collapsible-school.component';
 
@@ -25,7 +26,17 @@ export default class School extends Component {
     this.onChangeName = this.onChangeName.bind(this);
     this.onChangeCode = this.onChangeCode.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
+
     this.onChangePrincipal = this.onChangePrincipal.bind(this);
+    this.onChangePrincipalCell = this.onChangePrincipalCell.bind(this);
+    this.onChangePrincipalWechat = this.onChangePrincipalWechat.bind(this);
+    this.onChangeSchoolBoardRegisteredName = this.onChangeSchoolBoardRegisteredName.bind(this);
+    this.onChangeSchoolBoard = this.onChangeSchoolBoard.bind(this);
+
+    this.onChangeContact = this.onChangeContact.bind(this);
+    this.onChangeContactCell = this.onChangeContactCell.bind(this);
+    this.onChangeContactWechat = this.onChangeContactWechat.bind(this);
+
     this.onChangePhoto = this.onChangePhoto.bind(this);
     this.onChangeAddress = this.onChangeAddress.bind(this);
     this.onChangePhone = this.onChangePhone.bind(this);
@@ -34,6 +45,9 @@ export default class School extends Component {
     this.onChangeRegion = this.onChangeRegion.bind(this);
     this.onChangeStartAt = this.onChangeStartAt.bind(this);
     this.onChangeYPStartAt = this.onChangeYPStartAt.bind(this);
+    this.onChangeLastVisit = this.onChangeLastVisit.bind(this);
+    this.onChangeYPLastVisit = this.onChangeYPLastVisit.bind(this);
+    this.onChangeDonor = this.onChangeDonor.bind(this);
 
     this.onChangeStage = this.onChangeStage.bind(this);
     this.onChangeStatus = this.onChangeStatus.bind(this);
@@ -59,23 +73,34 @@ export default class School extends Component {
         id: null,
         name: "",
         code: "",
-        description: "",
-        principal: "",
+
         photo: null,
         file: null, // for photo
+        docFiles: [],
+        docCategory: "",
+
+        startAt: null,
+        lastVisit: null,
+        donor: null,
+        stage: "",
+
+        status: "",
+        request: "",
+        category: "",
+        principal: "",
+        principalCell: null,
+        principalWechat: null,
+        contact: "",
+        contactCell: null,
+        contactWechat: null,
+        schoolBoard: null,
+        schoolBoardRegisteredName: null,
         region: "",
         address: "",
         phone: "",
         studentsCount: 0,
         teachersCount: 0,
-        docFiles: [],
-        docCategory: "",
-        startAt: null,
-
-        stage: "",
-        status: "",
-        request: "",
-        category: "",
+        description: "",
       },
 
       newschool: true,
@@ -248,6 +273,32 @@ export default class School extends Component {
     });
   }
 
+  onChangeSchoolBoardRegisteredName(e) {
+    const schoolBoardRegisteredName = e.target.value;
+
+    this.setState(function(prevState) {
+      return {
+        currentSchool: {
+          ...prevState.currentSchool,
+          schoolBoardRegisteredName: schoolBoardRegisteredName
+        }
+      };
+    });
+  }
+
+  onChangeSchoolBoard(e) {
+    const schoolBoard = e.target.value;
+
+    this.setState(function(prevState) {
+      return {
+        currentSchool: {
+          ...prevState.currentSchool,
+          schoolBoard: schoolBoard
+        }
+      };
+    });
+  }
+
   onChangeStartAt(e) {
     const startAt = e.target.value;
 
@@ -269,6 +320,45 @@ export default class School extends Component {
         currentSchool: {
           ...prevState.currentSchool,
           startAt: startAt
+        }
+      };
+    });
+  }
+
+  onChangeLastVisit(e) {
+    const lastVisit = e.target.value;
+
+    this.setState(function(prevState) {
+      return {
+        currentSchool: {
+          ...prevState.currentSchool,
+          lastVisit: lastVisit
+        }
+      };
+    });
+  }
+
+  onChangeYPLastVisit(e) {
+    const lastVisit = e; //.target.value;
+
+    this.setState(function(prevState) {
+      return {
+        currentSchool: {
+          ...prevState.currentSchool,
+          lastVisit: lastVisit
+        }
+      };
+    });
+  }
+
+  onChangeDonor(e) {
+    const donor = e.target.value;
+
+    this.setState(function(prevState) {
+      return {
+        currentSchool: {
+          ...prevState.currentSchool,
+          donor: donor
         }
       };
     });
@@ -318,6 +408,61 @@ export default class School extends Component {
       currentSchool: {
         ...prevState.currentSchool,
         principal: principal
+      }
+    }));
+  }
+
+  onChangePrincipalCell(e) {
+    const principalCell = e.target.value;
+
+    this.setState(prevState => ({
+      currentSchool: {
+        ...prevState.currentSchool,
+        principalCell: principalCell
+      }
+    }));
+  }
+
+  onChangePrincipalWechat(e) {
+    const principalWechat = e.target.value;
+
+    this.setState(prevState => ({
+      currentSchool: {
+        ...prevState.currentSchool,
+        principalWechat: principalWechat
+      }
+    }));
+  }
+
+  onChangeContact(e) {
+    const contact = e.target.value;
+
+    this.setState(prevState => ({
+      currentSchool: {
+        ...prevState.currentSchool,
+        contact: contact
+      }
+    }));
+  }
+
+  onChangeContactCell(e) {
+    const contactCell = e.target.value;
+
+    this.setState(prevState => ({
+      currentSchool: {
+        ...prevState.currentSchool,
+        contactCell: contactCell
+      }
+    }));
+  }
+
+  onChangeContactWechat(e) {
+    const contactWechat = e.target.value;
+
+    this.setState(prevState => ({
+      currentSchool: {
+        ...prevState.currentSchool,
+        contactWechat: contactWechat
       }
     }));
   }
@@ -391,8 +536,22 @@ export default class School extends Component {
   getSchool(id) {
     SchoolDataService.get(id)
       .then(response => {
-        this.setState({
-          currentSchool: response.data
+
+        SurveyDataService.get(id)
+        .then (r => {
+          this.setState({currentSchool: response.data}, () => {
+            const {id, ...others} = SchoolDataService.reduce(r.data, this.state.currentSchool);
+            this.setState(prevState => ({
+                    currentSchool: {
+                      id: prevState.currentSchool.id,
+                      ...others
+                    }
+            }));
+          });
+
+        })
+        .catch (err => {
+          alert(err.message);
         });
 
         //this.getSchoolPhoto(id);
@@ -478,48 +637,55 @@ export default class School extends Component {
   }
 
   saveSchool() {
-    var data = {
-      name: this.state.currentSchool.name,
-      code: this.state.currentSchool.code,
-      description: this.state.currentSchool.description,
-      principal: this.state.currentSchool.principal,
-      //photo: this.state.currentSchool.photo,
-      region: this.state.currentSchool.region,
-      address: this.state.currentSchool.address,
-      phone: this.state.currentSchool.phone,
-      studentsCount: this.state.currentSchool.studentsCount,
-      teachersCount: this.state.currentSchool.teachersCount,
-      startAt: this.state.currentSchool.startAt ? (this.state.currentSchool.startAt + '-01-01') : null,
+  const {
+    id,
+    photo,
+    file,
+    docFiles,
+    docCategory,
+    startAt,
+    lastVisit,
+    ...others} = this.state.currentSchool;
 
-      stage: this.state.currentSchool.stage,
-      status: this.state.currentSchool.status,
-      request: this.state.currentSchool.request,
-      category: this.state.currentSchool.category,
+  const dataSchool = {
+      ...others,
+      startAt: startAt ? (startAt + '-01-01') : null,
+      lastVisit: lastVisit ? (lastVisit + '-01-01') : null,
     };
 
-    SchoolDataService.create(data)
+    SchoolDataService.create(dataSchool)
       .then(response => {
-        this.setState(prevState => ({
-          currentSchool: {
-            ...prevState.currentSchool,
-            id: response.data.id,
 
-            //name: response.data.name,
-            //code: response.data.code,
-            //description: response.data.description,
-            //principal: response.data.principal,
-            //photo: response.data.photo,
-            //region: response.data.region,
-            //address: response.data.address,
-            //phone: response.data.phone,
-            //studentsCount: response.data.studentsCount,
-            //teachersCount: response.data.teachersCount,
-            //startAt: response.data.startAt,
-          },
+        const dataSurvey = {
+          ...others,
+          startAt: startAt ? (startAt + '-01-01') : null,
+          lastVisit: lastVisit ? (lastVisit + '-01-01') : null,
+          schoolId: response.data.id
+        };
 
-          message: "学校信息成功提交!",
-          submitted: true
-        }));
+        SurveyDataService.create(dataSurvey)
+        .then(r => {
+           this.setState(prevState => ({
+             currentSchool: {
+               ...prevState.currentSchool,
+               id: response.data.id,
+             },
+             message: "学校信息成功提交!",
+             submitted: true
+           }));
+        })
+        .catch(err => {
+          const resMessage =
+            (err.response &&
+            err.response.data &&
+            err.response.data.message) ||
+            err.message ||
+            err.toString();
+
+          this.setState({
+            message: "学校信息保存失败! " + resMessage
+          });
+        })
 
         if (this.state.currentSchool.file) { // photo, followed by docs
           this.updatePhoto();
@@ -543,38 +709,59 @@ export default class School extends Component {
         });
         console.log(e);
       });
-
-      //$('input[name="schoolId"]').attr('value', this.state.currentSchool.id );
-      //this.refs.formToSubmit.submit();
   }
 
   updateSchool() {
-    var data = {
-      name: this.state.currentSchool.name,
-      code: this.state.currentSchool.code,
-      description: this.state.currentSchool.description,
-      principal: this.state.currentSchool.principal,
-      //photo: this.state.currentSchool.photo,
-      region: this.state.currentSchool.region,
-      address: this.state.currentSchool.address,
-      phone: this.state.currentSchool.phone,
-      studentsCount: this.state.currentSchool.studentsCount,
-      teachersCount: this.state.currentSchool.teachersCount,
-      startAt: this.state.currentSchool.startAt ? (this.state.currentSchool.startAt + '-01-01') : null,
+    const {
+      id,
+      photo,
+      file,
+      docFiles,
+      docCategory,
+      startAt,
+      lastVisit,
+      ...others} = this.state.currentSchool;
 
-      stage: this.state.currentSchool.stage,
-      status: this.state.currentSchool.status,
-      request: this.state.currentSchool.request,
-      category: this.state.currentSchool.category,
-    };
+    const dataSchool = {
+        ...others,
+        startAt: startAt ? (startAt + '-01-01') : null,
+        lastVisit: lastVisit ? (lastVisit + '-01-01') : null,
+      };
+
+    const dataSurvey = {
+        ...others,
+        startAt: startAt ? (startAt + '-01-01') : null,
+        lastVisit: lastVisit ? (lastVisit + '-01-01') : null,
+        schoolId: this.state.currentSchool.id
+      };
 
     SchoolDataService.update(
       this.state.currentSchool.id,
-      data
-      //this.state.currentSchool
-    )
+      dataSchool)
       .then(response => {
         console.log(response.data);
+
+        SurveyDataService.update(
+          this.state.currentSchool.id,
+          dataSurvey)
+        .then (r => {
+          this.setState({
+            message: "学校信息成功修改!",
+            submitted: true
+          });
+        })
+        .catch(err => {
+          const resMessage =
+            (err.response &&
+            err.response.data &&
+            err.response.data.message) ||
+            err.message ||
+            err.toString();
+
+          this.setState({
+            message: "学校信息修改失败! " + resMessage
+          });
+        });
 
         if (this.state.currentSchool.file) { // photo, followed by docs
           this.updatePhoto();
@@ -582,12 +769,6 @@ export default class School extends Component {
           if (this.state.currentSchool.docFiles) // docs
             this.uploadDocuments();
         }
-
-        this.setState({
-          message: "学校信息成功修改!",
-          submitted: true
-        });
-
       })
       .catch(e => {
         const resMessage =
@@ -602,14 +783,6 @@ export default class School extends Component {
         });
         console.log(e);
       });
-
-/**
-      if (this.state.currentSchool.file) {
-        this.updatePhoto();
-      } else {
-        this.uploadDocuments();
-      }
-*/
   }
 
 
@@ -776,6 +949,34 @@ export default class School extends Component {
                 />
                 </div>
 
+                <div class="form-group">
+                <label htmlFor="schoolBoardRegisteredName">教育局校名</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="schoolBoardRegisteredName"
+                required
+                value={currentSchool.schoolBoardRegisteredName}
+                onChange={this.onChangeSchoolBoardRegisteredName}
+                name="schoolBoardRegisteredName"
+                />
+                </div>
+
+                <div class="form-group">
+                <label htmlFor="schoolBoard">教育局</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="schoolBoard"
+                required
+                value={currentSchool.schoolBoard}
+                onChange={this.onChangeSchoolBoard}
+                name="schoolBoard"
+                />
+                </div>
+
                 <div class="w-100"></div>
 
                 {this.state.readonly && (
@@ -791,46 +992,31 @@ export default class School extends Component {
 
             <div class="col-md-8">
               <div class="row">
-                <div class="form-group col-md-12">
-                <label htmlFor="description">简介</label>
-                <textarea
-                readonly={this.state.readonly?"":false}
-                class="form-control"
-                id="description"
-                required
-                value={currentSchool.description}
-                onChange={this.onChangeDescription}
-                name="description"
-                />
-                </div>
-
-                <div class="w-100"></div>
 
                 <div class="form-group col-md-4">
-                <label htmlFor="principal">校长</label>
-                <input
-                readonly={this.state.readonly?"":false}
-                type="text"
-                class="form-control"
-                id="principal"
-                required
-                value={currentSchool.principal}
-                onChange={this.onChangePrincipal}
-                name="principal"
-                />
+                <div>
+                <div class="side"><label htmlFor="lastVisit">最近访校年份</label></div>
+                <div class="side">
+                {!this.state.readonly &&
+                (<YearPicker
+                yearArray={['2019', '2020']}
+                value={currentSchool.lastVisit}
+                onSelect={this.onChangeYPLastVisit}
+                hideInput={true}
+                minRange={1995}
+                maxRange={2022}
+                />)}
                 </div>
-
-                <div class="form-group col-md-4">
-                <label htmlFor="phone">电话</label>
+                </div>
                 <input
-                readonly={this.state.readonly?"":false}
+                readonly=""
                 type="text"
                 class="form-control"
-                id="phone"
+                id="lastVisit"
                 required
-                value={currentSchool.phone}
-                onChange={this.onChangePhone}
-                name="phone"
+                value={currentSchool.lastVisit}
+                onChange={this.onChangeLastVisit}
+                name="lastVisit"
                 />
                 </div>
 
@@ -861,11 +1047,81 @@ export default class School extends Component {
                 />
                 </div>
 
+                <div class="form-group col-md-4">
+                <label htmlFor="donor">捐款人</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="donor"
+                required
+                value={currentSchool.donor}
+                onChange={this.onChangeDonor}
+                name="donor"
+                />
+                </div>
+
+                <div class="w-100"></div>
+
+
+                <div class="select-container form-group col-md-4">
+                <label htmlFor="stage">学校阶段</label>
+                <select
+                readonly={this.state.readonly?"":false}
+                class="form-control"
+                id="stage"
+                required
+                value={currentSchool.stage}
+                onChange={this.onChangeStage}
+                name="stage"
+                >
+                <option value="">{this.state.readonly ? '' : '请选择' }</option>
+                {this.state.stages.map((option) => (
+                  <option value={option}>{option}</option>
+                ))}
+                </select>
+                </div>
+
+                <div class="select-container form-group col-md-4">
+                <label htmlFor="status">学校状态</label>
+                <select
+                readonly={this.state.readonly?"":false}
+                class="form-control"
+                id="status"
+                required
+                value={currentSchool.status}
+                onChange={this.onChangeStatus}
+                name="status"
+                >
+                <option value="">{this.state.readonly ? '' : '请选择' }</option>
+                {this.state.statuses.map((option) => (
+                  <option value={option}>{option}</option>
+                ))}
+                </select>
+                </div>
+
+                <div class="select-container form-group col-md-4">
+                <label htmlFor="request">学校需求状态</label>
+                <select
+                readonly={this.state.readonly?"":false}
+                class="form-control"
+                id="request"
+                required
+                value={currentSchool.request}
+                onChange={this.onChangeRequest}
+                name="request"
+                >
+                <option value="">{this.state.readonly ? '' : '请选择' }</option>
+                {this.state.requests.map((option) => (
+                  <option value={option}>{option}</option>
+                ))}
+                </select>
+                </div>
 
                 <div class="w-100"></div>
 
                 <div class="select-container form-group col-md-3">
-                <label htmlFor="region">省/直辖市</label>
+                <label htmlFor="region">省/自治区</label>
                 <select
                 readonly={this.state.readonly?"":false}
                 class="form-control"
@@ -897,6 +1153,7 @@ export default class School extends Component {
                 </div>
 
                 <div class="w-100"></div>
+
                 <div class="form-group col-md-4">
                 <label htmlFor="studentsCount">学生人数</label>
                 <input
@@ -943,59 +1200,108 @@ export default class School extends Component {
                 </select>
                 </div>
 
-                <div class="select-container form-group col-md-4">
-                <label htmlFor="status">学校状态</label>
-                <select
+                <div class="w-100"></div>
+
+                <div class="form-group col-md-4">
+                <label htmlFor="principal">校长</label>
+                <input
                 readonly={this.state.readonly?"":false}
+                type="text"
                 class="form-control"
-                id="status"
+                id="principal"
                 required
-                value={currentSchool.status}
-                onChange={this.onChangeStatus}
-                name="status"
-                >
-                <option value="">{this.state.readonly ? '' : '请选择' }</option>
-                {this.state.statuses.map((option) => (
-                  <option value={option}>{option}</option>
-                ))}
-                </select>
+                value={currentSchool.principal}
+                onChange={this.onChangePrincipal}
+                name="principal"
+                />
                 </div>
 
-                <div class="select-container form-group col-md-4">
-                <label htmlFor="request">学校需求状态</label>
-                <select
+                <div class="form-group col-md-4">
+                <label htmlFor="principalCell">校长手机</label>
+                <input
                 readonly={this.state.readonly?"":false}
+                type="text"
                 class="form-control"
-                id="request"
+                id="principalCell"
                 required
-                value={currentSchool.request}
-                onChange={this.onChangeRequest}
-                name="request"
-                >
-                <option value="">{this.state.readonly ? '' : '请选择' }</option>
-                {this.state.requests.map((option) => (
-                  <option value={option}>{option}</option>
-                ))}
-                </select>
+                value={currentSchool.principalCell}
+                onChange={this.onChangePrincipalCell}
+                name="principalCell"
+                />
                 </div>
 
+                <div class="form-group col-md-4">
+                <label htmlFor="principalWechat">校长微信</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="principalWechat"
+                required
+                value={currentSchool.principalWechat}
+                onChange={this.onChangePrincipalWechat}
+                name="principalWechat"
+                />
+                </div>
 
-                <div class="select-container form-group col-md-4">
-                <label htmlFor="stage">学校阶段</label>
-                <select
+                <div class="w-100"></div>
+
+                <div class="form-group col-md-4">
+                <label htmlFor="contact">联络人</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="contact"
+                required
+                value={currentSchool.contact}
+                onChange={this.onChangeContact}
+                name="contact"
+                />
+                </div>
+
+                <div class="form-group col-md-4">
+                <label htmlFor="contactCell">联络人手机</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="contactCell"
+                required
+                value={currentSchool.contactCell}
+                onChange={this.onChangeContactCell}
+                name="contactCell"
+                />
+                </div>
+
+                <div class="form-group col-md-4">
+                <label htmlFor="contactWechat">联络人微信</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="contactWechat"
+                required
+                value={currentSchool.contactWechat}
+                onChange={this.onChangeContactWechat}
+                name="contactWechat"
+                />
+                </div>
+
+                <div class="w-100"></div>
+
+
+                <div class="form-group col-md-12">
+                <label htmlFor="description">简介</label>
+                <textarea
                 readonly={this.state.readonly?"":false}
                 class="form-control"
-                id="stage"
+                id="description"
                 required
-                value={currentSchool.stage}
-                onChange={this.onChangeStage}
-                name="stage"
-                >
-                <option value="">{this.state.readonly ? '' : '请选择' }</option>
-                {this.state.stages.map((option) => (
-                  <option value={option}>{option}</option>
-                ))}
-                </select>
+                value={currentSchool.description}
+                onChange={this.onChangeDescription}
+                name="description"
+                />
                 </div>
               </div>
             </div>

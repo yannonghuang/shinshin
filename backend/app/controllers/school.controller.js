@@ -485,8 +485,10 @@ exports.findOne = (req, res) => {
                          'status',
                          'request',
                          'category',
+                         'donor',
                           //[db.Sequelize.fn('date_format', db.Sequelize.col("startAt"), '%Y-%m-%d'), "startAt"],
                           [db.Sequelize.fn("year", db.Sequelize.col("schools.startAt")), "startAt"],
+                          [db.Sequelize.fn("year", db.Sequelize.col("schools.lastVisit")), "lastVisit"],
                    ],
       raw: true,
     }

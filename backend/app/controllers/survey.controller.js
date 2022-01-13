@@ -36,10 +36,32 @@ exports.create = (req, res) => {
   })
     .then(d => {
       if (d) {
+        const {id, ...otherParams} = req.body;
+        Survey.update(otherParams, {
+          where: { schoolId: req.body.schoolId }
+        })
+        .then(num => {
+          if (num == 1) {
+            res.send({
+            message: "Survey was updated successfully."
+          });
+          } else {
+            res.status(500).send({
+            message: "Error updating Survey with req.body.schoolId =" + req.body.schoolId
+            });
+          }
+        })
+        .catch(err => {
+          res.status(500).send({
+            message: "Error updating Survey with req.body.schoolId =" + req.body.schoolId
+          });
+        });
+/**
         res.status(500).send({
         message:
           "该校的调查表已经存在！！"
         });
+*/
       } else {
         // Create a Survey, save Survey in the database
         Survey.create(req.body)

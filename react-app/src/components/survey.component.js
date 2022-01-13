@@ -23,18 +23,29 @@ export default class Survey extends Component {
     this.onChangePrincipal = this.onChangePrincipal.bind(this);
     this.onChangeAddress = this.onChangeAddress.bind(this);
     this.onChangePhone = this.onChangePhone.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangeStudentsCount = this.onChangeStudentsCount.bind(this);
     this.onChangeTeachersCount = this.onChangeTeachersCount.bind(this);
     this.onChangeRegion = this.onChangeRegion.bind(this);
-    this.onChangeStartAt = this.onChangeStartAt.bind(this);
-    this.onChangeYPStartAt = this.onChangeYPStartAt.bind(this);
     this.onChangeDocCategory = this.onChangeDocCategory.bind(this);
     this.onChangeSchoolId = this.onChangeSchoolId.bind(this);
+
+    this.onChangePrincipal = this.onChangePrincipal.bind(this);
+    this.onChangePrincipalCell = this.onChangePrincipalCell.bind(this);
+    this.onChangePrincipalWechat = this.onChangePrincipalWechat.bind(this);
+    this.onChangeSchoolBoardRegisteredName = this.onChangeSchoolBoardRegisteredName.bind(this);
+    this.onChangeSchoolBoard = this.onChangeSchoolBoard.bind(this);
+
+    this.onChangeContact = this.onChangeContact.bind(this);
+    this.onChangeContactCell = this.onChangeContactCell.bind(this);
+    this.onChangeContactWechat = this.onChangeContactWechat.bind(this);
 
     this.onChangeStage = this.onChangeStage.bind(this);
     this.onChangeStatus = this.onChangeStatus.bind(this);
     this.onChangeRequest = this.onChangeRequest.bind(this);
     this.onChangeCategory = this.onChangeCategory.bind(this);
+
+    this.onChangeGenerics = this.onChangeGenerics.bind(this);
 
     this.getSurvey = this.getSurvey.bind(this);
     this.updateSurvey = this.updateSurvey.bind(this);
@@ -48,25 +59,54 @@ export default class Survey extends Component {
     this.state = {
       currentSurvey: {
         id: null,
-        name: "",
-        code: "",
-        description: "",
-        principal: "",
-        region: "",
-        address: "",
-        phone: "",
-        studentsCount: 0,
-        teachersCount: 0,
+        schoolId: null,
         docFiles: [],
         docCategory: "",
-        startAt: null,
 
-        schoolId: null,
-
-        stage: "",
         status: "",
         request: "",
         category: "",
+        principal: "",
+        principalCell: null,
+        principalWechat: null,
+        contact: "",
+        contactCell: null,
+        contactWechat: null,
+        schoolBoard: null,
+        schoolBoardRegisteredName: null,
+        region: "",
+        address: "",
+        phone: "",
+        email: "",
+        studentsCount: 0,
+        teachersCount: 0,
+        description: "",
+
+        stayBehindCount: 0,
+        boarderCount: 0,
+        kClassesCount: 0,
+        g1ClassesCount: 0,
+        g2ClassesCount: 0,
+        g3ClassesCount: 0,
+        g4ClassesCount: 0,
+        g5ClassesCount: 0,
+        g6ClassesCount: 0,
+        kStudentsCount: 0,
+        g1StudentsCount: 0,
+        g2StudentsCount: 0,
+        g3StudentsCount: 0,
+        g4StudentsCount: 0,
+        g5StudentsCount: 0,
+        g6StudentsCount: 0,
+        mStudentsCount: 0,
+        computersCount: 0,
+        computerRoomExists: false,
+        computerRoomCount: 0,
+        internetExists: false,
+        multimediaSystemsCount: 0,
+        libraryExists: false,
+        bookCornersCount: 0,
+        booksCount: 0,
       },
 
       embedded: false,
@@ -242,6 +282,100 @@ export default class Survey extends Component {
     }));
   }
 
+
+  onChangeSchoolBoardRegisteredName(e) {
+    const schoolBoardRegisteredName = e.target.value;
+
+    this.setState(function(prevState) {
+      return {
+        currentSurvey: {
+          ...prevState.currentSurvey,
+          schoolBoardRegisteredName: schoolBoardRegisteredName
+        }
+      };
+    });
+  }
+
+  onChangeSchoolBoard(e) {
+    const schoolBoard = e.target.value;
+
+    this.setState(function(prevState) {
+      return {
+        currentSurvey: {
+          ...prevState.currentSurvey,
+          schoolBoard: schoolBoard
+        }
+      };
+    });
+  }
+
+
+  onChangePrincipal(e) {
+    const principal = e.target.value;
+
+    this.setState(prevState => ({
+      currentSurvey: {
+        ...prevState.currentSurvey,
+        principal: principal
+      }
+    }));
+  }
+
+  onChangePrincipalCell(e) {
+    const principalCell = e.target.value;
+
+    this.setState(prevState => ({
+      currentSurvey: {
+        ...prevState.currentSurvey,
+        principalCell: principalCell
+      }
+    }));
+  }
+
+  onChangePrincipalWechat(e) {
+    const principalWechat = e.target.value;
+
+    this.setState(prevState => ({
+      currentSurvey: {
+        ...prevState.currentSurvey,
+        principalWechat: principalWechat
+      }
+    }));
+  }
+
+  onChangeContact(e) {
+    const contact = e.target.value;
+
+    this.setState(prevState => ({
+      currentSurvey: {
+        ...prevState.currentSurvey,
+        contact: contact
+      }
+    }));
+  }
+
+  onChangeContactCell(e) {
+    const contactCell = e.target.value;
+
+    this.setState(prevState => ({
+      currentSurvey: {
+        ...prevState.currentSurvey,
+        contactCell: contactCell
+      }
+    }));
+  }
+
+  onChangeContactWechat(e) {
+    const contactWechat = e.target.value;
+
+    this.setState(prevState => ({
+      currentSurvey: {
+        ...prevState.currentSurvey,
+        contactWechat: contactWechat
+      }
+    }));
+  }
+
   onChangeStage(e) {
     const stage = e.target.value;
 
@@ -294,32 +428,6 @@ export default class Survey extends Component {
         currentSurvey: {
           ...prevState.currentSurvey,
           name: name
-        }
-      };
-    });
-  }
-
-  onChangeStartAt(e) {
-    const startAt = e.target.value;
-
-    this.setState(function(prevState) {
-      return {
-        currentSurvey: {
-          ...prevState.currentSurvey,
-          startAt: startAt
-        }
-      };
-    });
-  }
-
-  onChangeYPStartAt(e) {
-    const startAt = e; //.target.value;
-
-    this.setState(function(prevState) {
-      return {
-        currentSurvey: {
-          ...prevState.currentSurvey,
-          startAt: startAt
         }
       };
     });
@@ -407,6 +515,17 @@ export default class Survey extends Component {
     }));
   }
 
+  onChangeEmail(e) {
+    const email = e.target.value;
+
+    this.setState(prevState => ({
+      currentSurvey: {
+        ...prevState.currentSurvey,
+        email: email
+      }
+    }));
+  }
+
   onChangeTeachersCount(e) {
     const teachersCount = e.target.value;
 
@@ -425,6 +544,19 @@ export default class Survey extends Component {
       currentSurvey: {
         ...prevState.currentSurvey,
         studentsCount: studentsCount
+      }
+    }));
+  }
+
+  onChangeGenerics(e) {
+    const name = e.target.name;
+    const type = e.target.type;
+    const value = (type === "checkbox") ? e.target.checked : e.target.value;
+
+    this.setState(prevState => ({
+      currentSurvey: {
+        ...prevState.currentSurvey,
+        [name]: value
       }
     }));
   }
@@ -649,6 +781,37 @@ export default class Survey extends Component {
                   />
                 </div>)}
 
+                <div class="form-group">
+                <label htmlFor="schoolBoardRegisteredName">教育局校名</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="schoolBoardRegisteredName"
+                required
+                value={currentSurvey.schoolBoardRegisteredName}
+                onChange={this.onChangeSchoolBoardRegisteredName}
+                name="schoolBoardRegisteredName"
+                />
+                </div>
+
+                <div class="form-group">
+                <label htmlFor="schoolBoard">教育局</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="schoolBoard"
+                required
+                value={currentSurvey.schoolBoard}
+                onChange={this.onChangeSchoolBoard}
+                name="schoolBoard"
+                />
+                </div>
+
+
+
+
                 {!this.state.readonly && (<div>
                 <div class="w-100"></div>
 
@@ -706,82 +869,14 @@ export default class Survey extends Component {
             </div>
 
             <div class="col-md-9">
-              <div class="row">
-                <div class="form-group col-md-12">
-                <label htmlFor="description">简介</label>
-                <textarea
-                readonly={this.state.readonly?"":false}
-                class="form-control"
-                id="description"
-                required
-                value={currentSurvey.description}
-                onChange={this.onChangeDescription}
-                name="description"
-                />
-                </div>
 
-                <div class="w-100"></div>
-
-                <div class="form-group col-md-4">
-                <label htmlFor="principal">校长</label>
-                <input
-                readonly={this.state.readonly?"":false}
-                type="text"
-                class="form-control"
-                id="principal"
-                required
-                value={currentSurvey.principal}
-                onChange={this.onChangePrincipal}
-                name="principal"
-                />
-                </div>
-
-                <div class="form-group col-md-4">
-                <label htmlFor="phone">电话</label>
-                <input
-                readonly={this.state.readonly?"":false}
-                type="text"
-                class="form-control"
-                id="phone"
-                required
-                value={currentSurvey.phone}
-                onChange={this.onChangePhone}
-                name="phone"
-                />
-                </div>
-
-                <div class="form-group col-md-4">
-                <div>
-                <div class="side"><label htmlFor="startAt">建校年份</label></div>
-                <div class="side">
-                {!this.state.readonly &&
-                (<YearPicker
-                yearArray={['2019', '2020']}
-                value={currentSurvey.startAt}
-                onSelect={this.onChangeYPStartAt}
-                hideInput={true}
-                minRange={1995}
-                maxRange={2022}
-                />)}
-                </div>
-                </div>
-                <input
-                readonly=""
-                type="text"
-                class="form-control"
-                id="startAt"
-                required
-                value={currentSurvey.startAt}
-                onChange={this.onChangeStartAt}
-                name="startAt"
-                />
-                </div>
-
+              {!this.state.embedded &&
+              (<div class="row">
 
                 <div class="w-100"></div>
 
                 <div class="select-container form-group col-md-3">
-                <label htmlFor="region">省/直辖市</label>
+                <label htmlFor="region">省/自治区</label>
                 <select
                 readonly={this.state.readonly?"":false}
                 class="form-control"
@@ -813,6 +908,7 @@ export default class Survey extends Component {
                 </div>
 
                 <div class="w-100"></div>
+
                 <div class="form-group col-md-4">
                 <label htmlFor="studentsCount">学生人数</label>
                 <input
@@ -859,7 +955,124 @@ export default class Survey extends Component {
                 </select>
                 </div>
 
-                <div class="select-container form-group col-md-4">
+                <div class="w-100"></div>
+
+                <div class="form-group col-md-4">
+                <label htmlFor="principal">校长</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="principal"
+                required
+                value={currentSurvey.principal}
+                onChange={this.onChangePrincipal}
+                name="principal"
+                />
+                </div>
+
+                <div class="form-group col-md-4">
+                <label htmlFor="principalCell">校长手机</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="principalCell"
+                required
+                value={currentSurvey.principalCell}
+                onChange={this.onChangePrincipalCell}
+                name="principalCell"
+                />
+                </div>
+
+                <div class="form-group col-md-4">
+                <label htmlFor="principalWechat">校长微信</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="principalWechat"
+                required
+                value={currentSurvey.principalWechat}
+                onChange={this.onChangePrincipalWechat}
+                name="principalWechat"
+                />
+                </div>
+
+                <div class="w-100"></div>
+
+                <div class="form-group col-md-4">
+                <label htmlFor="contact">联络人</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="contact"
+                required
+                value={currentSurvey.contact}
+                onChange={this.onChangeContact}
+                name="contact"
+                />
+                </div>
+
+                <div class="form-group col-md-4">
+                <label htmlFor="contactCell">联络人手机</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="contactCell"
+                required
+                value={currentSurvey.contactCell}
+                onChange={this.onChangeContactCell}
+                name="contactCell"
+                />
+                </div>
+
+                <div class="form-group col-md-4">
+                <label htmlFor="contactWechat">联络人微信</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="contactWechat"
+                required
+                value={currentSurvey.contactWechat}
+                onChange={this.onChangeContactWechat}
+                name="contactWechat"
+                />
+                </div>
+
+                <div class="form-group col-md-3">
+                <label htmlFor="phone">学校电话</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="phone"
+                required
+                value={currentSurvey.phone}
+                onChange={this.onChangePhone}
+                name="phone"
+                />
+                </div>
+
+
+                <div class="form-group col-md-3">
+                <label htmlFor="email">学校电子邮箱</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="email"
+                required
+                value={currentSurvey.email}
+                onChange={this.onChangeEmail}
+                name="email"
+                />
+                </div>
+
+                <div class="select-container form-group col-md-3">
                 <label htmlFor="status">学校状态</label>
                 <select
                 readonly={this.state.readonly?"":false}
@@ -877,7 +1090,7 @@ export default class Survey extends Component {
                 </select>
                 </div>
 
-                <div class="select-container form-group col-md-4">
+                <div class="select-container form-group col-md-3">
                 <label htmlFor="request">学校需求状态</label>
                 <select
                 readonly={this.state.readonly?"":false}
@@ -896,28 +1109,387 @@ export default class Survey extends Component {
                 </div>
 
 
-                <div class="select-container form-group col-md-4">
-                <label htmlFor="stage">学校阶段</label>
-                <select
+                <div class="w-100"></div>
+
+                <div class="form-group col-md-12">
+                <label htmlFor="description">简介</label>
+                <textarea
                 readonly={this.state.readonly?"":false}
                 class="form-control"
-                id="stage"
+                id="description"
                 required
-                value={currentSurvey.stage}
-                onChange={this.onChangeStage}
-                name="stage"
-                >
-                <option value="">{this.state.readonly ? '' : '请选择' }</option>
-                {this.state.stages.map((option) => (
-                  <option value={option}>{option}</option>
-                ))}
-                </select>
+                value={currentSurvey.description}
+                onChange={this.onChangeDescription}
+                name="description"
+                />
                 </div>
+
+              </div>)}
+
+
+              <div class="row">
+                <div class="w-100"></div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="stayBehindCount">留守儿童人数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="stayBehindCount"
+                required
+                value={currentSurvey.stayBehindCount}
+                onChange={this.onChangeGenerics}
+                name="stayBehindCount"
+                />
+                </div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="boarderCount">学生住宿人数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="boarderCount"
+                required
+                value={currentSurvey.boarderCount}
+                onChange={this.onChangeGenerics}
+                name="boarderCount"
+                />
+                </div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="kClassesCount">学前班级数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="kClassesCount"
+                required
+                value={currentSurvey.kClassesCount}
+                onChange={this.onChangeGenerics}
+                name="kClassesCount"
+                />
+                </div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="kStudentsCount">学前学生数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="kStudentsCount"
+                required
+                value={currentSurvey.kStudentsCount}
+                onChange={this.onChangeGenerics}
+                name="kStudentsCount"
+                />
+                </div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="mStudentsCount">初中学生数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="mStudentsCount"
+                required
+                value={currentSurvey.mStudentsCount}
+                onChange={this.onChangeGenerics}
+                name="mStudentsCount"
+                />
+                </div>
+
+                <div class="w-100"></div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="g1ClassesCount">一年级班级数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="g1ClassesCount"
+                required
+                value={currentSurvey.g1ClassesCount}
+                onChange={this.onChangeGenerics}
+                name="g1ClassesCount"
+                />
+                </div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="g2ClassesCount">二年级班级数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="g2ClassesCount"
+                required
+                value={currentSurvey.g2ClassesCount}
+                onChange={this.onChangeGenerics}
+                name="g2ClassesCount"
+                />
+                </div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="g3ClassesCount">三年级班级数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="g3ClassesCount"
+                required
+                value={currentSurvey.g3ClassesCount}
+                onChange={this.onChangeGenerics}
+                name="g3ClassesCount"
+                />
+                </div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="g4ClassesCount">四年级班级数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="g4ClassesCount"
+                required
+                value={currentSurvey.g4ClassesCount}
+                onChange={this.onChangeGenerics}
+                name="g4ClassesCount"
+                />
+                </div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="g5ClassesCount">五年级班级数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="g5ClassesCount"
+                required
+                value={currentSurvey.g5ClassesCount}
+                onChange={this.onChangeGenerics}
+                name="g5ClassesCount"
+                />
+                </div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="g6ClassesCount">六年级班级数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="g6ClassesCount"
+                required
+                value={currentSurvey.g6ClassesCount}
+                onChange={this.onChangeGenerics}
+                name="g6ClassesCount"
+                />
+                </div>
+
+                <div class="w-100"></div>
+
+
+                <div class="form-group col-md-2">
+                <label htmlFor="g1StudentsCount">一年级学生数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="g1StudentsCount"
+                required
+                value={currentSurvey.g1StudentsCount}
+                onChange={this.onChangeGenerics}
+                name="g1StudentsCount"
+                />
+                </div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="g2StudentsCount">二年级学生数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="g2StudentsCount"
+                required
+                value={currentSurvey.g2StudentsCount}
+                onChange={this.onChangeGenerics}
+                name="g2StudentsCount"
+                />
+                </div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="g3StudentsCount">三年级学生数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="g3StudentsCount"
+                required
+                value={currentSurvey.g3StudentsCount}
+                onChange={this.onChangeGenerics}
+                name="g3StudentsCount"
+                />
+                </div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="g4StudentsCount">四年级学生数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="g4StudentsCount"
+                required
+                value={currentSurvey.g4StudentsCount}
+                onChange={this.onChangeGenerics}
+                name="g4StudentsCount"
+                />
+                </div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="g5StudentsCount">五年级学生数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="g5StudentsCount"
+                required
+                value={currentSurvey.g5StudentsCount}
+                onChange={this.onChangeGenerics}
+                name="g5StudentsCount"
+                />
+                </div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="g6StudentsCount">六年级学生数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="g6StudentsCount"
+                required
+                value={currentSurvey.g6StudentsCount}
+                onChange={this.onChangeGenerics}
+                name="g6StudentsCount"
+                />
+                </div>
+
+
+                <div class="form-group col-md-2">
+                <label htmlFor="computersCount">办公电脑数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="computersCount"
+                required
+                value={currentSurvey.computersCount}
+                onChange={this.onChangeGenerics}
+                name="computersCount"
+                />
+                </div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="computerRoomExists">是否有电脑室</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="checkbox"
+                class="form-control"
+                id="computerRoomExists"
+                required
+                checked={currentSurvey.computerRoomExists}
+                onChange={this.onChangeGenerics}
+                name="computerRoomExists"
+                />
+                </div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="computerRoomCount">电脑室电脑数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="computerRoomCount"
+                required
+                value={currentSurvey.computerRoomCount}
+                onChange={this.onChangeGenerics}
+                name="computerRoomCount"
+                />
+                </div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="internetExists">可否上网</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="checkbox"
+                class="form-control"
+                id="internetExists"
+                required
+                checked={currentSurvey.internetExists}
+                onChange={this.onChangeGenerics}
+                name="internetExists"
+                />
+                </div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="multimediaSystemsCount">多媒体一体机数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="multimediaSystemsCount"
+                required
+                value={currentSurvey.multimediaSystemsCount}
+                onChange={this.onChangeGenerics}
+                name="multimediaSystemsCount"
+                />
+                </div>
+
+                <div class="w-100"></div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="libraryExists">是否有图书室</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="checkbox"
+                class="form-control"
+                id="libraryExists"
+                required
+                checked={currentSurvey.libraryExists}
+                onChange={this.onChangeGenerics}
+                name="libraryExists"
+                />
+                </div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="bookCornersCount">图书角数量</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="bookCornersCount"
+                required
+                value={currentSurvey.bookCornersCount}
+                onChange={this.onChangeGenerics}
+                name="bookCornersCount"
+                />
+                </div>
+
+                <div class="form-group col-md-2">
+                <label htmlFor="booksCount">图书册数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="booksCount"
+                required
+                value={currentSurvey.booksCount}
+                onChange={this.onChangeGenerics}
+                name="booksCount"
+                />
+                </div>
+
               </div>
             </div>
-
-            <div class="w-100"></div>
-
 
             <div class="w-100"></div>
 

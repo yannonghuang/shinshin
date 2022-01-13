@@ -104,6 +104,17 @@ class SchoolDataService {
   getAllSimple() {
     return http.get("/schoolsSimple", { headers: authHeader() });
   }
+
+//
+
+  reduce = (bigObj, smallObj) => {
+    var result = {};
+    Object.keys(smallObj).forEach(key => {
+      result = Object.assign(result, {[key]: bigObj[key]});
+    });
+    return result;
+  }
+
 }
 
 export default new SchoolDataService();

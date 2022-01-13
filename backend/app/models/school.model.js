@@ -45,6 +45,12 @@ module.exports = (sequelize, Sequelize) => {
     category: {
       type: Sequelize.STRING
     },
+    lastVisit: {
+      type: Sequelize.DATE
+    },
+    donor: {
+      type: Sequelize.STRING
+    },
   });
 
   return School;
