@@ -97,6 +97,10 @@ db.SCHOOL_STATUSES = [
 ];
 
 db.SCHOOL_STATUSES_SS = [
+  "原欣欣学校",
+  "并校",
+  "重建",
+  "迁移",
   "中心校加入",
   "失联",
   "不愿再联系",
@@ -113,6 +117,10 @@ db.SCHOOL_REQUESTS = [
 ];
 
 db.SCHOOL_REQUESTS_SS = [
+  "基本设施",
+  "教学设备",
+  "教师培训",
+  "学生活动",
   "暂停捐赠",
   "终止捐赠",
 ];

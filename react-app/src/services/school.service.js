@@ -43,8 +43,16 @@ class SchoolDataService {
     return http.get("/schools/statuses", { headers: authHeader() });
   }
 
+  getStatuses_ss() {
+    return http.get("/schools/statuses_ss", { headers: authHeader() });
+  }
+
   getRequests() {
     return http.get("/schools/requests", { headers: authHeader() });
+  }
+
+  getRequests_ss() {
+    return http.get("/schools/requests_ss", { headers: authHeader() });
   }
 
   getCategories() {

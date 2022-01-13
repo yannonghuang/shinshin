@@ -8,7 +8,9 @@ const Op = db.Sequelize.Op;
 const REGIONS = db.REGIONS;
 const SCHOOL_STAGES = db.SCHOOL_STAGES;
 const SCHOOL_STATUSES = db.SCHOOL_STATUSES;
+const SCHOOL_STATUSES_SS = db.SCHOOL_STATUSES_SS;
 const SCHOOL_REQUESTS = db.SCHOOL_REQUESTS;
+const SCHOOL_REQUESTS_SS = db.SCHOOL_REQUESTS_SS;
 const SCHOOL_CATEGORIES = db.SCHOOL_CATEGORIES;
 
 const getPagination = (page, size) => {
@@ -102,9 +104,17 @@ exports.getSchoolStatuses = (req, res) => {
   res.send(SCHOOL_STATUSES);
 }
 
+exports.getSchoolStatuses_ss = (req, res) => {
+  res.send(SCHOOL_STATUSES_SS);
+}
+
 // return School request statuses
 exports.getSchoolRequests = (req, res) => {
   res.send(SCHOOL_REQUESTS);
+}
+
+exports.getSchoolRequests_ss = (req, res) => {
+  res.send(SCHOOL_REQUESTS_SS);
 }
 
 // return School categories

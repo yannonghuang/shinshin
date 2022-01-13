@@ -40,9 +40,19 @@ module.exports = function(app) {
     schools.getSchoolStatuses
   );
 
+  app.get("/api/schools/statuses_ss",
+    [authJwt.verifyToken],
+    schools.getSchoolStatuses_ss
+  );
+
   app.get("/api/schools/requests",
     [authJwt.verifyToken],
     schools.getSchoolRequests
+  );
+
+  app.get("/api/schools/requests_ss",
+    [authJwt.verifyToken],
+    schools.getSchoolRequests_ss
   );
 
   app.get("/api/schools/categories",

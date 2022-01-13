@@ -151,7 +151,7 @@ export default class School extends Component {
   }
 
   getRequests() {
-    SchoolDataService.getRequests()
+    SchoolDataService.getRequests_ss()
       .then(response => {
         this.setState({
           requests: response.data
@@ -164,7 +164,7 @@ export default class School extends Component {
   }
 
   getStatuses() {
-    SchoolDataService.getStatuses()
+    SchoolDataService.getStatuses_ss()
       .then(response => {
         this.setState({
           statuses: response.data
@@ -548,7 +548,6 @@ export default class School extends Component {
                     }
             }));
           });
-
         })
         .catch (err => {
           alert(err.message);
@@ -582,30 +581,6 @@ export default class School extends Component {
       });
   }
 
-/**
-  updatePublished(status) {
-    var data = {
-      id: this.state.currentSchool.id,
-      title: this.state.currentSchool.title,
-      description: this.state.currentSchool.description,
-      published: status
-    };
-
-    SchoolDataService.update(this.state.currentSchool.id, data)
-      .then(response => {
-        this.setState(prevState => ({
-          currentSchool: {
-            ...prevState.currentSchool,
-            published: status
-          }
-        }));
-        console.log(response.data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  }
-*/
   newSchool() {
   this.setState(prevState => ({
     currentSchool: {
