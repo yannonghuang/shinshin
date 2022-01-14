@@ -148,8 +148,15 @@ exports.findOne = (req, res) => {
       if (data) {
         res.send(data);
       } else {
-        res.status(404).send({
-          message: `调查表不存在 id=${id}.`
+        Survey.create({schoolId: id})
+        .then(d => {
+          res.send(d);
+        })
+        .catch(e => {
+          res.status(500).send({
+          message:
+            e.message || "Some error occurred while creating the Survey."
+          });
         });
       }
     })

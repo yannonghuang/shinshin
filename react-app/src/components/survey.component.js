@@ -886,6 +886,44 @@ export default class Survey extends Component {
 
                 <div class="w-100"></div>
 
+                <div class="select-container form-group col-md-5">
+                <label htmlFor="status">学校状态</label>
+                <select
+                readonly={this.state.readonly?"":false}
+                class="form-control"
+                id="status"
+                required
+                value={currentSurvey.status}
+                onChange={this.onChangeGenerics}
+                name="status"
+                >
+                <option value="">{this.state.readonly ? '' : '请选择' }</option>
+                {this.state.statuses.map((option) => (
+                  <option value={option}>{option}</option>
+                ))}
+                </select>
+                </div>
+
+                <div class="select-container form-group col-md-5">
+                <label htmlFor="request">学校需求状态</label>
+                <select
+                readonly={this.state.readonly?"":false}
+                class="form-control"
+                id="request"
+                required
+                value={currentSurvey.request}
+                onChange={this.onChangeGenerics}
+                name="request"
+                >
+                <option value="">{this.state.readonly ? '' : '请选择' }</option>
+                {this.state.requests.map((option) => (
+                  <option value={option}>{option}</option>
+                ))}
+                </select>
+                </div>
+
+                <div class="w-100"></div>
+
                 <div class="select-container form-group col-md-3">
                 <label htmlFor="region">省/自治区</label>
                 <select
@@ -1054,70 +1092,6 @@ export default class Survey extends Component {
                 />
                 </div>
 
-                <div class="form-group col-md-3">
-                <label htmlFor="phone">学校电话</label>
-                <input
-                readonly={this.state.readonly?"":false}
-                type="text"
-                class="form-control"
-                id="phone"
-                required
-                value={currentSurvey.phone}
-                onChange={this.onChangeGenerics}
-                name="phone"
-                />
-                </div>
-
-
-                <div class="form-group col-md-3">
-                <label htmlFor="email">学校电子邮箱</label>
-                <input
-                readonly={this.state.readonly?"":false}
-                type="text"
-                class="form-control"
-                id="email"
-                required
-                value={currentSurvey.email}
-                onChange={this.onChangeGenerics}
-                name="email"
-                />
-                </div>
-
-                <div class="select-container form-group col-md-3">
-                <label htmlFor="status">学校状态</label>
-                <select
-                readonly={this.state.readonly?"":false}
-                class="form-control"
-                id="status"
-                required
-                value={currentSurvey.status}
-                onChange={this.onChangeGenerics}
-                name="status"
-                >
-                <option value="">{this.state.readonly ? '' : '请选择' }</option>
-                {this.state.statuses.map((option) => (
-                  <option value={option}>{option}</option>
-                ))}
-                </select>
-                </div>
-
-                <div class="select-container form-group col-md-3">
-                <label htmlFor="request">学校需求状态</label>
-                <select
-                readonly={this.state.readonly?"":false}
-                class="form-control"
-                id="request"
-                required
-                value={currentSurvey.request}
-                onChange={this.onChangeGenerics}
-                name="request"
-                >
-                <option value="">{this.state.readonly ? '' : '请选择' }</option>
-                {this.state.requests.map((option) => (
-                  <option value={option}>{option}</option>
-                ))}
-                </select>
-                </div>
 
 
                 <div class="w-100"></div>
@@ -1139,6 +1113,37 @@ export default class Survey extends Component {
 
 
               <div class="row">
+                <div class="w-100"></div>
+
+                <div class="form-group col-md-5">
+                <label htmlFor="phone">学校电话</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="phone"
+                required
+                value={currentSurvey.phone}
+                onChange={this.onChangeGenerics}
+                name="phone"
+                />
+                </div>
+
+
+                <div class="form-group col-md-5">
+                <label htmlFor="email">学校电子邮箱</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="email"
+                required
+                value={currentSurvey.email}
+                onChange={this.onChangeGenerics}
+                name="email"
+                />
+                </div>
+
                 <div class="w-100"></div>
 
                 <div class="form-group col-md-2">
