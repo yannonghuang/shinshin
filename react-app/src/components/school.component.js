@@ -215,6 +215,18 @@ export default class School extends Component {
       });
   }
 
+  onChangeGenerics(e) {
+    const name = e.target.name;
+    const type = e.target.type;
+    const value = (type === "checkbox") ? e.target.checked : e.target.value;
+
+    this.setState(prevState => ({
+      currentSurvey: {
+        ...prevState.currentSurvey,
+        [name]: value
+      }
+    }));
+  }
 
   onChangeStage(e) {
     const stage = e.target.value;

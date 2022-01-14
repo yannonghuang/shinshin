@@ -768,9 +768,9 @@ export default class Survey extends Component {
           <div class="row">
             <div class="col-md-3">
               <div class="row">
-              <h4>学校详情</h4>
               {!this.state.embedded &&
               (<div>
+                <h4>学校详情</h4>
                 <div class="form-group" style={{width: "100%"}}>
                   <label htmlFor="schoolId">学校</label>
                   <Select onChange={this.onChangeSchoolId.bind(this)}
@@ -844,10 +844,14 @@ export default class Survey extends Component {
                   </form>)}
 
 
-                  <button onClick={this.saveSurvey} class="btn btn-success" hidden={!this.state.newsurvey}>
+                  <button onClick={this.saveSurvey}
+                    style={{ position: "absolute", left: "15px" }}
+                    class="btn btn-success"
+                    hidden={!this.state.newsurvey}>
                     提交
                   </button>
                   <button hidden={this.state.newsurvey}
+                    style={{ position: "absolute", left: "15px" }}
                     type="submit"
                     className="btn btn-success"
                     onClick={this.updateSurvey}
