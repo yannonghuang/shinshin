@@ -178,7 +178,6 @@ exports.update = (req, res) => {
   }
 
   const schoolId = req.body.schoolId; //school id
-
   Survey.update(req.body, {
     where: { schoolId: schoolId }
   })
