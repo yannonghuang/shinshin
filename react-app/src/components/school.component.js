@@ -23,7 +23,8 @@ import YearPicker from 'react-single-year-picker';
 export default class School extends Component {
   constructor(props) {
     super(props);
-    this.onChangeName = this.onChangeName.bind(this);
+
+/**
     this.onChangeCode = this.onChangeCode.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
 
@@ -43,16 +44,21 @@ export default class School extends Component {
     this.onChangeStudentsCount = this.onChangeStudentsCount.bind(this);
     this.onChangeTeachersCount = this.onChangeTeachersCount.bind(this);
     this.onChangeRegion = this.onChangeRegion.bind(this);
-    this.onChangeStartAt = this.onChangeStartAt.bind(this);
-    this.onChangeYPStartAt = this.onChangeYPStartAt.bind(this);
-    this.onChangeLastVisit = this.onChangeLastVisit.bind(this);
-    this.onChangeYPLastVisit = this.onChangeYPLastVisit.bind(this);
     this.onChangeDonor = this.onChangeDonor.bind(this);
+
 
     this.onChangeStage = this.onChangeStage.bind(this);
     this.onChangeStatus = this.onChangeStatus.bind(this);
     this.onChangeRequest = this.onChangeRequest.bind(this);
     this.onChangeCategory = this.onChangeCategory.bind(this);
+    this.onChangeDocCategory = this.onChangeDocCategory.bind(this);
+*/
+    this.onChangeGenerics = this.onChangeGenerics.bind(this);
+
+    this.onChangeStartAt = this.onChangeStartAt.bind(this);
+    this.onChangeYPStartAt = this.onChangeYPStartAt.bind(this);
+    this.onChangeLastVisit = this.onChangeLastVisit.bind(this);
+    this.onChangeYPLastVisit = this.onChangeYPLastVisit.bind(this);
 
     this.getSchool = this.getSchool.bind(this);
     this.getSchoolPhoto = this.getSchoolPhoto.bind(this);
@@ -63,7 +69,7 @@ export default class School extends Component {
     this.onDrag = this.onDrag.bind(this);
     this.onDrop = this.onDrop.bind(this);
     this.onChangeDocFiles = this.onChangeDocFiles.bind(this);
-    this.onChangeDocCategory = this.onChangeDocCategory.bind(this);
+
 
     this.saveSchool = this.saveSchool.bind(this);
     this.newSchool = this.newSchool.bind(this);
@@ -221,13 +227,14 @@ export default class School extends Component {
     const value = (type === "checkbox") ? e.target.checked : e.target.value;
 
     this.setState(prevState => ({
-      currentSurvey: {
-        ...prevState.currentSurvey,
+      currentSchool: {
+        ...prevState.currentSchool,
         [name]: value
       }
     }));
   }
 
+/**
   onChangeStage(e) {
     const stage = e.target.value;
 
@@ -272,18 +279,6 @@ export default class School extends Component {
     }));
   }
 
-  onChangeName(e) {
-    const name = e.target.value;
-
-    this.setState(function(prevState) {
-      return {
-        currentSchool: {
-          ...prevState.currentSchool,
-          name: name
-        }
-      };
-    });
-  }
 
   onChangeSchoolBoardRegisteredName(e) {
     const schoolBoardRegisteredName = e.target.value;
@@ -310,6 +305,7 @@ export default class School extends Component {
       };
     });
   }
+*/
 
   onChangeStartAt(e) {
     const startAt = e.target.value;
@@ -323,6 +319,7 @@ export default class School extends Component {
       };
     });
   }
+
 
   onChangeYPStartAt(e) {
     const startAt = e; //.target.value;
@@ -363,6 +360,7 @@ export default class School extends Component {
     });
   }
 
+/**
   onChangeDonor(e) {
     const donor = e.target.value;
 
@@ -479,6 +477,7 @@ export default class School extends Component {
     }));
   }
 
+
   onChangePhoto(e) {
     const photo = e.target.value;
 
@@ -489,6 +488,7 @@ export default class School extends Component {
       }
     }));
   }
+
 
   onChangeAddress(e) {
     const address = e.target.value;
@@ -544,6 +544,7 @@ export default class School extends Component {
       }
     }));
   }
+*/
 
   getSchool(schoolId) {
     const {
@@ -928,7 +929,7 @@ export default class School extends Component {
                 cols="31"
                 required
                 value={currentSchool.name}
-                onChange={this.onChangeName}
+                onChange={this.onChangeGenerics}
                 name="name"
                 />
                 </div>
@@ -942,7 +943,7 @@ export default class School extends Component {
                 id="code"
                 required
                 value={currentSchool.code}
-                onChange={this.onChangeCode}
+                onChange={this.onChangeGenerics}
                 name="code"
                 />
                 </div>
@@ -956,7 +957,7 @@ export default class School extends Component {
                 id="schoolBoardRegisteredName"
                 required
                 value={currentSchool.schoolBoardRegisteredName}
-                onChange={this.onChangeSchoolBoardRegisteredName}
+                onChange={this.onChangeGenerics}
                 name="schoolBoardRegisteredName"
                 />
                 </div>
@@ -970,7 +971,7 @@ export default class School extends Component {
                 id="schoolBoard"
                 required
                 value={currentSchool.schoolBoard}
-                onChange={this.onChangeSchoolBoard}
+                onChange={this.onChangeGenerics}
                 name="schoolBoard"
                 />
                 </div>
@@ -1054,7 +1055,7 @@ export default class School extends Component {
                 id="donor"
                 required
                 value={currentSchool.donor}
-                onChange={this.onChangeDonor}
+                onChange={this.onChangeGenerics}
                 name="donor"
                 />
                 </div>
@@ -1070,7 +1071,7 @@ export default class School extends Component {
                 id="stage"
                 required
                 value={currentSchool.stage}
-                onChange={this.onChangeStage}
+                onChange={this.onChangeGenerics}
                 name="stage"
                 >
                 <option value="">{this.state.readonly ? '' : '请选择' }</option>
@@ -1088,7 +1089,7 @@ export default class School extends Component {
                 id="status"
                 required
                 value={currentSchool.status}
-                onChange={this.onChangeStatus}
+                onChange={this.onChangeGenerics}
                 name="status"
                 >
                 <option value="">{this.state.readonly ? '' : '请选择' }</option>
@@ -1106,7 +1107,7 @@ export default class School extends Component {
                 id="request"
                 required
                 value={currentSchool.request}
-                onChange={this.onChangeRequest}
+                onChange={this.onChangeGenerics}
                 name="request"
                 >
                 <option value="">{this.state.readonly ? '' : '请选择' }</option>
@@ -1126,7 +1127,7 @@ export default class School extends Component {
                 id="region"
                 required
                 value={currentSchool.region}
-                onChange={this.onChangeRegion}
+                onChange={this.onChangeGenerics}
                 name="region"
                 >
                 <option value="">{this.state.readonly ? '' : '请选择' }</option>
@@ -1145,7 +1146,7 @@ export default class School extends Component {
                 id="address"
                 required
                 value={currentSchool.address}
-                onChange={this.onChangeAddress}
+                onChange={this.onChangeGenerics}
                 name="address"
                 />
                 </div>
@@ -1161,7 +1162,7 @@ export default class School extends Component {
                 id="studentsCount"
                 required
                 value={currentSchool.studentsCount}
-                onChange={this.onChangeStudentsCount}
+                onChange={this.onChangeGenerics}
                 name="studentsCount"
                 />
                 </div>
@@ -1175,7 +1176,7 @@ export default class School extends Component {
                 id="teachersCount"
                 required
                 value={currentSchool.teachersCount}
-                onChange={this.onChangeTeachersCount}
+                onChange={this.onChangeGenerics}
                 name="teachersCount"
                 />
                 </div>
@@ -1188,7 +1189,7 @@ export default class School extends Component {
                 id="category"
                 required
                 value={currentSchool.category}
-                onChange={this.onChangeCategory}
+                onChange={this.onChangeGenerics}
                 name="category"
                 >
                 <option value="">{this.state.readonly ? '' : '请选择' }</option>
@@ -1209,7 +1210,7 @@ export default class School extends Component {
                 id="principal"
                 required
                 value={currentSchool.principal}
-                onChange={this.onChangePrincipal}
+                onChange={this.onChangeGenerics}
                 name="principal"
                 />
                 </div>
@@ -1223,7 +1224,7 @@ export default class School extends Component {
                 id="principalCell"
                 required
                 value={currentSchool.principalCell}
-                onChange={this.onChangePrincipalCell}
+                onChange={this.onChangeGenerics}
                 name="principalCell"
                 />
                 </div>
@@ -1237,7 +1238,7 @@ export default class School extends Component {
                 id="principalWechat"
                 required
                 value={currentSchool.principalWechat}
-                onChange={this.onChangePrincipalWechat}
+                onChange={this.onChangeGenerics}
                 name="principalWechat"
                 />
                 </div>
@@ -1253,7 +1254,7 @@ export default class School extends Component {
                 id="contact"
                 required
                 value={currentSchool.contact}
-                onChange={this.onChangeContact}
+                onChange={this.onChangeGenerics}
                 name="contact"
                 />
                 </div>
@@ -1267,7 +1268,7 @@ export default class School extends Component {
                 id="contactCell"
                 required
                 value={currentSchool.contactCell}
-                onChange={this.onChangeContactCell}
+                onChange={this.onChangeGenerics}
                 name="contactCell"
                 />
                 </div>
@@ -1281,7 +1282,7 @@ export default class School extends Component {
                 id="contactWechat"
                 required
                 value={currentSchool.contactWechat}
-                onChange={this.onChangeContactWechat}
+                onChange={this.onChangeGenerics}
                 name="contactWechat"
                 />
                 </div>
@@ -1297,7 +1298,7 @@ export default class School extends Component {
                 id="description"
                 required
                 value={currentSchool.description}
-                onChange={this.onChangeDescription}
+                onChange={this.onChangeGenerics}
                 name="description"
                 />
                 </div>
@@ -1336,9 +1337,10 @@ export default class School extends Component {
 
                 <select
                   className="form-control input-group-append"
+                  name="docCategory" id="docCategory"
                   placeholder=""
                   value={currentSchool.docCategory}
-                  onChange={e => this.onChangeDocCategory(e)}
+                  onChange={e => this.onChangeGenerics(e)}
                 >
                   <option value="">附件类别</option>
                   {this.state.docCategories.map((option) => (

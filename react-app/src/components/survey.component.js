@@ -17,6 +17,7 @@ import YearPicker from 'react-single-year-picker';
 export default class Survey extends Component {
   constructor(props) {
     super(props);
+/**
     this.onChangeName = this.onChangeName.bind(this);
     this.onChangeCode = this.onChangeCode.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
@@ -28,7 +29,7 @@ export default class Survey extends Component {
     this.onChangeTeachersCount = this.onChangeTeachersCount.bind(this);
     this.onChangeRegion = this.onChangeRegion.bind(this);
     this.onChangeDocCategory = this.onChangeDocCategory.bind(this);
-    this.onChangeSchoolId = this.onChangeSchoolId.bind(this);
+
 
     this.onChangePrincipal = this.onChangePrincipal.bind(this);
     this.onChangePrincipalCell = this.onChangePrincipalCell.bind(this);
@@ -44,14 +45,15 @@ export default class Survey extends Component {
     this.onChangeStatus = this.onChangeStatus.bind(this);
     this.onChangeRequest = this.onChangeRequest.bind(this);
     this.onChangeCategory = this.onChangeCategory.bind(this);
-
+*/
     this.onChangeGenerics = this.onChangeGenerics.bind(this);
 
     this.getSurvey = this.getSurvey.bind(this);
     this.updateSurvey = this.updateSurvey.bind(this);
     this.deleteSurvey = this.deleteSurvey.bind(this);
     this.onChangeDocFiles = this.onChangeDocFiles.bind(this);
-    this.onChangeDocCategory = this.onChangeDocCategory.bind(this);
+
+    this.onChangeSchoolId = this.onChangeSchoolId.bind(this);
 
     this.saveSurvey = this.saveSurvey.bind(this);
     this.newSurvey = this.newSurvey.bind(this);
@@ -282,7 +284,7 @@ export default class Survey extends Component {
     }));
   }
 
-
+/**
   onChangeSchoolBoardRegisteredName(e) {
     const schoolBoardRegisteredName = e.target.value;
 
@@ -547,6 +549,7 @@ export default class Survey extends Component {
       }
     }));
   }
+*/
 
   onChangeGenerics(e) {
     const name = e.target.name;
@@ -792,7 +795,7 @@ export default class Survey extends Component {
                 id="schoolBoardRegisteredName"
                 required
                 value={currentSurvey.schoolBoardRegisteredName}
-                onChange={this.onChangeSchoolBoardRegisteredName}
+                onChange={this.onChangeGenerics}
                 name="schoolBoardRegisteredName"
                 />
                 </div>
@@ -806,7 +809,7 @@ export default class Survey extends Component {
                 id="schoolBoard"
                 required
                 value={currentSurvey.schoolBoard}
-                onChange={this.onChangeSchoolBoard}
+                onChange={this.onChangeGenerics}
                 name="schoolBoard"
                 />
                 </div>
@@ -829,8 +832,9 @@ export default class Survey extends Component {
                   <select
                     className="form-control input-group-append"
                     placeholder=""
+                    name="docCategory" id="docCategory"
                     value={currentSurvey.docCategory}
-                    onChange={e => this.onChangeDocCategory(e)}
+                    onChange={e => this.onChangeGenerics(e)}
                   >
                     <option value="">附件类别</option>
                     {this.state.docCategories.map((option) => (
@@ -845,13 +849,13 @@ export default class Survey extends Component {
 
 
                   <button onClick={this.saveSurvey}
-                    style={{ position: "absolute", left: "15px" }}
+
                     class="btn btn-success"
                     hidden={!this.state.newsurvey}>
                     提交
                   </button>
                   <button hidden={this.state.newsurvey}
-                    style={{ position: "absolute", left: "15px" }}
+
                     type="submit"
                     className="btn btn-success"
                     onClick={this.updateSurvey}
@@ -865,7 +869,9 @@ export default class Survey extends Component {
                 <div class="w-100"></div>
 
                 {(this.state.readonly) && (
-                  <a target="_blank" href={"/surveys/" + currentSurvey.schoolId} class="btn btn-primary mb-4">
+                  <a target="_blank"
+
+                    href={"/surveys/" + currentSurvey.schoolId} class="btn btn-primary mb-4">
                     编辑
                   </a>
                 )}
@@ -888,7 +894,7 @@ export default class Survey extends Component {
                 id="region"
                 required
                 value={currentSurvey.region}
-                onChange={this.onChangeRegion}
+                onChange={this.onChangeGenerics}
                 name="region"
                 >
                 <option value="">{this.state.readonly ? '' : '请选择' }</option>
@@ -907,7 +913,7 @@ export default class Survey extends Component {
                 id="address"
                 required
                 value={currentSurvey.address}
-                onChange={this.onChangeAddress}
+                onChange={this.onChangeGenerics}
                 name="address"
                 />
                 </div>
@@ -923,7 +929,7 @@ export default class Survey extends Component {
                 id="studentsCount"
                 required
                 value={currentSurvey.studentsCount}
-                onChange={this.onChangeStudentsCount}
+                onChange={this.onChangeGenerics}
                 name="studentsCount"
                 />
                 </div>
@@ -937,7 +943,7 @@ export default class Survey extends Component {
                 id="teachersCount"
                 required
                 value={currentSurvey.teachersCount}
-                onChange={this.onChangeTeachersCount}
+                onChange={this.onChangeGenerics}
                 name="teachersCount"
                 />
                 </div>
@@ -950,7 +956,7 @@ export default class Survey extends Component {
                 id="category"
                 required
                 value={currentSurvey.category}
-                onChange={this.onChangeCategory}
+                onChange={this.onChangeGenerics}
                 name="category"
                 >
                 <option value="">{this.state.readonly ? '' : '请选择' }</option>
@@ -971,7 +977,7 @@ export default class Survey extends Component {
                 id="principal"
                 required
                 value={currentSurvey.principal}
-                onChange={this.onChangePrincipal}
+                onChange={this.onChangeGenerics}
                 name="principal"
                 />
                 </div>
@@ -985,7 +991,7 @@ export default class Survey extends Component {
                 id="principalCell"
                 required
                 value={currentSurvey.principalCell}
-                onChange={this.onChangePrincipalCell}
+                onChange={this.onChangeGenerics}
                 name="principalCell"
                 />
                 </div>
@@ -999,7 +1005,7 @@ export default class Survey extends Component {
                 id="principalWechat"
                 required
                 value={currentSurvey.principalWechat}
-                onChange={this.onChangePrincipalWechat}
+                onChange={this.onChangeGenerics}
                 name="principalWechat"
                 />
                 </div>
@@ -1015,7 +1021,7 @@ export default class Survey extends Component {
                 id="contact"
                 required
                 value={currentSurvey.contact}
-                onChange={this.onChangeContact}
+                onChange={this.onChangeGenerics}
                 name="contact"
                 />
                 </div>
@@ -1029,7 +1035,7 @@ export default class Survey extends Component {
                 id="contactCell"
                 required
                 value={currentSurvey.contactCell}
-                onChange={this.onChangeContactCell}
+                onChange={this.onChangeGenerics}
                 name="contactCell"
                 />
                 </div>
@@ -1043,7 +1049,7 @@ export default class Survey extends Component {
                 id="contactWechat"
                 required
                 value={currentSurvey.contactWechat}
-                onChange={this.onChangeContactWechat}
+                onChange={this.onChangeGenerics}
                 name="contactWechat"
                 />
                 </div>
@@ -1057,7 +1063,7 @@ export default class Survey extends Component {
                 id="phone"
                 required
                 value={currentSurvey.phone}
-                onChange={this.onChangePhone}
+                onChange={this.onChangeGenerics}
                 name="phone"
                 />
                 </div>
@@ -1072,7 +1078,7 @@ export default class Survey extends Component {
                 id="email"
                 required
                 value={currentSurvey.email}
-                onChange={this.onChangeEmail}
+                onChange={this.onChangeGenerics}
                 name="email"
                 />
                 </div>
@@ -1085,7 +1091,7 @@ export default class Survey extends Component {
                 id="status"
                 required
                 value={currentSurvey.status}
-                onChange={this.onChangeStatus}
+                onChange={this.onChangeGenerics}
                 name="status"
                 >
                 <option value="">{this.state.readonly ? '' : '请选择' }</option>
@@ -1103,7 +1109,7 @@ export default class Survey extends Component {
                 id="request"
                 required
                 value={currentSurvey.request}
-                onChange={this.onChangeRequest}
+                onChange={this.onChangeGenerics}
                 name="request"
                 >
                 <option value="">{this.state.readonly ? '' : '请选择' }</option>
@@ -1124,7 +1130,7 @@ export default class Survey extends Component {
                 id="description"
                 required
                 value={currentSurvey.description}
-                onChange={this.onChangeDescription}
+                onChange={this.onChangeGenerics}
                 name="description"
                 />
                 </div>
