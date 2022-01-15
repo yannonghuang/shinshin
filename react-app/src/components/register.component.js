@@ -58,7 +58,9 @@ export default class Register extends Component {
   constructor(props) {
     super(props);
     this.handleRegister = this.handleRegister.bind(this);
+    this.createContactOnly = this.createContactOnly.bind(this);
     this.updateUser = this.updateUser.bind(this);
+    this.updateContactOnly = this.updateContactOnly.bind(this);
     this.getUser = this.getUser.bind(this);
 
     this.onChangeTitle = this.onChangeTitle.bind(this);
@@ -71,6 +73,7 @@ export default class Register extends Component {
     this.onChangePhone = this.onChangePhone.bind(this);
     this.onChangeWechat = this.onChangeWechat.bind(this);
     this.onChangeStartAt = this.onChangeStartAt.bind(this);
+    this.onChangeContactOnly = this.onChangeContactOnly.bind(this);
 
     this.state = {
       id: null,
@@ -88,6 +91,8 @@ export default class Register extends Component {
       lastLogin: null,
       title: "",
       newuser: true,
+
+      contactOnly: false,
 
       titles: [],
       schools: [],
@@ -111,8 +116,47 @@ export default class Register extends Component {
     this.getTitles();
   }
 
+  updateContactOnly() {
+    this.setState({
+      message: "",
+      successful: false
+    });
+
+    var data = {
+        email: this.state.email,
+        roles: this.state.roles,
+        schoolId: this.state.schoolId,
+        chineseName: this.state.chineseName,
+        phone: this.state.phone,
+        wechat: this.state.wechat,
+        title: this.state.title,
+        contactOnly: this.state.contactOnly
+    };
+
+    AuthService.updateContactOnly(
+      this.state.id,
+      data
+    )
+      .then(response => {
+        console.log(response.data);
+        this.setState({
+          message: "用户信息成功更新!",
+          successful: true
+        });
+      })
+      .catch(e => {
+        this.setState({
+          message: "用户信息修改失败：" + e,
+          successful: false
+        });
+        console.log(e);
+      });
+  }
+
   updateUser(e) {
     e.preventDefault();
+
+    if(this.state.contactOnly) return this.updateContactOnly();
 
     this.setState({
       message: "",
@@ -183,6 +227,8 @@ export default class Register extends Component {
           createdAt: response.data.createdAt,
           lastLogin: response.data.lastLogin,
           title: response.data.title,
+
+          contactOnly: response.data.contactOnly,
 
           //newuser: false
         });
@@ -260,6 +306,12 @@ export default class Register extends Component {
     });
   }
 
+  onChangeContactOnly(e) {
+    this.setState({
+      contactOnly: e.target.checked
+    });
+  }
+
   onChangeChineseName(e) {
     this.setState({
       chineseName: e.target.value
@@ -314,8 +366,44 @@ export default class Register extends Component {
     });
   }
 
+  createContactOnly() {
+
+      AuthService.createContactOnly({
+        email: this.state.email,
+        roles: this.state.roles,
+        schoolId: this.state.schoolId,
+        chineseName: this.state.chineseName,
+        phone: this.state.phone,
+        wechat: this.state.wechat,
+        title: this.state.title,
+        contactOnly: this.state.contactOnly
+      }).then(
+        response => {
+          this.setState({
+            message: response.data.message,
+            successful: true
+          });
+        },
+        error => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+
+          this.setState({
+            successful: false,
+            message: '创建用户异常，' + resMessage
+          });
+        }
+      );
+  }
+
   handleRegister(e) {
     e.preventDefault();
+
+    if (this.state.contactOnly) return this.createContactOnly();
 
     this.setState({
       message: "",
@@ -414,6 +502,18 @@ export default class Register extends Component {
           {!this.state.successful && (
             <div class="row">
                 <div class="form-group col-md-4">
+                  <label htmlFor="contactOnly">仅联络方式</label>
+                  <Input
+                    readonly={!this.state.newuser?"":false}
+                    type="checkbox"
+                    class="form-control"
+                    name="contactOnly"
+                    checked={this.state.contactOnly}
+                    onChange={this.onChangeContactOnly}
+                  />
+                </div>
+
+                <div class="form-group col-md-4">
                   <label htmlFor="username">用户名</label>
                   <Input
                     readonly={!this.state.newuser?"":false}
@@ -459,6 +559,7 @@ export default class Register extends Component {
                     readonly={this.state.readonly?"":false}
                     type="text"
                     class="form-control"
+                    required
                     name="chineseName"
                     value={this.state.chineseName}
                     onChange={this.onChangeChineseName}

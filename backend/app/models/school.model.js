@@ -51,6 +51,21 @@ module.exports = (sequelize, Sequelize) => {
     donor: {
       type: Sequelize.STRING
     },
+    city: {
+      type: Sequelize.STRING
+    },
+    county: {
+      type: Sequelize.STRING
+    },
+    community: {
+      type: Sequelize.STRING
+    },
+    principalId: {
+      type: Sequelize.INTEGER
+    },
+    contactId: {
+      type: Sequelize.INTEGER
+    },
   });
 
   return School;

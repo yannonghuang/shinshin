@@ -118,7 +118,7 @@ class SchoolDataService {
   reduce = (bigObj, smallObj) => {
     var result = {};
     Object.keys(smallObj).forEach(key => {
-      result = Object.assign(result, {[key]: bigObj[key]});
+      Object.assign(result, {[key]: bigObj[key]});
     });
     return result;
   }

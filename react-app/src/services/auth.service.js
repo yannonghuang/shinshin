@@ -73,6 +73,14 @@ class AuthService {
     });
   }
 
+  createContactOnly(data) {
+    return axios.post(API_URL + "createContactOnly", data, { headers: authHeader() });
+  }
+
+  updateContactOnly(id, data) {
+    return axios.put(API_URL + "users/updateContactOnly/" + `${id}`, data, { headers: authHeader() });
+  }
+
   getCurrentUser() {
     return JSON.parse(localStorage.getItem('user'));
   }

@@ -30,6 +30,9 @@ module.exports = (sequelize, Sequelize) => {
     emailVerified: {
       type: Sequelize.BOOLEAN
     },
+    contactOnly: {
+      type: Sequelize.BOOLEAN
+    },
   });
 
   return User;

@@ -52,4 +52,14 @@ module.exports = function(app) {
   app.put("/api/auth/users/update/:id",
     [authJwt.verifyToken],
     controller.update);
+
+  app.post(
+    "/api/auth/createContactOnly",
+    [authJwt.verifyToken],
+    controller.createContactOnly
+  );
+
+  app.put("/api/auth/users/updateContactOnly/:id",
+    [authJwt.verifyToken],
+    controller.updateContactOnly);
 };

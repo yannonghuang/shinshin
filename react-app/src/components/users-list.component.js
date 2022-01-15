@@ -282,6 +282,18 @@ const UsersList = (props) => {
         accessor: "createdAt",
       },
       {
+        Header: "仅联络方式",
+        accessor: 'contactOnly',
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+                {usersRef.current[rowIdx].contactOnly ? '是' : '否'}
+            </div>
+          );
+        },
+      },
+      {
         Header: "操作",
         accessor: "actions",
         disableSortBy: true,

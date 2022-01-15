@@ -82,7 +82,7 @@ exports.findOne = (req, res) => {
 
   User.findByPk(id, {
   attributes: [
-        'id', 'username', 'email', 'chineseName', 'phone', 'wechat', 'schoolId', 'title',
+        'id', 'username', 'email', 'chineseName', 'phone', 'wechat', 'schoolId', 'title', 'contactOnly',
         [db.Sequelize.fn('date_format', db.Sequelize.col("startAt"), '%Y-%m-%d'), "startAt"],
         [db.Sequelize.fn('date_format', db.Sequelize.col("users.createdAt"), '%Y-%m-%d'), "createdAt"],
         [db.Sequelize.fn('date_format', db.Sequelize.col("lastLogin"), '%Y-%m-%d'), "lastLogin"],
@@ -178,7 +178,7 @@ var orderbyObject = null;
   offset: offset,
   subQuery: false,
   attributes: [
-        'id', 'username', 'email', 'chineseName', 'phone', 'wechat', 'title',
+        'id', 'username', 'email', 'chineseName', 'phone', 'wechat', 'title', 'contactOnly',
         [db.Sequelize.fn('date_format', db.Sequelize.col("users.startAt"), '%Y-%m-%d'), "startAt"],
         [db.Sequelize.fn('date_format', db.Sequelize.col("users.createdAt"), '%Y-%m-%d'), "createdAt"],
         [db.Sequelize.fn('date_format', db.Sequelize.col("lastLogin"), '%Y-%m-%d'), "lastLogin"],
@@ -278,6 +278,76 @@ exports.signup = (req, res) => {
     })
     .catch(err => {
       res.status(500).send({ message: '创建用户异常，密码是必填项。。。' + err.message });
+    });
+};
+
+
+// Update a user by the id in the request
+exports.updateContactOnly = (req, res) => {
+  const id = req.params.id;
+
+  User.update(req.body, {
+    where: { id: id }
+  })
+    .then(num => {
+      if (num == 1) {
+        User.findByPk(id).then(user=>{
+          if (req.body.roles) {
+            Role.findAll({
+              where: {
+                name: {
+                  [Op.or]: req.body.roles
+                }
+              }
+            }).then(roles => {
+              user.setRoles(roles).then(() => {
+                res.send({ message: "User and roles were updated successfully!" });
+              });
+            });
+          } else {
+            res.send({message: "User was updated successfully."});
+          }
+        });
+      } else {
+        console.log("Cannot update User with id=${id}. Maybe User was not found or req.body is empty!");
+        res.send({
+          message: `Cannot update User with id=${id}. Maybe User was not found or req.body is empty!`
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err.message || "Error updating User with id=" + id);
+      res.status(500).send({
+        message: "Error updating User with id=" + id
+      });
+    });
+};
+
+exports.createContactOnly = (req, res) => {
+  // Save User to Database
+  User.create(req.body)
+    .then(user => {
+      if (req.body.roles) {
+        Role.findAll({
+          where: {
+            name: {
+              [Op.or]: req.body.roles
+            }
+          }
+        }).then(roles => {
+          user.setRoles(roles).then(() => {
+            res.send({ message: "User was registered successfully!" });
+          });
+        });
+      } else {
+        // user role = 1
+        user.setRoles([1]).then(() => {
+          res.send({ message: "User was registered successfully!" });
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({ message: '创建用户异常，。。。' + err.message });
     });
 };
 

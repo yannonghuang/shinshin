@@ -8,6 +8,7 @@ import Divider from '@material-ui/core/Divider';
 
 import Select from 'react-select';
 
+import UserDataService from "../services/auth.service";
 import SurveyDataService from "../services/survey.service";
 import SchoolDataService from "../services/school.service";
 import DocumentDataService from "../services/document.service";
@@ -54,6 +55,8 @@ export default class Survey extends Component {
     this.onChangeDocFiles = this.onChangeDocFiles.bind(this);
 
     this.onChangeSchoolId = this.onChangeSchoolId.bind(this);
+    this.onChangePrincipalId = this.onChangePrincipalId.bind(this);
+    this.onChangeContactId = this.onChangeContactId.bind(this);
 
     this.saveSurvey = this.saveSurvey.bind(this);
     this.newSurvey = this.newSurvey.bind(this);
@@ -77,12 +80,17 @@ export default class Survey extends Component {
         schoolBoard: null,
         schoolBoardRegisteredName: null,
         region: "",
+        city: "",
+        county: "",
+        community: "",
         address: "",
         phone: "",
         email: "",
         studentsCount: 0,
         teachersCount: 0,
         description: "",
+        principalId: null,
+        contactId: null,
 
         stayBehindCount: 0,
         boarderCount: 0,
@@ -109,6 +117,7 @@ export default class Survey extends Component {
         libraryExists: false,
         bookCornersCount: 0,
         booksCount: 0,
+
       },
 
       embedded: false,
@@ -116,6 +125,8 @@ export default class Survey extends Component {
       readonly: true,
       regions: [],
       docCategories: [],
+
+      users: [],
 
       schools: [],
       stages: [],
@@ -159,6 +170,52 @@ export default class Survey extends Component {
     this.getRequests();
     this.getStatuses();
     this.getStages();
+    this.getUsers();
+  }
+
+
+  convertUser(users) {
+    const result = [];
+    if (users) {
+    for (var i = 0; i < users.length; i++) {
+      result.push({value: users[i].id,
+        label: users[i].chineseName });
+    }
+    return result;
+    }
+  }
+
+  displayUser(userId) {
+    if (this.state.users) {
+      for (var i = 0; i < this.state.users.length; i++) {
+        if (this.state.users[i].value == userId)
+          return this.state.users[i];
+      }
+      return [];
+    }
+  }
+
+  displayNameUser(userId) {
+    if (this.state.users) {
+      for (var i = 0; i < this.state.users.length; i++) {
+        if (this.state.users[i].value == userId)
+          return this.state.users[i].label ? this.state.users[i].label : '中文名';
+      }
+      return '';
+    }
+  }
+
+  getUsers() {
+    UserDataService.getAll2({schoolId: this.state.currentSurvey.schoolId})
+      .then(response => {
+        this.setState({
+          users: this.convertUser(response.data.users)
+        });
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
   }
 
   getSchools() {
@@ -551,6 +608,24 @@ export default class Survey extends Component {
   }
 */
 
+  onChangePrincipalId(e) {
+    this.setState(prevState => ({
+      currentSurvey: {
+        ...prevState.currentSurvey,
+        principalId: e.value //.target.value
+      }
+    }));
+  }
+
+  onChangeContactId(e) {
+    this.setState(prevState => ({
+      currentSurvey: {
+        ...prevState.currentSurvey,
+        contactId: e.value //.target.value
+      }
+    }));
+  }
+
   onChangeGenerics(e) {
     const name = e.target.name;
     const type = e.target.type;
@@ -942,7 +1017,50 @@ export default class Survey extends Component {
                 </select>
                 </div>
 
-                <div class="form-group col-md-9">
+
+                <div class="form-group col-md-3">
+                <label htmlFor="city">市</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="city"
+                required
+                value={currentSurvey.city}
+                onChange={this.onChangeGenerics}
+                name="city"
+                />
+                </div>
+
+                <div class="form-group col-md-3">
+                <label htmlFor="county">县</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="county"
+                required
+                value={currentSurvey.county}
+                onChange={this.onChangeGenerics}
+                name="county"
+                />
+                </div>
+
+                <div class="form-group col-md-3">
+                <label htmlFor="community">乡镇</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="community"
+                required
+                value={currentSurvey.community}
+                onChange={this.onChangeGenerics}
+                name="community"
+                />
+                </div>
+
+                <div class="form-group col-md-12">
                 <label htmlFor="address">地址</label>
                 <input
                 readonly={this.state.readonly?"":false}
@@ -1007,92 +1125,44 @@ export default class Survey extends Component {
                 <div class="w-100"></div>
 
                 <div class="form-group col-md-4">
-                <label htmlFor="principal">校长</label>
-                <input
-                readonly={this.state.readonly?"":false}
-                type="text"
-                class="form-control"
-                id="principal"
-                required
-                value={currentSurvey.principal}
-                onChange={this.onChangeGenerics}
-                name="principal"
-                />
+                  <label htmlFor="principalId">校长</label>
+                  {!this.state.readonly
+                  ? (<Select onChange={this.onChangePrincipalId.bind(this)}
+                    readonly={this.state.readonly?"":false}
+                    class="form-control"
+                    id="principalId"
+                    value={this.displayUser(currentSurvey.principalId)}
+                    name="principalId"
+                    options={this.state.users}
+                  />)
+                  : (<Link
+                    to={ "/usersView/" + currentSurvey.principalId}
+                    id="principalId"
+                    name="principalId"
+                  >
+                    {this.displayNameUser(currentSurvey.principalId)}
+                  </Link>)}
                 </div>
 
                 <div class="form-group col-md-4">
-                <label htmlFor="principalCell">校长手机</label>
-                <input
-                readonly={this.state.readonly?"":false}
-                type="text"
-                class="form-control"
-                id="principalCell"
-                required
-                value={currentSurvey.principalCell}
-                onChange={this.onChangeGenerics}
-                name="principalCell"
-                />
+                  <label htmlFor="contactId">联络人</label>
+                  {!this.state.readonly
+                  ? (<Select onChange={this.onChangeContactId.bind(this)}
+                    readonly={this.state.readonly?"":false}
+                    class="form-control"
+                    id="contactId"
+                    value={this.displayUser(currentSurvey.contactId)}
+                    name="contactId"
+                    options={this.state.users}
+                  />)
+                  : (<Link
+                    to={ "/usersView/" + currentSurvey.contactId}
+                    id="contactId"
+                    name="contactId"
+                  >
+                    {this.displayNameUser(currentSurvey.contactId)}
+                  </Link>)}
                 </div>
-
-                <div class="form-group col-md-4">
-                <label htmlFor="principalWechat">校长微信</label>
-                <input
-                readonly={this.state.readonly?"":false}
-                type="text"
-                class="form-control"
-                id="principalWechat"
-                required
-                value={currentSurvey.principalWechat}
-                onChange={this.onChangeGenerics}
-                name="principalWechat"
-                />
-                </div>
-
-                <div class="w-100"></div>
-
-                <div class="form-group col-md-4">
-                <label htmlFor="contact">联络人</label>
-                <input
-                readonly={this.state.readonly?"":false}
-                type="text"
-                class="form-control"
-                id="contact"
-                required
-                value={currentSurvey.contact}
-                onChange={this.onChangeGenerics}
-                name="contact"
-                />
-                </div>
-
-                <div class="form-group col-md-4">
-                <label htmlFor="contactCell">联络人手机</label>
-                <input
-                readonly={this.state.readonly?"":false}
-                type="text"
-                class="form-control"
-                id="contactCell"
-                required
-                value={currentSurvey.contactCell}
-                onChange={this.onChangeGenerics}
-                name="contactCell"
-                />
-                </div>
-
-                <div class="form-group col-md-4">
-                <label htmlFor="contactWechat">联络人微信</label>
-                <input
-                readonly={this.state.readonly?"":false}
-                type="text"
-                class="form-control"
-                id="contactWechat"
-                required
-                value={currentSurvey.contactWechat}
-                onChange={this.onChangeGenerics}
-                name="contactWechat"
-                />
-                </div>
-
-
 
                 <div class="w-100"></div>
 

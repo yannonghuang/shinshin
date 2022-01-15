@@ -130,6 +130,21 @@ module.exports = (sequelize, Sequelize) => {
     booksCount: {
       type: Sequelize.INTEGER
     },
+    city: {
+      type: Sequelize.STRING
+    },
+    county: {
+      type: Sequelize.STRING
+    },
+    community: {
+      type: Sequelize.STRING
+    },
+    principalId: {
+      type: Sequelize.INTEGER
+    },
+    contactId: {
+      type: Sequelize.INTEGER
+    },
   });
 
   return Survey;

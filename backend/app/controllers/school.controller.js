@@ -344,7 +344,7 @@ exports.findAll2 = (req, res) => {
 //  offset: offset,
   subQuery: false,
   attributes: ['id', 'code', 'name', 'description', 'principal', 'region', 'address', 'phone', 'teachersCount', 'studentsCount',
-            'stage', 'status', 'request', 'category',
+            'stage', 'status', 'request', 'category', 'principalId', 'contactId',
             [db.Sequelize.fn("year", db.Sequelize.col("schools.startAt")), "startAt"],
             [db.Sequelize.fn("COUNT", db.Sequelize.col("projects.id")), "projectsCount"],
             [db.Sequelize.fn("COUNT", db.Sequelize.col("projects.responseId")), "responsesCount"], //`projects->response`.`id`
@@ -496,6 +496,7 @@ exports.findOne = (req, res) => {
                          'request',
                          'category',
                          'donor',
+                         'principalId', 'contactId',
                           //[db.Sequelize.fn('date_format', db.Sequelize.col("startAt"), '%Y-%m-%d'), "startAt"],
                           [db.Sequelize.fn("year", db.Sequelize.col("schools.startAt")), "startAt"],
                           [db.Sequelize.fn("year", db.Sequelize.col("schools.lastVisit")), "lastVisit"],

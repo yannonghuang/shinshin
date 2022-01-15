@@ -7,7 +7,9 @@ import 'react-tabs/style/react-tabs.css';
 import $ from "jquery"; //Load jquery
 import { Link } from "react-router-dom";
 import Divider from '@material-ui/core/Divider';
+import Select from 'react-select';
 
+import UserDataService from "../services/auth.service";
 import Survey from './survey.component.js';
 import CommentsList from './comments-list.component.js';
 import ProjectsList from './projects-list.component.js';
@@ -60,6 +62,9 @@ export default class School extends Component {
     this.onChangeLastVisit = this.onChangeLastVisit.bind(this);
     this.onChangeYPLastVisit = this.onChangeYPLastVisit.bind(this);
 
+    this.onChangePrincipalId = this.onChangePrincipalId.bind(this);
+    this.onChangeContactId = this.onChangeContactId.bind(this);
+
     this.getSchool = this.getSchool.bind(this);
     this.getSchoolPhoto = this.getSchoolPhoto.bind(this);
     //this.updatePublished = this.updatePublished.bind(this);
@@ -102,17 +107,24 @@ export default class School extends Component {
         schoolBoard: null,
         schoolBoardRegisteredName: null,
         region: "",
+        city: "",
+        county: "",
+        community: "",
         address: "",
         phone: "",
         studentsCount: 0,
         teachersCount: 0,
         description: "",
+        principalId: null,
+        contactId: null,
       },
 
       newschool: true,
       readonly: true,
       regions: [],
       docCategories: [],
+
+      users: [],
 
       stages: [],
       statuses: [],
@@ -141,6 +153,52 @@ export default class School extends Component {
     this.getRequests();
     this.getStatuses();
     this.getStages();
+    this.getUsers();
+  }
+
+  convert(users) {
+    const result = [];
+    if (users) {
+    for (var i = 0; i < users.length; i++) {
+      result.push({value: users[i].id,
+        label: users[i].chineseName });
+    }
+    return result;
+    }
+  }
+
+  display(userId) {
+    if (this.state.users) {
+      for (var i = 0; i < this.state.users.length; i++) {
+        if (this.state.users[i].value == userId)
+          return this.state.users[i];
+      }
+      return [];
+    }
+  }
+
+  displayName(userId) {
+    if (this.state.users) {
+      for (var i = 0; i < this.state.users.length; i++) {
+        if (this.state.users[i].value == userId)
+          return this.state.users[i].label ? this.state.users[i].label : '中文名';
+      }
+      return '';
+    }
+  }
+
+  getUsers() {
+    UserDataService.getAll2({schoolId: this.state.currentSchool.id})
+      .then(response => {
+        this.setState({
+          users: this.convert(response.data.users)
+        });
+
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
   }
 
   getCategories() {
@@ -219,6 +277,24 @@ export default class School extends Component {
       .catch(e => {
         console.log(e);
       });
+  }
+
+  onChangePrincipalId(e) {
+    this.setState(prevState => ({
+      currentSchool: {
+        ...prevState.currentSchool,
+        principalId: e.value //.target.value
+      }
+    }));
+  }
+
+  onChangeContactId(e) {
+    this.setState(prevState => ({
+      currentSchool: {
+        ...prevState.currentSchool,
+        contactId: e.value //.target.value
+      }
+    }));
   }
 
   onChangeGenerics(e) {
@@ -546,7 +622,38 @@ export default class School extends Component {
   }
 */
 
-  getSchool(schoolId) {
+  async getSchool(schoolId) {
+    const {
+      id,
+      photo,
+      file,
+      docFiles,
+      docCategory,
+      ...base} = this.state.currentSchool;
+
+    try {
+      let rSchool = await SchoolDataService.get(schoolId);
+      let rSurvey = await SurveyDataService.get(schoolId);
+
+      const {id, ...rSurveyButId} = rSurvey.data;
+      let x = {...base, ...rSchool.data, ...rSurveyButId};
+      let y = SchoolDataService.reduce(x, base);
+
+      await this.setState({
+        currentSchool: {
+          ...y,
+          id: schoolId
+        }
+
+        });
+
+    } catch (err) {
+      alert(err.message);
+    };
+
+  }
+
+  SAVE_getSchool(schoolId) {
     const {
       id,
       photo,
@@ -557,19 +664,24 @@ export default class School extends Component {
 
     SchoolDataService.get(schoolId)
       .then(response => {
-
+//alert(JSON.stringify(response.data))
         SurveyDataService.get(schoolId)
         .then (r => {
           this.setState({
               currentSchool: {...others, ...response.data}
             }, () => {
-            const {id, ...others2} = SchoolDataService.reduce(r.data, this.state.currentSchool);
+alert(JSON.stringify(this.state.currentSchool))
+            let xxx= SchoolDataService.reduce(r.data, others);
+            const {id, ...others2} = xxx;
+alert(JSON.stringify(xxx))
             this.setState(prevState => ({
                     currentSchool: {
-                      id: prevState.currentSchool.id,
+                      ...prevState.currentSchool,
                       ...others2
                     }
-            }));
+            }), () => {
+alert(JSON.stringify(this.state.currentSchool))
+            });
           });
 
         })
@@ -920,19 +1032,6 @@ export default class School extends Component {
                 <img src={currentSchool.photo} height="250" width="350" readonly={this.state.readonly?"":false} />
                 </div>
 
-                <div class="form-group">
-                <label htmlFor="name">学校名称</label>
-                <textarea
-                readonly={this.state.readonly?"":false}
-                class="form-control"
-                id="name"
-                cols="31"
-                required
-                value={currentSchool.name}
-                onChange={this.onChangeGenerics}
-                name="name"
-                />
-                </div>
 
                 <div class="form-group">
                 <label htmlFor="code">学校编号</label>
@@ -949,10 +1048,25 @@ export default class School extends Component {
                 </div>
 
                 <div class="form-group">
-                <label htmlFor="schoolBoardRegisteredName">教育局校名</label>
-                <input
+                <label htmlFor="name">学校名称</label>
+                <textarea
                 readonly={this.state.readonly?"":false}
-                type="text"
+                class="form-control"
+                id="name"
+                cols="31"
+                required
+                value={currentSchool.name}
+                onChange={this.onChangeGenerics}
+                name="name"
+                />
+                </div>
+
+
+                <div class="form-group">
+                <label htmlFor="schoolBoardRegisteredName">教育局校名</label>
+                <textarea
+                readonly={this.state.readonly?"":false}
+                cols="31"
                 class="form-control"
                 id="schoolBoardRegisteredName"
                 required
@@ -964,9 +1078,9 @@ export default class School extends Component {
 
                 <div class="form-group">
                 <label htmlFor="schoolBoard">教育局</label>
-                <input
+                <textarea
                 readonly={this.state.readonly?"":false}
-                type="text"
+                cols="31"
                 class="form-control"
                 id="schoolBoard"
                 required
@@ -991,33 +1105,6 @@ export default class School extends Component {
 
             <div class="col-md-8">
               <div class="row">
-
-                <div class="form-group col-md-4">
-                <div>
-                <div class="side"><label htmlFor="lastVisit">最近访校年份</label></div>
-                <div class="side">
-                {!this.state.readonly &&
-                (<YearPicker
-                yearArray={['2019', '2020']}
-                value={currentSchool.lastVisit}
-                onSelect={this.onChangeYPLastVisit}
-                hideInput={true}
-                minRange={1995}
-                maxRange={2022}
-                />)}
-                </div>
-                </div>
-                <input
-                readonly=""
-                type="text"
-                class="form-control"
-                id="lastVisit"
-                required
-                value={currentSchool.lastVisit}
-                onChange={this.onChangeLastVisit}
-                name="lastVisit"
-                />
-                </div>
 
                 <div class="form-group col-md-4">
                 <div>
@@ -1057,6 +1144,33 @@ export default class School extends Component {
                 value={currentSchool.donor}
                 onChange={this.onChangeGenerics}
                 name="donor"
+                />
+                </div>
+
+                <div class="form-group col-md-4">
+                <div>
+                <div class="side"><label htmlFor="lastVisit">最近访校年份</label></div>
+                <div class="side">
+                {!this.state.readonly &&
+                (<YearPicker
+                yearArray={['2019', '2020']}
+                value={currentSchool.lastVisit}
+                onSelect={this.onChangeYPLastVisit}
+                hideInput={true}
+                minRange={1995}
+                maxRange={2022}
+                />)}
+                </div>
+                </div>
+                <input
+                readonly=""
+                type="text"
+                class="form-control"
+                id="lastVisit"
+                required
+                value={currentSchool.lastVisit}
+                onChange={this.onChangeLastVisit}
+                name="lastVisit"
                 />
                 </div>
 
@@ -1137,7 +1251,49 @@ export default class School extends Component {
                 </select>
                 </div>
 
-                <div class="form-group col-md-9">
+                <div class="form-group col-md-3">
+                <label htmlFor="city">市</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="city"
+                required
+                value={currentSchool.city}
+                onChange={this.onChangeGenerics}
+                name="city"
+                />
+                </div>
+
+                <div class="form-group col-md-3">
+                <label htmlFor="county">县</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="county"
+                required
+                value={currentSchool.county}
+                onChange={this.onChangeGenerics}
+                name="county"
+                />
+                </div>
+
+                <div class="form-group col-md-3">
+                <label htmlFor="community">乡镇</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="community"
+                required
+                value={currentSchool.community}
+                onChange={this.onChangeGenerics}
+                name="community"
+                />
+                </div>
+
+                <div class="form-group col-md-12">
                 <label htmlFor="address">地址</label>
                 <input
                 readonly={this.state.readonly?"":false}
@@ -1202,89 +1358,43 @@ export default class School extends Component {
                 <div class="w-100"></div>
 
                 <div class="form-group col-md-4">
-                <label htmlFor="principal">校长</label>
-                <input
-                readonly={this.state.readonly?"":false}
-                type="text"
-                class="form-control"
-                id="principal"
-                required
-                value={currentSchool.principal}
-                onChange={this.onChangeGenerics}
-                name="principal"
-                />
+                  <label htmlFor="principalId">校长</label>
+                  {!this.state.readonly
+                  ? (<Select onChange={this.onChangePrincipalId.bind(this)}
+                    readonly={this.state.readonly?"":false}
+                    class="form-control"
+                    id="principalId"
+                    value={this.display(currentSchool.principalId)}
+                    name="principalId"
+                    options={this.state.users}
+                  />)
+                  : (<Link
+                    to={ "/usersView/" + currentSchool.principalId}
+                    id="principalId"
+                    name="principalId"
+                  >
+                    {this.displayName(currentSchool.principalId)}
+                  </Link>)}
                 </div>
 
                 <div class="form-group col-md-4">
-                <label htmlFor="principalCell">校长手机</label>
-                <input
-                readonly={this.state.readonly?"":false}
-                type="text"
-                class="form-control"
-                id="principalCell"
-                required
-                value={currentSchool.principalCell}
-                onChange={this.onChangeGenerics}
-                name="principalCell"
-                />
-                </div>
-
-                <div class="form-group col-md-4">
-                <label htmlFor="principalWechat">校长微信</label>
-                <input
-                readonly={this.state.readonly?"":false}
-                type="text"
-                class="form-control"
-                id="principalWechat"
-                required
-                value={currentSchool.principalWechat}
-                onChange={this.onChangeGenerics}
-                name="principalWechat"
-                />
-                </div>
-
-                <div class="w-100"></div>
-
-                <div class="form-group col-md-4">
-                <label htmlFor="contact">联络人</label>
-                <input
-                readonly={this.state.readonly?"":false}
-                type="text"
-                class="form-control"
-                id="contact"
-                required
-                value={currentSchool.contact}
-                onChange={this.onChangeGenerics}
-                name="contact"
-                />
-                </div>
-
-                <div class="form-group col-md-4">
-                <label htmlFor="contactCell">联络人手机</label>
-                <input
-                readonly={this.state.readonly?"":false}
-                type="text"
-                class="form-control"
-                id="contactCell"
-                required
-                value={currentSchool.contactCell}
-                onChange={this.onChangeGenerics}
-                name="contactCell"
-                />
-                </div>
-
-                <div class="form-group col-md-4">
-                <label htmlFor="contactWechat">联络人微信</label>
-                <input
-                readonly={this.state.readonly?"":false}
-                type="text"
-                class="form-control"
-                id="contactWechat"
-                required
-                value={currentSchool.contactWechat}
-                onChange={this.onChangeGenerics}
-                name="contactWechat"
-                />
+                  <label htmlFor="contactId">联络人</label>
+                  {!this.state.readonly
+                  ? (<Select onChange={this.onChangeContactId.bind(this)}
+                    readonly={this.state.readonly?"":false}
+                    class="form-control"
+                    id="contactId"
+                    value={this.display(currentSchool.contactId)}
+                    name="contactId"
+                    options={this.state.users}
+                  />)
+                  : (<Link
+                    to={ "/usersView/" + currentSchool.contactId}
+                    id="contactId"
+                    name="contactId"
+                  >
+                    {this.displayName(currentSchool.contactId)}
+                  </Link>)}
                 </div>
 
                 <div class="w-100"></div>
