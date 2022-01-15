@@ -962,7 +962,10 @@ export default class Survey extends Component {
 
                 <div class="w-100"></div>
 
-                <div class="select-container form-group col-md-5">
+                <div class="col-md-4">
+                </div>
+
+                <div class="select-container form-group col-md-4">
                 <label htmlFor="status">学校状态</label>
                 <select
                 readonly={this.state.readonly?"":false}
@@ -980,7 +983,7 @@ export default class Survey extends Component {
                 </select>
                 </div>
 
-                <div class="select-container form-group col-md-5">
+                <div class="select-container form-group col-md-4">
                 <label htmlFor="request">学校需求状态</label>
                 <select
                 readonly={this.state.readonly?"":false}
