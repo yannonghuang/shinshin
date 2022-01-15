@@ -141,9 +141,10 @@ export default class School extends Component {
     this.setState({newschool: newschool});
     this.setState({readonly: window.location.pathname.includes('View')});
 
+    const schoolId = this.props.match? this.props.match.params.id : this.props.id;
     if (!newschool) {
-      this.getSchool(this.props.match? this.props.match.params.id : this.props.id);
-      this.getSchoolPhoto(this.props.match? this.props.match.params.id : this.props.id);
+      this.getSchool(schoolId);
+      this.getSchoolPhoto(schoolId);
     }
 
     this.getRegions();
@@ -153,7 +154,7 @@ export default class School extends Component {
     this.getRequests();
     this.getStatuses();
     this.getStages();
-    this.getUsers();
+    this.getUsers(schoolId);
   }
 
   convert(users) {
@@ -187,9 +188,9 @@ export default class School extends Component {
     }
   }
 
-  getUsers() {
+  getUsers(schoolId) {
     //UserDataService.getAll2({schoolId: this.state.currentSchool.id})
-    UserDataService.getAllSimple({schoolId: this.state.currentSchool.id})
+    UserDataService.getAllSimple({schoolId: schoolId})
       .then(response => {
         this.setState({
           users: this.convert(response.data)

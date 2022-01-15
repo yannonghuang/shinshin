@@ -170,7 +170,7 @@ export default class Survey extends Component {
     this.getRequests();
     this.getStatuses();
     this.getStages();
-    this.getUsers();
+    this.getUsers(schoolId);
   }
 
 
@@ -205,9 +205,9 @@ export default class Survey extends Component {
     }
   }
 
-  getUsers() {
+  getUsers(schoolId) {
     //UserDataService.getAll2({schoolId: this.state.currentSurvey.schoolId})
-    UserDataService.getAllSimple({schoolId: this.state.currentSurvey.schoolId})
+    UserDataService.getAllSimple({schoolId: schoolId})
       .then(response => {
         this.setState({
           users: this.convertUser(response.data)
