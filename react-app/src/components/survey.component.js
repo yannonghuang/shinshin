@@ -206,10 +206,11 @@ export default class Survey extends Component {
   }
 
   getUsers() {
-    UserDataService.getAll2({schoolId: this.state.currentSurvey.schoolId})
+    //UserDataService.getAll2({schoolId: this.state.currentSurvey.schoolId})
+    UserDataService.getAllSimple({schoolId: this.state.currentSurvey.schoolId})
       .then(response => {
         this.setState({
-          users: this.convertUser(response.data.users)
+          users: this.convertUser(response.data)
         });
         console.log(response);
       })

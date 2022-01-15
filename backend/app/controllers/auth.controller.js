@@ -112,6 +112,26 @@ exports.findOne = (req, res) => {
     });
 };
 
+exports.findAllSimple = (req, res) => {
+  const schoolId = req.body.schoolId;
+  var condition = schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null;
+
+  User.findAll({
+    where: condition,
+    attributes: ['id', 'username', 'chineseName' ],
+    order: [ ['chineseName', 'asc'] ]
+  })
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while retrieving responses."
+        });
+      });
+}
+
 exports.findAll2 = (req, res) => {
   const username = req.body.username;
   const searchRole = req.body.searchRole;

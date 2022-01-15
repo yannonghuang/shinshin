@@ -39,6 +39,11 @@ module.exports = function(app) {
       controller.findAll2
     );
 
+  // Retrieve "simple" list of users
+  app.post("/api/auth/usersSimple",
+    [authJwt.verifyToken],
+    controller.findAllSimple);
+
   // Delete a user with id
   app.delete("/api/auth/users/:id",
     [authJwt.verifyToken],

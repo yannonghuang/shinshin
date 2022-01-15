@@ -105,6 +105,10 @@ class AuthService {
     return axios.post(API_URL + "users", data, { headers: authHeader() });
   }
 
+  getAllSimple(data) {
+    return axios.post(API_URL + "usersSimple", data, { headers: authHeader() });
+  }
+
   delete(id) {
     return axios.delete(API_URL + "users/" + `${id}`, { headers: authHeader() });
   }

@@ -188,15 +188,17 @@ export default class School extends Component {
   }
 
   getUsers() {
-    UserDataService.getAll2({schoolId: this.state.currentSchool.id})
+    //UserDataService.getAll2({schoolId: this.state.currentSchool.id})
+    UserDataService.getAllSimple({schoolId: this.state.currentSchool.id})
       .then(response => {
         this.setState({
-          users: this.convert(response.data.users)
+          users: this.convert(response.data)
         });
 
         console.log(response);
       })
       .catch(e => {
+        alert(JSON.stringify(e))
         console.log(e);
       });
   }
