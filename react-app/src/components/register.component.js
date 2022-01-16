@@ -4,6 +4,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 import Select from 'react-select';
+import { Link } from "react-router-dom";
 
 import emailjs, { init } from "emailjs-com";
 
@@ -271,6 +272,16 @@ export default class Register extends Component {
           return this.state.schools[i];
       }
       return [];
+    }
+  }
+
+  displayName(schoolId) {
+    if (this.state.schools) {
+      for (var i = 0; i < this.state.schools.length; i++) {
+        if (this.state.schools[i].value == schoolId)
+          return this.state.schools[i].label ? this.state.schools[i].label : '学校名';
+      }
+      return '';
     }
   }
 
@@ -640,14 +651,22 @@ export default class Register extends Component {
 
                 <div class="form-group col-md-4">
                   <label htmlFor="schoolId">所属学校</label>
-                  <Select onChange={this.onChangeSchoolId.bind(this)}
+                  {!this.state.readonly
+                  ? (<Select onChange={this.onChangeSchoolId.bind(this)}
                     readonly={this.state.readonly?"":false}
                     class="form-control"
                     id="schoolId"
                     value={this.display(this.state.schoolId)}
                     name="schoolId"
                     options={this.state.schools}
-                  />
+                  />)
+                  : (<Link
+                    to={ "/schoolsView/" + this.state.schoolId}
+                    id="schoolId"
+                    name="schoolId"
+                  >
+                    {this.displayName(this.state.schoolId)}
+                  </Link>)}
                 </div>
 
 
