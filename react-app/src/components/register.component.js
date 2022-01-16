@@ -54,6 +54,7 @@ const vpassword = value => {
   }
 };
 
+
 export default class Register extends Component {
   constructor(props) {
     super(props);
@@ -513,7 +514,9 @@ export default class Register extends Component {
                   />
                 </div>
 
-                <div class="form-group col-md-4">
+                <div class="w-100"></div>
+
+                <div class="form-group col-md-4" hidden={this.state.contactOnly}>
                   <label htmlFor="username">用户名</label>
                   <Input
                     readonly={!this.state.newuser?"":false}
@@ -540,7 +543,7 @@ export default class Register extends Component {
                 </div>
 
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-4" hidden={this.state.contactOnly}>
                   <label htmlFor="password">密码</label>
                   <Input
                     readonly={this.state.readonly?"":false}
@@ -619,7 +622,7 @@ export default class Register extends Component {
                   </select>
                 </div>
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-4" hidden={this.state.contactOnly}>
                   <label htmlFor="roles">角色</label>
                   <select multiple onChange={this.onChangeRoles.bind(this)}
                     readonly={this.state.readonly?"":false}
@@ -648,7 +651,7 @@ export default class Register extends Component {
                 </div>
 
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-4" hidden={this.state.contactOnly}>
                   <label htmlFor="lastLogin">上次登录时间</label>
                   <Input
                     readonly={""}
