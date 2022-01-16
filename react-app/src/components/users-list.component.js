@@ -429,10 +429,10 @@ const UsersList = (props) => {
         />
       </div>
 
-                  <a target="_blank"
-                    href={"/addU?schoolId=" + schoolId} class="btn btn-primary col-md-.5 mt-5 mb-4">
-                    新建
-                  </a>
+      <a target="_blank"
+         href={"/addU?schoolId=" + schoolId} class="btn btn-primary col-md-.5 mt-5 mb-4">
+           新建
+      </a>
 
       <div class="w-100"></div>
 

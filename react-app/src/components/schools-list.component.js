@@ -518,7 +518,7 @@ const SchoolsList = (props) => {
 
           <input
             type="text"
-            className="form-control col-md-2"
+            className="form-control col-md-2 ml-2"
             placeholder="学校编号"
             value={searchCode}
             onChange={onChangeSearchCode}
@@ -526,7 +526,7 @@ const SchoolsList = (props) => {
 
           <input
             type="text"
-            className="form-control col-md-4"
+            className="form-control col-md-4 ml-2"
             placeholder="学校名称"
             value={searchName}
             onChange={onChangeSearchName}
@@ -536,7 +536,7 @@ const SchoolsList = (props) => {
           <input
             type="text"
             readonly=""
-            className="form-control col-md-1"
+            className="form-control col-md-1 ml-2"
             placeholder="建校"
             value={searchStartAt}
             onChange={onChangeSearchInputStartAt}
@@ -550,10 +550,11 @@ const SchoolsList = (props) => {
             maxRange={2022}
           />
 
+
           <input
             type="text"
             readonly=""
-            className="form-control col-md-1"
+            className="form-control col-md-1 ml-2"
             placeholder="访校"
             value={searchLastVisit}
             onChange={onChangeSearchInputLastVisit}
@@ -569,7 +570,7 @@ const SchoolsList = (props) => {
 
           <input
             type="text"
-            className="form-control col-md-2"
+            className="form-control col-md-2 ml-2"
             placeholder="捐款人"
             value={searchDonor}
             onChange={onChangeSearchDonor}
@@ -582,7 +583,7 @@ const SchoolsList = (props) => {
 
 
           <select
-            className="form-control col-md-2"
+            className="form-control col-md-2 ml-2"
             placeholder="...."
             value={searchStage}
             onChange={onChangeSearchStage}
@@ -596,7 +597,7 @@ const SchoolsList = (props) => {
           </select>
 
           <select
-            className="form-control col-md-2"
+            className="form-control col-md-2 ml-2"
             placeholder="...."
             value={searchStatus}
             onChange={onChangeSearchStatus}
@@ -610,7 +611,7 @@ const SchoolsList = (props) => {
           </select>
 
           <select
-            className="form-control col-md-2"
+            className="form-control col-md-2 ml-2"
             placeholder="...."
             value={searchRequest}
             onChange={onChangeSearchRequest}
@@ -624,7 +625,7 @@ const SchoolsList = (props) => {
           </select>
 
           <select
-            className="form-control col-md-2"
+            className="form-control col-md-2 ml-2"
             placeholder="...."
             value={searchRegion}
             onChange={onChangeSearchRegion}
@@ -639,7 +640,7 @@ const SchoolsList = (props) => {
 
           <div>
             <button
-              className="btn btn-primary badge btn-block"
+              className="btn btn-primary badge btn-block ml-2"
               type="button"
               onClick={onClearSearch}
             >
@@ -661,7 +662,7 @@ const SchoolsList = (props) => {
           </div>
           <div>
             <button
-              className="btn btn-primary"
+              className="btn btn-primary ml-2"
               type="button"
               onClick={retrieveExportSchools}
             >
