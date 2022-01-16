@@ -6,6 +6,8 @@ import { isEmail } from "validator";
 import Select from 'react-select';
 import { Link } from "react-router-dom";
 
+import queryString from 'query-string'
+
 import emailjs, { init } from "emailjs-com";
 
 import AuthService from "../services/auth.service";
@@ -112,6 +114,9 @@ export default class Register extends Component {
       this.setState({newuser: false});
       this.getUser(this.props.match.params.id);
     }
+
+    const qString = queryString.parse(this.props.location.search);
+    this.setState({schoolId: qString.schoolId});
 
     this.getRoles();
     this.getSchools();

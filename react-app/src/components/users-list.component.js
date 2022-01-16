@@ -363,7 +363,7 @@ const UsersList = (props) => {
 
   return (
     <div className="list row">
-      <div className="col-md-9">
+      <div className="col-md-8">
         <h4>{schoolTitle ? schoolTitle + " - " : ""}用户列表(总数：{totalItems})</h4>
         <div className="input-group mb-3">
           <select
@@ -429,7 +429,12 @@ const UsersList = (props) => {
         />
       </div>
 
-        <div class="w-100"></div>
+                  <a target="_blank"
+                    href={"/addU?schoolId=" + schoolId} class="btn btn-primary col-md-.5 mt-5 mb-4">
+                    新建
+                  </a>
+
+      <div class="w-100"></div>
 
       <div className="col-md-12 list">
         <table
