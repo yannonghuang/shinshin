@@ -1037,7 +1037,7 @@ export default class Survey extends Component {
                 </div>
 
                 <div class="form-group col-md-3">
-                <label htmlFor="county">县</label>
+                <label htmlFor="county">区/县</label>
                 <input
                 readonly={this.state.readonly?"":false}
                 type="text"
