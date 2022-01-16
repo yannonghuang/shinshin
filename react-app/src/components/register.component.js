@@ -520,7 +520,7 @@ export default class Register extends Component {
           {!this.state.successful && (
             <div class="row">
                 <div class="form-group col-md-4">
-                  <label htmlFor="contactOnly">仅联络方式(信息不作校验)</label>
+                  <label htmlFor="contactOnly"><h5>仅联络方式(信息不作校验)</h5></label>
                   <Input
                     readonly={!this.state.newuser?"":false}
                     type="checkbox"
