@@ -20,6 +20,11 @@ const SchoolsList = (props) => {
   const [searchCode, setSearchCode] = useState("");
   const [searchRegion, setSearchRegion] = useState(props.match? props.match.params.region : props.region);
   const [searchStartAt, setSearchStartAt] = useState("");
+  const [searchLastVisit, setSearchLastVisit] = useState("");
+  const [searchDonor, setSearchDonor] = useState("");
+  const [searchStage, setSearchStage] = useState("");
+  const [searchStatus, setSearchStatus] = useState("");
+  const [searchRequest, setSearchRequest] = useState("");
 
   const schoolsRef = useRef();
   schoolsRef.current = schools;
@@ -35,8 +40,10 @@ const SchoolsList = (props) => {
   const [orderby, setOrderby] = useState([]);
 
   const [regions, setRegions] = useState([]);
+  const [stages, setStages] = useState([]);
+  const [statuses, setStatuses] = useState([]);
+  const [requests, setRequests] = useState([]);
 
-  const [startAt, setStartAt] = useState([]);
 
   const onChangeSearchName = (e) => {
     const searchName = e.target.value;
@@ -53,6 +60,26 @@ const SchoolsList = (props) => {
     setSearchRegion(searchRegion);
   };
 
+  const onChangeSearchDonor = (e) => {
+    const searchDonor = e.target.value;
+    setSearchDonor(searchDonor);
+  };
+
+  const onChangeSearchStage = (e) => {
+    const searchStage = e.target.value;
+    setSearchStage(searchStage);
+  };
+
+  const onChangeSearchStatus = (e) => {
+    const searchStatus = e.target.value;
+    setSearchStatus(searchStatus);
+  };
+
+  const onChangeSearchRequest = (e) => {
+    const searchRequest = e.target.value;
+    setSearchRequest(searchRequest);
+  };
+
   const onChangeSearchStartAt = (e) => {
     const searchStartAt = e; //e.target.value;
     setSearchStartAt(searchStartAt);
@@ -63,11 +90,28 @@ const SchoolsList = (props) => {
     setSearchStartAt(searchStartAt);
   };
 
+  const onChangeSearchLastVisit = (e) => {
+    const searchLastVisit = e; //e.target.value;
+    setSearchLastVisit(searchLastVisit);
+  };
+
+  const onChangeSearchInputLastVisit = (e) => {
+    const searchLastVisit = e; //e.target.value;
+    setSearchLastVisit(searchLastVisit);
+  };
+
+
   const onClearSearch = (e) => {
     setSearchName("");
     setSearchCode("");
     setSearchRegion("");
     setSearchStartAt("");
+    setSearchLastVisit("");
+    setSearchDonor("");
+    setSearchStage("");
+    setSearchStatus("");
+    setSearchRequest("");
+
     setOrderby([]);
     setExportSchools([]);
   };
@@ -104,6 +148,26 @@ const SchoolsList = (props) => {
       params["startAt"] = searchStartAt;
     }
 
+    if (searchLastVisit) {
+      params["lastVisit"] = searchLastVisit;
+    }
+
+    if (searchDonor) {
+      params["donor"] = searchDonor;
+    }
+
+    if (searchStage) {
+      params["stage"] = searchStage;
+    }
+
+    if (searchStatus) {
+      params["status"] = searchStatus;
+    }
+
+    if (searchRequest) {
+      params["request"] = searchRequest;
+    }
+
     if (exportFlag) {
       params["exportFlag"] = exportFlag;
     }
@@ -124,7 +188,44 @@ const SchoolsList = (props) => {
     }
   }
 
+
+  const getRequests = () => {
+    SchoolDataService.getRequests_ss()
+      .then(response => {
+        setRequests(response.data);
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  const getStatuses = () => {
+    SchoolDataService.getStatuses_ss()
+      .then(response => {
+        setStatuses(response.data);
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  const getStages = () => {
+    SchoolDataService.getStages()
+      .then(response => {
+        setStages(response.data);
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
   useEffect(getRegions, [orderby]);
+  useEffect(getStages, [orderby]);
+  useEffect(getStatuses, [orderby]);
+  useEffect(getRequests, [orderby]);
 
   const retrieveSchools = () => {
     const params = getRequestParams(/*searchName, page, pageSize, orderby,
@@ -174,7 +275,8 @@ const SchoolsList = (props) => {
       });
   };
 
-  useEffect(retrieveSchools, [page, pageSize, orderby, searchName, searchCode, searchRegion, searchStartAt]);
+  useEffect(retrieveSchools, [page, pageSize, orderby, searchName, searchCode, searchRegion, searchStartAt,
+                            searchLastVisit, searchDonor, searchStage, searchStatus, searchRequest]);
 
   const refreshList = () => {
     retrieveSchools();
@@ -243,19 +345,44 @@ const SchoolsList = (props) => {
         accessor: "name",
       },
       {
-        Header: "省/自治区",
-        accessor: "region",
+        Header: "建校年份",
+        accessor: "startAt",
+        //Filter: SelectStartAtFilter,
       },
+      {
+        Header: "最近访校年份",
+        accessor: "lastVisit",
+        //Filter: SelectStartAtFilter,
+      },
+      {
+        Header: "捐款人",
+        accessor: "donor",
+        disableSortBy: true,
+      },
+/**
       {
         Header: "校长",
         accessor: "principal",
         disableSortBy: true,
       },
+*/
       {
-        Header: "建校年份",
-        accessor: "startAt",
-        //Filter: SelectStartAtFilter,
+        Header: "学校阶段",
+        accessor: "stage",
       },
+      {
+        Header: "学校状态",
+        accessor: "status",
+      },
+      {
+        Header: "需求状态",
+        accessor: "request",
+      },
+      {
+        Header: "省/自治区",
+        accessor: "region",
+      },
+/**
       {
         Header: "教师人数",
         accessor: "teachersCount",
@@ -264,6 +391,7 @@ const SchoolsList = (props) => {
         Header: "学生人数",
         accessor: "studentsCount",
       },
+*/
       {
         Header: "项目",
         accessor: "projectsCount",
@@ -386,18 +514,11 @@ const SchoolsList = (props) => {
     <div className="list row">
       <div className="col-md-9">
         <h4>学校列表(总数：{totalItems})</h4>
-        <div className="input-group mb-3 ">
+        <div className="row mb-3 ">
 
           <input
             type="text"
-            className="form-control"
-            placeholder="学校名称"
-            value={searchName}
-            onChange={onChangeSearchName}
-          />
-          <input
-            type="text"
-            className="form-control"
+            className="form-control col-md-2"
             placeholder="学校编号"
             value={searchCode}
             onChange={onChangeSearchCode}
@@ -405,9 +526,18 @@ const SchoolsList = (props) => {
 
           <input
             type="text"
+            className="form-control col-md-4"
+            placeholder="学校名称"
+            value={searchName}
+            onChange={onChangeSearchName}
+          />
+
+
+          <input
+            type="text"
             readonly=""
-            className="form-control"
-            placeholder="建校年份"
+            className="form-control col-md-1"
+            placeholder="建校"
             value={searchStartAt}
             onChange={onChangeSearchInputStartAt}
           />
@@ -420,8 +550,81 @@ const SchoolsList = (props) => {
             maxRange={2022}
           />
 
+          <input
+            type="text"
+            readonly=""
+            className="form-control col-md-1"
+            placeholder="访校"
+            value={searchLastVisit}
+            onChange={onChangeSearchInputLastVisit}
+          />
+          <YearPicker
+            yearArray={['2019', '2020']}
+            value={searchLastVisit}
+            onSelect={onChangeSearchLastVisit}
+            hideInput={true}
+            minRange={1995}
+            maxRange={2022}
+          />
+
+          <input
+            type="text"
+            className="form-control col-md-2"
+            placeholder="捐款人"
+            value={searchDonor}
+            onChange={onChangeSearchDonor}
+          />
+
+
+        </div>
+
+        <div className="row mb-3 ">
+
+
           <select
-            className="form-control"
+            className="form-control col-md-2"
+            placeholder="...."
+            value={searchStage}
+            onChange={onChangeSearchStage}
+          >
+            <option value="">学校阶段</option>
+            {stages.map((option) => (
+            <option value={option}>
+            {option}
+            </option>
+            ))}
+          </select>
+
+          <select
+            className="form-control col-md-2"
+            placeholder="...."
+            value={searchStatus}
+            onChange={onChangeSearchStatus}
+          >
+            <option value="">学校状态</option>
+            {statuses.map((option) => (
+            <option value={option}>
+            {option}
+            </option>
+            ))}
+          </select>
+
+          <select
+            className="form-control col-md-2"
+            placeholder="...."
+            value={searchRequest}
+            onChange={onChangeSearchRequest}
+          >
+            <option value="">需求状态</option>
+            {requests.map((option) => (
+            <option value={option}>
+            {option}
+            </option>
+            ))}
+          </select>
+
+          <select
+            className="form-control col-md-2"
             placeholder="...."
             value={searchRegion}
             onChange={onChangeSearchRegion}
@@ -443,7 +646,9 @@ const SchoolsList = (props) => {
               清空
             </button>
           </div>
+
         </div>
+
         <div className="input-group mb-4">
           <div>
             <button
@@ -508,7 +713,10 @@ const SchoolsList = (props) => {
                       {/*column.isSorted*/ (column.id === 'code' || column.id === 'region' ||
                       column.id === 'startAt' || column.id === 'teachersCount' ||
                       column.id === 'studentsCount' || column.id === 'name' ||
-                      column.id === 'projectsCount' || column.id === 'responsesCount' )
+                      column.id === 'projectsCount' || column.id === 'responsesCount' ||
+                      column.id === 'stage' || column.id === 'lastVisit' ||
+                      column.id === 'status' || column.id === 'request'
+                      )
                       ? column.isSortedDesc
                         ? ' 🔽'
                         : ' 🔼'

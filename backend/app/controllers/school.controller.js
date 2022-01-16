@@ -283,8 +283,13 @@ exports.findAll2 = (req, res) => {
   const size = req.body.size;
   const orderby = req.body.orderby;
   const code = req.body.code;
+  const donor = req.body.donor;
   const region = req.body.region;
+  const stage = req.body.stage;
+  const status = req.body.status;
+  const request = req.body.request;
   const startAt = req.body.startAt;
+  const lastVisit = req.body.lastVisit;
   const exportFlag = req.body.exportFlag;
   //var condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
 
@@ -306,8 +311,13 @@ exports.findAll2 = (req, res) => {
         [Op.and]: [
             name ? { name: { [Op.like]: `%${name}%` } } : null,
             code ? { code: { [Op.like]: `%${code}%` } } : null,
+            donor ? { donor: { [Op.like]: `%${donor}%` } } : null,
             region ? { region: { [Op.eq]: `${region}` } } : null,
-            startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('schools.startAt')), `${startAt}`) } } : null
+            stage ? { stage: { [Op.eq]: `${stage}` } } : null,
+            status ? { status: { [Op.eq]: `${status}` } } : null,
+            request ? { request: { [Op.eq]: `${request}` } } : null,
+            startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('schools.startAt')), `${startAt}`) } } : null,
+            lastVisit ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('schools.lastVisit')), `${lastVisit}`) } } : null
         ]};
 
   const inner_include = [
@@ -344,8 +354,9 @@ exports.findAll2 = (req, res) => {
 //  offset: offset,
   subQuery: false,
   attributes: ['id', 'code', 'name', 'description', 'principal', 'region', 'address', 'phone', 'teachersCount', 'studentsCount',
-            'stage', 'status', 'request', 'category', 'principalId', 'contactId',
+            'stage', 'status', 'request', 'category', 'principalId', 'contactId', 'donor',
             [db.Sequelize.fn("year", db.Sequelize.col("schools.startAt")), "startAt"],
+            [db.Sequelize.fn("year", db.Sequelize.col("schools.lastVisit")), "lastVisit"],
             [db.Sequelize.fn("COUNT", db.Sequelize.col("projects.id")), "projectsCount"],
             [db.Sequelize.fn("COUNT", db.Sequelize.col("projects.responseId")), "responsesCount"], //`projects->response`.`id`
   ],
