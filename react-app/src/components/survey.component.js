@@ -1004,7 +1004,7 @@ export default class Survey extends Component {
                 <div class="w-100"></div>
 
                 <div class="select-container form-group col-md-3">
-                <label htmlFor="region">省/自治区</label>
+                <label htmlFor="region">省/自治区/直辖市</label>
                 <select
                 readonly={this.state.readonly?"":false}
                 class="form-control"
@@ -1051,7 +1051,7 @@ export default class Survey extends Component {
                 </div>
 
                 <div class="form-group col-md-3">
-                <label htmlFor="community">乡镇</label>
+                <label htmlFor="community">乡/镇</label>
                 <input
                 readonly={this.state.readonly?"":false}
                 type="text"
