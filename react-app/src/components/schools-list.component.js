@@ -580,7 +580,7 @@ const SchoolsList = (props) => {
         </div>
 
         <div className="row mb-3 ">
-
+          <div className="col-md-2 ml-2" />
 
           <select
             className="form-control col-md-2 ml-2"
