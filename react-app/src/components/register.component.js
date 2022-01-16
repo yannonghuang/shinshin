@@ -82,7 +82,7 @@ export default class Register extends Component {
       username: "",
       email: "",
       password: null,
-      roles: [],
+      roles: null,
       schoolId: null,
       chineseName: "",
       phone: "",
@@ -432,6 +432,7 @@ export default class Register extends Component {
     this.form.validateAll();
 
     if (this.checkBtn.context._errors.length === 0) {
+
       AuthService.register(
         this.state.username,
         this.state.email,
@@ -621,8 +622,8 @@ export default class Register extends Component {
                   <select onChange={this.onChangeTitle.bind(this)}
                     readonly={this.state.readonly?"":false}
                     class="form-control"
-                    id="title"
                     required
+                    id="title"
                     value={this.state.title}
                     name="title"
                 >
@@ -635,11 +636,11 @@ export default class Register extends Component {
 
                 <div class="form-group col-md-4" hidden={this.state.contactOnly}>
                   <label htmlFor="roles">角色</label>
-                  <select multiple onChange={this.onChangeRoles.bind(this)}
+                  <select onChange={this.onChangeRoles.bind(this)}
                     readonly={this.state.readonly?"":false}
                     class="form-control"
-                    id="roles"
                     required={!this.state.contactOnly}
+                    id="roles"
                     value={this.state.roles}
                     name="roles"
                 >

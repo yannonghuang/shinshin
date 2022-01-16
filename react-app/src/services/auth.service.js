@@ -59,7 +59,7 @@ class AuthService {
   }
 
   register(username, email, password, roles, schoolId,
-              chineseName, phone, wechat, startAt) {
+              chineseName, phone, wechat, startAt, title) {
     return axios.post(API_URL + "signup", {
       username,
       email,
@@ -69,7 +69,8 @@ class AuthService {
       chineseName,
       phone,
       wechat,
-      startAt
+      startAt,
+      title
     });
   }
 
