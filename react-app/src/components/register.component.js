@@ -639,7 +639,7 @@ export default class Register extends Component {
                     readonly={this.state.readonly?"":false}
                     class="form-control"
                     id="roles"
-                    required
+                    required={!this.state.contactOnly}
                     value={this.state.roles}
                     name="roles"
                 >
