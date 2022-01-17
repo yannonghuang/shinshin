@@ -513,6 +513,20 @@ const SchoolsList = (props) => {
             onChange={onChangeSearchCode}
           />
 
+          <select
+            className="form-control col-md-2 ml-2"
+            placeholder="...."
+            value={searchRegion}
+            onChange={onChangeSearchRegion}
+          >
+            <option value="">省（直辖市）</option>
+            {regions.map((option) => (
+            <option value={option}>
+            {option}
+            </option>
+            ))}
+          </select>
+
           <input
             type="text"
             className="form-control col-md-4 ml-2"
@@ -555,19 +569,9 @@ const SchoolsList = (props) => {
             maxRange={2022}
           />
 
-          <input
-            type="text"
-            className="form-control col-md-2 ml-2"
-            placeholder="捐款人"
-            value={searchDonor}
-            onChange={onChangeSearchDonor}
-          />
-
-
         </div>
 
         <div className="row mb-3 ">
-          <div className="col-md-2 ml-2" />
 
           <select
             className="form-control col-md-2 ml-2"
@@ -611,19 +615,13 @@ const SchoolsList = (props) => {
             ))}
           </select>
 
-          <select
+          <input
+            type="text"
             className="form-control col-md-2 ml-2"
-            placeholder="...."
-            value={searchRegion}
-            onChange={onChangeSearchRegion}
-          >
-            <option value="">省（直辖市）</option>
-            {regions.map((option) => (
-            <option value={option}>
-            {option}
-            </option>
-            ))}
-          </select>
+            placeholder="捐款人"
+            value={searchDonor}
+            onChange={onChangeSearchDonor}
+          />
 
           <div>
             <button
