@@ -85,21 +85,10 @@ const SchoolsList = (props) => {
     setSearchStartAt(searchStartAt);
   };
 
-  const onChangeSearchInputStartAt = (e) => {
-    const searchStartAt = e; //e.target.value;
-    setSearchStartAt(searchStartAt);
-  };
-
   const onChangeSearchLastVisit = (e) => {
     const searchLastVisit = e; //e.target.value;
     setSearchLastVisit(searchLastVisit);
   };
-
-  const onChangeSearchInputLastVisit = (e) => {
-    const searchLastVisit = e; //e.target.value;
-    setSearchLastVisit(searchLastVisit);
-  };
-
 
   const onClearSearch = (e) => {
     setSearchName("");
@@ -539,7 +528,6 @@ const SchoolsList = (props) => {
             className="form-control col-md-1 ml-2"
             placeholder="建校"
             value={searchStartAt}
-            onChange={onChangeSearchInputStartAt}
           />
           <YearPicker
             yearArray={['2019', '2020']}
@@ -557,7 +545,6 @@ const SchoolsList = (props) => {
             className="form-control col-md-1 ml-2"
             placeholder="访校"
             value={searchLastVisit}
-            onChange={onChangeSearchInputLastVisit}
           />
           <YearPicker
             yearArray={['2019', '2020']}
