@@ -330,6 +330,10 @@ const SchoolsList = (props) => {
         },
       },
       {
+        Header: "省/自治区/直辖市",
+        accessor: "region",
+      },
+      {
         Header: "学校名称",
         accessor: "name",
       },
@@ -342,11 +346,6 @@ const SchoolsList = (props) => {
         Header: "最近访校年份",
         accessor: "lastVisit",
         //Filter: SelectStartAtFilter,
-      },
-      {
-        Header: "捐款人",
-        accessor: "donor",
-        disableSortBy: true,
       },
 /**
       {
@@ -368,8 +367,9 @@ const SchoolsList = (props) => {
         accessor: "request",
       },
       {
-        Header: "省/自治区",
-        accessor: "region",
+        Header: "捐款人",
+        accessor: "donor",
+        disableSortBy: true,
       },
 /**
       {
@@ -519,7 +519,7 @@ const SchoolsList = (props) => {
             value={searchRegion}
             onChange={onChangeSearchRegion}
           >
-            <option value="">省（直辖市）</option>
+            <option value="">省/自治区</option>
             {regions.map((option) => (
             <option value={option}>
             {option}
