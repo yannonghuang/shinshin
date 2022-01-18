@@ -1,6 +1,7 @@
 const db = require("../models");
 const School = db.schools;
 const Log = db.logs;
+const Survey = db.surveys;
 const Response = db.responses;
 const Project = db.projects;
 const Document = db.documents;
@@ -88,6 +89,30 @@ const SAVE_updateAndLog = async (newObj, oldObj, schoolId, userId, t) => {
     throw error;
   }
 };
+
+const joinArray = (arr1, arr2) => {
+  result = [];
+  for (var i = 0; i < arr1.length; i++) {
+    if (arr2.includes(arr1[i]))
+      result.push(arr1[i]);
+  }
+  return result;
+}
+
+const diffArray = (arr1, arr2) => {
+  result = [];
+  for (var i = 0; i < arr1.length; i++) {
+    if (!arr2.includes(arr1[i]))
+      result.push(arr1[i]);
+  }
+  return result;
+}
+
+const getAttributes = (model) => {
+  result = [];
+  for( let key in model.rawAttributes ) result.push(key);
+  return result;
+}
 
 // return region list
 exports.getRegions = (req, res) => {
@@ -383,6 +408,50 @@ exports.findAll2 = (req, res) => {
       res.status(500).send({
         message:
         err.message || "Some error occurred while retrieving responses."
+      });
+    });
+};
+
+exports.findExport = (req, res) => {
+  const detail = req.body.detail;
+
+  var schoolAttributes = getAttributes(School);
+  var surveyAttributes = getAttributes(Survey);
+
+  if (!detail) surveyAttributes = joinArray(schoolAttributes, surveyAttributes);
+
+  surveyAttributes = diffArray(surveyAttributes, [`id`]);
+
+  schoolAttributes = diffArray(schoolAttributes, surveyAttributes);
+  schoolAttributes = diffArray(schoolAttributes, [`photo`]);
+  const include = [
+        {
+           model: Survey,
+           attributes: surveyAttributes,
+           required: false,
+        },
+    ];
+
+
+  School.findAll({
+
+  attributes: ['id',
+            [db.Sequelize.fn("year", db.Sequelize.col("schools.startAt")), "startAt"],
+            [db.Sequelize.fn("year", db.Sequelize.col("schools.lastVisit")), "lastVisit"],
+            ...schoolAttributes
+  ],
+
+  include: include,
+  order: [ ['code', 'asc'] ]
+  })
+    .then(schools => {
+      res.send(schools);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).send({
+        message:
+        err.message || "Some error occurred while retrieving exports."
       });
     });
 };

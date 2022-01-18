@@ -65,6 +65,11 @@ module.exports = function(app) {
     schools.findAll2
   );
 
+  app.post("/api/schools/export",
+    [authJwt.verifyToken],
+    schools.findExport
+  );
+
   app.get("/api/schools/published",
     [authJwt.verifyToken],
     schools.findAllPublished

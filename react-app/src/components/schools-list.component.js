@@ -236,6 +236,31 @@ const SchoolsList = (props) => {
   };
 
   const retrieveExportSchools = () => {
+    const params = {detail: false};
+
+    SchoolDataService.getExport(params)
+      .then(response => {
+        setExportSchools(response.data);
+        console.log(response.data);
+
+        const csv = ProjectDataService.exportCSV(response.data, exportColumns);
+        const url = window.URL.createObjectURL(new Blob([csv]));
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download',
+                'school.csv'
+            );
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const SAVE_retrieveExportSchools = () => {
     const params = getRequestParams(/*searchName, page, pageSize, orderby,
         searchCode, searchRegion, searchStartAt, */true);
 
@@ -305,6 +330,242 @@ const SchoolsList = (props) => {
         console.log(e);
       });
   };
+
+  const exportColumns = [
+      {
+        Header: "ID",
+        accessor: "id",
+      },
+      {
+        Header: "学校编号",
+        accessor: "code",
+      },
+      {
+        Header: "学校名称",
+        accessor: "name",
+      },
+      {
+        Header: "建校年份",
+        accessor: "startAt",
+      },
+      {
+        Header: "最近访校年份",
+        accessor: "lastVisit",
+      },
+      {
+        Header: "捐款人",
+        accessor: "donor",
+      },
+      {
+        Header: "学校阶段",
+        accessor: "stage",
+      },
+
+      {
+        Header: "省/自治区/直辖市",
+        accessor: "surveys.region",
+      },
+      {
+        Header: "市",
+        accessor: "surveys.city",
+      },
+      {
+        Header: "县",
+        accessor: "surveys.county",
+      },
+      {
+        Header: "乡/镇",
+        accessor: "surveys.community",
+      },
+      {
+        Header: "地址",
+        accessor: "surveys.address",
+      },
+      {
+        Header: "校长",
+        accessor: "surveys.principal",
+      },
+      {
+        Header: "学校状态",
+        accessor: "surveys.status",
+      },
+      {
+        Header: "需求状态",
+        accessor: "surveys.request",
+      },
+
+      {
+        Header: "教师人数",
+        accessor: "surveys.teachersCount",
+      },
+      {
+        Header: "学生人数",
+        accessor: "surveys.studentsCount",
+      },
+      {
+        Header: "学校类型",
+        accessor: "surveys.category",
+      },
+      {
+        Header: "教育局注册校名",
+        accessor: "surveys.schoolBoardRegisteredName",
+      },
+      {
+        Header: "主管教育局名称",
+        accessor: "surveys.schoolBoard",
+      },
+      {
+        Header: "学校电话",
+        accessor: "surveys.phone",
+      },
+      {
+        Header: "学校电邮地址",
+        accessor: "surveys.email",
+      },
+      {
+        Header: "校长姓名",
+        accessor: "surveys.principal",
+      },
+      {
+        Header: "校长手机号",
+        accessor: "surveys.principalCell",
+      },
+      {
+        Header: "校长微信",
+        accessor: "surveys.principalWechat",
+      },
+      {
+        Header: "联络人姓名",
+        accessor: "surveys.contact",
+      },
+      {
+        Header: "联络人手机号",
+        accessor: "surveys.contactCell",
+      },
+      {
+        Header: "联络人微信",
+        accessor: "surveys.contactWechat",
+      },
+      {
+        Header: "学校简介",
+        accessor: "surveys.description",
+      },
+
+      {
+        Header: "留守儿童人数",
+        accessor: "surveys.stayBehindCount",
+      },
+      {
+        Header: "学生住宿人数",
+        accessor: "surveys.boarderCount",
+      },
+      {
+        Header: "学前班级数",
+        accessor: "surveys.kClassesCount",
+      },
+      {
+        Header: "一年级班级数",
+        accessor: "surveys.g1ClassesCount",
+      },
+      {
+        Header: "二年级班级数",
+        accessor: "surveys.g2ClassesCount",
+      },
+      {
+        Header: "三年级班级数",
+        accessor: "surveys.g3ClassesCount",
+      },
+      {
+        Header: "四年级班级数",
+        accessor: "surveys.g4ClassesCount",
+      },
+      {
+        Header: "五年级班级数",
+        accessor: "surveys.g5ClassesCount",
+      },
+      {
+        Header: "六年级班级数",
+        accessor: "surveys.g6ClassesCount",
+      },
+      {
+        Header: "学前学生数",
+        accessor: "surveys.kStudentsCount",
+      },
+      {
+        Header: "一年级学生数",
+        accessor: "surveys.g1StudentsCount",
+      },
+      {
+        Header: "二年级学生数",
+        accessor: "surveys.g2StudentsCount",
+      },
+      {
+        Header: "三年级学生数",
+        accessor: "surveys.g3StudentsCount",
+      },
+      {
+        Header: "四年级学生数",
+        accessor: "surveys.g4StudentsCount",
+      },
+      {
+        Header: "五年级学生数",
+        accessor: "surveys.g5StudentsCount",
+      },
+      {
+        Header: "六年级学生数",
+        accessor: "surveys.g6StudentsCount",
+      },
+      {
+        Header: "如有初中,学生数",
+        accessor: "surveys.mStudentsCount",
+      },
+      {
+        Header: "办公用电脑台数",
+        accessor: "surveys.computersCount",
+      },
+      {
+        Header: "是否有电脑室",
+        accessor: "surveys.computerRoomExists",
+      },
+      {
+        Header: "共有几台电脑",
+        accessor: "surveys.computerRoomCount",
+      },
+      {
+        Header: "可否上网",
+        accessor: "surveys.internetExists",
+      },
+      {
+        Header: "多媒体一体机套数",
+        accessor: "surveys.multimediaSystemsCount",
+      },
+      {
+        Header: "是否有图书阅览室",
+        accessor: "surveys.libraryExists",
+      },
+      {
+        Header: "图书角数量",
+        accessor: "surveys.bookCornersCount",
+      },
+      {
+        Header: "图书册数",
+        accessor: "surveys.booksCount",
+      },
+
+      {
+        Header: "校长",
+        accessor: "surveys.principalId",
+      },
+      {
+        Header: "联络人",
+        accessor: "surveys.contactId",
+      },
+
+    ];
+
+/**
+
+*/
 
   const columns = useMemo(
     () => [
@@ -449,7 +710,6 @@ const SchoolsList = (props) => {
     ],
     []
   );
-
 
   const {
     getTableProps,

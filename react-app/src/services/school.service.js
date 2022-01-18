@@ -7,6 +7,9 @@ class SchoolDataService {
     return http.post("/schools/all", data, { headers: authHeader() });
   }
 
+  getExport(data) {
+    return http.post("/schools/export", data, { headers: authHeader() });
+  }
 
   getAll(params) {
     return http.get("/schools", { params }, { headers: authHeader() });
