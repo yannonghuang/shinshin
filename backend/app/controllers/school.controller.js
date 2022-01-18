@@ -418,12 +418,18 @@ exports.findExport = (req, res) => {
   var schoolAttributes = getAttributes(School);
   var surveyAttributes = getAttributes(Survey);
 
+console.log(schoolAttributes)
+
   if (!detail) surveyAttributes = joinArray(schoolAttributes, surveyAttributes);
 
   surveyAttributes = diffArray(surveyAttributes, [`id`]);
 
   schoolAttributes = diffArray(schoolAttributes, surveyAttributes);
   schoolAttributes = diffArray(schoolAttributes, [`photo`]);
+
+console.log(schoolAttributes)
+console.log(surveyAttributes)
+
   const include = [
         {
            model: Survey,
@@ -435,7 +441,7 @@ exports.findExport = (req, res) => {
 
   School.findAll({
 
-  attributes: ['id',
+  attributes: [
             [db.Sequelize.fn("year", db.Sequelize.col("schools.startAt")), "startAt"],
             [db.Sequelize.fn("year", db.Sequelize.col("schools.lastVisit")), "lastVisit"],
             ...schoolAttributes

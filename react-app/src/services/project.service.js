@@ -169,6 +169,7 @@ class ProjectDataService {
     }
 
     const csv = flatten(obj);
+
     const header = csv.header.trim().split(',');
 
     // build index
@@ -176,7 +177,7 @@ class ProjectDataService {
     for (var i = 0; i < mapper.length; i++) {
       for (var j = 0; j < header.length; j++)
           if (mapper[i].accessor === header[j])
-            index.push(j);
+            index.push({mapper: i, data: j}); //index.push(j);
     }
 
     const order = (line, header = false) => {
@@ -185,7 +186,9 @@ class ProjectDataService {
 
       var result = "";
       for (var i = 0; i < index.length; i++)
-        result = result + (header? mapper[i].Header : column[index[i]]) + ',';
+        result = result + (header
+                            ? mapper[index[i].mapper].Header // mapper[i].Header
+                            : column[index[i].data]) + ','; //column[index[i]]) + ',';
 
       result = result.substring(0, result.lastIndexOf(',')) + '\n';
       return result;

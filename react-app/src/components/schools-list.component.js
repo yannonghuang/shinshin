@@ -235,8 +235,16 @@ const SchoolsList = (props) => {
       });
   };
 
+  const retrieveExportSchoolsDetail = () => {
+    doRetrieveExportSchools(true);
+  }
+
   const retrieveExportSchools = () => {
-    const params = {detail: false};
+    doRetrieveExportSchools(false);
+  }
+
+  const doRetrieveExportSchools = (flag) => {
+    const params = {detail: flag};
 
     SchoolDataService.getExport(params)
       .then(response => {
@@ -249,7 +257,7 @@ const SchoolsList = (props) => {
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download',
-                'school.csv'
+                'schools_export' + (flag ? '_detail' : '') + '.csv'
             );
         document.body.appendChild(link);
         link.click();
@@ -423,7 +431,7 @@ const SchoolsList = (props) => {
         accessor: "surveys.email",
       },
       {
-        Header: "校长姓名",
+        Header: "校长",
         accessor: "surveys.principal",
       },
       {
@@ -516,7 +524,7 @@ const SchoolsList = (props) => {
         accessor: "surveys.g6StudentsCount",
       },
       {
-        Header: "如有初中,学生数",
+        Header: "如有初中学生数",
         accessor: "surveys.mStudentsCount",
       },
       {
@@ -550,15 +558,6 @@ const SchoolsList = (props) => {
       {
         Header: "图书册数",
         accessor: "surveys.booksCount",
-      },
-
-      {
-        Header: "校长",
-        accessor: "surveys.principalId",
-      },
-      {
-        Header: "联络人",
-        accessor: "surveys.contactId",
       },
 
     ];
@@ -912,6 +911,15 @@ const SchoolsList = (props) => {
               onClick={retrieveExportSchools}
             >
               导出
+            </button>
+          </div>
+          <div>
+            <button
+              className="btn btn-primary ml-2"
+              type="button"
+              onClick={retrieveExportSchoolsDetail}
+            >
+              详细导出
             </button>
           </div>
         </div>
