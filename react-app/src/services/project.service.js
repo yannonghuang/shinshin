@@ -176,7 +176,8 @@ class ProjectDataService {
     const index = [];
     for (var i = 0; i < mapper.length; i++) {
       for (var j = 0; j < header.length; j++)
-          if (mapper[i].accessor === header[j])
+          //if (mapper[i].accessor === header[j])
+          if (header[j].endsWith(mapper[i].accessor))
             index.push({mapper: i, data: j}); //index.push(j);
     }
 

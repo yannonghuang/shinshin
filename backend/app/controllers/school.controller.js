@@ -413,22 +413,15 @@ exports.findAll2 = (req, res) => {
 };
 
 exports.findExport = (req, res) => {
-  const detail = req.body.detail;
+  const mainAttributes = req.body.main;
+  const detailAttributes = req.body.detail;
 
   var schoolAttributes = getAttributes(School);
   var surveyAttributes = getAttributes(Survey);
 
-console.log(schoolAttributes)
-
-  if (!detail) surveyAttributes = joinArray(schoolAttributes, surveyAttributes);
-
-  surveyAttributes = diffArray(surveyAttributes, [`id`]);
-
-  schoolAttributes = diffArray(schoolAttributes, surveyAttributes);
-  schoolAttributes = diffArray(schoolAttributes, [`photo`]);
-
-console.log(schoolAttributes)
-console.log(surveyAttributes)
+  schoolAttributes = joinArray(schoolAttributes, mainAttributes);
+  schoolAttributes = diffArray(schoolAttributes, ["startAt", "lastVisit"]);
+  surveyAttributes = joinArray(surveyAttributes, [...mainAttributes, ...detailAttributes]);
 
   const include = [
         {
@@ -438,13 +431,12 @@ console.log(surveyAttributes)
         },
     ];
 
-
   School.findAll({
 
   attributes: [
             [db.Sequelize.fn("year", db.Sequelize.col("schools.startAt")), "startAt"],
             [db.Sequelize.fn("year", db.Sequelize.col("schools.lastVisit")), "lastVisit"],
-            ...schoolAttributes
+            ...schoolAttributes,
   ],
 
   include: include,

@@ -236,15 +236,15 @@ const SchoolsList = (props) => {
   };
 
   const retrieveExportSchoolsDetail = () => {
-    doRetrieveExportSchools(true);
+    doRetrieveExportSchools({main: getAttributes(exportColumnsMain),
+                detail: getAttributes(exportColumnsDetail)});
   }
 
   const retrieveExportSchools = () => {
-    doRetrieveExportSchools(false);
+    doRetrieveExportSchools({main: getAttributes(exportColumnsMain), detail: []});
   }
 
-  const doRetrieveExportSchools = (flag) => {
-    const params = {detail: flag};
+  const doRetrieveExportSchools = (params) => {
 
     SchoolDataService.getExport(params)
       .then(response => {
@@ -257,7 +257,7 @@ const SchoolsList = (props) => {
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download',
-                'schools_export' + (flag ? '_detail' : '') + '.csv'
+                'schools_export' + (params.detail[0] ? '_detail' : '') + '.csv'
             );
         document.body.appendChild(link);
         link.click();
@@ -339,11 +339,15 @@ const SchoolsList = (props) => {
       });
   };
 
-  const exportColumns = [
-      {
-        Header: "ID",
-        accessor: "id",
-      },
+  const getAttributes = (mapper) => {
+    var result = [];
+    for (var i = 0; i < mapper.length; i++)
+      result.push(mapper[i].accessor);
+    return result;
+  }
+
+
+  const exportColumnsMain = [
       {
         Header: "学校编号",
         accessor: "code",
@@ -353,218 +357,199 @@ const SchoolsList = (props) => {
         accessor: "name",
       },
       {
-        Header: "建校年份",
-        accessor: "startAt",
+        Header: "教育局注册校名",
+        accessor: "schoolBoardRegisteredName",
       },
       {
-        Header: "最近访校年份",
-        accessor: "lastVisit",
+        Header: "主管教育局名称",
+        accessor: "schoolBoard",
+      },
+      {
+        Header: "建校年份",
+        accessor: "startAt",
       },
       {
         Header: "捐款人",
         accessor: "donor",
       },
       {
-        Header: "学校阶段",
-        accessor: "stage",
+        Header: "最近访校年份",
+        accessor: "lastVisit",
       },
 
       {
-        Header: "省/自治区/直辖市",
-        accessor: "surveys.region",
-      },
-      {
-        Header: "市",
-        accessor: "surveys.city",
-      },
-      {
-        Header: "县",
-        accessor: "surveys.county",
-      },
-      {
-        Header: "乡/镇",
-        accessor: "surveys.community",
-      },
-      {
-        Header: "地址",
-        accessor: "surveys.address",
-      },
-      {
-        Header: "校长",
-        accessor: "surveys.principal",
+        Header: "学校阶段",
+        accessor: "stage",
       },
       {
         Header: "学校状态",
-        accessor: "surveys.status",
+        accessor: "status",
       },
       {
         Header: "需求状态",
-        accessor: "surveys.request",
+        accessor: "request",
+      },
+      {
+        Header: "省/自治区/直辖市",
+        accessor: "region",
+      },
+      {
+        Header: "市",
+        accessor: "city",
+      },
+      {
+        Header: "区/县",
+        accessor: "county",
+      },
+      {
+        Header: "乡/镇",
+        accessor: "community",
+      },
+      {
+        Header: "地址",
+        accessor: "address",
       },
 
       {
         Header: "教师人数",
-        accessor: "surveys.teachersCount",
+        accessor: "teachersCount",
       },
       {
         Header: "学生人数",
-        accessor: "surveys.studentsCount",
+        accessor: "studentsCount",
       },
       {
         Header: "学校类型",
-        accessor: "surveys.category",
-      },
-      {
-        Header: "教育局注册校名",
-        accessor: "surveys.schoolBoardRegisteredName",
-      },
-      {
-        Header: "主管教育局名称",
-        accessor: "surveys.schoolBoard",
-      },
-      {
-        Header: "学校电话",
-        accessor: "surveys.phone",
-      },
-      {
-        Header: "学校电邮地址",
-        accessor: "surveys.email",
+        accessor: "category",
       },
       {
         Header: "校长",
-        accessor: "surveys.principal",
-      },
-      {
-        Header: "校长手机号",
-        accessor: "surveys.principalCell",
-      },
-      {
-        Header: "校长微信",
-        accessor: "surveys.principalWechat",
-      },
-      {
-        Header: "联络人姓名",
-        accessor: "surveys.contact",
-      },
-      {
-        Header: "联络人手机号",
-        accessor: "surveys.contactCell",
-      },
-      {
-        Header: "联络人微信",
-        accessor: "surveys.contactWechat",
-      },
-      {
-        Header: "学校简介",
-        accessor: "surveys.description",
+        accessor: "principal",
       },
 
       {
+        Header: "联络人",
+        accessor: "contact",
+      },
+
+      {
+        Header: "学校简介",
+        accessor: "description",
+      },
+  ];
+
+  const exportColumnsDetail = [
+      {
+        Header: "学校电话",
+        accessor: "phone",
+      },
+      {
+        Header: "学校电邮地址",
+        accessor: "email",
+      },
+      {
         Header: "留守儿童人数",
-        accessor: "surveys.stayBehindCount",
+        accessor: "stayBehindCount",
       },
       {
         Header: "学生住宿人数",
-        accessor: "surveys.boarderCount",
+        accessor: "boarderCount",
       },
       {
         Header: "学前班级数",
-        accessor: "surveys.kClassesCount",
+        accessor: "kClassesCount",
       },
       {
         Header: "一年级班级数",
-        accessor: "surveys.g1ClassesCount",
+        accessor: "g1ClassesCount",
       },
       {
         Header: "二年级班级数",
-        accessor: "surveys.g2ClassesCount",
+        accessor: "g2ClassesCount",
       },
       {
         Header: "三年级班级数",
-        accessor: "surveys.g3ClassesCount",
+        accessor: "g3ClassesCount",
       },
       {
         Header: "四年级班级数",
-        accessor: "surveys.g4ClassesCount",
+        accessor: "g4ClassesCount",
       },
       {
         Header: "五年级班级数",
-        accessor: "surveys.g5ClassesCount",
+        accessor: "g5ClassesCount",
       },
       {
         Header: "六年级班级数",
-        accessor: "surveys.g6ClassesCount",
+        accessor: "g6ClassesCount",
       },
       {
         Header: "学前学生数",
-        accessor: "surveys.kStudentsCount",
+        accessor: "kStudentsCount",
       },
       {
         Header: "一年级学生数",
-        accessor: "surveys.g1StudentsCount",
+        accessor: "g1StudentsCount",
       },
       {
         Header: "二年级学生数",
-        accessor: "surveys.g2StudentsCount",
+        accessor: "g2StudentsCount",
       },
       {
         Header: "三年级学生数",
-        accessor: "surveys.g3StudentsCount",
+        accessor: "g3StudentsCount",
       },
       {
         Header: "四年级学生数",
-        accessor: "surveys.g4StudentsCount",
+        accessor: "g4StudentsCount",
       },
       {
         Header: "五年级学生数",
-        accessor: "surveys.g5StudentsCount",
+        accessor: "g5StudentsCount",
       },
       {
         Header: "六年级学生数",
-        accessor: "surveys.g6StudentsCount",
+        accessor: "g6StudentsCount",
       },
       {
         Header: "如有初中学生数",
-        accessor: "surveys.mStudentsCount",
+        accessor: "mStudentsCount",
       },
       {
         Header: "办公用电脑台数",
-        accessor: "surveys.computersCount",
+        accessor: "computersCount",
       },
       {
         Header: "是否有电脑室",
-        accessor: "surveys.computerRoomExists",
+        accessor: "computerRoomExists",
       },
       {
         Header: "共有几台电脑",
-        accessor: "surveys.computerRoomCount",
+        accessor: "computerRoomCount",
       },
       {
         Header: "可否上网",
-        accessor: "surveys.internetExists",
+        accessor: "internetExists",
       },
       {
         Header: "多媒体一体机套数",
-        accessor: "surveys.multimediaSystemsCount",
+        accessor: "multimediaSystemsCount",
       },
       {
         Header: "是否有图书阅览室",
-        accessor: "surveys.libraryExists",
+        accessor: "libraryExists",
       },
       {
         Header: "图书角数量",
-        accessor: "surveys.bookCornersCount",
+        accessor: "bookCornersCount",
       },
       {
         Header: "图书册数",
-        accessor: "surveys.booksCount",
+        accessor: "booksCount",
       },
-
     ];
 
-/**
-
-*/
+  const exportColumns = [...exportColumnsMain, ...exportColumnsDetail];
 
   const columns = useMemo(
     () => [
