@@ -426,12 +426,26 @@ const SchoolsList = (props) => {
         Header: "校长",
         accessor: "principalId",
       },
-
+      {
+        Header: "校长电话",
+        accessor: "principalPhone",
+      },
+      {
+        Header: "校长微信",
+        accessor: "principalWechat",
+      },
       {
         Header: "联络人",
         accessor: "contactId",
       },
-
+      {
+        Header: "联络人电话",
+        accessor: "contactPhone",
+      },
+      {
+        Header: "联络人微信",
+        accessor: "contactWechat",
+      },
       {
         Header: "学校简介",
         accessor: "description",

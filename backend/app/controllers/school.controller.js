@@ -423,7 +423,8 @@ exports.findExport = (req, res) => {
   schoolAttributes = joinArray(schoolAttributes, mainAttributes);
   schoolAttributes = diffArray(schoolAttributes, ["startAt", "lastVisit", ...surveyAttributes]);
   surveyAttributes = joinArray(surveyAttributes, [...mainAttributes, ...detailAttributes]);
-  surveyAttributes = diffArray(surveyAttributes, ["principalId", "contactId"]);
+  surveyAttributes = diffArray(surveyAttributes, ["principalId", "contactId", 'principalPhone',
+                                                    'principalWechat', 'contactPhone', 'contactWechat']);
 
   const include = [
         {
@@ -434,17 +435,17 @@ exports.findExport = (req, res) => {
 
         {
            model: User,
-           attributes: [['chineseName', 'principalId']],
+           attributes: [['chineseName', 'principalId'], ['phone', 'principalPhone'], ['wechat', 'principalWechat']],
            required: false,
            where: db.Sequelize.literal('surveys.principalId = users.id')
         },
         {
            model: User,
-           attributes: [['chineseName', 'contactId']],
+           as: 'Utilisateurs',
+           attributes: [['chineseName', 'contactId'], ['phone', 'contactPhone'], ['wechat', 'contactWechat']],
            required: false,
-           where: db.Sequelize.literal('surveys.contactId = users.id')
+           where: db.Sequelize.literal('surveys.contactId = utilisateurs.id')
         },
-
     ];
 
   School.findAll({

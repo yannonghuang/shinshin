@@ -191,6 +191,7 @@ db.schools.hasMany(db.comments, {foreignKey: 'schoolId'}, {as: 'Comments'})
 db.comments.belongsTo(db.schools);
 
 db.schools.hasMany(db.user, {foreignKey: 'schoolId'}, {as: 'Users'});
+db.schools.hasMany(db.user, {as: 'Utilisateurs', foreignKey: 'schoolId'});
 db.user.belongsTo(db.schools);
 
 db.schools.hasMany(db.logs, {foreignKey: 'schoolId'}, {as: 'Logs'});
