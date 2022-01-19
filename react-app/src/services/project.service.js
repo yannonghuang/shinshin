@@ -136,12 +136,14 @@ class ProjectDataService {
   exportCSV = (obj, mapper) => {
 
     const flatten = (obj, path = '', newline = true) => {
+
       if (!(obj instanceof Object)) {
         const p = path.substring(0, path.lastIndexOf('.')); // drop the last "."
         return {header: p, body: (obj ? obj : '')};
       }
 
       if (obj instanceof Array) {
+
         var body = '';
         var header = '';
         for (var i = 0; i < obj.length; i++) {
@@ -149,6 +151,8 @@ class ProjectDataService {
           body = body + result.body + (newline ? '\n' : '');
           if (!header.endsWith('\n'))
             header = header + result.header + (newline ? '\n' : '');
+          //else
+            //header = (header.length > result.header.length) ? header : result.header;
         }
         return {header: header, body: body};
       }
@@ -161,6 +165,8 @@ class ProjectDataService {
           body = body + result.body + ',';
           if (!header.endsWith('\n'))
             header = header + result.header + ',';
+          //else
+            //header = (header.length > result.header.length) ? header : result.header;
         });
         body = body.substring(0, body.lastIndexOf(',')); // drop last ','
         header = header.substring(0, header.lastIndexOf(',')); // drop last ','

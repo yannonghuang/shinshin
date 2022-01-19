@@ -1,4 +1,5 @@
 const db = require("../models");
+const User = db.user;
 const School = db.schools;
 const Log = db.logs;
 const Survey = db.surveys;
@@ -420,8 +421,9 @@ exports.findExport = (req, res) => {
   var surveyAttributes = getAttributes(Survey);
 
   schoolAttributes = joinArray(schoolAttributes, mainAttributes);
-  schoolAttributes = diffArray(schoolAttributes, ["startAt", "lastVisit"]);
+  schoolAttributes = diffArray(schoolAttributes, ["startAt", "lastVisit", ...surveyAttributes]);
   surveyAttributes = joinArray(surveyAttributes, [...mainAttributes, ...detailAttributes]);
+  surveyAttributes = diffArray(surveyAttributes, ["principalId"]);
 
   const include = [
         {
@@ -429,6 +431,15 @@ exports.findExport = (req, res) => {
            attributes: surveyAttributes,
            required: false,
         },
+
+        {
+           model: User,
+           attributes: [['chineseName', 'principalId']],
+           required: false,
+           where: db.Sequelize.literal('surveys.principalId = users.id')
+        },
+
+
     ];
 
   School.findAll({

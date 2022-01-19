@@ -424,12 +424,12 @@ const SchoolsList = (props) => {
       },
       {
         Header: "校长",
-        accessor: "principal",
+        accessor: "principalId",
       },
 
       {
         Header: "联络人",
-        accessor: "contact",
+        accessor: "contactId",
       },
 
       {
