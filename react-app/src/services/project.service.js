@@ -162,11 +162,11 @@ class ProjectDataService {
       if (obj instanceof Object) {
         var body = '';
         var header = '';
-        var hh = '';
+        //var hh = '';
         Object.keys(obj).forEach(key => {
           const result = flatten(obj[key], path + key + '.', false);
           body = body + result.body + ',';
-          hh = result.hh;
+          //hh = result.hh;
           //if (!header.endsWith('\n'))
             header = header + result.header + ',';
           //else {
@@ -177,7 +177,7 @@ class ProjectDataService {
         });
         body = body.substring(0, body.lastIndexOf(',')); // drop last ','
         header = header.substring(0, header.lastIndexOf(',')); // drop last ','
-        return {hh: hh, header: header, body: body};
+        return {hh: '', header: header, body: body};
       }
     }
 
