@@ -185,24 +185,40 @@ class ProjectDataService {
             index.push({mapper: i, data: j}); //index.push(j);
     }
 
+    const render = (item) => {
+      //if (item === true) return '是';
+      //if (item === false) return '否';
+
+      return (item
+        ? item
+        : '');
+    }
+
     const order = (line, header = false) => {
       const column = line.split(',');
-      if (!column[0]) return "";
+      if (column.length == 0)
+        return "";
 
       var result = "";
       for (var i = 0; i < index.length; i++)
         result = result + (header
-                            ? mapper[index[i].mapper].Header // mapper[i].Header
-                            : column[index[i].data]) + ','; //column[index[i]]) + ',';
+                            ? mapper[index[i].mapper].Header
+                            //: column[index[i].data]
+                            : render(column[index[i].data])
+                          ) + ',';
 
       result = result.substring(0, result.lastIndexOf(',')) + '\n';
+
       return result;
     }
 
     const body = csv.body.split('\n');
     var newBody = "";
-    for (var i = 0; i < body.length; i++)
-        newBody = newBody + order(body[i]);
+    for (var i = 0; i < body.length; i++) {
+      newBody = newBody + order(body[i]);
+
+    }
+
     const newHeader = order(csv.hh, true);
     return (newHeader + newBody);
   }
