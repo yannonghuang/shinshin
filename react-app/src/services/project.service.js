@@ -134,12 +134,20 @@ class ProjectDataService {
   }
 
   exportCSV = (obj, mapper) => {
+    const render = (item) => {
+      if (item === true) return '是';
+      if (item === false) return '否';
+
+      return (item
+        ? item
+        : '');
+    }
 
     const flatten = (obj, path = '', newline = true) => {
-
       if (!(obj instanceof Object)) {
         const p = path.substring(0, path.lastIndexOf('.')); // drop the last "."
-        return {hh: '', header: p, body: (obj ? obj : '')};
+        return {hh: '', header: p, body: render(obj)};
+        //return {hh: '', header: p, body: (obj ? obj : '')};
       }
 
       if (obj instanceof Array) {
@@ -185,19 +193,12 @@ class ProjectDataService {
             index.push({mapper: i, data: j}); //index.push(j);
     }
 
-    const render = (item) => {
-      //if (item === true) return '是';
-      //if (item === false) return '否';
-
-      return (item
-        ? item
-        : '');
-    }
-
     const order = (line, header = false) => {
+      if (!line || line.trim().length == 0) return "";
+
       const column = line.split(',');
-      if (column.length == 0)
-        return "";
+      //if (column.length == 0)
+        //return "";
 
       var result = "";
       for (var i = 0; i < index.length; i++)
