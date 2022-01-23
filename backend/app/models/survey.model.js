@@ -145,6 +145,9 @@ module.exports = (sequelize, Sequelize) => {
     contactId: {
       type: Sequelize.INTEGER
     },
+    code: {
+      type: Sequelize.STRING
+    },
   });
 
   return Survey;

@@ -137,10 +137,7 @@ class ProjectDataService {
     const render = (item) => {
       if (item === true) return '是';
       if (item === false) return '否';
-
-      return (item
-        ? item
-        : '');
+      return (item ? item : '');
     }
 
     const flatten = (obj, path = '', newline = true) => {

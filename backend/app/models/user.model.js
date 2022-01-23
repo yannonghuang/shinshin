@@ -33,6 +33,9 @@ module.exports = (sequelize, Sequelize) => {
     contactOnly: {
       type: Sequelize.BOOLEAN
     },
+    code: {
+      type: Sequelize.STRING
+    },
   });
 
   return User;
