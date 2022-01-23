@@ -146,7 +146,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.INTEGER
     },
     code: {
-      type: Sequelize.STRING
+      type: Sequelize.INTEGER
     },
   });
 

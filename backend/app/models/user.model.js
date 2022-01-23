@@ -34,7 +34,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.BOOLEAN
     },
     code: {
-      type: Sequelize.STRING
+      type: Sequelize.INTEGER
     },
   });
 
