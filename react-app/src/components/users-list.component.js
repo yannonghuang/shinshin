@@ -381,7 +381,7 @@ const UsersList = (props) => {
 
           {!schoolId && (<input
             type="text"
-            className="form-control"
+            className="form-control ml-2"
             placeholder="学校编码"
             value={searchSchoolCode}
             onChange={onChangeSearchSchoolCode}
@@ -389,13 +389,13 @@ const UsersList = (props) => {
 
           <input
             type="text"
-            className="form-control"
+            className="form-control ml-2"
             placeholder="用户名/中文名"
             value={searchUsername}
             onChange={onChangeSearchUsername}
           />
 
-          <div className="input-group-append">
+          <div className="input-group-append ml-2">
             <button
               className="btn btn-primary badge-success"
               type="button"

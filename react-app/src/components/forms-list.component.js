@@ -279,25 +279,25 @@ const FormsList = (props) => {
 
           <input
             type="text"
-            className="form-control"
+            className="form-control ml-2"
             placeholder="标题查找"
             value={searchTitle}
             onChange={onChangeSearchTitle}
           />
-
+{/*
           <div>
             <button
-              className="btn btn-primary badge btn-block"
+              className="btn btn-primary badge btn-block ml-2"
               type="button"
               onClick={onClearSearch}
             >
               清空
             </button>
           </div>
-
-          <div className="input-group-append">
+*/}
+          <div className="input-group-append ml-2">
             <button
-              className="btn btn-outline-secondary"
+              className="btn btn-primary badge-success"
               type="button"
               onClick={findByTitle}
             >

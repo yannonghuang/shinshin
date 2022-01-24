@@ -449,7 +449,7 @@ const ProjectsList = (props) => {
 
           {!embedded && (<input
             type="text"
-            className="form-control"
+            className="form-control ml-2"
             placeholder="学校编号"
             value={searchCode}
             onChange={onChangeSearchCode}
@@ -458,7 +458,7 @@ const ProjectsList = (props) => {
           <input
             type="text"
             readonly=""
-            className="form-control"
+            className="form-control ml-2"
             placeholder="项目年份"
             value={searchCreatedAt}
             onChange={onChangeSearchInputCreatedAt}
@@ -475,7 +475,7 @@ const ProjectsList = (props) => {
 
           <div>
             <button
-              className="btn btn-primary badge btn-block"
+              className="btn btn-primary badge btn-block ml-2"
               type="button"
               onClick={onClearSearch}
             >
