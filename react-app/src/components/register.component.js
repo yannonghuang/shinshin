@@ -92,7 +92,6 @@ export default class Register extends Component {
       startAt: null,
       createdAt: null,
       lastLogin: null,
-      lastLogin: null,
       title: "",
       newuser: true,
 

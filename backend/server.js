@@ -54,6 +54,8 @@ app.listen(PORT, () => {
 
 function initial() {
 
+  //Role.destroy({ truncate : true, cascade: false });
+
   Role.create({
     id: 1,
     name: "user"

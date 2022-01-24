@@ -53,7 +53,6 @@ export default class Project extends Component {
         budget: 0,
         photo: null,
         file: null, // for photo
-        status: "",
         description: "",
 
         docFiles: [],
@@ -619,7 +618,7 @@ export default class Project extends Component {
       <div>
         {(this.state.submitted /*&& this.state.newproject*/) ? (
           <div>
-            <h4>{this.state.message}</h4>
+            {this.state.message}
             <a href={"/projectsView/" + currentProject.id} class="btn btn-success">返回</a>
 {/*}
             <h4>项目信息成功提交!</h4>
