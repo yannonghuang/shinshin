@@ -22,7 +22,7 @@ const Role = db.role;
 
 db.sequelize.sync(/*{ force: true }*/).then(() => {
   //console.log("Drop and re-sync db.");
-  //initial();
+  initial();
 });
 
 /** simple route
