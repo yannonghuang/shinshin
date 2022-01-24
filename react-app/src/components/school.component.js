@@ -1012,7 +1012,7 @@ alert(JSON.stringify(this.state.currentSchool))
       <div>
         {(this.state.submitted /*&& this.state.newschool*/) ? (
           <div>
-            {this.state.message}
+            <div>{this.state.message}</div>
 
             <a href={"/schoolsView/" + currentSchool.id} class="btn btn-success">返回</a>
 {/*}

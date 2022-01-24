@@ -608,7 +608,7 @@ export default class Register extends Component {
                     onChange={this.onChangeWechat}
                   />
                 </div>
-
+{/*
                 <div class="form-group col-md-4">
                   <label htmlFor="startAt">加入时间</label>
                   <Input
@@ -620,7 +620,7 @@ export default class Register extends Component {
                     onChange={this.onChangeStartAt}
                   />
                 </div>
-
+*/}
                 <div class="form-group col-md-4">
                   <label htmlFor="title">职务</label>
                   <select onChange={this.onChangeTitle.bind(this)}

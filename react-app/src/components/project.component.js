@@ -618,7 +618,7 @@ export default class Project extends Component {
       <div>
         {(this.state.submitted /*&& this.state.newproject*/) ? (
           <div>
-            {this.state.message}
+            <div>{this.state.message}</div>
             <a href={"/projectsView/" + currentProject.id} class="btn btn-success">返回</a>
 {/*}
             <h4>项目信息成功提交!</h4>
