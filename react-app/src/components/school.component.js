@@ -1512,6 +1512,7 @@ alert(JSON.stringify(this.state.currentSchool))
               <TabPanel>
                 <DocumentsList
                   schoolId = {currentSchool.id}
+                  docCategory = {'!照片'}
                   embedded = {true}
                   readonly = {this.state.readonly}
                 />

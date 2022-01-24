@@ -344,7 +344,6 @@ exports.updateContactOnly = (req, res) => {
 };
 
 exports.createContactOnly = (req, res) => {
-
   // Save User to Database
   User.create(req.body)
     .then(user => {

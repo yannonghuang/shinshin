@@ -77,7 +77,7 @@ exports.findAll2 = (req, res) => {
   const page = req.body.page;
   const size = req.body.size;
   const schoolId = req.body.schoolId;
-  const docCategory = req.body.docCategory;
+  var docCategory = req.body.docCategory;
 
 
   //const { page, size, originalname } = req.query;
@@ -85,7 +85,11 @@ exports.findAll2 = (req, res) => {
         [Op.and]: [
             originalname ? { originalname: { [Op.like]: `%${originalname}%` } } : null,
             schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null,
-            docCategory ? { docCategory: { [Op.eq]: `${docCategory}` } } : null
+            docCategory
+              ? docCategory.startsWith('!')
+                ? { docCategory: { [Op.ne]: `${docCategory.substring(1)}` } }
+                : { docCategory: { [Op.eq]: `${docCategory}` } }
+              : null
         ]};
 
   const { limit, offset } = getPagination(page, size);
