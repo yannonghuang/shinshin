@@ -121,7 +121,7 @@ exports.SAVE_SQL_findAll2 = (req, res) => {
 
   const { limit, offset } = getPagination(page, size);
 
-  const selectClause = "select id, code, name, description, principal, region, address, phone, teachersCount, studentsCount, year(createdAt) as createdYear, ";
+  const selectClause = "select id, code, name, description, principal, region, address, phone, teachersCount, studentsCount, year(startAt) as createdYear, ";
   const attributeResponsesCount = "(select count(*)  from responses where responses.projectId = projects.Id) as responsesCount, "
   const attributeDossiersCount = "(select count(*) from dossiers where dossiers.projectId = projects.Id) as dossiersCount ";
   const fromClause = "from projects ";
@@ -171,7 +171,7 @@ exports.findAll2 = (req, res) => {
   const page = req.body.page;
   const size = req.body.size;
   const orderby = req.body.orderby;
-  const createdAt = req.body.createdAt;
+  const startAt = req.body.startAt;
   const schoolId = req.body.schoolId;
   const code = req.body.code;
   const exportFlag = req.body.exportFlag;
@@ -197,7 +197,7 @@ var orderbyObject = null;
             name ? { name: { [Op.like]: `%${name}%` } } : null,
             schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null,
             code ? { '$school.code$': { [Op.eq]: `${code}` } } : null,
-            createdAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('projects.createdAt')), `${createdAt}`) } } : null
+            startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('projects.startAt')), `${startAt}`) } } : null
         ]};
 
   var include = [
@@ -230,7 +230,7 @@ var orderbyObject = null;
 //  offset: offset,
   subQuery: false,
   attributes: ['id', 'name', 'budget', 'status', 'description', //'schoolId', 'responseId'
-            "createdAt", //[db.Sequelize.fn("year", db.Sequelize.col("projects.createdAt")), "createdAt"],
+            "startAt", //[db.Sequelize.fn("year", db.Sequelize.col("projects.startAt")), "startAt"],
   //          [db.Sequelize.fn("COUNT", db.Sequelize.col("responses.id")), "responsesCount"],
   ],
 
@@ -373,7 +373,7 @@ exports.findOne = (req, res) => {
 
   Project.findByPk(id, {
       attributes: ['id', 'name', 'budget', 'status', 'description',
-                    [db.Sequelize.fn("year", db.Sequelize.col("projects.createdAt")), "createdAt"],
+                    [db.Sequelize.fn("year", db.Sequelize.col("projects.startAt")), "startAt"],
                   ],
 
       include: [

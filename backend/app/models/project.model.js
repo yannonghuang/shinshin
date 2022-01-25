@@ -15,6 +15,9 @@ module.exports = (sequelize, Sequelize) => {
     description: {
       type: Sequelize.STRING
     },
+    startAt: {
+      type: Sequelize.DATE
+    },
   });
 
   return Project;
