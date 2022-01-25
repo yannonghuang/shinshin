@@ -256,7 +256,11 @@ const ProjectsList = (props) => {
         accessor: "status",
       },
       {
-        Header: "项目申请(项目名称)",
+        Header: "项目名称",
+        accessor: "name",
+      },
+      {
+        Header: "项目申请",
         accessor: "response.title",
         disableSortBy: true,
         Cell: (props) => {
@@ -549,7 +553,8 @@ const ProjectsList = (props) => {
                     {/* Add a sort direction indicator */}
                     <span>
                       {/*column.isSorted*/ (column.id === 'school.region' || column.id === 'school.code' ||
-                      column.id === 'school.name' || column.id === 'createdAt' || column.id === 'status' )
+                      column.id === 'school.name' || column.id === 'createdAt' || column.id === 'status'
+                      || column.id === 'name' )
                       ? column.isSortedDesc
                         ? ' 🔽'
                         : ' 🔼'

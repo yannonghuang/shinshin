@@ -639,9 +639,9 @@ export default class Project extends Component {
 
                 <div class="form-group">
                 <label htmlFor="name">项目名称</label>
-                <input
+                <textarea
                 readonly={this.state.readonly?"":false}
-                type="text"
+                cols="26"
                 class="form-control"
                 id="name"
                 required
