@@ -443,19 +443,11 @@ const ProjectsList = (props) => {
 
           <input
             type="text"
-            className="form-control"
+            className="form-control mr-2"
             placeholder="项目名称"
             value={searchName}
             onChange={onChangeSearchName}
           />
-
-          {!embedded && (<input
-            type="text"
-            className="form-control ml-2"
-            placeholder="学校编号"
-            value={searchCode}
-            onChange={onChangeSearchCode}
-          />)}
 
           <input
             type="text"
@@ -463,7 +455,6 @@ const ProjectsList = (props) => {
             className="form-control ml-2"
             placeholder="项目年份"
             value={searchStartAt}
-            onChange={onChangeSearchInputStartAt}
           />
           <YearPicker
             yearArray={['2019', '2020']}
@@ -473,6 +464,14 @@ const ProjectsList = (props) => {
             minRange={1995}
             maxRange={2022}
           />
+
+          {!embedded && (<input
+            type="text"
+            className="form-control ml-2"
+            placeholder="学校编号"
+            value={searchCode}
+            onChange={onChangeSearchCode}
+          />)}
 
           <select
             className="form-control ml-2"
