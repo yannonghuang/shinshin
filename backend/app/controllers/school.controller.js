@@ -16,7 +16,7 @@ const SCHOOL_REQUESTS_SS = db.SCHOOL_REQUESTS_SS;
 const SCHOOL_CATEGORIES = db.SCHOOL_CATEGORIES;
 
 const getPagination = (page, size) => {
-  const limit = size ? +size : 5;
+  const limit = size ? +size : 30;
   const offset = page ? page * limit : 0;
 
   return { limit, offset };
@@ -310,13 +310,19 @@ exports.findAll2 = (req, res) => {
   const orderby = req.body.orderby;
   const code = req.body.code;
   const donor = req.body.donor;
-  const region = req.body.region;
+  //const region = req.body.region;
   const stage = req.body.stage;
   const status = req.body.status;
   const request = req.body.request;
   const startAt = req.body.startAt;
   const lastVisit = req.body.lastVisit;
   const exportFlag = req.body.exportFlag;
+  const region = req.body.region
+    ? req.body.region.startsWith('湖南湘西')
+      ? req.body.region.substring(0, 4)
+      : req.body.region.substring(0, 2)
+    : null;
+
   //var condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
 
   var orderbyObject = null;
@@ -338,7 +344,8 @@ exports.findAll2 = (req, res) => {
             name ? { name: { [Op.like]: `%${name}%` } } : null,
             code ? { code: { [Op.like]: `%${code}%` } } : null,
             donor ? { donor: { [Op.like]: `%${donor}%` } } : null,
-            region ? { region: { [Op.eq]: `${region}` } } : null,
+            //region ? { region: { [Op.eq]: `${region}` } } : null,
+            region ? { region: { [Op.like]: `%${region}%` } } : null,
             stage ? { stage: { [Op.eq]: `${stage}` } } : null,
             status ? { status: { [Op.eq]: `${status}` } } : null,
             request ? { request: { [Op.eq]: `${request}` } } : null,

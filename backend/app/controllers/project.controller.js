@@ -8,7 +8,7 @@ const School = db.schools;
 const PROJECT_STATUSES = db.PROJECT_STATUSES;
 
 const getPagination = (page, size) => {
-  const limit = size ? +size : 5;
+  const limit = size ? +size : 30;
   const offset = page ? page * limit : 0;
 
   return { limit, offset };
@@ -175,8 +175,13 @@ exports.findAll2 = (req, res) => {
   const schoolId = req.body.schoolId;
   const code = req.body.code;
   const exportFlag = req.body.exportFlag;
+  const region = req.body.region
+    ? req.body.region.startsWith('湖南湘西')
+      ? req.body.region.substring(0, 4)
+      : req.body.region.substring(0, 2)
+    : null;
 
-var orderbyObject = null;
+  var orderbyObject = null;
   if (orderby) {
     orderbyObject = [];
     for (var i = 0; i < orderby.length; i++) {
@@ -197,6 +202,7 @@ var orderbyObject = null;
             name ? { name: { [Op.like]: `%${name}%` } } : null,
             schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null,
             code ? { '$school.code$': { [Op.eq]: `${code}` } } : null,
+            region ? { '$school.region$': { [Op.like]: `%${region}%` } } : null,
             startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('projects.startAt')), `${startAt}`) } } : null
         ]};
 

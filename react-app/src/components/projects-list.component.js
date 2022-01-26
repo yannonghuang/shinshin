@@ -30,11 +30,11 @@ const ProjectsList = (props) => {
 
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(30);
 
   const [totalItems, setTotalItems] = useState(0);
 
-  const pageSizes = [5, 10, 20];
+  const pageSizes = [20, 30, 50];
 
   const [orderby, setOrderby] = useState([]);
 
@@ -186,7 +186,7 @@ const ProjectsList = (props) => {
       });
   };
 
-  useEffect(retrieveProjects, [page, pageSize, orderby, searchCode, searchName, searchStartAt]);
+  useEffect(retrieveProjects, [page, pageSize, orderby, searchCode, searchName, searchStartAt, searchRegion]);
 
   const refreshList = () => {
     retrieveProjects();
@@ -280,39 +280,11 @@ const ProjectsList = (props) => {
           );
         },
       },
-      {
-        Header: "项目费用",
-        accessor: "budget",
-        disableSortBy: true,
-      },
+
       {
         Header: "项目描述",
         accessor: "description",
         disableSortBy: true,
-      },
-      {
-        Header: "学校学生数",
-        accessor: 'school.studentsCount',
-        disableSortBy: true,
-      },
-      {
-        Header: "学校教师数",
-        accessor: 'school.teachersCount',
-        disableSortBy: true,
-      },
-      {
-        Header: "学校类型",
-        accessor: 'school.category',
-        disableSortBy: true,
-      },
-      {
-        Header: "ID",
-        accessor: "id",
-        disableSortBy: true,
-      },
-      {
-        Header: "省（直辖市）",
-        accessor: "school.region",
       },
       {
         Header: "学校编号",
@@ -333,6 +305,10 @@ const ProjectsList = (props) => {
         },
       },
       {
+        Header: "省（直辖市）",
+        accessor: "school.region",
+      },
+      {
         Header: "学校名称",
         accessor: "school.name",
         Cell: (props) => {
@@ -349,6 +325,26 @@ const ProjectsList = (props) => {
             </div>
           );
         },
+      },
+      {
+        Header: "学生数",
+        accessor: 'school.studentsCount',
+        disableSortBy: true,
+      },
+      {
+        Header: "教师数",
+        accessor: 'school.teachersCount',
+        disableSortBy: true,
+      },
+      {
+        Header: "学校类型",
+        accessor: 'school.category',
+        disableSortBy: true,
+      },
+      {
+        Header: "项目费用",
+        accessor: "budget",
+        disableSortBy: true,
       },
       {
         Header: "操作",
@@ -478,6 +474,19 @@ const ProjectsList = (props) => {
             maxRange={2022}
           />
 
+          <select
+            className="form-control ml-2"
+            placeholder="...."
+            value={searchRegion}
+            onChange={onChangeSearchRegion}
+          >
+            <option value="">省/自治区</option>
+            {regions.map((option) => (
+            <option value={option}>
+            {option}
+            </option>
+            ))}
+          </select>
 
           <div>
             <button
@@ -584,8 +593,28 @@ const ProjectsList = (props) => {
         </table>
       </div>
 
-      <div className="col-md-8">
+      <div className="mt-3 col-md-12">
+        {"每页显示行数: "}
+        <select onChange={handlePageSizeChange} value={pageSize}>
+          {pageSizes.map((size) => (
+            <option key={size} value={size}>
+              {size}
+            </option>
+          ))}
+        </select>
+
+        <Pagination
+          className="my-3"
+          count={count}
+          page={page}
+          siblingCount={1}
+          boundaryCount={1}
+          variant="outlined"
+          shape="rounded"
+          onChange={handlePageChange}
+        />
       </div>
+
     </div>
   );
 };
