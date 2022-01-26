@@ -505,7 +505,7 @@ const ProjectsList = (props) => {
 
           <div>
             <button
-              className="btn btn-primary"
+              className="btn btn-primary ml-2"
               type="button"
               onClick={retrieveExportProjects}
             >
