@@ -8,12 +8,19 @@ import AuthService from "./auth.service";
 const SESSION_IDEL_MINUTES = 20;
 
 const AutoLogoutTimer = (props: any) => {
+    const logout = () => {
+        AuthService.logout();
+        props.history.push('/login');
+    }
+
+    if (!localStorage.getItem('user')) logout();
+
     const { ComposedClass, ...passThroughProps } = props;
     //const history = useHistory();
 
     const handleOnIdle = (event: any) => {
         //console.log('user is idle', event)
-        //console.log('last active', getLastActiveTime())
+        console.log('last active', getLastActiveTime())
         AuthService.logout();
         props.history.push('/login');
     }
