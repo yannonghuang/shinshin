@@ -8,6 +8,8 @@ import $ from "jquery"; //Load jquery
 import { Link } from "react-router-dom";
 import Select from 'react-select';
 
+import YearPicker from 'react-single-year-picker';
+
 import ResponsesList from './responses-list.component.js';
 import DossiersList from './dossiers-list.component.js';
 import ProjectDataService from "../services/project.service";
@@ -28,6 +30,7 @@ export default class Project extends Component {
     this.onChangePhoto = this.onChangePhoto.bind(this);
     this.onChangeStatus = this.onChangeStatus.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
+    this.onChangeStartAt = this.onChangeStartAt.bind(this);
 
     this.getProject = this.getProject.bind(this);
     this.getProjectPhoto = this.getProjectPhoto.bind(this);
@@ -54,6 +57,7 @@ export default class Project extends Component {
         photo: null,
         file: null, // for photo
         description: "",
+        startAt: null,
 
         docFiles: [],
         docCategory: ""
@@ -273,6 +277,18 @@ export default class Project extends Component {
     }));
   }
 
+  onChangeStartAt(e) {
+    const startAt = e; //e.target.value;
+    this.setState(function(prevState) {
+      return {
+        currentProject: {
+          ...prevState.currentProject,
+          startAt: startAt
+        }
+      };
+    });
+  };
+
   getProject(id) {
     ProjectDataService.get(id)
       .then(response => {
@@ -358,6 +374,7 @@ export default class Project extends Component {
       docFiles: [],
       docCategory: "",
       description: "",
+      startAt: null
       },
 
       submitted: false
@@ -414,6 +431,7 @@ export default class Project extends Component {
       responseId: this.state.currentProject.responseId,
       status: this.state.currentProject.status,
       description: this.state.currentProject.description,
+      startAt: this.state.currentProject.startAt ? (this.state.currentProject.startAt + '-02-01') : null,
     };
 
     try {
@@ -455,6 +473,7 @@ export default class Project extends Component {
       schoolId: this.state.currentProject.schoolId,
       responseId: this.state.currentProject.responseId,
       description: this.state.currentProject.description,
+      startAt: this.state.currentProject.startAt ? (this.state.currentProject.startAt + '-02-01') : null,
     };
 
     try {
@@ -726,7 +745,7 @@ export default class Project extends Component {
                 </div>
                 ) : '' }
 
-                <div class="w-100"></div>
+
 
                 <div class="select-container form-group col-md-4">
                 <label htmlFor="status">项目状态</label>
@@ -744,6 +763,29 @@ export default class Project extends Component {
                   <option value={option}>{option}</option>
                 ))}
                 </select>
+                </div>
+
+
+
+                <div className="col-md-4">
+                  <label htmlFor="startAt">项目年份</label>
+                  {(this.state.readonly)
+                  ?<input
+                     type="text"
+                     id='startAt'
+                     readonly=""
+                     className="form-group"
+                     placeholder="项目年份"
+                     value={currentProject.startAt}
+                  />
+                  :<YearPicker
+                     yearArray={['2019', '2020']}
+                     value={currentProject.startAt}
+                     onSelect={this.onChangeStartAt}
+                     minRange={1995}
+                     maxRange={2022}
+                  />
+                  }
                 </div>
 
               </div>

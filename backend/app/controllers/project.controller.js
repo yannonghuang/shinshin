@@ -46,6 +46,7 @@ exports.create = (req, res) => {
     status: req.body.status,
     schoolId: req.body.schoolId,
     description: req.body.description,
+    startAt: req.body.startAt,
   };
 
   // Save Project in the database
