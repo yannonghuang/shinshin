@@ -5,6 +5,8 @@ import $ from "jquery"; //Load jquery
 import React, { Component, createRef } from "react"; //For react component
 import ReactDOM from "react-dom";
 
+import YearPicker from 'react-single-year-picker';
+
 window.jQuery = $; //JQuery alias
 window.$ = $; //JQuery alias
 require("jquery-ui-sortable"); //For FormBuilder Element Drag and Drop
@@ -17,6 +19,7 @@ export default class Form extends Component {
     this.onChangeTitle = this.onChangeTitle.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
     this.onChangeDeadline = this.onChangeDeadline.bind(this);
+    this.onChangeStartAt = this.onChangeStartAt.bind(this);
     this.getForm = this.getForm.bind(this);
     //this.updatePublished = this.updatePublished.bind(this);
     this.updateForm = this.updateForm.bind(this);
@@ -32,6 +35,7 @@ export default class Form extends Component {
         published: false,
         fdata: null,
         deadline: null,
+        startAt: null,
       },
       message: "",
       newsform: true,
@@ -83,6 +87,17 @@ export default class Form extends Component {
     }
   }
 
+  onChangeStartAt(e) {
+    const startAt = e; //e.target.value;
+    this.setState(function(prevState) {
+      return {
+        currentForm: {
+          ...prevState.currentForm,
+          startAt: startAt
+        }
+      };
+    });
+  };
 
   onChangeTitle(e) {
     const title = e.target.value;
@@ -172,6 +187,7 @@ export default class Form extends Component {
       title: this.state.currentForm.title,
       description: this.state.currentForm.description,
       deadline: this.state.currentForm.deadline,
+      startAt: this.state.currentForm.startAt ? (this.state.currentForm.startAt + '-02-01') : null,
       fdata: this.fBuilder.actions.getData() /* formData */
     };
 
@@ -199,6 +215,7 @@ export default class Form extends Component {
         title: "",
         description: "",
         deadline: null,
+        startAt: null,
       },
       submitted: false
     }));
@@ -268,6 +285,29 @@ export default class Form extends Component {
                   onChange={this.onChangeDeadline}
                 />
               </div>
+
+              <div className="form-group">
+                <label htmlFor="startAt">项目年份</label>
+                {(!this.state.newform && this.state.readonly)
+                ?<input
+                   type="text"
+                   id='startAt'
+                   readonly=""
+                   className="form-group"
+                   placeholder="项目年份"
+                   value={currentForm.startAt}
+                />
+                :<YearPicker
+                   yearArray={['2019', '2020']}
+                   value={currentForm.startAt}
+                   onSelect={this.onChangeStartAt}
+
+                   minRange={1995}
+                   maxRange={2022}
+                />
+                }
+              </div>
+
             </form>
           </div>
 

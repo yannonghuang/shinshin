@@ -6,6 +6,9 @@ module.exports = (sequelize, Sequelize) => {
     fdata: {
       type: Sequelize.JSON,
     },
+    startAt: {
+      type: Sequelize.DATE
+    },
   });
 
   return Response;

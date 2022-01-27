@@ -1,5 +1,6 @@
 const db = require("../models");
 const Response = db.responses;
+const Form = db.forms;
 const Project = db.projects;
 const Attachment = db.attachments;
 const School = db.schools;
@@ -24,13 +25,20 @@ const getPagingData = (count, data, page, limit) => {
 };
 
 // Create and Save a new Response
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
   // Validate request
   if (!req.body.title) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
     return;
+  }
+
+  const formId = req.body.formId;
+  var startAt = null;
+  if (formId) {
+    const f = await Form.findByPk(formId);
+    if (f) startAt = f.startAt;
   }
 
   // Create a Response
@@ -40,6 +48,7 @@ exports.create = (req, res) => {
     formId: req.body.formId,
     schoolId: req.body.schoolId,
     userId: req.body.userId,
+    startAt: startAt,
   };
 
   // Save Response in the database
@@ -51,6 +60,7 @@ exports.create = (req, res) => {
       name: data.title, //req.body.name,
       schoolId: data.schoolId,
       responseId: data.id,
+      startAt: startAt,
     };
 
     // Save Project in the database

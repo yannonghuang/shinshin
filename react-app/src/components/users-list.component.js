@@ -18,7 +18,7 @@ const UsersList = (props) => {
 
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(30);
 
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
 
@@ -29,7 +29,7 @@ const UsersList = (props) => {
                                                {name: "volunteer", label: "欣欣义工"},
                                              ]);
 
-  const pageSizes = [5, 10, 20];
+  const pageSizes = [20, 30, 50];
 
   const [orderby, setOrderby] = useState([]);
 
@@ -479,8 +479,28 @@ const UsersList = (props) => {
         </table>
       </div>
 
-      <div className="col-md-8">
+      <div className="mb-3 col-md-12">
+        {"每页显示行数: "}
+        <select onChange={handlePageSizeChange} value={pageSize}>
+          {pageSizes.map((size) => (
+            <option key={size} value={size}>
+              {size}
+            </option>
+          ))}
+        </select>
+
+        <Pagination
+          className="my-3"
+          count={count}
+          page={page}
+          siblingCount={1}
+          boundaryCount={1}
+          variant="outlined"
+          shape="rounded"
+          onChange={handlePageChange}
+        />
       </div>
+
     </div>
   );
 };

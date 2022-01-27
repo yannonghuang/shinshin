@@ -15,6 +15,9 @@ module.exports = (sequelize, Sequelize) => {
     deadline: {
       type: Sequelize.DATE,
     },
+    startAt: {
+      type: Sequelize.DATE
+    },
   });
 
   return Form;

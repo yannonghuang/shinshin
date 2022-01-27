@@ -35,6 +35,7 @@ exports.create = (req, res) => {
     title: req.body.title,
     description: req.body.description,
     deadline: req.body.deadline,
+    startAt: req.body.startAt,
     published: req.body.published ? req.body.published : false,
     fdata: req.body.fdata,
   };
@@ -74,7 +75,7 @@ exports.findAll = (req, res) => {
 
 exports.findAll2 = (req, res) => {
   const title = req.body.title;
-  const createdAt = req.body.createdAt;
+  const startAt = req.body.startAt;
   const page = req.body.page;
   const size = req.body.size;
   const orderby = req.body.orderby;
@@ -110,7 +111,7 @@ exports.findAll2 = (req, res) => {
   var condition = {
         [Op.and]: [
             title ? { title: { [Op.like]: `%${title}%` } } : null,
-            createdAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('form.createdAt')), `${createdAt}`) } } : null
+            startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('form.startAt')), `${startAt}`) } } : null
         ]};
 
   const { limit, offset } = getPagination(page, size);
@@ -123,7 +124,7 @@ exports.findAll2 = (req, res) => {
   attributes: ['id', 'title', 'description',// 'deadline',
       [db.Sequelize.fn("COUNT", db.Sequelize.col("responses.id")), "responsesCount"],
       [db.Sequelize.fn('date_format', db.Sequelize.col("deadline"), '%Y-%m-%d'), "deadline"],
-      "createdAt", //[db.Sequelize.fn('date_format', db.Sequelize.col("form.createdAt"), '%Y-%m-%d'), "createdAt"],
+      "startAt", //[db.Sequelize.fn('date_format', db.Sequelize.col("form.startAt"), '%Y-%m-%d'), "startAt"],
   ],
   include: [{
       model: Response,
@@ -203,7 +204,8 @@ exports.findOne = (req, res) => {
   Form.findByPk(id, {
     attributes: ['id', 'title', 'description', 'fdata', // 'deadline',
       [db.Sequelize.fn('date_format', db.Sequelize.col("deadline"), '%Y-%m-%d'), "deadline"],
-      [db.Sequelize.fn('date_format', db.Sequelize.col("createdAt"), '%Y-%m-%d'), "createdAt"],
+      [db.Sequelize.fn('YEAR', db.Sequelize.col('form.startAt')), "startAt"],
+      //[db.Sequelize.fn('date_format', db.Sequelize.col("startAt"), '%Y-%m-%d'), "startAt"],
   ]
   })
     .then(data => {
