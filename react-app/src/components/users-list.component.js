@@ -282,13 +282,13 @@ const UsersList = (props) => {
         accessor: "createdAt",
       },
       {
-        Header: "仅联络方式",
+        Header: "注册用户",
         accessor: 'contactOnly',
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
-                {usersRef.current[rowIdx].contactOnly ? '是' : '否'}
+                {usersRef.current[rowIdx].contactOnly ? '否' : '是'}
             </div>
           );
         },
@@ -363,7 +363,7 @@ const UsersList = (props) => {
 
   return (
     <div className="list row">
-      <div className="col-md-8">
+      <div className="col-md-6">
         <h4>{schoolTitle ? schoolTitle + " - " : ""}用户列表(总数：{totalItems})</h4>
         <div className="input-group mb-3">
           <select
@@ -407,7 +407,7 @@ const UsersList = (props) => {
         </div>
       </div>
 
-      <div className="mb-3 col-md-3">
+      <div className="mb-3 col-md-4">
         {"每页显示行数: "}
         <select onChange={handlePageSizeChange} value={pageSize}>
           {pageSizes.map((size) => (
@@ -429,10 +429,10 @@ const UsersList = (props) => {
         />
       </div>
 
-      <a target="_blank"
-         href={"/addU?schoolId=" + schoolId} class="btn btn-primary col-md-.5 mt-5 mb-4">
-           新建
-      </a>
+      {schoolId && (<a target="_blank"
+         href={"/addU?schoolId=" + schoolId} class="btn btn-primary mt-5 mb-5">
+           新建联络方式
+      </a>)}
 
       <div class="w-100"></div>
 

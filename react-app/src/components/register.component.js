@@ -115,7 +115,8 @@ export default class Register extends Component {
     }
 
     const qString = queryString.parse(this.props.location.search);
-    this.setState({schoolId: qString.schoolId});
+    if (qString && qString.schoolId)
+      this.setState({schoolId: qString.schoolId, contactOnly: true});
 
     this.getRoles();
     this.getSchools();
@@ -518,6 +519,7 @@ export default class Register extends Component {
           >
           {!this.state.successful && (
             <div class="row">
+{/*}
                 <div class="form-group col-md-4">
                   <label htmlFor="contactOnly"><h5>仅联络方式(信息不作校验)</h5></label>
                   <Input
@@ -531,7 +533,7 @@ export default class Register extends Component {
                 </div>
 
                 <div class="w-100"></div>
-
+*/}
                 <div class="form-group col-md-4" hidden={this.state.contactOnly}>
                   <label htmlFor="username">用户名</label>
                   <Input
