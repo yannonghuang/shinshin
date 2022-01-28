@@ -418,12 +418,12 @@ const UsersList = (props) => {
             value={searchContactOnly}
             onChange={onChangeSearchContactOnly}
           >
-            <option value="">注册用户?</option>
+            <option value="">用户类型</option>
               <option value={false}>
-                {'是'}
+                {'注册用户'}
               </option>
               <option value={true}>
-                {'否'}
+                {'非注册用户'}
               </option>
           </select>
 

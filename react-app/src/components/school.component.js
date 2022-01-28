@@ -1516,7 +1516,7 @@ alert(JSON.stringify(this.state.currentSchool))
                 <ResponsesList
                   schoolId = {currentSchool.id}
                   embedded = {true}
-                  readonly = {this.state.readonly}
+                  readonly = {false}
                 />
               </TabPanel>
               <TabPanel>
