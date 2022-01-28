@@ -349,7 +349,7 @@ exports.findAll2 = async (req, res) => {
         [Op.and]: [
             id ? { id: { [Op.eq]: `${id}` } } : null,
             name ? { name: { [Op.like]: `%${name}%` } } : null,
-            code ? { code: { [Op.like]: `%${code}%` } } : null,
+            code ? { code: { [Op.like]: `${code}` } } : null,
             donor ? { donor: { [Op.like]: `%${donor}%` } } : null,
             //region ? { region: { [Op.eq]: `${region}` } } : null,
             region ? { region: { [Op.like]: `%${region}%` } } : null,

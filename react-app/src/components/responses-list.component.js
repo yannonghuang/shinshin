@@ -16,7 +16,7 @@ const ResponsesList = (props) => {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [searchTitle, setSearchTitle] = useState("");
   const [searchCode, setSearchCode] = useState("");
-  const [searchStartAtAt, setSearchStartAtAt] = useState("");
+  const [searchStartAt, setSearchStartAt] = useState("");
   const [title, setTitle] = useState(null);
 
   const [formId, setFormId] = useState(props.match? props.match.params.formId : props.formId);
@@ -50,14 +50,14 @@ const ResponsesList = (props) => {
     setSearchCode(searchCode);
   };
 
-  const onChangeSearchStartAtAt = (e) => {
-    const searchStartAtAt = e; // e.target.value;
-    setSearchStartAtAt(searchStartAtAt);
+  const onChangeSearchStartAt = (e) => {
+    const searchStartAt = e; // e.target.value;
+    setSearchStartAt(searchStartAt);
   };
 
-  const onChangeSearchInputStartAtAt = (e) => {
-    const searchStartAtAt = e; //e.target.value;
-    setSearchStartAtAt(searchStartAtAt);
+  const onChangeSearchInputStartAt = (e) => {
+    const searchStartAt = e; //e.target.value;
+    setSearchStartAt(searchStartAt);
   };
 
   const getRequestParams = (/*searchTitle, page, pageSize, formId, schoolId, userId, orderby*/) => {
@@ -73,8 +73,8 @@ const ResponsesList = (props) => {
       params["code"] = searchCode;
     }
 
-    if (searchStartAtAt) {
-      params["startAtAt"] = searchStartAtAt;
+    if (searchStartAt) {
+      params["startAt"] = searchStartAt;
     }
 
     if (page) {
@@ -107,7 +107,7 @@ const ResponsesList = (props) => {
   const onClearSearch = (e) => {
     setSearchTitle("");
     setSearchCode("");
-    setSearchStartAtAt("");
+    setSearchStartAt("");
     setOrderby([]);
   };
 
@@ -144,7 +144,7 @@ const ResponsesList = (props) => {
       });
   };
 
-  useEffect(retrieveResponses, [page, pageSize, orderby, searchTitle, searchCode, searchStartAtAt]);
+  useEffect(retrieveResponses, [page, pageSize, orderby, searchTitle, searchCode, searchStartAt]);
 
   const refreshList = () => {
     retrieveResponses();
@@ -364,7 +364,7 @@ const ResponsesList = (props) => {
       hiddenColumns: hiddenColumns,
       sortBy: [
         {
-          id: 'startAtAt',
+          id: 'startAt',
           desc: false
         }
       ]
@@ -401,13 +401,13 @@ const ResponsesList = (props) => {
             readonly=""
             className="form-control"
             placeholder="项目年份"
-            value={searchStartAtAt}
-            onChange={onChangeSearchInputStartAtAt}
+            value={searchStartAt}
+            onChange={onChangeSearchInputStartAt}
           />
           <YearPicker
             yearArray={['2019', '2020']}
-            value={searchStartAtAt}
-            onSelect={onChangeSearchStartAtAt}
+            value={searchStartAt}
+            onSelect={onChangeSearchStartAt}
             hideInput={true}
             minRange={1995}
             maxRange={2022}
@@ -489,7 +489,7 @@ const ResponsesList = (props) => {
                     {/* Add a sort direction indicator */}
                       <span>
                         {/*column.isSorted*/ (column.id === 'school.region' || column.id === 'school.code' ||
-                        column.id === 'school.name' || column.id === 'startAtAt' || column.id === 'updatedAt' ||
+                        column.id === 'school.name' || column.id === 'startAt' || column.id === 'updatedAt' ||
                         column.id === 'title')
                           ? column.isSortedDesc
                             ? ' 🔽'

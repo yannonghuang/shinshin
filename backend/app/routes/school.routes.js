@@ -61,7 +61,7 @@ module.exports = function(app) {
   );
 
   app.post("/api/schools/all",
-    [authJwt.verifyToken],
+    //[authJwt.verifyToken],
     schools.findAll2
   );
 
@@ -77,12 +77,12 @@ module.exports = function(app) {
 
   // Retrieve a single School with id
   app.get("/api/schools/:id",
-    [authJwt.verifyToken],
+    //[authJwt.verifyToken],
     schools.findOne);
 
   // Retrieve a single School photo with id
   app.get("/api/schoolPhoto/:id",
-    [authJwt.verifyToken],
+    //[authJwt.verifyToken],
     schools.findOnePhoto);
 
   // Retrieve "simple" list of Schools

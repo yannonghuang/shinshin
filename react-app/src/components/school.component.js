@@ -199,7 +199,7 @@ export default class School extends Component {
         console.log(response);
       })
       .catch(e => {
-        alert(JSON.stringify(e))
+        //alert(JSON.stringify(e))
         console.log(e);
       });
   }
@@ -1095,7 +1095,7 @@ alert(JSON.stringify(this.state.currentSchool))
 
                 <div class="w-100"></div>
 
-                {this.state.readonly && (
+                {this.state.readonly && localStorage.getItem('user') && (
                 <div class="box">
                   <a target="_blank" href={"/users/school/" + currentSchool.id} class="btn btn-primary">用户</a>
                   <a target="_blank" href={"/logs/school/" + currentSchool.id} class="btn btn-primary">历史</a>

@@ -4,7 +4,7 @@ import authHeader from './auth-header';
 class SchoolDataService {
 
   getAll2(data) {
-    return http.post("/schools/all", data, { headers: authHeader() });
+    return http.post("/schools/all", data /*, { headers: authHeader() }*/);
   }
 
   getExport(data) {
@@ -63,11 +63,11 @@ class SchoolDataService {
   }
 
   get(id) {
-    return http.get(`/schools/${id}`, { headers: authHeader() });
+    return http.get(`/schools/${id}`/*, { headers: authHeader() }*/);
   }
 
   getPhoto(id) {
-    return http.get(`/schoolPhoto/${id}`, { headers: authHeader() });
+    return http.get(`/schoolPhoto/${id}`/*, { headers: authHeader() }*/);
   }
 
   create(data) {

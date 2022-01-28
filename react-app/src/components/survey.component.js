@@ -944,9 +944,8 @@ export default class Survey extends Component {
 
                 <div class="w-100"></div>
 
-                {(this.state.readonly) && (
+                {(this.state.readonly && localStorage.getItem('user')) && (
                   <a target="_blank"
-
                     href={"/surveys/" + currentSurvey.schoolId} class="btn btn-primary mb-4">
                     编辑
                   </a>

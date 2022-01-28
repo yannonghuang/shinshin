@@ -252,10 +252,12 @@ class App extends Component {
             <Route exact path={["/", "/home"]} component={Home} />
           */}
             <Route exact path={["/reset"]} component={Reset} />
-
             <Route exact path={["/login", "/", "/home"]} component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />
+
+            <Route exact path={["/schools"]} component={SchoolsList} />
+            <Route path={["/schoolsView/:id"]} component={School} />
 
 {/*}
             <Route path="/user" component={BoardUser} />
@@ -270,10 +272,10 @@ class App extends Component {
             <Route exact path={["/regions"]} component={RegionsList} >
                 <AutoLogoutTimer ComposedClass={RegionsList} />
             </Route>
-            <Route exact path={["/schools", "/schools/region/:region"]} >
+            <Route exact path={["/schools/region/:region"]} >
                 <AutoLogoutTimer ComposedClass={SchoolsList} />
             </Route>
-            <Route path={["/schools/:id", "/schoolsView/:id", "/addS"]} component={School} >
+            <Route path={["/schools/:id", "/addS"]} component={School} >
                 <AutoLogoutTimer ComposedClass={School} />
             </Route>
 

@@ -25,7 +25,7 @@ class SurveyDataService {
 */
 
   get(id) {
-    return http.get(`/surveys/${id}`, { headers: authHeader() });
+    return http.get(`/surveys/${id}`/*, { headers: authHeader() }*/);
   }
 
   getContent(id) {

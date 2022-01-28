@@ -15,6 +15,8 @@ const SchoolsList = (props) => {
   const [exportSchools, setExportSchools] = useState([]);
 
   const [currentSchool, setCurrentSchool] = useState(null);
+  const [currentUser, setCurrentUser] = useState(localStorage.getItem('user'));
+
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [searchName, setSearchName] = useState("");
   const [searchCode, setSearchCode] = useState("");
@@ -686,21 +688,19 @@ const SchoolsList = (props) => {
             <div>
               <Link
                 to={"/schoolsView/" + schoolsRef.current[rowIdx].id}
-                target='_blank'
               >
                 <i className="fas fa-eye action mr-2"></i>
               </Link>
 
-              <Link
+              {currentUser && (<Link
                 to={"/schools/" + schoolsRef.current[rowIdx].id}
-                target='_blank'
               >
                 <i className="far fa-edit action mr-2"></i>
-              </Link>
+              </Link>)}
 
-              <span onClick={() => window.confirm("您确定要删除吗 ?") && deleteSchool(rowIdx)}>
+              {currentUser && (<span onClick={() => window.confirm("您确定要删除吗 ?") && deleteSchool(rowIdx)}>
                 <i className="fas fa-trash action"></i>
-              </span>
+              </span>)}
             </div>
           );
         },

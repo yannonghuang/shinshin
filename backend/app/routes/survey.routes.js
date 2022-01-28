@@ -22,7 +22,7 @@ module.exports = function(app) {
 
   // Retrieve a single Survey with id
   app.get("/api/surveys/:id",
-    [authJwt.verifyToken],
+    //[authJwt.verifyToken],
   surveys.findOne);
 
 
