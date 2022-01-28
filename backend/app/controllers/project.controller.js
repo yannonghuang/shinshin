@@ -7,6 +7,8 @@ const REGIONS = db.REGIONS;
 const School = db.schools;
 const PROJECT_STATUSES = db.PROJECT_STATUSES;
 
+const { authJwt } = require("../middleware");
+
 const getPagination = (page, size) => {
   const limit = size ? +size : 30;
   const offset = page ? page * limit : 0;
@@ -167,13 +169,15 @@ exports.SAVE_SQL_findAll2 = (req, res) => {
 
 };
 
-exports.findAll2 = (req, res) => {
+exports.findAll2 = async (req, res) => {
+  const sid = await authJwt.getSchoolId(req);
+
   const name = req.body.name;
   const page = req.body.page;
   const size = req.body.size;
   const orderby = req.body.orderby;
   const startAt = req.body.startAt;
-  const schoolId = req.body.schoolId;
+  const schoolId = sid ? sid : req.body.schoolId;
   const code = req.body.code;
   const exportFlag = req.body.exportFlag;
   const region = req.body.region

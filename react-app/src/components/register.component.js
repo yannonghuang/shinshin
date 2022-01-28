@@ -121,7 +121,9 @@ export default class Register extends Component {
     this.getRoles();
     this.getSchools();
     this.getTitles();
+
   }
+
 
   updateContactOnly() {
     this.setState({
@@ -169,6 +171,8 @@ export default class Register extends Component {
       message: "",
       successful: false
     });
+
+    if (!this.validateSchool()) return;
 
     this.form.validateAll();
     if (this.checkBtn.context._errors.length !== 0)
@@ -417,6 +421,21 @@ export default class Register extends Component {
       );
   }
 
+  validateSchool() {
+    const user = localStorage.getItem('user');
+
+    if ((!user && !this.state.schoolId) ||
+        (user && JSON.parse(user).schoolId && !this.state.schoolId)){
+      this.setState({
+        message: "请选择学校",
+        successful: false
+      });
+      return false;
+    }
+
+    return true;
+  }
+
   handleRegister(e) {
     e.preventDefault();
 
@@ -433,6 +452,8 @@ export default class Register extends Component {
       });
       return;
     }
+
+    if (!this.validateSchool()) return;
 
     this.form.validateAll();
 
@@ -645,7 +666,6 @@ export default class Register extends Component {
                   <select onChange={this.onChangeRoles.bind(this)}
                     readonly={this.state.readonly?"":false}
                     class="form-control"
-                    required={!this.state.contactOnly}
                     id="roles"
                     value={this.state.roles}
                     name="roles"

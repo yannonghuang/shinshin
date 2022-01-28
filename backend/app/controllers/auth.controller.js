@@ -7,6 +7,8 @@ const ROLES = db.ROLES;
 const Op = db.Sequelize.Op;
 const USER_TITLES = db.USER_TITLES;
 
+const { authJwt } = require("../middleware");
+
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
@@ -132,13 +134,15 @@ exports.findAllSimple = (req, res) => {
       });
 }
 
-exports.findAll2 = (req, res) => {
+exports.findAll2 = async (req, res) => {
+  const sid = await authJwt.getSchoolId(req);
+
   const username = req.body.username;
   const searchRole = req.body.searchRole;
   const searchSchoolCode = req.body.searchSchoolCode;
   const page = req.body.page;
   const size = req.body.size;
-  const schoolId = req.body.schoolId;
+  const schoolId = sid ? sid : req.body.schoolId;
   const orderby = req.body.orderby;
 
 var orderbyObject = null;

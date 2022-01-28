@@ -15,6 +15,8 @@ const SCHOOL_REQUESTS = db.SCHOOL_REQUESTS;
 const SCHOOL_REQUESTS_SS = db.SCHOOL_REQUESTS_SS;
 const SCHOOL_CATEGORIES = db.SCHOOL_CATEGORIES;
 
+const { authJwt } = require("../middleware");
+
 const getPagination = (page, size) => {
   const limit = size ? +size : 30;
   const offset = page ? page * limit : 0;
@@ -219,7 +221,9 @@ exports.findAll = (req, res) => {
 };
 
 exports.findAllSimple = (req, res) => {
-  const schoolId = req.params.schoolId;
+  const schoolId = authJwt.getSchoolId(req);
+
+  //const schoolId = req.params.schoolId;
   var condition = schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null;
 
   School.findAll({
@@ -303,7 +307,9 @@ exports.SAVE_SQL_findAll2 = (req, res) => {
 
 };
 
-exports.findAll2 = (req, res) => {
+exports.findAll2 = async (req, res) => {
+  const id = await authJwt.getSchoolId(req);
+
   const name = req.body.name;
   const page = req.body.page;
   const size = req.body.size;
@@ -341,6 +347,7 @@ exports.findAll2 = (req, res) => {
 
   const condition = {
         [Op.and]: [
+            id ? { id: { [Op.eq]: `${id}` } } : null,
             name ? { name: { [Op.like]: `%${name}%` } } : null,
             code ? { code: { [Op.like]: `%${code}%` } } : null,
             donor ? { donor: { [Op.like]: `%${donor}%` } } : null,

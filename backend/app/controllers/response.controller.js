@@ -7,6 +7,8 @@ const School = db.schools;
 const User = db.user;
 const Op = db.Sequelize.Op;
 
+const { authJwt } = require("../middleware");
+
 const getPagination = (page, size) => {
   const limit = size ? +size : 3;
   const offset = page ? page * limit : 0;
@@ -128,14 +130,16 @@ exports.SAVE_findAll2 = (req, res) => {
     });
 };
 
-exports.findAll2 = (req, res) => {
+exports.findAll2 = async (req, res) => {
+  const sid = await authJwt.getSchoolId(req);
+
   const title = req.body.title;
   const startAt = req.body.startAt;
   const code = req.body.code;
   const page = req.body.page;
   const size = req.body.size;
   const formId = req.body.formId;
-  const schoolId = req.body.schoolId;
+  const schoolId = sid ? sid : req.body.schoolId;
   const orderby = req.body.orderby;
   const userId = req.body.userId;
 

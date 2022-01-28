@@ -81,10 +81,23 @@ isModeratorOrAdmin = (req, res, next) => {
   });
 };
 
+const getSchoolId = async (req) => {
+  if (!req.userId) return null;
+
+  try {
+    let user = await User.findByPk(req.userId);
+    return user.schoolId;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
 const authJwt = {
   verifyToken: verifyToken,
   isAdmin: isAdmin,
   isModerator: isModerator,
-  isModeratorOrAdmin: isModeratorOrAdmin
+  isModeratorOrAdmin: isModeratorOrAdmin,
+  getSchoolId: getSchoolId
 };
 module.exports = authJwt;
