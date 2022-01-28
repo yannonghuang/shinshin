@@ -656,6 +656,7 @@ export default class School extends Component {
 
   }
 
+/**
   SAVE_getSchool(schoolId) {
     const {
       id,
@@ -667,7 +668,7 @@ export default class School extends Component {
 
     SchoolDataService.get(schoolId)
       .then(response => {
-//alert(JSON.stringify(response.data))
+alert(JSON.stringify(response.data))
         SurveyDataService.get(schoolId)
         .then (r => {
           this.setState({
@@ -699,6 +700,7 @@ alert(JSON.stringify(this.state.currentSchool))
         console.log(e);
       });
   }
+*/
 
   getSchoolPhoto(id) {
     SchoolDataService.getPhoto(id)
@@ -1095,12 +1097,20 @@ alert(JSON.stringify(this.state.currentSchool))
 
                 <div class="w-100"></div>
 
-                {this.state.readonly && localStorage.getItem('user') && (
+                {this.state.readonly && localStorage.getItem('user') &&
+                !JSON.parse(localStorage.getItem('user')).schoolId && (
                 <div class="box">
                   <a target="_blank" href={"/users/school/" + currentSchool.id} class="btn btn-primary">用户</a>
                   <a target="_blank" href={"/logs/school/" + currentSchool.id} class="btn btn-primary">历史</a>
                   <a target="_blank" href={"/schools/" + currentSchool.id} class="btn btn-primary mb-4">编辑</a>
                 </div>
+                )}
+
+                {(this.state.readonly && localStorage.getItem('user')) && (
+                  <a target="_blank"
+                    href={"/surveys/" + currentSchool.id} class="btn btn-primary mb-4">
+                    更新学校信息
+                  </a>
                 )}
 
               </div>
@@ -1492,7 +1502,7 @@ alert(JSON.stringify(this.state.currentSchool))
                 <Survey
                   schoolId = {currentSchool.id}
                   embedded = {true}
-                  readonly = {this.state.readonly}
+                  readonly = {true}
                 />
               </TabPanel>
               <TabPanel>

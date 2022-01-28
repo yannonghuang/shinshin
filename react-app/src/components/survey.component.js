@@ -142,7 +142,10 @@ export default class Survey extends Component {
   componentDidMount() {
     const newsurvey = window.location.pathname.includes('add');
     this.setState({newsurvey: newsurvey});
-    this.setState({readonly: window.location.pathname.includes('View')});
+
+    //this.setState({readonly: window.location.pathname.includes('View')});
+    const readonly = this.props.match? this.props.match.params.readonly : this.props.readonly;
+    this.setState({readonly: readonly});
 
     var schoolId = this.props.match? this.props.match.params.schoolId : this.props.schoolId;
     const id = this.props.match? this.props.match.params.id : this.props.id;
@@ -200,6 +203,16 @@ export default class Survey extends Component {
       for (var i = 0; i < this.state.users.length; i++) {
         if (this.state.users[i].value == userId)
           return this.state.users[i].label ? this.state.users[i].label : '中文名';
+      }
+      return '';
+    }
+  }
+
+  displayNameSchool(schoolId) {
+    if (this.state.schools) {
+      for (var i = 0; i < this.state.schools.length; i++) {
+        if (this.state.schools[i].value == schoolId)
+          return this.state.schools[i].label ? this.state.schools[i].label : '学校名';
       }
       return '';
     }
@@ -850,23 +863,23 @@ export default class Survey extends Component {
               {!this.state.embedded &&
               (<div>
                 <h4>学校详情</h4>
-                <div class="form-group" style={{width: "100%"}}>
+                <div class="form-group" >
                   <label htmlFor="schoolId">学校</label>
-                  <Select onChange={this.onChangeSchoolId.bind(this)}
-                    readonly={this.state.readonly?"":false}
-                    class="form-control"
+                  <Link
+                    to={ "/schoolsView/" + currentSurvey.schoolId}
                     id="schoolId"
-                    value={this.display(currentSurvey.schoolId)}
                     name="schoolId"
-                    options={this.state.schools}
-                  />
+                    target="_blank"
+                  >
+                    {this.displayNameSchool(currentSurvey.schoolId)}
+                  </Link>
                 </div>
 
                 <div class="form-group">
                 <label htmlFor="schoolBoardRegisteredName">教育局校名</label>
-                <input
+                <textarea
                 readonly={this.state.readonly?"":false}
-                type="text"
+                cols="31"
                 class="form-control"
                 id="schoolBoardRegisteredName"
                 required
@@ -878,9 +891,9 @@ export default class Survey extends Component {
 
                 <div class="form-group">
                 <label htmlFor="schoolBoard">教育局</label>
-                <input
+                <textarea
                 readonly={this.state.readonly?"":false}
-                type="text"
+                cols="31"
                 class="form-control"
                 id="schoolBoard"
                 required
@@ -889,67 +902,57 @@ export default class Survey extends Component {
                 name="schoolBoard"
                 />
                 </div>
+
+                <form ref="formToSubmit"
+                  action="http://localhost:8080/api/documents-upload" method="POST" enctype="multipart/form-data">
+                  <div class="form-group input-group">
+                  <label for="input-multi-files">上传文件:</label>
+                  <input type="file" name="multi-files"
+                  multiple
+                  id="input-multi-files"
+                  class="form-control-file border"
+                  onChange={e => this.onChangeDocFiles(e)}
+                />
+
+                <select
+                  className="form-control input-group-append"
+                  placeholder=""
+                  name="docCategory" id="docCategory"
+                  value={currentSurvey.docCategory}
+                  onChange={e => this.onChangeGenerics(e)}
+                >
+                  <option value="">附件类别</option>
+                  {this.state.docCategories.map((option) => (
+                    <option value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+                <input type="hidden" name="surveyId" id="surveyId"/>
+                </div>
+                </form>
+
+                <div class="w-100"></div>
+
+                <button onClick={this.saveSurvey}
+                  class="btn btn-success"
+                  hidden={!this.state.newsurvey}>
+                  提交
+                </button>
+                <button hidden={this.state.newsurvey}
+                  type="submit"
+                  className="btn btn-success"
+                  onClick={this.updateSurvey}
+                >
+                  更新
+                </button>
+
+                <p>{this.state.message}</p>
+
               </div>)}
 
-                {!this.state.readonly && (<div>
-                <div class="w-100"></div>
-
-                  {!this.state.embedded && (<form ref="formToSubmit"
-                    action="http://localhost:8080/api/documents-upload" method="POST" enctype="multipart/form-data">
-                    <div class="form-group input-group">
-                    <label for="input-multi-files">上传文件:</label>
-                    <input type="file" name="multi-files"
-                    multiple
-                    id="input-multi-files"
-                    class="form-control-file border"
-                    onChange={e => this.onChangeDocFiles(e)}
-                  />
-
-                  <select
-                    className="form-control input-group-append"
-                    placeholder=""
-                    name="docCategory" id="docCategory"
-                    value={currentSurvey.docCategory}
-                    onChange={e => this.onChangeGenerics(e)}
-                  >
-                    <option value="">附件类别</option>
-                    {this.state.docCategories.map((option) => (
-                      <option value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                  <input type="hidden" name="surveyId" id="surveyId"/>
-                  </div>
-                  </form>)}
-
-
-                  <button onClick={this.saveSurvey}
-
-                    class="btn btn-success"
-                    hidden={!this.state.newsurvey}>
-                    提交
-                  </button>
-                  <button hidden={this.state.newsurvey}
-
-                    type="submit"
-                    className="btn btn-success"
-                    onClick={this.updateSurvey}
-                  >
-                    更新
-                  </button>
-
-                  <p>{this.state.message}</p>
-                </div>)}
 
                 <div class="w-100"></div>
-
-                {(this.state.readonly && localStorage.getItem('user')) && (
-                  <a target="_blank"
-                    href={"/surveys/" + currentSurvey.schoolId} class="btn btn-primary mb-4">
-                    编辑
-                  </a>
-                )}
 
               </div>
             </div>
