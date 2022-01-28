@@ -259,6 +259,10 @@ class App extends Component {
             <Route exact path={["/schools"]} component={SchoolsList} />
             <Route path={["/schoolsView/:id"]} component={School} />
 
+            <Route exact path={["/projects", "/projects/school/:schoolId"]} component={ProjectsList} />
+            <Route path={["/projectsView/:id"]} component={Project} />
+
+
 {/*}
             <Route path="/user" component={BoardUser} />
             <Route path="/mod" component={BoardModerator} />
@@ -298,12 +302,12 @@ class App extends Component {
             <Route exact path={["/logs", "/logs/school/:schoolId"]} component={LogsList} >
                 <AutoLogoutTimer ComposedClass={LogsList} />
             </Route>
-
+{/*
             <Route exact path={["/projects", "/projects/school/:schoolId"]} component={ProjectsList} >
                 <AutoLogoutTimer ComposedClass={ProjectsList} />
             </Route>
-
-            <Route path={["/projects/:id", "/projectsView/:id", "/addP"]} component={Project} >
+*/}
+            <Route path={["/projects/:id", "/addP"]} component={Project} >
                 <AutoLogoutTimer ComposedClass={Project} />
             </Route>
 

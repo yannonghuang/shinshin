@@ -138,8 +138,9 @@ exports.findAll2 = async (req, res) => {
   const sid = await authJwt.getSchoolId(req);
 
   const username = req.body.username;
-  const searchRole = req.body.searchRole;
-  const searchSchoolCode = req.body.searchSchoolCode;
+  const role = req.body.role;
+  const schoolCode = req.body.schoolCode;
+  const contactOnly = req.body.contactOnly;
   const page = req.body.page;
   const size = req.body.size;
   const schoolId = sid ? sid : req.body.schoolId;
@@ -159,8 +160,6 @@ var orderbyObject = null;
     }
   }
 
-  //const { page, size, title } = req.query;
-  //var condition = username ? { username: { [Op.like]: `%${username}%` } } : null;
 
   var condition = {
         [Op.and]: [
@@ -170,16 +169,15 @@ var orderbyObject = null;
                         {chineseName: { [Op.like]: `%${username}%` }},
                       ] } : null,
             schoolId ? { schoolId: { [Op.eq]: `${schoolId}` }} : null,
-            searchRole ? {'$roles.name$': { [Op.eq]: `${searchRole}` }} : null,
-            searchSchoolCode ? {'$school.code$': { [Op.like]: `%${searchSchoolCode}%` }} : null
+            role ? {'$roles.name$': { [Op.eq]: `${role}` }} : null,
+            //schoolCode ? {'$school.code$': { [Op.like]: `%${schoolCode}%` }} : null,
+            schoolCode ? { '$school.code$': { [Op.eq]: `${schoolCode}` } } : null,
+            contactOnly === undefined
+              ? null
+              : contactOnly === 'true'
+                ? { contactOnly: { [Op.eq]: `1` }}
+                : { contactOnly: null },
         ]};
-/**
-  var condition = username ? {
-                      [Op.or] : [
-                        {username: { [Op.like]: `%${username}%` }},
-                        {chineseName: { [Op.like]: `%${username}%` }},
-                      ] } : null;
-*/
 
   const include = [
                     {

@@ -26,7 +26,7 @@ module.exports = function(app) {
   );
 
   app.post("/api/projects/all",
-    [authJwt.verifyToken],
+    //[authJwt.verifyToken],
     projects.findAll2
   );
 
@@ -37,7 +37,7 @@ module.exports = function(app) {
 
   // Retrieve a single Project with id
   app.get("/api/projects/:id",
-    [authJwt.verifyToken],
+    //[authJwt.verifyToken],
     projects.findOne);
 
   // Retrieve a single Project photo with id

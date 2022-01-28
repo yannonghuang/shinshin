@@ -55,6 +55,12 @@ const UsersList = (props) => {
     setSearchSchoolCode(searchSchoolCode);
   };
 
+  const [searchContactOnly, setSearchContactOnly] = useState(null);
+  const onChangeSearchContactOnly = (e) => {
+    const searchContactOnly = e.target.value;
+    setSearchContactOnly(searchContactOnly);
+  };
+
   const getRequestParams = (/*searchUsername, searchRole, searchSchoolCode, page, pageSize, schoolId, orderby*/) => {
     let params = {};
 
@@ -63,11 +69,15 @@ const UsersList = (props) => {
     }
 
     if (searchRole) {
-      params["searchRole"] = searchRole;
+      params["role"] = searchRole;
     }
 
     if (searchSchoolCode) {
-      params["searchSchoolCode"] = searchSchoolCode;
+      params["schoolCode"] = searchSchoolCode;
+    }
+
+    if (searchContactOnly) {
+      params["contactOnly"] = searchContactOnly;
     }
 
     if (page) {
@@ -87,6 +97,14 @@ const UsersList = (props) => {
     }
 
     return params;
+  };
+
+  const onClearSearch = (e) => {
+    setSearchUsername("");
+    setSearchSchoolCode("");
+    setSearchRole("");
+    setSearchContactOnly("");
+    setOrderby([]);
   };
 
   const getRoleLabel = (name) => {
@@ -151,7 +169,7 @@ const UsersList = (props) => {
       });
   };
 
-  useEffect(retrieveUsers, [page, pageSize, orderby, searchRole, searchUsername, searchSchoolCode]);
+  useEffect(retrieveUsers, [page, pageSize, orderby, searchRole, searchUsername, searchSchoolCode, searchContactOnly]);
 
   const refreshList = () => {
     retrieveUsers();
@@ -363,7 +381,7 @@ const UsersList = (props) => {
 
   return (
     <div className="list row">
-      <div className="col-md-6">
+      <div className="col-md-8">
         <h4>{schoolTitle ? schoolTitle + " - " : ""}用户列表(总数：{totalItems})</h4>
         <div className="input-group mb-3">
           <select
@@ -395,15 +413,40 @@ const UsersList = (props) => {
             onChange={onChangeSearchUsername}
           />
 
-          <div className="input-group-append ml-2">
+          <select
+            className="form-control ml-2"
+            value={searchContactOnly}
+            onChange={onChangeSearchContactOnly}
+          >
+            <option value="">注册用户?</option>
+              <option value={false}>
+                {'是'}
+              </option>
+              <option value={true}>
+                {'否'}
+              </option>
+          </select>
+
+          <div>
             <button
-              className="btn btn-primary badge-success"
+              className="btn btn-primary badge btn-block ml-2"
               type="button"
-              onClick={search}
+              onClick={onClearSearch}
             >
-              查询
+              清空
             </button>
           </div>
+
+        </div>
+
+        <div className="input-group mb-4">
+          <button
+            className="btn btn-primary badge-success"
+            type="button"
+            onClick={search}
+          >
+            查询
+          </button>
         </div>
       </div>
 
@@ -427,12 +470,13 @@ const UsersList = (props) => {
           shape="rounded"
           onChange={handlePageChange}
         />
-      </div>
+        
+        {schoolId && (<a target="_blank"
+          href={"/addU?schoolId=" + schoolId} class="btn btn-primary ">
+            新建联络方式
+        </a>)}
 
-      {schoolId && (<a target="_blank"
-         href={"/addU?schoolId=" + schoolId} class="btn btn-primary mt-5 mb-5">
-           新建联络方式
-      </a>)}
+      </div>
 
       <div class="w-100"></div>
 

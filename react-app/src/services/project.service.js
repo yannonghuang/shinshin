@@ -4,7 +4,7 @@ import authHeader from './auth-header';
 class ProjectDataService {
 
   getAll2(data) {
-    return http.post("/projects/all", data, { headers: authHeader() });
+    return http.post("/projects/all", data/*, { headers: authHeader() }*/);
   }
 
 
@@ -35,7 +35,7 @@ class ProjectDataService {
   }
 
   get(id) {
-    return http.get(`/projects/${id}`, { headers: authHeader() });
+    return http.get(`/projects/${id}`/*, { headers: authHeader() }*/);
   }
 
   getPhoto(id) {

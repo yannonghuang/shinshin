@@ -110,6 +110,16 @@ export default class Project extends Component {
     }
   }
 
+  displayName(schoolId) {
+    if (this.state.schools) {
+      for (var i = 0; i < this.state.schools.length; i++) {
+        if (this.state.schools[i].value == schoolId)
+          return this.state.schools[i].label ? this.state.schools[i].label : '学校名';
+      }
+      return '';
+    }
+  }
+
   getSchools() {
     SchoolDataService.getAllSimple()
       .then(response => {
@@ -671,7 +681,7 @@ export default class Project extends Component {
                 </div>
               </div>
 
-                {this.state.readonly && (
+                {this.state.readonly && localStorage.getItem('user') && (
                 <div class="box">
                   <a target="_blank" href={"/projects/" + currentProject.id} class="btn btn-primary mb-4">编辑</a>
                 </div>
@@ -699,14 +709,22 @@ export default class Project extends Component {
 
                 <div class="col-md-8">
                   <label htmlFor="schoolId">学校</label>
-                  <Select onChange={this.onChangeSchoolId.bind(this)}
+                  {!this.state.readonly
+                  ? (<Select onChange={this.onChangeSchoolId.bind(this)}
                     readonly={this.state.readonly?"":false}
                     class="form-control"
                     id="schoolId"
                     value={this.display(currentProject.schoolId)}
                     name="schoolId"
                     options={this.state.schools}
-                  />
+                  />)
+                  : (<Link
+                    to={ "/schoolsView/" + currentProject.schoolId}
+                    id="schoolId"
+                    name="schoolId"
+                    >
+                      {this.displayName(currentProject.schoolId)}
+                  </Link>)}
                 </div>
 {/*}
                     <option value="">学校编号（省-学校名）</option>
@@ -764,8 +782,6 @@ export default class Project extends Component {
                 ))}
                 </select>
                 </div>
-
-
 
                 <div className="col-md-4">
                   <label htmlFor="startAt">项目年份</label>

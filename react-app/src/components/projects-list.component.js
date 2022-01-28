@@ -13,6 +13,8 @@ const ProjectsList = (props) => {
   const [exportProjects, setExportProjects] = useState([]);
 
   const [currentProject, setCurrentProject] = useState(null);
+  const [currentUser, setCurrentUser] = useState(localStorage.getItem('user'));
+
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [searchName, setSearchName] = useState("");
   const [searchCode, setSearchCode] = useState("");
@@ -356,19 +358,17 @@ const ProjectsList = (props) => {
             <div>
               <Link
                 to={"/projectsView/" + projectsRef.current[rowIdx].id}
-                target='_blank'
               >
                 <i className="fas fa-eye action mr-2"></i>
               </Link>
 
-              {!readonly && (<Link
+              {!readonly && currentUser && (<Link
                 to={"/projects/" + projectsRef.current[rowIdx].id}
-                target='_blank'
               >
                 <i className="far fa-edit action mr-2"></i>
               </Link>)}
 
-              {!readonly && (<span onClick={() => window.confirm("您确定要删除吗 ?") && deleteProject(rowIdx)}>
+              {!readonly && currentUser && (<span onClick={() => window.confirm("您确定要删除吗 ?") && deleteProject(rowIdx)}>
                 <i className="fas fa-trash action"></i>
               </span>)}
             </div>
