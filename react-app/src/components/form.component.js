@@ -137,8 +137,17 @@ export default class Form extends Component {
   getForm(id, readonly) {
     FormDataService.get(id)
       .then(response => {
+
+
+      const {startAt, ...others} = response.data;
         this.setState({
-          currentForm: response.data
+          //currentForm: response.data
+
+          currentForm: {
+            ...others,
+            startAt: (new Date(startAt)).getFullYear()
+          }
+
         });
 
         if (readonly) {
@@ -296,7 +305,7 @@ export default class Form extends Component {
                    readonly=""
                    className="form-control"
                    placeholder="项目年份"
-                   value={(new Date(currentForm.startAt)).getFullYear()}
+                   value={currentForm.startAt}
                 />
                 :<YearPicker
                    yearArray={['2019', '2020']}

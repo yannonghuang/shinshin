@@ -115,11 +115,6 @@ optionOnSave = {
   getForm(formId) {
     FormDataService.get(formId)
       .then(response => {
-      const {id, ...otherParameters} = response.data;
-
-      this.setState({
-        currentResponse: otherParameters
-      });
 
       try {
         const formData = JSON.stringify(response.data.fdata);
@@ -128,6 +123,18 @@ optionOnSave = {
         alert(e);
       }
 
+      const {id, startAt, ...otherParameters} = response.data;
+
+      this.setState({
+        currentResponse: {
+          ...otherParameters,
+          startAt: (new Date(startAt)).getFullYear(),
+          formId: formId
+        },
+        hasFiles: this.hasFiles()
+      });
+
+/*
       this.setState(function(prevState) {
         return {
           currentResponse: {
@@ -137,7 +144,7 @@ optionOnSave = {
           hasFiles: this.hasFiles()
          };
       });
-
+*/
       this.getSchools();
     })
   }
@@ -155,8 +162,15 @@ optionOnSave = {
           alert(e);
         }
 
+        const {startAt, ...otherParameters} = response.data;
+
         this.setState({
-          currentResponse: response.data,
+          //currentResponse: response.data,
+          currentResponse: {
+            ...otherParameters,
+            startAt: (new Date(startAt)).getFullYear(),
+          },
+
           hasFiles: this.hasFiles()
         });
 
@@ -349,7 +363,20 @@ optionOnSave = {
     });
   }
 
+  validateSchool() {
+
+    if (!this.state.currentResponse.schoolId) {
+      this.setState({
+        message: "请选择学校"
+      });
+      return false;
+    }
+    return true;
+  }
+
   updateResponse() {
+    if (!this.validateSchool()) return;
+
     const attFiles = this.collectFiles();
 
     var data = {
@@ -379,6 +406,8 @@ optionOnSave = {
 
 
   submitResponse() {
+    if (!this.validateSchool()) return;
+
     const attFiles = this.collectFiles();
 
     var data = {
@@ -479,6 +508,7 @@ optionOnSave = {
               ? (<Select onChange={this.onChangeSchoolId.bind(this)}
                 readonly={this.state.readonly?"":false}
                 class="form-control"
+                required
                 id="schoolId"
                 value={this.display(currentResponse.schoolId)}
                 name="schoolId"
@@ -501,7 +531,7 @@ optionOnSave = {
                 id='startAt'
                 readonly={"true" /*this.state.readonly?"":false*/}
                 placeholder="项目年份"
-                value={(new Date(currentResponse.startAt)).getFullYear()}
+                value={currentResponse.startAt}
               />
             </div>
 
@@ -592,6 +622,10 @@ optionOnSave = {
           )}
           </div>)}
 
+          <div class="w-100"></div>
+          <div className="alert-danger">
+            <p><h4>{this.state.message}</h4></p>
+          </div>
         </div>)}
       </div>
     );

@@ -422,10 +422,10 @@ export default class Register extends Component {
   }
 
   validateSchool() {
-    const user = localStorage.getItem('user');
+    const user = AuthService.getCurrentUser(); //localStorage.getItem('user');
 
     if ((!user && !this.state.schoolId) ||
-        (user && JSON.parse(user).schoolId && !this.state.schoolId)){
+        (user && user.schoolId && !this.state.schoolId)){
       this.setState({
         message: "请选择学校",
         successful: false

@@ -433,7 +433,20 @@ export default class Project extends Component {
       //this.refs.formToSubmit.submit();
   }
 
+  validateSchool() {
+
+    if (!this.state.currentProject.schoolId) {
+      this.setState({
+        message: "请选择学校"
+      });
+      return false;
+    }
+    return true;
+  }
+
   async saveProject() {
+    if (!this.validateSchool()) return;
+
     var data = {
       name: this.state.currentProject.name,
       budget: this.state.currentProject.budget,
@@ -475,6 +488,8 @@ export default class Project extends Component {
   }
 
   async updateProject() {
+    if (!this.validateSchool()) return;
+
     var data = {
       name: this.state.currentProject.name,
       budget: this.state.currentProject.budget,
@@ -713,6 +728,7 @@ export default class Project extends Component {
                   ? (<Select onChange={this.onChangeSchoolId.bind(this)}
                     readonly={this.state.readonly?"":false}
                     class="form-control"
+                    required
                     id="schoolId"
                     value={this.display(currentProject.schoolId)}
                     name="schoolId"
@@ -816,7 +832,6 @@ export default class Project extends Component {
                 提交
               </button>
 
-
               <button hidden={this.state.newproject}
                 type="submit"
                 className="btn btn-success"
@@ -876,7 +891,10 @@ export default class Project extends Component {
               </TabPanel>
             </Tabs>
 
-
+            <div class="w-100"></div>
+            <div className="alert-danger">
+            <p><h4>{this.state.message}</h4></p>          
+            </div>
 
           </div>
         ) }
