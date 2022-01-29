@@ -54,6 +54,8 @@ export default class Response extends Component {
       progress: 0,
       reload: false,
       hasFiles: null,
+
+      submitted: false
     };
 
     //this.init();
@@ -331,14 +333,15 @@ optionOnSave = {
     .then(response => {
       console.log(response.data);
 
-      if (attFiles[0]) {
+//      if (attFiles[0]) {
       //this.reload();
         this.setState(prevState => ({
-          message: prevState.message + " 项目申请附件成功上传!",
+          message: prevState.message + (attFiles[0] ? " 项目申请附件成功上传!" : ""),
           reload: !this.state.reload,
+          submitted: true,
         }))
-      }
-      alert(this.state.message);
+//      }
+      //alert(this.state.message);
       this.clearFiles();
     })
     .catch(e => {
@@ -439,123 +442,125 @@ optionOnSave = {
     return (
 
       <div>
-        {currentResponse ? (
+        {this.state.submitted
+        ? (
+          <div>
+            <p><h4>{this.state.message}</h4></p>
+          </div>
+        )
+        : (
           <div class="row">
             <div class="col-md-4">
-              {this.state.readonly && (
-                <div class="box">
-                  <a target="_blank" href={"/responses/" + currentResponse.id} class="btn btn-primary mb-4">编辑</a>
+            {this.state.readonly && (
+              <div class="box">
+                <a target="_blank" href={"/responses/" + currentResponse.id} class="btn btn-primary mb-4">编辑</a>
+              </div>
+            )}
+            </div>
+
+            <div class="col-md-4">
+            <h4>项目申请（{this.state.readonly?"浏览":"编辑"}）</h4>
+            <form>
+              <div className="form-group">
+                <label htmlFor="title">标题</label>
+                <input
+                  readonly={"true" /*this.state.readonly?"":false*/}
+                  type="text"
+                  className="form-control"
+                  id="title"
+                  value={currentResponse.title}
+                  onChange={this.onChangeTitle}
+                />
+            </div>
+
+            <div class="form-group">
+              <label htmlFor="schoolId">所属学校</label>
+              {!this.state.readonly && AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId
+              ? (<Select onChange={this.onChangeSchoolId.bind(this)}
+                readonly={this.state.readonly?"":false}
+                class="form-control"
+                id="schoolId"
+                value={this.display(currentResponse.schoolId)}
+                name="schoolId"
+                options={this.state.schools}
+              />)
+              : (<Link
+                to={ "/schoolsView/" + currentResponse.schoolId}
+                id="schoolId"
+                name="schoolId"
+              >
+                {this.displayName(currentResponse.schoolId)}
+              </Link>)}
+            </div>
+
+            <div class="form-group">
+              <label htmlFor="startAt">项目年份</label>
+              <input
+                type="text"
+                className="form-control"
+                id='startAt'
+                readonly={"true" /*this.state.readonly?"":false*/}
+                placeholder="项目年份"
+                value={(new Date(currentResponse.startAt)).getFullYear()}
+              />
+            </div>
+
+            </form>
+          </div>
+
+          <div class="col-md-4">
+           {!this.state.readonly && (<div>
+              { this.state.newresponse? (
+                <button
+                  style={{ position: "absolute", right: "10px" }}
+                  type="submit"
+                  className="btn btn-success"
+                  onClick={this.submitResponse}
+                >
+                  提交
+                </button>
+              ) : (
+                <button
+                  style={{ position: "absolute", right: "10px" }}
+                  type="submit"
+                  className="btn btn-success"
+                  onClick={this.updateResponse}
+                >
+                  保存
+                </button>
+              )}
+
+              {(progress < 100 && progress > 0) && (
+                <div className="progress">
+                <div
+                  className="progress-bar progress-bar-info progress-bar-striped"
+                  role="progressbar"
+                  aria-valuenow={progress}
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  style={{ width: progress + "%" }}
+                >
+                  {progress}%
+                </div>
                 </div>
               )}
-            </div>
-
-            <div class="col-md-4">
-              <h4>项目申请（{this.state.readonly?"浏览":"编辑"}）</h4>
-              <form>
-                <div className="form-group">
-                  <label htmlFor="title">标题</label>
-                  <input
-                    readonly={"true" /*this.state.readonly?"":false*/}
-                    type="text"
-                    className="form-control"
-                    id="title"
-                    value={currentResponse.title}
-                    onChange={this.onChangeTitle}
-                  />
-                </div>
-
-                <div class="form-group">
-                  <label htmlFor="schoolId">所属学校</label>
-                  {!this.state.readonly && AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId
-                  ? (<Select onChange={this.onChangeSchoolId.bind(this)}
-                    readonly={this.state.readonly?"":false}
-                    class="form-control"
-                    id="schoolId"
-                    value={this.display(currentResponse.schoolId)}
-                    name="schoolId"
-                    options={this.state.schools}
-                  />)
-                  : (<Link
-                    to={ "/schoolsView/" + currentResponse.schoolId}
-                    id="schoolId"
-                    name="schoolId"
-                  >
-                    {this.displayName(currentResponse.schoolId)}
-                  </Link>)}
-                </div>
-
-                <div class="form-group">
-                  <label htmlFor="startAt">项目年份</label>
-                  <input
-                     type="text"
-                     className="form-control"
-                     id='startAt'
-                     readonly={"true" /*this.state.readonly?"":false*/}
-                     placeholder="项目年份"
-                     value={(new Date(currentResponse.startAt)).getFullYear()}
-                  />
-                </div>
-
-              </form>
-            </div>
-
-            <div class="col-md-4">
-             {!this.state.readonly && (<div>
-                { this.state.newresponse? (
-                  <button
-                    style={{ position: "absolute", right: "10px" }}
-                    type="submit"
-                    className="btn btn-success"
-                    onClick={this.submitResponse}
-                  >
-                    提交
-                  </button>
-                ) : (
-                  <button
-                    style={{ position: "absolute", right: "10px" }}
-                    type="submit"
-                    className="btn btn-success"
-                    onClick={this.updateResponse}
-                  >
-                    保存
-                  </button>
-                )}
-
-                {(progress < 100 && progress > 0) && (
-                  <div className="progress">
-                  <div
-                    className="progress-bar progress-bar-info progress-bar-striped"
-                    role="progressbar"
-                    aria-valuenow={progress}
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                    style={{ width: progress + "%" }}
-                  >
-                    {progress}%
-                  </div>
-                  </div>
-                )}
-
-{/*
-                <p><h4>{this.state.message}</h4></p>
-*/}
-              </div>)}
-
-            </div>
+            </div>)}
           </div>
-        ) : ''}
 
-        <div id="fb-editor" ref={this.fb} />
 
-        {this.state.hasFiles &&
-        (<Tabs>
-          <TabList>
+          <div id="fb-editor" ref={this.fb} />
+
+          <div class="w-100"></div>
+
+          {this.state.hasFiles &&
+          (<Tabs>
+            <TabList>
             <Tab>更多信息 <i class="fas fa-hand-point-right"></i></Tab>
             <Tab>项目申请附件</Tab>
-          </TabList>
-          <TabPanel>
-          </TabPanel>
-          <TabPanel>
+            </TabList>
+            <TabPanel>
+            </TabPanel>
+            <TabPanel>
             {this.state.currentResponse.id && (<AttachmentsList
               responseId = {this.state.currentResponse.id}
               embedded = {true}
@@ -563,9 +568,11 @@ optionOnSave = {
               reload = {this.state.reload}
             />)}
           </TabPanel>
-        </Tabs>)}
+          </Tabs>)}
 
-        {!this.state.readonly && (<div>
+          <div class="w-100"></div>
+
+          {!this.state.readonly && (<div>
           { this.state.newresponse? (
             <button
               type="submit"
@@ -583,6 +590,8 @@ optionOnSave = {
               保存
             </button>
           )}
+          </div>)}
+
         </div>)}
       </div>
     );
