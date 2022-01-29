@@ -14,7 +14,7 @@ const AutoLogoutTimer = (props: any) => {
         window.location.reload();
     }
 
-    if (!localStorage.getItem('user')) logout();
+    if (!AuthService.getCurrentUser()) logout();
 
     const { ComposedClass, ...passThroughProps } = props;
     //const history = useHistory();
@@ -22,9 +22,9 @@ const AutoLogoutTimer = (props: any) => {
     const handleOnIdle = (event: any) => {
         //console.log('user is idle', event)
         console.log('last active', getLastActiveTime());
-        logout();
-        //AuthService.logout();
-        //props.history.push('/login');
+        //logout();
+        AuthService.logout();
+        props.history.push('/login');
     }
 
     const {getLastActiveTime } = useIdleTimer({
