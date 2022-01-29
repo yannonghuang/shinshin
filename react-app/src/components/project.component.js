@@ -790,7 +790,7 @@ export default class Project extends Component {
                      type="text"
                      id='startAt'
                      readonly=""
-                     className="form-group"
+                     className="form-control"
                      placeholder="项目年份"
                      value={currentProject.startAt}
                   />
