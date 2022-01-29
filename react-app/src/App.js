@@ -98,43 +98,9 @@ class App extends Component {
             学校项目管理系统
           </Link>
 
+          {!AuthService.getCurrentUser().schoolId && (
           <div class="collapse navbar-collapse navbar-nav mr-auto">
-{/*}
-            {showModeratorBoard && (
-              <li class="nav-item">
-                <Link to={"/mod"} class="nav-link">
-                  Moderator Board
-                </Link>
-              </li>
-            )}
 
-            {showAdminBoard && (
-              <li class="nav-item">
-                <Link to={"/admin"} class="nav-link">
-                  Admin Board
-                </Link>
-              </li>
-            )}
-
-            {currentUser && (
-              <li class="nav-item">
-                <Link to={"/user"} class="nav-link">
-                  User
-                </Link>
-              </li>
-            )}
-
-            <li class="nav-item">
-             <Link to={"/tutorials"} class="nav-link">
-               Tutorials
-             </Link>
-            </li>
-            <li class="nav-item">
-              <Link to={"/add"} class="nav-link">
-                Add Tutorial
-              </Link>
-            </li>
-*/}
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 管理
@@ -186,7 +152,7 @@ class App extends Component {
                 <a class="dropdown-item" href={"/attachments"}>项目申请附件</a>
               </div>
             </li>
-          </div>
+          </div>)}
 
           {currentUser ? (
             <div class="navbar-nav ml-auto">
