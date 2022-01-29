@@ -100,6 +100,16 @@ optionOnSave = {
     }
   }
 
+  displayName(schoolId) {
+    if (this.state.schools) {
+      for (var i = 0; i < this.state.schools.length; i++) {
+        if (this.state.schools[i].value == schoolId)
+          return this.state.schools[i].label ? this.state.schools[i].label : '学校名';
+      }
+      return '';
+    }
+  }
+
   getForm(formId) {
     FormDataService.get(formId)
       .then(response => {
@@ -445,7 +455,7 @@ optionOnSave = {
                 <div className="form-group">
                   <label htmlFor="title">标题</label>
                   <input
-                    readonly={"true"/*this.state.readonly?"":false*/}
+                    readonly={"true" /*this.state.readonly?"":false*/}
                     type="text"
                     className="form-control"
                     id="title"
@@ -453,29 +463,36 @@ optionOnSave = {
                     onChange={this.onChangeTitle}
                   />
                 </div>
+
                 <div class="form-group">
                   <label htmlFor="schoolId">所属学校</label>
-                  <Select onChange={this.onChangeSchoolId.bind(this)}
+                  {!this.state.readonly && AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId
+                  ? (<Select onChange={this.onChangeSchoolId.bind(this)}
                     readonly={this.state.readonly?"":false}
                     class="form-control"
                     id="schoolId"
                     value={this.display(currentResponse.schoolId)}
                     name="schoolId"
                     options={this.state.schools}
-                  />
+                  />)
+                  : (<Link
+                    to={ "/schoolsView/" + currentResponse.schoolId}
+                    id="schoolId"
+                    name="schoolId"
+                  >
+                    {this.displayName(currentResponse.schoolId)}
+                  </Link>)}
                 </div>
 
                 <div class="form-group">
                   <label htmlFor="startAt">项目年份</label>
                   <input
                      type="text"
+                     className="form-control"
                      id='startAt'
-                     readonly=""
+                     readonly={"true" /*this.state.readonly?"":false*/}
                      placeholder="项目年份"
-                     value={currentResponse.startAt
-                        ? (new Date(currentResponse.startAt)).getFullYear()
-                        : ''
-                     }
+                     value={(new Date(currentResponse.startAt)).getFullYear()}
                   />
                 </div>
 

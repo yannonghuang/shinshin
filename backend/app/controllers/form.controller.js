@@ -1,6 +1,7 @@
 const db = require("../models");
 const Form = db.forms;
 const Response = db.responses;
+const Project = db.projects;
 const Op = db.Sequelize.Op;
 
 const getPagination = (page, size) => {
@@ -8,6 +9,32 @@ const getPagination = (page, size) => {
   const offset = page ? page * limit : 0;
 
   return { limit, offset };
+};
+
+const propagateUpdates = async (req) => {
+  const formId = req.params.id;
+  const {title, startAt} = req.body;
+
+  try {
+    await Response.update({title: title, startAt: startAt}, {where: { formId: formId }});
+    const responseIds = await Response.findAll({
+      attributes: ['id'],
+      where: { formId: formId }
+    });
+
+    let rIds = [];
+    for (var i = 0; i < responseIds.length; i++) rIds.push(responseIds[i].id);
+
+    await Project.update({name: title, startAt: startAt}, {
+      where: {
+        responseId: {[Op.or]: rIds}
+      }
+    });
+
+  } catch (e) {
+    console.log(e.message);
+  }
+
 };
 
 const getPagingData = (count, data, page, limit) => {
@@ -204,7 +231,7 @@ exports.findOne = (req, res) => {
   Form.findByPk(id, {
     attributes: ['id', 'title', 'description', 'fdata', // 'deadline',
       [db.Sequelize.fn('date_format', db.Sequelize.col("deadline"), '%Y-%m-%d'), "deadline"],
-      [db.Sequelize.fn('YEAR', db.Sequelize.col('form.startAt')), "startAt"],
+      "startAt", //[db.Sequelize.fn('YEAR', db.Sequelize.col('form.startAt')), "startAt"],
       //[db.Sequelize.fn('date_format', db.Sequelize.col("startAt"), '%Y-%m-%d'), "startAt"],
   ]
   })
@@ -236,6 +263,8 @@ exports.update = (req, res) => {
         res.send({
           message: "Form was updated successfully."
         });
+
+        propagateUpdates(req);
       } else {
         res.send({
           message: `Cannot update Form with id=${id}. Maybe Form was not found or req.body is empty!`

@@ -162,6 +162,7 @@ export default class Form extends Component {
     this.setState(prevState => ({
       currentForm: {
         ...prevState.currentForm,
+        startAt: prevState.currentForm.startAt ? (prevState.currentForm.startAt + '-02-01') : null,
         fdata: this.fBuilder.actions.getData()
       }
     }));
@@ -295,7 +296,7 @@ export default class Form extends Component {
                    readonly=""
                    className="form-group"
                    placeholder="项目年份"
-                   value={currentForm.startAt}
+                   value={(new Date(currentForm.startAt)).getFullYear()}
                 />
                 :<YearPicker
                    yearArray={['2019', '2020']}

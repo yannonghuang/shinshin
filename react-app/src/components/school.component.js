@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import Divider from '@material-ui/core/Divider';
 import Select from 'react-select';
 
+import AuthService from "./../services/auth.service";
 import UserDataService from "../services/auth.service";
 import Survey from './survey.component.js';
 import CommentsList from './comments-list.component.js';
@@ -1097,8 +1098,7 @@ alert(JSON.stringify(this.state.currentSchool))
 
                 <div class="w-100"></div>
 
-                {this.state.readonly && localStorage.getItem('user') &&
-                !JSON.parse(localStorage.getItem('user')).schoolId && (
+                {this.state.readonly && AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId && (
                 <div class="box">
                   <a target="_blank" href={"/users/school/" + currentSchool.id} class="btn btn-primary">用户</a>
                   <a target="_blank" href={"/logs/school/" + currentSchool.id} class="btn btn-primary">历史</a>
@@ -1106,7 +1106,7 @@ alert(JSON.stringify(this.state.currentSchool))
                 </div>
                 )}
 
-                {(this.state.readonly && localStorage.getItem('user')) && (
+                {(this.state.readonly && AuthService.getCurrentUser()) && (
                   <a target="_blank"
                     href={"/surveys/" + currentSchool.id} class="btn btn-primary mb-4">
                     更新学校信息
