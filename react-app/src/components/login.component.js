@@ -178,7 +178,11 @@ export default class Login extends Component {
       AuthService.login(this.state.username, this.state.password).then(
         () => {
           //this.props.history.push("/profile");
-          this.props.history.push("/schools");
+          //this.props.history.push("/schools");
+          AuthService.getCurrentUser().schoolId
+            ? this.props.history.push('/schoolsView/' + AuthService.getCurrentUser().schoolId)
+            : this.props.history.push('/schools');
+
           window.location.reload();
         },
         error => {
@@ -206,7 +210,11 @@ export default class Login extends Component {
   render() {
     return (
     <div>
-    { /* AuthService.getCurrentUser() */ AuthService.isValid() ? (this.props.history.push('/schools')) : (
+    { /* AuthService.getCurrentUser() */ AuthService.isValid()
+    ? AuthService.getCurrentUser().schoolId
+       ? this.props.history.push('/schoolsView/' + AuthService.getCurrentUser().schoolId)
+       : this.props.history.push('/schools')
+    : (
       <div className="col-md-12">
         <div className="card card-container">
           <img
