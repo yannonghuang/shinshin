@@ -169,14 +169,12 @@ const FormsList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
-              {AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId
-              ? <Link
+              <Link
                 to={"/responses/form/" + formsRef.current[rowIdx].id}
                 className="badge badge-success"
               >
                 {formsRef.current[rowIdx].responsesCount}
               </Link>
-              : <div>{formsRef.current[rowIdx].responsesCount}</div>}
             </div>
           );
         },

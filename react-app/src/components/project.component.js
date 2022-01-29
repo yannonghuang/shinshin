@@ -893,7 +893,7 @@ export default class Project extends Component {
 
             <div class="w-100"></div>
             <div className="alert-danger">
-            <p><h4>{this.state.message}</h4></p>          
+            <p><h4>{this.state.message}</h4></p>
             </div>
 
           </div>
