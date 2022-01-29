@@ -98,7 +98,7 @@ class App extends Component {
             学校项目管理系统
           </Link>
 
-          {!AuthService.getCurrentUser().schoolId && (
+          {currentUser && !currentUser.schoolId && (
           <div class="collapse navbar-collapse navbar-nav mr-auto">
 
             <li class="nav-item dropdown">
