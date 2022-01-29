@@ -1101,9 +1101,9 @@ alert(JSON.stringify(this.state.currentSchool))
                 {(this.state.readonly && AuthService.getCurrentUser()) && (
                 <div class="box">
                   <a target="_blank" href={"/surveys/" + currentSchool.id} class="btn btn-primary mb-4">更新信息</a>
-                  <a target="_blank" href={"/users/school/" + currentSchool.id} class="btn btn-primary">用户</a>
                   {AuthService.getCurrentUser().schoolId &&
                     <a target="_blank" href={"/forms"} class="btn btn-primary">项目申请</a>}
+                  <a target="_blank" href={"/users/school/" + currentSchool.id} class="btn btn-primary">用户</a>
                   {!AuthService.getCurrentUser().schoolId &&
                     <a target="_blank" href={"/logs/school/" + currentSchool.id} class="btn btn-primary">历史</a>}
                   {!AuthService.getCurrentUser().schoolId &&

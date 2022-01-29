@@ -8,6 +8,8 @@ import { useTable, useSortBy } from "react-table";
 
 import YearPicker from 'react-single-year-picker';
 
+import AuthService from "./../services/auth.service";
+
 const FormsList = (props) => {
   const [forms, setForms] = useState([]);
   const [currentForm, setCurrentForm] = useState(null);
@@ -167,12 +169,14 @@ const FormsList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
-              <Link
+              {AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId
+              ? <Link
                 to={"/responses/form/" + formsRef.current[rowIdx].id}
                 className="badge badge-success"
               >
                 {formsRef.current[rowIdx].responsesCount}
               </Link>
+              : <div>{formsRef.current[rowIdx].responsesCount}</div>}
             </div>
           );
         },
@@ -201,13 +205,15 @@ const FormsList = (props) => {
                 <i className="fas fa-eye action mr-2"></i>
               </Link>
 
-              <span onClick={() => openForm(rowIdx)}>
-                <i className="far fa-edit action mr-2"></i>
-              </span>
+              {AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId &&
+                <span onClick={() => openForm(rowIdx)}>
+                  <i className="far fa-edit action mr-2"></i>
+              </span>}
 
-              <span onClick={() => window.confirm("您确定要删除吗 ?") && deleteForm(rowIdx)}>
-                <i className="fas fa-trash action"></i>
-              </span>
+              {AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId &&
+                <span onClick={() => window.confirm("您确定要删除吗 ?") && deleteForm(rowIdx)}>
+                  <i className="fas fa-trash action"></i>
+              </span>}
             </div>
           );
         },
