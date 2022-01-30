@@ -25,12 +25,13 @@ const propagateUpdates = async (req) => {
     let rIds = [];
     for (var i = 0; i < responseIds.length; i++) rIds.push(responseIds[i].id);
 
-    if (rIds.length > 0)
-      await Project.update({name: title, startAt: startAt}, {
-        where: {
-          responseId: {[Op.or]: rIds}
-        }
-      });
+    if (rIds.length === 0) return;
+
+    await Project.update({name: title, startAt: startAt}, {
+      where: {
+        responseId: {[Op.or]: rIds}
+      }
+    });
 
   } catch (e) {
     console.log(e.message);
