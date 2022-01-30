@@ -5,35 +5,54 @@ import { useIdleTimer } from 'react-idle-timer';
 
 import AuthService from "./auth.service";
 
-const SESSION_IDEL_MINUTES = 20;
+const SESSION_IDLE_MINUTES = 20;
+
+const EXEMPTED_URLS = [
+    "/schools",
+    "/schoolsView",
+    "/projects",
+    "/projects/school",
+    "/projectsView"
+  ];
 
 const AutoLogoutTimer = (props: any) => {
-    const logout = () => {
-        AuthService.logout();
-        props.history.push('/login');
-        window.location.reload();
-    }
 
-    if (!AuthService.getCurrentUser()) logout();
+  const login = () => {
+    AuthService.logout();
+    props.history.push('/login');
+    window.location.reload();
+  }
 
-    const { ComposedClass, ...passThroughProps } = props;
+//window.location.pathname.includes('add')
+
+  const isExempted = () => {
+    const pathname = window.location.pathname;
+    for (var i = 0; i < EXEMPTED_URLS.length; i++)
+      if (pathname.includes(EXEMPTED_URLS[i]))
+        return true;
+    return false;
+  }
+
+  if (!AuthService.getCurrentUser() && !isExempted()) login();
+
+  const { ComposedClass, ...passThroughProps } = props;
     //const history = useHistory();
 
-    const handleOnIdle = (event: any) => {
-        //console.log('user is idle', event)
-        console.log('last active', getLastActiveTime());
-        //logout();
-        AuthService.logout();
-        props.history.push('/login');
-    }
+  const handleOnIdle = (event: any) => {
+    //console.log('user is idle', event)
+    //console.log('last active', getLastActiveTime());
+    login();
+    //AuthService.logout();
+    //props.history.push('/login');
+  }
 
-    const {getLastActiveTime } = useIdleTimer({
-        timeout: 1000 * 60 * SESSION_IDEL_MINUTES,
-        onIdle: handleOnIdle,
-        debounce: 500,
-    })
+  const {getLastActiveTime } = useIdleTimer({
+    timeout: 1000 * 60 * SESSION_IDLE_MINUTES,
+    onIdle: handleOnIdle,
+    debounce: 500,
+  })
 
-    return <ComposedClass  {...passThroughProps} />
+  return <ComposedClass  {...passThroughProps} />
 }
 
 export default withRouter(AutoLogoutTimer);

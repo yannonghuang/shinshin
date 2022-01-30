@@ -43,7 +43,7 @@ import AttachmentsList from "./components/attachments-list.component";
 import UsersList from "./components/users-list.component";
 
 import AuthService from "./services/auth.service";
-import AutoLogoutTimer from "./services/timer.service";
+import AccessControlService from "./services/timer.service";
 
 import Reset from "./components/reset.component";
 import Login from "./components/login.component";
@@ -222,14 +222,13 @@ class App extends Component {
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />
 
+{/*
             <Route exact path={["/schools"]} component={SchoolsList} />
             <Route path={["/schoolsView/:id"]} component={School} />
 
             <Route exact path={["/projects", "/projects/school/:schoolId"]} component={ProjectsList} />
             <Route path={["/projectsView/:id"]} component={Project} />
 
-
-{/*}
             <Route path="/user" component={BoardUser} />
             <Route path="/mod" component={BoardModerator} />
             <Route path="/admin" component={BoardAdmin} />
@@ -240,73 +239,72 @@ class App extends Component {
 
 
             <Route exact path={["/regions"]} component={RegionsList} >
-                <AutoLogoutTimer ComposedClass={RegionsList} />
+                <AccessControlService ComposedClass={RegionsList} />
             </Route>
-            <Route exact path={["/schools/region/:region"]} >
-                <AutoLogoutTimer ComposedClass={SchoolsList} />
+            <Route exact path={["/schools", "/schools/region/:region"]} >
+                <AccessControlService ComposedClass={SchoolsList} />
             </Route>
-            <Route path={["/schools/:id", "/addS"]} component={School} >
-                <AutoLogoutTimer ComposedClass={School} />
+            <Route path={["/schoolsView/:id", "/schools/:id", "/addS"]} component={School} >
+                <AccessControlService ComposedClass={School} />
             </Route>
 
             <Route path={["/surveys/:id", "/surveysView/:id", "/addSurvey", "/surveys/school/:schoolId"]} component={Survey} >
-                <AutoLogoutTimer ComposedClass={Survey} />
+                <AccessControlService ComposedClass={Survey} />
             </Route>
             <Route exact path={["/surveys"]} component={SurveysList} >
-                <AutoLogoutTimer ComposedClass={SurveysList} />
+                <AccessControlService ComposedClass={SurveysList} />
             </Route>
 
             <Route exact path={["/documents", "/documents/school/:schoolId",
                             "/documents/school/:schoolId/:docCategory"]} component={DocumentsList} >
-                <AutoLogoutTimer ComposedClass={DocumentsList} />
+                <AccessControlService ComposedClass={DocumentsList} />
             </Route>
 
             <Route exact path={["/comments", "/comments/school/:schoolId"]} component={CommentsList} >
-                <AutoLogoutTimer ComposedClass={CommentsList} />
+                <AccessControlService ComposedClass={CommentsList} />
             </Route>
 
             <Route exact path={["/logs", "/logs/school/:schoolId"]} component={LogsList} >
-                <AutoLogoutTimer ComposedClass={LogsList} />
+                <AccessControlService ComposedClass={LogsList} />
             </Route>
-{/*
+
             <Route exact path={["/projects", "/projects/school/:schoolId"]} component={ProjectsList} >
-                <AutoLogoutTimer ComposedClass={ProjectsList} />
+                <AccessControlService ComposedClass={ProjectsList} />
             </Route>
-*/}
-            <Route path={["/projects/:id", "/addP"]} component={Project} >
-                <AutoLogoutTimer ComposedClass={Project} />
+            <Route path={["/projectsView/:id", "/projects/:id", "/addP"]} component={Project} >
+                <AccessControlService ComposedClass={Project} />
             </Route>
 
             <Route exact path={["/dossiers", "/dossiers/project/:projectId",
                                             "/dossiers/project/:projectId/:docCategory"]} component={DossiersList} >
-                <AutoLogoutTimer ComposedClass={DossiersList} />
+                <AccessControlService ComposedClass={DossiersList} />
             </Route>
 
             <Route exact path={["/forms"]} component={FormsList} >
-                <AutoLogoutTimer ComposedClass={FormsList} />
+                <AccessControlService ComposedClass={FormsList} />
             </Route>
 
             {/*
             <Route exact path="/addF" component={AddForm} />
             */}
             <Route path={["/forms/:id", "/formsView/:id", "/addF"]} component={Form} >
-                <AutoLogoutTimer ComposedClass={Form} />
+                <AccessControlService ComposedClass={Form} />
             </Route>
 
             <Route exact path={["/responses", "/responses/form/:formId", "/responses/school/:schoolId",
                                 "/responses/user/:userId"]} component={ResponsesList} >
-                <AutoLogoutTimer ComposedClass={ResponsesList} />
+                <AccessControlService ComposedClass={ResponsesList} />
             </Route>
 
             {/*}
             <Route path="/addR/:id" component={AddResponse} />
             */}
             <Route path={["/responses/:id", "/responsesView/:id", "/addR/:id"]} component={Response} >
-                <AutoLogoutTimer ComposedClass={Response} />
+                <AccessControlService ComposedClass={Response} />
             </Route>
 
             <Route exact path={["/attachments", "/attachments/response/:responseId"]} component={AttachmentsList} >
-                <AutoLogoutTimer ComposedClass={AttachmentsList} />
+                <AccessControlService ComposedClass={AttachmentsList} />
             </Route>
 
             {/*}
@@ -315,11 +313,11 @@ class App extends Component {
             */}
 
             <Route exact path={["/users", "/users/school/:schoolId"]} component={UsersList} >
-                <AutoLogoutTimer ComposedClass={UsersList} />
+                <AccessControlService ComposedClass={UsersList} />
             </Route>
 
             <Route path={["/addU", "/users/:id", "/usersView/:id"]} component={Register} >
-                <AutoLogoutTimer ComposedClass={Register} />
+                <AccessControlService ComposedClass={Register} />
             </Route>
 
           </Switch>
