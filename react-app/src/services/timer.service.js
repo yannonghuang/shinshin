@@ -33,7 +33,11 @@ const AutoLogoutTimer = (props: any) => {
     return false;
   }
 
-  if (!AuthService.getCurrentUser() && !isExempted()) login();
+  if (!AuthService.getCurrentUser() && !isExempted()) {
+    alert("需要登录");
+    login();
+  }
+
 
   const { ComposedClass, ...passThroughProps } = props;
     //const history = useHistory();
