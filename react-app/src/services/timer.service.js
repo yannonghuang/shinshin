@@ -34,8 +34,9 @@ const AutoLogoutTimer = (props: any) => {
   }
 
   if (!AuthService.getCurrentUser() && !isExempted()) {
-    alert("需要登录");
-    login();
+    if (window.confirm("需要登录 ?")) login();
+    else props.history.goBack();
+    //alert("需要登录");
   }
 
 
