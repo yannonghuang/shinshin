@@ -21,7 +21,7 @@ module.exports = function(app) {
   );
 
   app.get("/api/schools/regions",
-    [authJwt.verifyToken],
+    //[authJwt.verifyToken],
     schools.getRegions
   );
 
@@ -31,32 +31,32 @@ module.exports = function(app) {
   );
 
   app.get("/api/schools/stages",
-    [authJwt.verifyToken],
+    //[authJwt.verifyToken],
     schools.getSchoolStages
   );
 
   app.get("/api/schools/statuses",
-    [authJwt.verifyToken],
+    //[authJwt.verifyToken],
     schools.getSchoolStatuses
   );
 
   app.get("/api/schools/statuses_ss",
-    [authJwt.verifyToken],
+    //[authJwt.verifyToken],
     schools.getSchoolStatuses_ss
   );
 
   app.get("/api/schools/requests",
-    [authJwt.verifyToken],
+    //[authJwt.verifyToken],
     schools.getSchoolRequests
   );
 
   app.get("/api/schools/requests_ss",
-    [authJwt.verifyToken],
+    //[authJwt.verifyToken],
     schools.getSchoolRequests_ss
   );
 
   app.get("/api/schools/categories",
-    [authJwt.verifyToken],
+    //[authJwt.verifyToken],
     schools.getSchoolCategories
   );
 

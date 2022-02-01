@@ -30,7 +30,7 @@ class SchoolDataService {
   }
 
   getRegions() {
-    return http.get("/schools/regions", { headers: authHeader() });
+    return http.get("/schools/regions"/*, { headers: authHeader() }*/);
   }
 
   getCountsByRegion() {
@@ -39,27 +39,27 @@ class SchoolDataService {
 
 
   getStages() {
-    return http.get("/schools/stages", { headers: authHeader() });
+    return http.get("/schools/stages"/*, { headers: authHeader() }*/);
   }
 
   getStatuses() {
-    return http.get("/schools/statuses", { headers: authHeader() });
+    return http.get("/schools/statuses"/*, { headers: authHeader() }*/);
   }
 
   getStatuses_ss() {
-    return http.get("/schools/statuses_ss", { headers: authHeader() });
+    return http.get("/schools/statuses_ss"/*, { headers: authHeader() }*/);
   }
 
   getRequests() {
-    return http.get("/schools/requests", { headers: authHeader() });
+    return http.get("/schools/requests"/*, { headers: authHeader() }*/);
   }
 
   getRequests_ss() {
-    return http.get("/schools/requests_ss", { headers: authHeader() });
+    return http.get("/schools/requests_ss"/*, { headers: authHeader() }*/);
   }
 
   getCategories() {
-    return http.get("/schools/categories", { headers: authHeader() });
+    return http.get("/schools/categories"/*, { headers: authHeader() }*/);
   }
 
   get(id) {
