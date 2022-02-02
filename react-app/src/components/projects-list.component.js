@@ -356,7 +356,7 @@ const ProjectsList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
-              {!readonly && currentUser && (<Link
+              {currentUser && (<Link
                 to={"/projectsView/" + projectsRef.current[rowIdx].id}
               >
                 <i className="fas fa-eye action mr-2"></i>
