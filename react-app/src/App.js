@@ -98,9 +98,10 @@ class App extends Component {
             学校项目管理系统
           </Link>
 
-          {(!currentUser || (currentUser && !currentUser.schoolId)) && (
+
           <div class="collapse navbar-collapse navbar-nav mr-auto">
 
+          {(currentUser && !currentUser.schoolId) && (
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 管理
@@ -109,8 +110,9 @@ class App extends Component {
                 <a class="dropdown-item" href={"/users"}>用户列表</a>
                 <a class="dropdown-item" href={"/addU"}>创建用户</a>
               </div>
-            </li>
+            </li>)}
 
+          {(!currentUser || (currentUser && !currentUser.schoolId)) && (
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 学校
@@ -126,8 +128,9 @@ class App extends Component {
                 <a class="dropdown-item" href={"/logs"}>修改记录</a>
                 <a class="dropdown-item" href={"/surveys"}>调查表列表</a>
               </div>
-            </li>
+            </li>)}
 
+          {(!currentUser || (currentUser && !currentUser.schoolId)) && (
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 项目
@@ -138,8 +141,9 @@ class App extends Component {
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href={"/dossiers"}>项目文档</a>
               </div>
-            </li>
+            </li>)}
 
+          {(currentUser && !currentUser.schoolId) && (
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 项目申请
@@ -151,8 +155,9 @@ class App extends Component {
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href={"/attachments"}>项目申请附件</a>
               </div>
-            </li>
-          </div>)}
+            </li>)}
+
+          </div>
 
           {currentUser ? (
             <div class="navbar-nav ml-auto">
