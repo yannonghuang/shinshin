@@ -17,10 +17,13 @@ const EXEMPTED_URLS = [
 
 const AutoLogoutTimer = (props: any) => {
 
-  const login = () => {
+  const login = (newTarget = false) => {
     AuthService.logout();
-    props.history.push('/login');
-    window.location.reload();
+    if (newTarget) props.history.goBack();
+    const win = window.open("/login", newTarget ? "_blank" : null);
+    win.focus();
+    //props.history.push('/login');
+    //window.location.reload();
   }
 
 //window.location.pathname.includes('add')
@@ -34,7 +37,7 @@ const AutoLogoutTimer = (props: any) => {
   }
 
   if (!AuthService.getCurrentUser() && !isExempted()) {
-    login();
+    login(true);
     //if (window.confirm("需要登录 ?")) login();
     //else props.history.goBack();
   }
