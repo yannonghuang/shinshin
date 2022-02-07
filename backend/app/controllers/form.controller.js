@@ -47,10 +47,13 @@ const buildElement = (row, userData = null) => {
   result.label = row.q_text;
 
   if (row.input_type === 'TEXTAREA') result.type = 'textarea';
-  if (row.input_type === 'NON-INPUT') result.type = 'header';
-  if (row.input_type === 'TEXT' ) result.type = 'text';
+  //if (row.input_type === 'NON-INPUT') result.type = 'header';
+  if (row.input_type === 'TEXT' || row.input_type === 'NON-INPUT') result.type = 'text';
   if (row.input_type === 'NUMERIC' ) result.type = 'number';
-  if (row.input_type === 'RADIO') result.type = 'radio-group';
+  if (row.input_type === 'RADIO') {
+    result.type = 'radio-group';
+    result.inline = true;
+  }
   if (row.input_type === 'CHECKBOX') result.type = 'checkbox-group';
   if (row.input_type === 'FILE') result.type = 'file';
   if (row.input_type === 'SELECT') result.type = 'select';
@@ -59,7 +62,8 @@ const buildElement = (row, userData = null) => {
     const options = row.options.trim().split('|');
     let opts = [];
     for (var i = 0; i < options.length; i++)
-      opts.push({label: '选择 ' + i, value: options[i]});
+      opts.push({label: options[i], value: options[i]});
+      //opts.push({label: '选择 ' + i, value: options[i]});
 
     if (opts.length > 0)
       result.values = opts;
@@ -136,7 +140,7 @@ const migrateForm = async () => {
   }
 };
 
-exports.SAVE_create = (req, res) => {
+exports.create = (req, res) => {
   migrate();
 }
 
@@ -151,7 +155,7 @@ const getPagingData = (count, data, page, limit) => {
 };
 
 // Create and Save a new Form
-exports.create = (req, res) => {
+exports.SAVE_create = (req, res) => {
   // Validate request
   if (!req.body.title) {
     res.status(400).send({
