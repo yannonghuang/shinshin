@@ -10,7 +10,7 @@ const Op = db.Sequelize.Op;
 const { authJwt } = require("../middleware");
 
 const getPagination = (page, size) => {
-  const limit = size ? +size : 3;
+  const limit = size ? +size : 30;
   const offset = page ? page * limit : 0;
 
   return { limit, offset };

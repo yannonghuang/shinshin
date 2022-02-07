@@ -168,7 +168,7 @@ optionOnSave = {
           //currentResponse: response.data,
           currentResponse: {
             ...otherParameters,
-            startAt: (new Date(startAt)).getFullYear(),
+            startAt: (startAt ? (new Date(startAt)).getFullYear() : '')
           },
 
           hasFiles: this.hasFiles()

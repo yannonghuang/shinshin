@@ -22,11 +22,11 @@ const FormsList = (props) => {
 
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(30);
 
   const [orderby, setOrderby] = useState([]);
 
-  const pageSizes = [5, 10, 20];
+  const pageSizes = [20, 30, 50];
 
   const [totalItems, setTotalItems] = useState(0);
 

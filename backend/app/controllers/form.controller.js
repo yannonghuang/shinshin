@@ -1,11 +1,13 @@
 const db = require("../models");
 const Form = db.forms;
+const Staging_Form = db.staging_forms;
 const Response = db.responses;
+const Staging_Response = db.staging_responses;
 const Project = db.projects;
 const Op = db.Sequelize.Op;
 
 const getPagination = (page, size) => {
-  const limit = size ? +size : 3;
+  const limit = size ? +size : 30;
   const offset = page ? page * limit : 0;
 
   return { limit, offset };
@@ -36,8 +38,107 @@ const propagateUpdates = async (req) => {
   } catch (e) {
     console.log(e.message);
   }
-
 };
+
+const buildElement = (row, userData = null) => {
+  let result = {};
+
+  result.name = row.data_field_name;
+  result.label = row.q_text;
+
+  if (row.input_type === 'TEXTAREA') result.type = 'textarea';
+  if (row.input_type === 'NON-INPUT') result.type = 'header';
+  if (row.input_type === 'TEXT' ) result.type = 'text';
+  if (row.input_type === 'NUMERIC' ) result.type = 'number';
+  if (row.input_type === 'RADIO') result.type = 'radio-group';
+  if (row.input_type === 'CHECKBOX') result.type = 'checkbox-group';
+  if (row.input_type === 'FILE') result.type = 'file';
+  if (row.input_type === 'SELECT') result.type = 'select';
+
+  if (row.options && row.options.trim().length > 0) {
+    const options = row.options.trim().split('|');
+    let opts = [];
+    for (var i = 0; i < options.length; i++)
+      opts.push({label: '选择 ' + i, value: options[i]});
+
+    if (opts.length > 0)
+      result.values = opts;
+  }
+
+  if (userData !== null)
+    result.userData = [userData];
+
+  return result;
+}
+
+const migrate = () => {
+  migrateForm();
+  migrateResponse();
+}
+
+const migrateResponse = async () => {
+  try {
+    const rows = await Staging_Response.findAll({
+      order: [ ['title', 'asc'] ]
+    });
+
+    let title = null;
+    let form = null;
+    for (var i = 0; i < rows.length; i++) {
+      if (title !== rows[i].title) {
+        // update form ...
+        if (title != null)
+          await Response.update({fdata: form}, {where: { title: title }});
+
+        title = rows[i].title;
+        form = [];
+      }
+
+      // construct element
+      const questions = await Staging_Form.findAll({where: { q_id: rows[i].q_id }});
+      if (questions && questions.length > 0) {
+        let element = buildElement(questions[0], rows[i].q_value);
+        form.push(element);
+      }
+    }
+
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const migrateForm = async () => {
+  try {
+
+    const rows = await Staging_Form.findAll({
+      order: [ ['title', 'asc'] ]
+    });
+
+    let title = null;
+    let form = null;
+    for (var i = 0; i < rows.length; i++) {
+      if (title !== rows[i].title) {
+        // update form ...
+        if (title != null)
+          await Form.update({fdata: form}, {where: { title: title }});
+
+        title = rows[i].title;
+        form = [];
+      }
+
+      // construct element
+      let element = buildElement(rows[i]);
+      form.push(element);
+    }
+
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+exports.create = (req, res) => {
+  migrate();
+}
 
 const getPagingData = (count, data, page, limit) => {
   //const { count: totalItems, rows: schools } = data;
@@ -50,7 +151,7 @@ const getPagingData = (count, data, page, limit) => {
 };
 
 // Create and Save a new Form
-exports.create = (req, res) => {
+exports.SAVE_create = (req, res) => {
   // Validate request
   if (!req.body.title) {
     res.status(400).send({
