@@ -58,17 +58,17 @@ export default class Response extends Component {
       submitted: false
     };
 
+    this.fb = createRef();
+    this.fRender = null;
     //this.init();
   }
 
-optionOnSave = {
-  onSave: (e, responseData) => {   //Auto binds `this`
+  optionOnSave = {
+    onSave: (e, responseData) => {   //Auto binds `this`
      this.submitResponse();
-  }
-};
+    }
+  };
 
-  fb = createRef();
-  fRender = null;
   componentDidMount() {
     const newresponse = window.location.pathname.includes('add');
     this.setState({newresponse: newresponse});

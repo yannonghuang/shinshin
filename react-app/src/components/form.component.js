@@ -42,6 +42,10 @@ export default class Form extends Component {
       readonly: true,      
       submitted: false
     };
+
+    this.fb = createRef();
+    this.fBuilder = null;
+    this.fRender = null;
   }
 
   newFormOptions = {
@@ -69,9 +73,7 @@ export default class Form extends Component {
     showActionButtons: !window.location.pathname.includes('View')
   };
 
-  fb = createRef();
-  fBuilder = null;
-  fRender = null;
+
   componentDidMount() {
     const readonly = window.location.pathname.includes('View')
     const newform = window.location.pathname.includes('add');
