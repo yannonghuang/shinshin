@@ -19,11 +19,14 @@ const AutoLogoutTimer = (props: any) => {
 
   const login = (newTarget = false) => {
     AuthService.logout();
-    if (newTarget) props.history.goBack();
-    const win = window.open("/login", newTarget ? "_blank" : null);
-    win.focus();
-    //props.history.push('/login');
-    //window.location.reload();
+    if (newTarget) {
+      props.history.goBack();
+      const win = window.open("/login", newTarget ? "_blank" : null);
+      win.focus();
+    } else {
+      props.history.push('/login');
+      window.location.reload();
+    }
   }
 
 //window.location.pathname.includes('add')
