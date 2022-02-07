@@ -136,7 +136,7 @@ const migrateForm = async () => {
   }
 };
 
-exports.create = (req, res) => {
+exports.SAVE_create = (req, res) => {
   migrate();
 }
 
@@ -151,7 +151,7 @@ const getPagingData = (count, data, page, limit) => {
 };
 
 // Create and Save a new Form
-exports.SAVE_create = (req, res) => {
+exports.create = (req, res) => {
   // Validate request
   if (!req.body.title) {
     res.status(400).send({
