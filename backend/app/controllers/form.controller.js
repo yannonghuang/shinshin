@@ -43,7 +43,7 @@ const propagateUpdates = async (req) => {
 const buildElement = (row, userData = null) => {
   let result = {};
 
-  result.name = row.data_field_name;
+  result.name = row.data_field_name; // ? row.data_field_name : ('name' + Date.now());
   result.label = row.q_text;
 
   if (row.input_type === 'TEXTAREA') result.type = 'textarea';
@@ -69,7 +69,7 @@ const buildElement = (row, userData = null) => {
       result.values = opts;
   }
 
-  if (userData !== null)
+  if (userData !== null && row.input_type !== 'FILE')
     result.userData = [userData];
 
   return result;
