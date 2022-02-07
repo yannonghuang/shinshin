@@ -79,7 +79,7 @@ const migrate = () => {
 const migrateResponse = async () => {
   try {
     const rows = await Staging_Response.findAll({
-      order: [ ['title', 'asc'] ]
+      order: [ ['title', 'asc'], ['q_id', 'asc'] ]
     });
 
     let title = null;
@@ -111,7 +111,7 @@ const migrateForm = async () => {
   try {
 
     const rows = await Staging_Form.findAll({
-      order: [ ['title', 'asc'] ]
+      order: [ ['title', 'asc'], ['q_id', 'asc'] ]
     });
 
     let title = null;
@@ -136,7 +136,7 @@ const migrateForm = async () => {
   }
 };
 
-exports.SAVE_create = (req, res) => {
+exports.create = (req, res) => {
   migrate();
 }
 
@@ -151,7 +151,7 @@ const getPagingData = (count, data, page, limit) => {
 };
 
 // Create and Save a new Form
-exports.create = (req, res) => {
+exports.SAVE_create = (req, res) => {
   // Validate request
   if (!req.body.title) {
     res.status(400).send({
