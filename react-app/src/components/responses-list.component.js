@@ -135,7 +135,10 @@ const ResponsesList = (props) => {
         setCount(totalPages);
         setTotalItems(totalItems);
 
-        if (formId && responses[0]) setTitle(responses[0].title);
+        if (formId && responses[0] && responses[0].title) { // in old system, responseTitle is: formTitle-schoolNumber
+          const index = responses[0].title.indexOf("-");
+          setTitle((index > 0) ? responses[0].title.substring(0, index) : responses[0].title);
+        }
 
         console.log(response.data);
       })
