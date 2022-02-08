@@ -49,6 +49,7 @@ exports.create = (req, res) => {
     schoolId: req.body.schoolId,
     description: req.body.description,
     startAt: req.body.startAt,
+    xr: req.body.xr,
   };
 
   // Save Project in the database
@@ -185,6 +186,7 @@ exports.findAll2 = async (req, res) => {
       ? req.body.region.substring(0, 4)
       : req.body.region.substring(0, 2)
     : null;
+  const xr = req.body.xr;
 
   var orderbyObject = null;
   if (orderby) {
@@ -208,7 +210,12 @@ exports.findAll2 = async (req, res) => {
             schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null,
             code ? { '$school.code$': { [Op.eq]: `${code}` } } : null,
             region ? { '$school.region$': { [Op.like]: `%${region}%` } } : null,
-            startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('projects.startAt')), `${startAt}`) } } : null
+            startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('projects.startAt')), `${startAt}`) } } : null,
+            xr /*=== undefined
+              ? null
+              : xr === 'true'*/
+                ? { xr: { [Op.eq]: `1` }}
+                : { xr: null },
         ]};
 
   var include = [
@@ -383,7 +390,7 @@ exports.findOne = (req, res) => {
   const id = req.params.id;
 
   Project.findByPk(id, {
-      attributes: ['id', 'name', 'budget', 'status', 'description',
+      attributes: ['id', 'name', 'budget', 'status', 'description', 'xr',
                     [db.Sequelize.fn("year", db.Sequelize.col("projects.startAt")), "startAt"],
                   ],
 

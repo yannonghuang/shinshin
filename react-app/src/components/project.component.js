@@ -58,6 +58,7 @@ export default class Project extends Component {
         file: null, // for photo
         description: "",
         startAt: null,
+        xr: window.location.pathname.includes('XR'),
 
         docFiles: [],
         docCategory: ""
@@ -455,6 +456,7 @@ export default class Project extends Component {
       status: this.state.currentProject.status,
       description: this.state.currentProject.description,
       startAt: this.state.currentProject.startAt ? (this.state.currentProject.startAt + '-02-01') : null,
+      xr: this.state.currentProject.xr,
     };
 
     try {
@@ -682,7 +684,7 @@ export default class Project extends Component {
                 </div>
 
                 <div class="form-group">
-                <label htmlFor="name">项目名称</label>
+                <label htmlFor="name">{currentProject.xr && '向荣支持'}项目名称</label>
                 <textarea
                 readonly={this.state.readonly?"":false}
                 cols="26"

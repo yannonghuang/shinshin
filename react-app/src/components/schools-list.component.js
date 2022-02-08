@@ -27,6 +27,7 @@ const SchoolsList = (props) => {
   const [searchStage, setSearchStage] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
   const [searchRequest, setSearchRequest] = useState("");
+  const [searchXR, setSearchXR] = useState(null);
 
   const schoolsRef = useRef();
   schoolsRef.current = schools;
@@ -92,6 +93,11 @@ const SchoolsList = (props) => {
     setSearchLastVisit(searchLastVisit);
   };
 
+  const onChangeSearchXR = (e) => {
+    const searchXR = e.target.value;
+    setSearchXR(searchXR);
+  };
+  
   const onClearSearch = (e) => {
     setSearchName("");
     setSearchCode("");
@@ -102,7 +108,8 @@ const SchoolsList = (props) => {
     setSearchStage("");
     setSearchStatus("");
     setSearchRequest("");
-
+    setSearchXR("");
+    
     setOrderby([]);
     setExportSchools([]);
   };
@@ -159,6 +166,10 @@ const SchoolsList = (props) => {
       params["request"] = searchRequest;
     }
 
+    if (searchXR) {
+      params["xr"] = searchXR;
+    }
+    
     if (exportFlag) {
       params["exportFlag"] = exportFlag;
     }
@@ -300,7 +311,7 @@ const SchoolsList = (props) => {
   };
 
   useEffect(retrieveSchools, [page, pageSize, orderby, searchName, searchCode, searchRegion, searchStartAt,
-                            searchLastVisit, searchDonor, searchStage, searchStatus, searchRequest]);
+                            searchLastVisit, searchDonor, searchStage, searchStatus, searchRequest, searchXR]);
 
   const refreshList = () => {
     retrieveSchools();
@@ -679,6 +690,18 @@ const SchoolsList = (props) => {
         },
       },
       {
+        Header: "向荣支持",
+        accessor: 'xr',
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+                {schoolsRef.current[rowIdx].xr ? '是' : '否'}
+            </div>
+          );
+        },
+      },      
+      {
         Header: "操作",
         accessor: "actions",
         disableSortBy: true,
@@ -881,6 +904,20 @@ const SchoolsList = (props) => {
             onChange={onChangeSearchDonor}
           />
 
+          <select
+            className="form-control col-md-2 ml-2"
+            value={searchXR}
+            onChange={onChangeSearchXR}
+          >
+            <option value="">向荣支持?</option>
+              <option value={false}>
+                {'否'}
+              </option>
+              <option value={true}>
+                {'是'}
+              </option>
+          </select>
+          
           <div>
             <button
               className="btn btn-primary badge btn-block ml-2"
@@ -968,7 +1005,7 @@ const SchoolsList = (props) => {
                       column.id === 'studentsCount' || column.id === 'name' ||
                       column.id === 'projectsCount' || column.id === 'responsesCount' ||
                       column.id === 'stage' || column.id === 'lastVisit' ||
-                      column.id === 'status' || column.id === 'request'
+                      column.id === 'status' || column.id === 'request' || column.id === 'xr'
                       )
                       ? column.isSortedDesc
                         ? ' 🔽'

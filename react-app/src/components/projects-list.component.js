@@ -46,6 +46,10 @@ const ProjectsList = (props) => {
   []
   );
 
+  const [xr, setXR] = useState(window.location.pathname.includes('XR')
+    ? window.location.pathname.includes('XR')
+    : props.xr);
+
   const onChangeSearchName = (e) => {
     const searchName = e.target.value;
     setSearchName(searchName);
@@ -116,6 +120,8 @@ const ProjectsList = (props) => {
     if (schoolId) {
       params["schoolId"] = schoolId;
     }
+
+    params["xr"] = xr;
 
     if (exportFlag) {
       params["exportFlag"] = exportFlag;
@@ -357,13 +363,13 @@ const ProjectsList = (props) => {
           return (
             <div>
               {currentUser && (<Link
-                to={"/projectsView/" + projectsRef.current[rowIdx].id}
+                to={"/projectsView" + (xr ? 'XR' : '') + "/" + projectsRef.current[rowIdx].id}
               >
                 <i className="fas fa-eye action mr-2"></i>
               </Link>)}
 
               {!readonly && currentUser && (<Link
-                to={"/projects/" + projectsRef.current[rowIdx].id}
+                to={"/projects" + (xr ? 'XR' : '') + "/" + projectsRef.current[rowIdx].id}
               >
                 <i className="far fa-edit action mr-2"></i>
               </Link>)}
@@ -439,7 +445,7 @@ const ProjectsList = (props) => {
   return (
     <div className="list row">
       <div className="col-md-9">
-        <h4>项目列表(总数：{totalItems})</h4>
+        <h4>{xr && '向荣支持'}项目列表(总数：{totalItems})</h4>
         <div className="input-group mb-3 ">
 
           <input

@@ -139,6 +139,9 @@ class App extends Component {
                 <a class="dropdown-item" href={"/projects"}>项目列表</a>
                 <a class="dropdown-item" href={"/addP"}>新增项目</a>
                 <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href={"/projectsXR"}>向荣支持项目列表</a>
+                <a class="dropdown-item" href={"/addPXR"}>新增向荣支持项目</a>
+                <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href={"/dossiers"}>项目文档</a>
               </div>
             </li>)}
@@ -273,10 +276,12 @@ class App extends Component {
                 <AccessControlService ComposedClass={LogsList} />
             </Route>
 
-            <Route exact path={["/projects", "/projects/school/:schoolId"]} component={ProjectsList} >
+            <Route exact path={["/projects", "/projects/school/:schoolId", "/projectsXR", "/projectsXR/school/:schoolId"]}
+                component={ProjectsList} >
                 <AccessControlService ComposedClass={ProjectsList} />
             </Route>
-            <Route path={["/projectsView/:id", "/projects/:id", "/addP"]} component={Project} >
+            <Route path={["/projectsView/:id", "/projects/:id", "/addP", "/projectsViewXR/:id", "/projectsXR/:id", "/addPXR"]}
+                component={Project} >
                 <AccessControlService ComposedClass={Project} />
             </Route>
 

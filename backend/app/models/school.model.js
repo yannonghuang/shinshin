@@ -66,6 +66,9 @@ module.exports = (sequelize, Sequelize) => {
     contactId: {
       type: Sequelize.INTEGER
     },
+    xr: {
+      type: Sequelize.BOOLEAN
+    },
   });
 
   return School;

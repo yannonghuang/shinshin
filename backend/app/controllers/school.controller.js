@@ -45,7 +45,8 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t) => {
       oldv = JSON.stringify(oldv).substring(1, 5);
     }
 
-    if (newv && (!oldObj || !oldObj[key] || (oldv != newv))) {
+    //if (newv && (!oldObj || !oldObj[key] || (oldv != newv))) {
+    if ((newv !== undefined) && (!oldObj || !oldObj[key] || (oldv != newv))) {
       updates.push({field: key, oldv: oldv, newv: newv, schoolId, userId});
       if (oldObj) oldObj.set(key, newObj[key]);
     }
@@ -328,6 +329,7 @@ exports.findAll2 = async (req, res) => {
       ? req.body.region.substring(0, 4)
       : req.body.region.substring(0, 2)
     : null;
+  const xr = req.body.xr;
 
   //var condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
 
@@ -357,7 +359,14 @@ exports.findAll2 = async (req, res) => {
             status ? { status: { [Op.eq]: `${status}` } } : null,
             request ? { request: { [Op.eq]: `${request}` } } : null,
             startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('schools.startAt')), `${startAt}`) } } : null,
-            lastVisit ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('schools.lastVisit')), `${lastVisit}`) } } : null
+            lastVisit ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('schools.lastVisit')), `${lastVisit}`) } } : null,
+            xr === undefined
+              ? null
+              : xr === 'true'
+                ? { xr: { [Op.eq]: `1` }}
+                : {[Op.or]: [{ xr: { [Op.ne]: `1` }}, { xr: null }]},
+                //: { xr: { [Op.ne]: `1` }},
+                //: { xr: null },
         ]};
 
   const inner_include = [
@@ -394,7 +403,7 @@ exports.findAll2 = async (req, res) => {
 //  offset: offset,
   subQuery: false,
   attributes: ['id', 'code', 'name', 'description', 'principal', 'region', 'address', 'phone', 'teachersCount', 'studentsCount',
-            'stage', 'status', 'request', 'category', 'principalId', 'contactId', 'donor',
+            'stage', 'status', 'request', 'category', 'principalId', 'contactId', 'donor', 'xr',
             [db.Sequelize.fn("year", db.Sequelize.col("schools.startAt")), "startAt"],
             [db.Sequelize.fn("year", db.Sequelize.col("schools.lastVisit")), "lastVisit"],
             [db.Sequelize.fn("COUNT", db.Sequelize.col("projects.id")), "projectsCount"],
@@ -609,6 +618,7 @@ exports.findOne = (req, res) => {
                           //[db.Sequelize.fn('date_format', db.Sequelize.col("startAt"), '%Y-%m-%d'), "startAt"],
                           [db.Sequelize.fn("year", db.Sequelize.col("schools.startAt")), "startAt"],
                           [db.Sequelize.fn("year", db.Sequelize.col("schools.lastVisit")), "lastVisit"],
+                          'xr',
                    ],
       raw: true,
     }

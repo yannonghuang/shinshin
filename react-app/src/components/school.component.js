@@ -76,7 +76,6 @@ export default class School extends Component {
     this.onDrop = this.onDrop.bind(this);
     this.onChangeDocFiles = this.onChangeDocFiles.bind(this);
 
-
     this.saveSchool = this.saveSchool.bind(this);
     this.newSchool = this.newSchool.bind(this);
 
@@ -118,6 +117,7 @@ export default class School extends Component {
         description: "",
         principalId: null,
         contactId: null,
+        xr: false,
       },
 
       newschool: true,
@@ -1054,6 +1054,18 @@ alert(JSON.stringify(this.state.currentSchool))
                 </div>
 
                 <div class="form-group">
+                  <label htmlFor="xr">向荣支持</label>
+                  <input
+                    readonly={this.state.readonly?"":false}
+                    type="checkbox"
+                    class="form-control"
+                    name="xr"
+                    checked={currentSchool.xr}
+                    onChange={this.onChangeGenerics}
+                  />
+                </div>
+
+                <div class="form-group">
                 <label htmlFor="name">学校名称</label>
                 <textarea
                 readonly={this.state.readonly?"":false}
@@ -1492,6 +1504,7 @@ alert(JSON.stringify(this.state.currentSchool))
                 <Tab>学校文档</Tab>
                 <Tab>学校照片</Tab>
                 <Tab>评论区</Tab>
+                {currentSchool.xr && <Tab>向荣支持项目</Tab>}
               </TabList>
 
               <TabPanel>
@@ -1539,6 +1552,14 @@ alert(JSON.stringify(this.state.currentSchool))
                   readonly = {this.state.readonly}
                 />
               </TabPanel>
+              {currentSchool.xr && (<TabPanel>
+                <ProjectsList
+                  schoolId = {currentSchool.id}
+                  embedded = {true}
+                  readonly = {this.state.readonly}
+                  xr = {true}
+                />
+              </TabPanel>)}
             </Tabs>
 
           </div>

@@ -18,6 +18,9 @@ module.exports = (sequelize, Sequelize) => {
     startAt: {
       type: Sequelize.DATE
     },
+    xr: {
+      type: Sequelize.BOOLEAN
+    },
   });
 
   return Project;
