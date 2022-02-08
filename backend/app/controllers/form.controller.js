@@ -50,13 +50,14 @@ const buildElement = (row, userData = null) => {
   //if (row.input_type === 'NON-INPUT') result.type = 'header';
   if (row.input_type === 'TEXT' || row.input_type === 'NON-INPUT') result.type = 'text';
   if (row.input_type === 'NUMERIC' ) result.type = 'number';
-  if (row.input_type === 'RADIO') {
-    result.type = 'radio-group';
-    result.inline = true;
-  }
+  if (row.input_type === 'RADIO') {result.type = 'radio-group'; result.inline = true;}
   if (row.input_type === 'CHECKBOX') result.type = 'checkbox-group';
   if (row.input_type === 'FILE') result.type = 'file';
   if (row.input_type === 'SELECT') result.type = 'select';
+
+  if (row.input_type === 'TEXT' || row.input_type === 'NON-INPUT' || row.input_type === 'TEXTAREA' ||
+    row.input_type === 'NUMERIC' || row.input_type === 'FILE')
+    result.className = 'form-control';
 
   if (row.options && row.options.trim().length > 0) {
     const options = row.options.trim().split('|');
@@ -140,7 +141,7 @@ const migrateForm = async () => {
   }
 };
 
-exports.SAVE_create = (req, res) => {
+exports.create = (req, res) => {
   migrate();
 }
 
@@ -155,7 +156,7 @@ const getPagingData = (count, data, page, limit) => {
 };
 
 // Create and Save a new Form
-exports.create = (req, res) => {
+exports.SAVE_create = (req, res) => {
   // Validate request
   if (!req.body.title) {
     res.status(400).send({
