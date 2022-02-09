@@ -1053,6 +1053,7 @@ alert(JSON.stringify(this.state.currentSchool))
                 />
                 </div>
 
+{/*
                 <div class="form-group" hidden={this.state.readonly && !currentSchool.xr} >
                   <label htmlFor="xr">向荣支持</label>
                   <input
@@ -1064,7 +1065,7 @@ alert(JSON.stringify(this.state.currentSchool))
                     onChange={this.onChangeGenerics}
                   />
                 </div>
-
+*/}
                 <div class="form-group">
                 <label htmlFor="name">学校名称</label>
                 <textarea

@@ -41,20 +41,25 @@ exports.create = (req, res) => {
     return;
   }
 
+  const schoolId = req.body.schoolId;
+  const xr = req.body.xr;
   // Create a Project
   const project = {
     name: req.body.name,
     budget: req.body.budget,
     status: req.body.status,
-    schoolId: req.body.schoolId,
+    schoolId: schoolId,
     description: req.body.description,
     startAt: req.body.startAt,
-    xr: req.body.xr,
+    xr: xr,
   };
 
   // Save Project in the database
   Project.create(project)
-    .then(data => {
+    .then( async (data) => {
+      if (xr)
+        await School.update({xr: 1}, {where: { id: schoolId }});
+
       res.send(data);
     })
     .catch(err => {
@@ -453,28 +458,43 @@ exports.update = (req, res) => {
 };
 
 // Delete a project with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
   const id = req.params.id;
 
-  Project.destroy({
-    where: { id: id }
-  })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "Project was deleted successfully!"
-        });
-      } else {
-        res.send({
-          message: `Cannot delete Project with id=${id}. Maybe Project was not found!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Could not delete Project with id=" + id
-      });
+  try {
+    let p = await Project.findByPk(id);
+    let schoolId = p.schoolId;
+
+    let num = await Project.destroy({
+      where: { id: id }
     });
+
+    if (num == 1) {
+      const c = await Project.count({where:
+        {[Op.and]: [
+            { xr: { [Op.eq]: `1` }},
+            { schoolId: schoolId }
+          ]
+        }
+      });
+
+      if (c == 0)
+        await School.update({xr: 0}, {where: { id: schoolId }});
+
+      res.send({
+        message: "Project was deleted successfully!"
+      });
+    } else {
+      res.send({
+        message: `Cannot delete Project with id=${id}. Maybe Project was not found!`
+      });
+    }
+
+  } catch (err) {
+    res.status(500).send({
+      message: "Could not delete Project with id=" + id
+    });
+  };
 };
 
 
