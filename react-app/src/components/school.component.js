@@ -1053,11 +1053,11 @@ alert(JSON.stringify(this.state.currentSchool))
                 />
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" hidden={this.state.readonly && !currentSchool.xr} >
                   <label htmlFor="xr">向荣支持</label>
                   <input
-                    readonly={this.state.readonly?"":false}
                     type="checkbox"
+                    hidden={this.state.readonly}
                     class="form-control"
                     name="xr"
                     checked={currentSchool.xr}
@@ -1504,7 +1504,7 @@ alert(JSON.stringify(this.state.currentSchool))
                 <Tab>学校文档</Tab>
                 <Tab>学校照片</Tab>
                 <Tab>评论区</Tab>
-                {currentSchool.xr && <Tab>向荣支持项目</Tab>}
+                {currentSchool.xr ? <Tab>向荣支持项目</Tab> : null}
               </TabList>
 
               <TabPanel>
@@ -1552,14 +1552,14 @@ alert(JSON.stringify(this.state.currentSchool))
                   readonly = {this.state.readonly}
                 />
               </TabPanel>
-              {currentSchool.xr && (<TabPanel>
+              {currentSchool.xr ? (<TabPanel>
                 <ProjectsList
                   schoolId = {currentSchool.id}
                   embedded = {true}
                   readonly = {this.state.readonly}
                   xr = {true}
                 />
-              </TabPanel>)}
+              </TabPanel>) : null}
             </Tabs>
 
           </div>

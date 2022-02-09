@@ -344,6 +344,7 @@ const ProjectsList = (props) => {
         accessor: 'school.teachersCount',
         disableSortBy: true,
       },
+
       {
         Header: "学校类型",
         accessor: 'school.category',
@@ -391,9 +392,16 @@ const ProjectsList = (props) => {
   const exportOnlyColumns =
     ['school.studentsCount', 'school.teachersCount', 'school.category'];
 
-  const hiddenColumns = embedded
+  var hiddenColumns = embedded
     ? [...schoolKnownColumns, ...exportOnlyColumns]
     : [];
+
+  const xrColumns =
+    ["response.title", "status"];
+
+  hiddenColumns = xr
+    ? [...hiddenColumns, ...xrColumns]
+    : hiddenColumns;
 
   const {
     getTableProps,

@@ -782,7 +782,7 @@ export default class Project extends Component {
                 ) : '' }
 
 
-
+                {(!currentProject.xr) ? (
                 <div class="select-container form-group col-md-4">
                 <label htmlFor="status">项目状态</label>
                 <select onChange={this.onChangeStatus}
@@ -800,6 +800,7 @@ export default class Project extends Component {
                 ))}
                 </select>
                 </div>
+                ) : '' }
 
                 <div className="col-md-4">
                   <label htmlFor="startAt">项目年份</label>
@@ -842,6 +843,7 @@ export default class Project extends Component {
                 更新
               </button>
 
+              {(!currentProject.xr) ? (
               <form ref="formToSubmit" action="http://localhost:8080/api/dossiers-upload" method="POST" enctype="multipart/form-data">
                 <div class="form-group input-group">
                 <label for="input-multi-files">上传文件:</label>
@@ -869,14 +871,14 @@ export default class Project extends Component {
                 <input type="hidden" name="projectId" id="projectId"/>
                 </div>
               </form>
+              ) : null}
 
               <p>{this.state.message}</p>
             </div>)}
 
-
-
             <div class="w-100"></div>
 
+            {(!currentProject.xr) ? (
             <Tabs>
               <TabList>
                 <Tab>更多信息 <i class="fas fa-hand-point-right"></i></Tab>
@@ -892,6 +894,7 @@ export default class Project extends Component {
                 />
               </TabPanel>
             </Tabs>
+            ) : null}
 
             <div class="w-100"></div>
             <div className="alert-danger">
