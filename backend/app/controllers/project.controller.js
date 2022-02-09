@@ -56,7 +56,7 @@ exports.create = (req, res) => {
 
   // Save Project in the database
   Project.create(project)
-    .then( async (data) => {
+    .then(async (data) => {
       if (xr)
         await School.update({xr: 1}, {where: { id: schoolId }});
 
