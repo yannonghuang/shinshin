@@ -843,7 +843,7 @@ export default class Project extends Component {
                 更新
               </button>
 
-              {(!currentProject.xr) ? (
+              {(!currentProject.xr) &&
               <form ref="formToSubmit" action="http://localhost:8080/api/dossiers-upload" method="POST" enctype="multipart/form-data">
                 <div class="form-group input-group">
                 <label for="input-multi-files">上传文件:</label>
@@ -870,15 +870,14 @@ export default class Project extends Component {
 
                 <input type="hidden" name="projectId" id="projectId"/>
                 </div>
-              </form>
-              ) : null}
+              </form>}
 
               <p>{this.state.message}</p>
             </div>)}
 
             <div class="w-100"></div>
 
-            {(!currentProject.xr) ? (
+            {(!currentProject.xr) &&
             <Tabs>
               <TabList>
                 <Tab>更多信息 <i class="fas fa-hand-point-right"></i></Tab>
@@ -893,8 +892,7 @@ export default class Project extends Component {
                   readonly = {this.state.readonly}
                 />
               </TabPanel>
-            </Tabs>
-            ) : null}
+            </Tabs>}
 
             <div class="w-100"></div>
             <div className="alert-danger">
