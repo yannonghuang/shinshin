@@ -257,9 +257,12 @@ const SchoolsList = (props) => {
     doRetrieveExportSchools({main: getAttributes(exportColumnsMain), detail: []});
   }
 
-  const doRetrieveExportSchools = (params) => {
+  const doRetrieveExportSchools = (columns) => {
 
-    SchoolDataService.getExport(params)
+    const filters = getRequestParams(true);
+
+    //SchoolDataService.getExport(columns)
+    SchoolDataService.getExport({...columns, ...filters})
       .then(response => {
         setExportSchools(response.data);
         console.log(response.data);
@@ -270,7 +273,7 @@ const SchoolsList = (props) => {
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download',
-                'schools_export' + (params.detail[0] ? '_detail' : '') + '.csv'
+                'schools_export' + (columns.detail[0] ? '_detail' : '') + '.csv'
             );
         document.body.appendChild(link);
         link.click();
@@ -458,10 +461,6 @@ const SchoolsList = (props) => {
       {
         Header: "联络人微信",
         accessor: "contactWechat",
-      },
-      {
-        Header: "学校简介",
-        accessor: "description",
       },
   ];
 

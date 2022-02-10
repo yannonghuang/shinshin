@@ -101,6 +101,7 @@ class ProjectDataService {
 
     if (!(obj instanceof Object)) {
       const p = path.substring(0, path.lastIndexOf('.')); // drop the last "."
+      //return {header: translate(p), body: (obj ? obj.trim() : '')};
       return {header: translate(p), body: (obj ? obj : '')};
     }
 
@@ -137,7 +138,13 @@ class ProjectDataService {
     const render = (item) => {
       if (item === true) return '是';
       if (item === false) return '否';
-      return (item ? item : '');
+
+      return (item
+        ? typeof item === 'string'
+          ? item.replace(/(\r\n|\n|\r)/gm, "")
+          : item
+        : ''
+      );
     }
 
     const flatten = (obj, path = '', newline = true) => {
