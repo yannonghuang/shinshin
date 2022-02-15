@@ -301,42 +301,41 @@ const FormsList = (props) => {
               清空
             </button>
           </div>
+        </div>
 
-
+        <div className="input-group mb-3">
           <button
-            className="btn btn-primary badge-success ml-2"
+            className="btn btn-primary badge-success"
             type="button"
             onClick={findByTitle}
           >
             查找
           </button>
-
         </div>
       </div>
 
+      <div className="mt-3 col-md-3">
+        {"每页显示行数: "}
+        <select onChange={handlePageSizeChange} value={pageSize}>
+          {pageSizes.map((size) => (
+            <option key={size} value={size}>
+              {size}
+            </option>
+          ))}
+        </select>
+        <Pagination
+          className="my-3"
+          count={count}
+          page={page}
+          siblingCount={1}
+          boundaryCount={1}
+          variant="outlined"
+          shape="rounded"
+          onChange={handlePageChange}
+        />
+      </div>
+
       <div className="col-md-12 list">
-        <div className="mt-3">
-          {"每页显示行数: "}
-          <select onChange={handlePageSizeChange} value={pageSize}>
-            {pageSizes.map((size) => (
-              <option key={size} value={size}>
-                {size}
-              </option>
-            ))}
-          </select>
-
-          <Pagination
-            className="my-3"
-            count={count}
-            page={page}
-            siblingCount={1}
-            boundaryCount={1}
-            variant="outlined"
-            shape="rounded"
-            onChange={handlePageChange}
-          />
-        </div>
-
         <table
           className="table table-striped table-bordered"
           {...getTableProps()}

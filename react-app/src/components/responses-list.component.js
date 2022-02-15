@@ -444,9 +444,11 @@ const ResponsesList = (props) => {
               清空
             </button>
           </div>
+        </div>
 
+        <div className="input-group mb-3">
           <button
-            className="btn btn-primary badge-success ml-2"
+            className="btn btn-primary badge-success"
             type="button"
             onClick={findByTitle}
           >
