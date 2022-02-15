@@ -4,6 +4,7 @@ import FormDataService from "../services/form.service";
 //import AttachmentsList from './collapsible-attachments-list.component.js';
 import AttachmentsList from './attachments-list.component.js';
 import SchoolDataService from "../services/school.service";
+import SurveyDataService from "../services/survey.service";
 import AuthService from "./../services/auth.service";
 //import TheCollapsible from './collapsible-attachments-list.component';
 
@@ -55,7 +56,9 @@ export default class Response extends Component {
       reload: false,
       hasFiles: null,
 
-      submitted: false
+      submitted: false,
+      updatedRecently: true,
+      updatedAt: null,
     };
 
     this.fb = createRef();
@@ -69,7 +72,9 @@ export default class Response extends Component {
     }
   };
 
-  componentDidMount() {
+  async componentDidMount() {
+    await this.setUpdateStatus();
+
     const newresponse = window.location.pathname.includes('add');
     this.setState({newresponse: newresponse});
     const readonly = window.location.pathname.includes('View');
@@ -79,6 +84,23 @@ export default class Response extends Component {
       this.getForm(this.props.match.params.id);
     else
       this.getResponse(this.props.match.params.id, readonly);
+  }
+
+  async setUpdateStatus() {
+    const user = AuthService.getCurrentUser();
+    if (user && user.schoolId) {
+      try {
+        let r = await SurveyDataService.getUpdatedAt(user.schoolId);
+        let updatedAtObj =  (new Date(r.data.updatedAt.updatedAt));
+        let updatedRecently = (new Date()).getTime() - updatedAtObj.getTime() < 1 * (60 * 60 * 24 * 1000);
+        await this.setState({
+          updatedRecently: updatedRecently,
+          updatedAt: updatedAtObj.toLocaleDateString('zh-cn', { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })
+        });
+      } catch (e) {
+        console.log(e.message);
+      }
+    }
   }
 
   convert(schools) {
@@ -471,7 +493,18 @@ export default class Response extends Component {
     return (
 
       <div>
-        {this.state.submitted
+      {!this.state.updatedRecently
+      ? (
+        <div>
+          <Link
+            to={ "/surveys/" + currentResponse.schoolId}
+          >
+            {'请更新学校信息，上次更新时间是：' + this.state.updatedAt}
+          </Link>
+
+        </div>
+      )
+      : (this.state.submitted
         ? (
           <div>
             <p><h4>{this.state.message}</h4></p>
@@ -626,7 +659,8 @@ export default class Response extends Component {
           <div className="alert-danger">
             <p><h4>{this.state.message}</h4></p>
           </div>
-        </div>)}
+        </div>)
+      )}
       </div>
     );
   }

@@ -28,6 +28,10 @@ class SurveyDataService {
     return http.get(`/surveys/${id}`/*, { headers: authHeader() }*/);
   }
 
+  getUpdatedAt(id) {
+    return http.get(`/surveysUpdatedAt/${id}`, { headers: authHeader() });
+  }
+
   getContent(id) {
     const user = JSON.parse(localStorage.getItem('user'));
     return http.get(`/surveysContent/${id}`, {

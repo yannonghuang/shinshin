@@ -25,6 +25,10 @@ module.exports = function(app) {
     //[authJwt.verifyToken],
   surveys.findOne);
 
+  // get updatedAt with school id
+  app.get("/api/surveysUpdatedAt/:id",
+    [authJwt.verifyToken],
+  surveys.getUpdatedAt);
 
   // Update a Survey with id
   app.put("/api/surveys/:id",

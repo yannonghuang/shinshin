@@ -261,4 +261,26 @@ exports.deleteAll = (req, res) => {
     });
 };
 
+// get updatedAt an id
+exports.getUpdatedAt = async (req, res) => {
+  const id = req.params.id; // school id
+
+  try {
+    //Survey.findByPk(id)
+    let updatedAt = await Survey.findOne({
+      attributes: ['updatedAt'],
+      where: {schoolId: id},
+      limit: 1
+    });
+
+    res.send({updatedAt: updatedAt});
+
+  } catch(err) {
+    console.log(err.message);
+    res.status(500).send({
+      message: "Error retrieving Survey with id=" + id
+    });
+  };
+};
+
 
