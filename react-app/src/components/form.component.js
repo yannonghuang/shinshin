@@ -147,7 +147,7 @@ export default class Form extends Component {
 
           currentForm: {
             ...others,
-            startAt: (startAt ? (new Date(startAt)).getFullYear() : '')
+            startAt: (startAt ? (new Date(startAt)).getUTCFullYear() : '')
           }
 
         });

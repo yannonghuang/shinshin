@@ -168,7 +168,7 @@ export default class Response extends Component {
           //currentResponse: response.data,
           currentResponse: {
             ...otherParameters,
-            startAt: (startAt ? (new Date(startAt)).getFullYear() : '')
+            startAt: (startAt ? (new Date(startAt)).getUTCFullYear() : '')
           },
 
           hasFiles: this.hasFiles()
