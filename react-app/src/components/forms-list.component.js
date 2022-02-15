@@ -150,7 +150,7 @@ const FormsList = (props) => {
             if ((formsRef.current[rowIdx].startAt)) d = new Date(formsRef.current[rowIdx].startAt);
             return (
               <div>
-                {d ? d.getFullYear() : ''
+                {d ? d.getUTCFullYear() : ''
                 /*d.toLocaleDateString('zh-cn', { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })*/
                 }
               </div>
@@ -291,7 +291,7 @@ const FormsList = (props) => {
             value={searchTitle}
             onChange={onChangeSearchTitle}
           />
-{/*
+
           <div>
             <button
               className="btn btn-primary badge btn-block ml-2"
@@ -301,16 +301,16 @@ const FormsList = (props) => {
               清空
             </button>
           </div>
-*/}
-          <div className="input-group-append ml-2">
-            <button
-              className="btn btn-primary badge-success"
-              type="button"
-              onClick={findByTitle}
-            >
-              查找
-            </button>
-          </div>
+
+
+          <button
+            className="btn btn-primary badge-success ml-2"
+            type="button"
+            onClick={findByTitle}
+          >
+            查找
+          </button>
+
         </div>
       </div>
 

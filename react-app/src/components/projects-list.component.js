@@ -255,7 +255,7 @@ const ProjectsList = (props) => {
             return (
               <div>
                 {/*d.toLocaleDateString('zh-cn', { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })*/
-                d.getFullYear()
+                d.getUTCFullYear()
                 }
               </div>
             );

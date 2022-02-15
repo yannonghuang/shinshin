@@ -207,8 +207,8 @@ const ResponsesList = (props) => {
             if ((responsesRef.current[rowIdx].startAt)) d = new Date(responsesRef.current[rowIdx].startAt);
             return (
               <div>
-                {d ? d.getFullYear() : ''
-                /*d.toLocaleDateString('zh-cn', { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })*/
+                {d ? d.getUTCFullYear() : ''
+                /* d.toLocaleDateString('zh-cn', { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })*/
                 }
               </div>
             );
@@ -432,7 +432,7 @@ const ResponsesList = (props) => {
             value={searchCode}
             onChange={onChangeSearchCode}
           />)}
-{/*
+
           <div>
             <button
               className="btn btn-primary badge btn-block ml-2"
@@ -442,16 +442,15 @@ const ResponsesList = (props) => {
               清空
             </button>
           </div>
-*/}
-          <div className="input-group-append ml-2">
-            <button
-              className="btn btn-primary badge-success"
-              type="button"
-              onClick={findByTitle}
-            >
-              查找
-            </button>
-          </div>
+
+          <button
+            className="btn btn-primary badge-success ml-2"
+            type="button"
+            onClick={findByTitle}
+          >
+            查找
+          </button>
+
         </div>
       </div>
 
