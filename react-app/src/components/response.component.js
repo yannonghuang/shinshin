@@ -87,12 +87,13 @@ export default class Response extends Component {
   }
 
   async setUpdateStatus() {
+    const UPDATE_THRESHOLD = 180; // number of days
     const user = AuthService.getCurrentUser();
     if (user && user.schoolId) {
       try {
         let r = await SurveyDataService.getUpdatedAt(user.schoolId);
         let updatedAtObj =  (new Date(r.data.updatedAt.updatedAt));
-        let updatedRecently = (new Date()).getTime() - updatedAtObj.getTime() < 1 * (60 * 60 * 24 * 1000);
+        let updatedRecently = ((new Date()).getTime() - updatedAtObj.getTime()) < UPDATE_THRESHOLD * (60 * 60 * 24 * 1000);
         await this.setState({
           updatedRecently: updatedRecently,
           updatedAt: updatedAtObj.toLocaleDateString('zh-cn', { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })
@@ -496,12 +497,8 @@ export default class Response extends Component {
       {!this.state.updatedRecently
       ? (
         <div>
-          <Link
-            to={ "/surveys/" + currentResponse.schoolId}
-          >
-            {'请更新学校信息，上次更新时间是：' + this.state.updatedAt}
-          </Link>
-
+            <p>{'您的学校信息上次更新时间是：' + this.state.updatedAt + ', 请点击下面更新学校信息'}</p>
+            <a href={"/surveys/" + currentResponse.schoolId} class="btn btn-success">更新</a>
         </div>
       )
       : (this.state.submitted

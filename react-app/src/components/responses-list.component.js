@@ -109,6 +109,8 @@ const ResponsesList = (props) => {
     setSearchCode("");
     setSearchStartAt("");
     setOrderby([]);
+
+    setPage(1);
   };
 
   const getAttachmentsCount = async (responseId) => {
