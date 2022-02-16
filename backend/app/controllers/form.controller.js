@@ -5,6 +5,7 @@ const Response = db.responses;
 const Staging_Response = db.staging_responses;
 const Project = db.projects;
 const Op = db.Sequelize.Op;
+const { authJwt } = require("../middleware");
 
 const getPagination = (page, size) => {
   const limit = size ? +size : 30;
@@ -208,13 +209,14 @@ exports.findAll = (req, res) => {
     });
 };
 
-exports.findAll2 = (req, res) => {
+exports.findAll2 = async(req, res) => {
+  const sid = await authJwt.getSchoolId(req);
+
   const title = req.body.title;
   const startAt = req.body.startAt;
   const page = req.body.page;
   const size = req.body.size;
   const orderby = req.body.orderby;
-  //const { page, size, title } = req.query;
 
   var orderbyObject = null;
   if (orderby) {
@@ -227,28 +229,24 @@ exports.findAll2 = (req, res) => {
         orderbyObject.push([orderby[i].id, (orderby[i].desc ? "desc" : "asc")]);
     }
   };
-/*
-  if (orderby) {
-    orderbyObject = [];
-    for (var i = 0; i < orderby.length; i++) {
-      var s = orderby[i].id.split(".");
-      if (s.length == 1) orderbyObject.push([s[0], (orderby[i].desc ? "desc" : "asc")]);
-      if (s.length == 2) { // this should NEVER happen ...
-        var m = null;
-        if (s[0] == 'response') m = Response;
-        orderbyObject.push([m, s[1], (orderby[i].desc ? "desc" : "asc")]);
-      }
-    }
-  };
-*/
 
-  //var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
-  var condition = {
+  const condition = {
         [Op.and]: [
-            title ? { title: { [Op.like]: `%${title}%` } } : null,
-            startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('form.startAt')), `${startAt}`) } } : null
+          title ? { title: { [Op.like]: `%${title}%` } } : null,
+          startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('form.startAt')), `${startAt}`) } } : null
         ]};
 
+  const includeCondition = {
+        [Op.and]: [
+          sid ? { '$responses.schoolId$': { [Op.eq]: `${sid}` } } : null,
+        ]};
+
+  const include = [{
+          model: Response,
+          attributes: [],
+          required: false,
+          where: includeCondition
+        }];
   const { limit, offset } = getPagination(page, size);
 
   Form.findAll({
@@ -261,16 +259,12 @@ exports.findAll2 = (req, res) => {
       [db.Sequelize.fn('date_format', db.Sequelize.col("deadline"), '%Y-%m-%d'), "deadline"],
       "startAt", //[db.Sequelize.fn('date_format', db.Sequelize.col("form.startAt"), '%Y-%m-%d'), "startAt"],
   ],
-  include: [{
-      model: Response,
-      attributes: [],
-      required: false,
-  }],
+  include: include,
   group: ['id'],
   order: orderbyObject
   })
     .then(data => {
-      Form.count({where: condition})
+      Form.count({where: condition, include: include, distinct: true, col: 'id'})
         .then(count => {
           const response = getPagingData(count, data, page, limit);
           res.send(response);
