@@ -148,13 +148,22 @@ const ResponsesList = (props) => {
     return result;
   }
 
+  const flattenUserData = (userData) => {
+    if (!userData || userData.length === 0) return '';
+    let result = userData[0];
+    for (var i = 1; i < userData.length; i++) {
+      result = result + ', ' + userData[i];
+    }
+    return result;
+  }
+
   const flattenFData = (fdata) => {
     if (!fdata || fdata.length === 0) return {};
     let result = {};
     for (var i = 0; i < fdata.length; i++) {
       if (fdata[i].type === 'file') continue;
 
-      result[fdata[i].label] = JSON.stringify(fdata[i].userData);
+      result[fdata[i].label] = flattenUserData(fdata[i].userData);
     }
 
     return result;
