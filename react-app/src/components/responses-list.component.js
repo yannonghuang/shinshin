@@ -189,7 +189,7 @@ const ResponsesList = (props) => {
 
         const fColumns = getFDataColumns(responses);
 
-        const csv = ProjectDataService.exportCSV(flatten(responses), [...columns, ...fColumns]);
+        const csv = ProjectDataService.exportCSV(flatten(responses), [...columns, ... exportColumns, ...fColumns]);
 
         const url = window.URL.createObjectURL(new Blob([csv]));
 
@@ -281,6 +281,21 @@ const ResponsesList = (props) => {
     return r;
   }
 
+  const exportColumns = [
+    {
+      Header: "学校类型",
+      accessor: "school.category",
+    },    
+    {
+      Header: "学生人数",
+      accessor: "school.studentsCount",
+    },
+    {
+      Header: "教师人数",
+      accessor: "school.teachersCount",
+    },
+  ];
+
   const columns = useMemo(
     () => [
       {
@@ -305,7 +320,7 @@ const ResponsesList = (props) => {
       },
       {
         Header: "申请人",
-        accessor: 'user.name',
+        accessor: 'user.chineseName',
         disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;

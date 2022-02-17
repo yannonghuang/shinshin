@@ -180,7 +180,7 @@ exports.findAll2 = async (req, res) => {
           },
           {
             model: School,
-            attributes: ['id', 'code', 'name', 'region'],
+            attributes: ['id', 'code', 'name', 'region', 'teachersCount', 'studentsCount', 'category'],
             required: false,
           },
           {
