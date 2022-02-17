@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ResponseDataService from "../services/response.service";
 import AttachmentDataService from "../services/attachment.service";
 import AuthService from "../services/auth.service";
+import ProjectDataService from "../services/project.service";
 
 import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
@@ -24,6 +25,8 @@ const ResponsesList = (props) => {
   const [userId, setUserId] = useState(props.match? props.match.params.userId : props.userId);
 
   const [orderby, setOrderby] = useState([]);
+
+  const [exportResponses, setExportResponses] = useState([]);
 
   const [readonly, setReadonly] = useState(props.readonly ? props.readonly : false);
 
@@ -60,7 +63,7 @@ const ResponsesList = (props) => {
     setSearchStartAt(searchStartAt);
   };
 
-  const getRequestParams = (/*searchTitle, page, pageSize, formId, schoolId, userId, orderby*/) => {
+  const getRequestParams = (/*searchTitle, page, pageSize, formId, schoolId, userId, orderby*/exportFlag = false) => {
     //const user = AuthService.getCurrentUser();
 
     let params = {};
@@ -101,6 +104,10 @@ const ResponsesList = (props) => {
       params["userId"] = userId;
     }
 
+    if (exportFlag) {
+      params["exportFlag"] = exportFlag;
+    }
+
     return params;
   };
 
@@ -109,6 +116,7 @@ const ResponsesList = (props) => {
     setSearchCode("");
     setSearchStartAt("");
     setOrderby([]);
+    setExportResponses([]);
 
     setPage(1);
   };
@@ -126,8 +134,72 @@ const ResponsesList = (props) => {
     return 0;
   };
 
+  const getFDataColumns = (responses) => {
+    if (!responses || responses.length == 0) return [];
+    let fdata = responses[0].fdata;
+    if (!fdata || fdata.length === 0) return [];
+    let result = [];
+    for (var i = 0; i < fdata.length; i++) {
+      if (fdata[i].type === 'file') continue;
+
+      result.push({Header: fdata[i].label, accessor: fdata[i].label});
+      //let userData = fdata[i].userData;
+    }
+    return result;
+  }
+
+  const flattenFData = (fdata) => {
+    if (!fdata || fdata.length === 0) return {};
+    let result = {};
+    for (var i = 0; i < fdata.length; i++) {
+      if (fdata[i].type === 'file') continue;
+
+      result[fdata[i].label] = JSON.stringify(fdata[i].userData);
+    }
+
+    return result;
+  }
+
+  const flatten = (responses) => {
+    if (!responses || responses.length == 0) return [];
+    let result = [];
+    for (var i = 0; i < responses.length; i++) {
+      const {fdata, ...others} = responses[i];
+      let f = flattenFData(fdata);
+      result.push({...others, ...f});
+    }
+    return result;
+  }
+
+  const retrieveExportResponses = () => {
+    const params = getRequestParams(true);
+
+    ResponseDataService.getAll2(params)
+      .then((response) => {
+        const { responses, totalPages, totalItems } = response.data;
+
+        const fColumns = getFDataColumns(responses);
+        const csv = ProjectDataService.exportCSV(flatten(responses), [...columns, ...fColumns]);
+        const url = window.URL.createObjectURL(new Blob([csv]));
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download',
+                'response.csv'
+        );
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        console.log(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   const retrieveResponses = () => {
-    const params = getRequestParams(/*searchTitle, page, pageSize, formId, schoolId, userId, orderby*/);
+    const params = getRequestParams();
 
     ResponseDataService.getAll2(params)
       .then((response) => {
@@ -452,8 +524,16 @@ const ResponsesList = (props) => {
             type="button"
             onClick={findByTitle}
           >
-            查找
+            查询
           </button>
+
+          {formId && (<button
+            className="btn btn-primary ml-2"
+            type="button"
+            onClick={retrieveExportResponses}
+          >
+            导出
+          </button>)}
 
         </div>
       </div>

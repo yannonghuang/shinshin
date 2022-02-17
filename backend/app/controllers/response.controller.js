@@ -142,6 +142,7 @@ exports.findAll2 = async (req, res) => {
   const schoolId = sid ? sid : req.body.schoolId;
   const orderby = req.body.orderby;
   const userId = req.body.userId;
+  const exportFlag = req.body.exportFlag;
 
   var orderbyObject = null;
   if (orderby) {
@@ -189,32 +190,30 @@ exports.findAll2 = async (req, res) => {
           },
         ];
 
+  var attributes = [
+    'id', 'title', 'startAt', 'updatedAt',
+    //[db.Sequelize.fn('date_format', db.Sequelize.col("response.startAt"), '%Y-%m-%d'), "startAt"],
+    [db.Sequelize.fn("COUNT", db.Sequelize.col("attachments.id")), "attachmentsCount"],
+  ];
+  if (exportFlag) attributes.push('fdata');
+
   const { limit, offset } = getPagination(page, size);
+  let limits = {};
+  if (!exportFlag) {
+    limits = {
+      offset: offset,
+      limit: limit
+    }
+  }
 
   Response.findAll({
   where: condition,
-  limit: limit,
-  offset: offset,
+  ...limits,
+  //limit: limit,
+  //offset: offset,
   subQuery: false,
-  attributes: ['id', 'title', 'startAt', 'updatedAt',
-      //[db.Sequelize.fn('date_format', db.Sequelize.col("response.startAt"), '%Y-%m-%d'), "startAt"],
-      [db.Sequelize.fn("COUNT", db.Sequelize.col("attachments.id")), "attachmentsCount"]
-  ],
+  attributes: attributes,
   include: include,
-  /*
-  [
-  {
-      model: Attachment,
-      attributes: [],
-      required: false,
-  },
-  {
-      model: School,
-      attributes: ['code', 'name', 'region'],
-      required: false,
-  },
-  ],
-  */
   group: ['id'],
   order: orderbyObject
   })
