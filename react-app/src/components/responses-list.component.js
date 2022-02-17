@@ -283,9 +283,25 @@ const ResponsesList = (props) => {
 
   const exportColumns = [
     {
+      Header: "市",
+      accessor: "school.surveys.city",
+    },
+    {
+      Header: "区/县",
+      accessor: "school.surveys.county",
+    },
+    {
+      Header: "乡/镇",
+      accessor: "school.surveys.community",
+    },
+    {
+      Header: "教育局校名",
+      accessor: "school.surveys.schoolBoardRegisteredName",
+    },
+    {
       Header: "学校类型",
       accessor: "school.category",
-    },    
+    },
     {
       Header: "学生人数",
       accessor: "school.studentsCount",

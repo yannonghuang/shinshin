@@ -4,6 +4,7 @@ const Form = db.forms;
 const Project = db.projects;
 const Attachment = db.attachments;
 const School = db.schools;
+const Survey = db.surveys;
 const User = db.user;
 const Op = db.Sequelize.Op;
 
@@ -172,16 +173,27 @@ exports.findAll2 = async (req, res) => {
             //schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null
         ]};
 
+  const innerInclude = [
+        {
+           model: Survey,
+           attributes: ['schoolBoardRegisteredName', 'city', 'county', 'community'],
+           required: false,
+        },
+      ];
+
   var include = [
+/**
           {
             model: Attachment,
             attributes: [],
             required: false,
           },
+*/
           {
             model: School,
             attributes: ['id', 'code', 'name', 'region', 'teachersCount', 'studentsCount', 'category'],
             required: false,
+            include: innerInclude
           },
           {
             model: User,
@@ -193,7 +205,7 @@ exports.findAll2 = async (req, res) => {
   var attributes = [
     'id', 'title', 'startAt', 'updatedAt',
     //[db.Sequelize.fn('date_format', db.Sequelize.col("response.startAt"), '%Y-%m-%d'), "startAt"],
-    [db.Sequelize.fn("COUNT", db.Sequelize.col("attachments.id")), "attachmentsCount"],
+    //[db.Sequelize.fn("COUNT", db.Sequelize.col("attachments.id")), "attachmentsCount"],
   ];
   if (exportFlag) attributes.push('fdata');
 
@@ -214,7 +226,7 @@ exports.findAll2 = async (req, res) => {
   subQuery: false,
   attributes: attributes,
   include: include,
-  group: ['id'],
+  //group: ['id'],
   order: orderbyObject
   })
     .then(data => {
