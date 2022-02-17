@@ -188,7 +188,9 @@ const ResponsesList = (props) => {
         const { responses, totalPages, totalItems } = response.data;
 
         const fColumns = getFDataColumns(responses);
+
         const csv = ProjectDataService.exportCSV(flatten(responses), [...columns, ...fColumns]);
+
         const url = window.URL.createObjectURL(new Blob([csv]));
 
         const link = document.createElement('a');
