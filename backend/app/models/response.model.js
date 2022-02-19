@@ -9,6 +9,9 @@ module.exports = (sequelize, Sequelize) => {
     startAt: {
       type: Sequelize.DATE
     },
+    result_id: {
+      type: Sequelize.INTEGER
+    },
   });
 
   return Response;

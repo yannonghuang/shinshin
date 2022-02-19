@@ -18,6 +18,9 @@ module.exports = (sequelize, Sequelize) => {
     startAt: {
       type: Sequelize.DATE
     },
+    form_id: {
+      type: Sequelize.INTEGER
+    },
   });
 
   return Form;

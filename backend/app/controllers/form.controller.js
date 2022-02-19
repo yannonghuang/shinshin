@@ -77,12 +77,45 @@ const buildElement = (row, userData = null) => {
   return result;
 }
 
+
 const migrate = () => {
   migrateForm();
   migrateResponse();
 }
 
+
 const migrateResponse = async () => {
+  try {
+    const rows = await Staging_Response.findAll({
+      order: [ ['result_id', 'asc'], ['q_id', 'asc'] ]
+    });
+
+    let result_id = null;
+    let form = null;
+    for (var i = 0; i < rows.length; i++) {
+      if (result_id !== rows[i].result_id) {
+        // update form ...
+        if (result_id != null)
+          await Response.update({fdata: form}, {where: { result_id: result_id }});
+
+        result_id = rows[i].result_id;
+        form = [];
+      }
+
+      // construct element
+      const questions = await Staging_Form.findAll({where: { q_id: rows[i].q_id }});
+      if (questions && questions.length > 0) {
+        let element = buildElement(questions[0], rows[i].q_value);
+        form.push(element);
+      }
+    }
+
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const SAVE_migrateResponse = async () => {
   try {
     const rows = await Staging_Response.findAll({
       order: [ ['title', 'asc'], ['q_id', 'asc'] ]
@@ -142,7 +175,37 @@ const migrateForm = async () => {
   }
 };
 
-exports.SAVE_create = (req, res) => {
+const SAVE_migrateForm = async () => {
+  try {
+
+    const rows = await Staging_Form.findAll({
+      order: [ ['form_id', 'asc'], ['q_id', 'asc'] ]
+    });
+
+    let form_id = null;
+    let form = null;
+    for (var i = 0; i < rows.length; i++) {
+      if (form_id !== rows[i].form_id) {
+        // update form ...
+        if (form_id != null) {
+          await Form.update({fdata: form}, {where: { form_id: form_id }});
+        }
+
+        form_id = rows[i].form_id;
+        form = [];
+      }
+
+      // construct element
+      let element = buildElement(rows[i]);
+      form.push(element);
+    }
+
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+exports.create = (req, res) => {
   migrate();
 }
 
@@ -157,7 +220,7 @@ const getPagingData = (count, data, page, limit) => {
 };
 
 // Create and Save a new Form
-exports.create = (req, res) => {
+exports.SAVE_create = (req, res) => {
   // Validate request
   if (!req.body.title) {
     res.status(400).send({
