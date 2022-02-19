@@ -158,7 +158,7 @@ export default class Login extends Component {
       })
       .catch(e => {
         this.setState({
-          message: e.toString()
+          message: '您的注册邮箱地址有误，请提供正确的注册邮箱 。。。' //+ e.toString()
         });
       });
     }

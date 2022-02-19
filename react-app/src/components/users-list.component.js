@@ -61,6 +61,12 @@ const UsersList = (props) => {
     setSearchContactOnly(searchContactOnly);
   };
 
+  const [searchEmailVerified, setSearchEmailVerified] = useState(null);
+  const onChangeSearchEmailVerified = (e) => {
+    const searchEmailVerified = e.target.value;
+    setSearchEmailVerified(searchEmailVerified);
+  };
+
   const getRequestParams = (/*searchUsername, searchRole, searchSchoolCode, page, pageSize, schoolId, orderby*/) => {
     let params = {};
 
@@ -78,6 +84,10 @@ const UsersList = (props) => {
 
     if (searchContactOnly) {
       params["contactOnly"] = searchContactOnly;
+    }
+
+    if (searchEmailVerified) {
+      params["emailVerified"] = searchEmailVerified;
     }
 
     if (page) {
@@ -104,6 +114,7 @@ const UsersList = (props) => {
     setSearchSchoolCode("");
     setSearchRole("");
     setSearchContactOnly("");
+    setSearchEmailVerified("");
     setOrderby([]);
   };
 
@@ -169,7 +180,8 @@ const UsersList = (props) => {
       });
   };
 
-  useEffect(retrieveUsers, [page, pageSize, orderby, searchRole, searchUsername, searchSchoolCode, searchContactOnly]);
+  useEffect(retrieveUsers, [page, pageSize, orderby, searchRole, searchUsername, searchSchoolCode,
+    searchContactOnly, searchEmailVerified]);
 
   const refreshList = () => {
     retrieveUsers();
@@ -312,6 +324,18 @@ const UsersList = (props) => {
         },
       },
       {
+        Header: "登录过?",
+        accessor: 'emailVerified',
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+                {usersRef.current[rowIdx].emailVerified ? '是' : '否'}
+            </div>
+          );
+        },
+      },
+      {
         Header: "操作",
         accessor: "actions",
         disableSortBy: true,
@@ -424,6 +448,20 @@ const UsersList = (props) => {
               </option>
               <option value={true}>
                 {'非注册用户'}
+              </option>
+          </select>
+
+          <select
+            className="form-control ml-2"
+            value={searchEmailVerified}
+            onChange={onChangeSearchEmailVerified}
+          >
+            <option value="">登录过?</option>
+              <option value={true}>
+                {'是'}
+              </option>
+              <option value={false}>
+                {'否'}
               </option>
           </select>
 

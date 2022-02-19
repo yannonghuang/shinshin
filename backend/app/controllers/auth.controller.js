@@ -141,6 +141,7 @@ exports.findAll2 = async (req, res) => {
   const role = req.body.role;
   const schoolCode = req.body.schoolCode;
   const contactOnly = req.body.contactOnly;
+  const emailVerified = req.body.emailVerified;
   const page = req.body.page;
   const size = req.body.size;
   const schoolId = sid ? sid : req.body.schoolId;
@@ -177,6 +178,11 @@ var orderbyObject = null;
               : contactOnly === 'true'
                 ? { contactOnly: { [Op.eq]: `1` }}
                 : { contactOnly: null },
+            emailVerified === undefined
+              ? null
+              : emailVerified === 'true'
+                ? { emailVerified: { [Op.eq]: `1` }}
+                : { emailVerified: null },
         ]};
 
   const include = [
@@ -200,7 +206,7 @@ var orderbyObject = null;
   offset: offset,
   subQuery: false,
   attributes: [
-        'id', 'username', 'email', 'chineseName', 'phone', 'wechat', 'title', 'contactOnly',
+        'id', 'username', 'email', 'chineseName', 'phone', 'wechat', 'title', 'contactOnly', 'emailVerified',
         [db.Sequelize.fn('date_format', db.Sequelize.col("users.startAt"), '%Y-%m-%d'), "startAt"],
         [db.Sequelize.fn('date_format', db.Sequelize.col("users.createdAt"), '%Y-%m-%d'), "createdAt"],
         [db.Sequelize.fn('date_format', db.Sequelize.col("lastLogin"), '%Y-%m-%d'), "lastLogin"],
@@ -404,6 +410,7 @@ exports.signin = (req, res) => {
       const lastLastLogin = user.lastLogin;
       user.update({
         lastLogin: db.sequelize.literal('CURRENT_TIMESTAMP'),
+        emailVerified: 1
       });
 
       var authorities = [];
