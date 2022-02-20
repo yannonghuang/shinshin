@@ -176,14 +176,22 @@ export default class Login extends Component {
 
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.login(this.state.username, this.state.password).then(
-        () => {
-          //this.props.history.push("/profile");
-          //this.props.history.push("/schools");
-          AuthService.getCurrentUser().schoolId
-            ? this.props.history.push('/schoolsView/' + AuthService.getCurrentUser().schoolId)
-            : this.props.history.push('/schools');
+        (response) => {
+          if (response.data.accessToken) {
+            localStorage.setItem("user", JSON.stringify(response.data));
+            //this.props.history.push("/profile");
+            //this.props.history.push("/schools");
+            AuthService.getCurrentUser().schoolId
+              ? this.props.history.push('/schoolsView/' + AuthService.getCurrentUser().schoolId)
+              : this.props.history.push('/schools');
 
-          //window.location.reload();
+            window.location.reload();
+          } else {
+            this.setState({
+              loading: false,
+              message: '服务器异常，登录失败'
+            });
+          }
         },
         error => {
           const resMessage =
