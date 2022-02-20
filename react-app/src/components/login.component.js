@@ -183,7 +183,7 @@ export default class Login extends Component {
             ? this.props.history.push('/schoolsView/' + AuthService.getCurrentUser().schoolId)
             : this.props.history.push('/schools');
 
-          window.location.reload();
+          //window.location.reload();
         },
         error => {
           const resMessage =
