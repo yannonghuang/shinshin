@@ -93,15 +93,21 @@ class App extends Component {
           <img src={logo} alt="" height="60" width="370" class="responsive" />
         </div>
 
-        <nav class="navbar navbar-expand navbar-dark bg-dark">
+
+
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
           <Link to={"/"} class="navbar-brand">
             学校项目管理系统
           </Link>
 
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
 
-          <div class="collapse navbar-collapse navbar-nav mr-auto">
+          <div class="collapse navbar-collapse navbar-nav mr-auto" id="navbarSupportedContent">
 
-          {(currentUser && !currentUser.schoolId) && (
+            {(currentUser && !currentUser.schoolId) && (
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 管理
@@ -112,7 +118,7 @@ class App extends Component {
               </div>
             </li>)}
 
-          {(!currentUser || (currentUser && !currentUser.schoolId)) && (
+            {(!currentUser || (currentUser && !currentUser.schoolId)) && (
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 学校
@@ -130,7 +136,7 @@ class App extends Component {
               </div>
             </li>)}
 
-          {(!currentUser || (currentUser && !currentUser.schoolId)) && (
+            {(!currentUser || (currentUser && !currentUser.schoolId)) && (
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 项目
@@ -146,7 +152,7 @@ class App extends Component {
               </div>
             </li>)}
 
-          {(currentUser && !currentUser.schoolId) && (
+            {(currentUser && !currentUser.schoolId) && (
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 项目申请

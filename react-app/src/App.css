@@ -133,15 +133,14 @@ font-size: 14px;
   display: grid;
   width: 100%;
   grid-template-columns: repeat(auto-fit, minmax(50px, 100px));
-  align-items: flex-start;
+  align-items: start;
   justify-content: space-between;
 }
 
 .side {
    display:inline-block;
-
-   grid-auto-flow: dense;
-   grid-gap: 0.5rem;
+   vertical-align:top;
+   grid-gap: 5px;
 }
 
 .disabled-link {
