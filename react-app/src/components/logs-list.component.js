@@ -250,7 +250,7 @@ const LogsList = (props) => {
 
   return (
     <div className="list row">
-      <div className="col-md-6">
+      <div className="col-sm-6">
         <h6>修改记录</h6>
         <div className="input-group mb-3">
           <input
@@ -271,7 +271,7 @@ const LogsList = (props) => {
           </div>
         </div>
 
-        <div className="col-md-6 mt-3">
+        <div className="col-sm-6 mt-3">
           {"每页显示行数: "}
           <select onChange={handlePageSizeChange} value={pageSize}>
             {pageSizes.map((size) => (
@@ -296,7 +296,7 @@ const LogsList = (props) => {
 
       <div class="w-100"></div>
 
-      <div className="col-md-12 list">
+      <div className="col-sm-12 list">
         <table
           className="table table-striped table-bordered"
           {...getTableProps()}
@@ -357,7 +357,7 @@ const LogsList = (props) => {
         </table>
       </div>
 
-      <div className="col-md-8">
+      <div className="col-sm-8">
       </div>
     </div>
   );

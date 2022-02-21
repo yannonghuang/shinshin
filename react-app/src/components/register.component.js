@@ -541,7 +541,7 @@ export default class Register extends Component {
           {!this.state.successful && (
             <div class="row">
 {/*}
-                <div class="form-group col-md-4">
+                <div class="form-group col-sm-4">
                   <label htmlFor="contactOnly"><h5>仅联络方式(信息不作校验)</h5></label>
                   <Input
                     readonly={!this.state.newuser?"":false}
@@ -555,7 +555,7 @@ export default class Register extends Component {
 
                 <div class="w-100"></div>
 */}
-                <div class="form-group col-md-4" hidden={this.state.contactOnly}>
+                <div class="form-group col-sm-4" hidden={this.state.contactOnly}>
                   <label htmlFor="username">用户名</label>
                   <Input
                     readonly={!this.state.newuser?"":false}
@@ -568,7 +568,7 @@ export default class Register extends Component {
                   />
                 </div>
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-sm-4">
                   <label htmlFor="email">电子邮箱</label>
                   <Input
                     readonly={!this.state.newuser?"":false}
@@ -582,7 +582,7 @@ export default class Register extends Component {
                 </div>
 
 
-                <div class="form-group col-md-4" hidden={this.state.contactOnly}>
+                <div class="form-group col-sm-4" hidden={this.state.contactOnly}>
                   <label htmlFor="password">密码</label>
                   <Input
                     readonly={this.state.readonly?"":false}
@@ -595,7 +595,7 @@ export default class Register extends Component {
                   />
                 </div>
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-sm-4">
                   <label htmlFor="chineseName">中文名</label>
                   <Input
                     readonly={this.state.readonly?"":false}
@@ -608,7 +608,7 @@ export default class Register extends Component {
                   />
                 </div>
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-sm-4">
                   <label htmlFor="phone">电话</label>
                   <Input
                     readonly={this.state.readonly?"":false}
@@ -620,7 +620,7 @@ export default class Register extends Component {
                   />
                 </div>
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-sm-4">
                   <label htmlFor="wechat">微信</label>
                   <Input
                     readonly={this.state.readonly?"":false}
@@ -632,7 +632,7 @@ export default class Register extends Component {
                   />
                 </div>
 {/*
-                <div class="form-group col-md-4">
+                <div class="form-group col-sm-4">
                   <label htmlFor="startAt">加入时间</label>
                   <Input
                     readonly={this.state.readonly?"":false}
@@ -644,7 +644,7 @@ export default class Register extends Component {
                   />
                 </div>
 */}
-                <div class="form-group col-md-4">
+                <div class="form-group col-sm-4">
                   <label htmlFor="title">职务</label>
                   <select onChange={this.onChangeTitle.bind(this)}
                     readonly={this.state.readonly?"":false}
@@ -661,7 +661,7 @@ export default class Register extends Component {
                   </select>
                 </div>
 
-                <div class="form-group col-md-4" hidden={this.state.contactOnly}>
+                <div class="form-group col-sm-4" hidden={this.state.contactOnly}>
                   <label htmlFor="roles">角色</label>
                   <select onChange={this.onChangeRoles.bind(this)}
                     readonly={this.state.readonly?"":false}
@@ -676,7 +676,7 @@ export default class Register extends Component {
                   </select>
                 </div>
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-sm-4">
                   <label htmlFor="schoolId">所属学校</label>
                   {!this.state.readonly
                   ? (<Select onChange={this.onChangeSchoolId.bind(this)}
@@ -697,7 +697,7 @@ export default class Register extends Component {
                 </div>
 
 
-                <div class="form-group col-md-4" hidden={this.state.contactOnly}>
+                <div class="form-group col-sm-4" hidden={this.state.contactOnly}>
                   <label htmlFor="lastLogin">上次登录时间</label>
                   <Input
                     readonly={""}
@@ -708,7 +708,7 @@ export default class Register extends Component {
                   />
                 </div>
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-sm-4">
                   <label htmlFor="createdAt">创建时间</label>
                   <Input
                     readonly={""}

@@ -509,7 +509,7 @@ export default class Response extends Component {
         )
         : (
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-sm-4">
             {this.state.readonly && (
               <div class="box">
                 <a target="_blank" href={"/responses/" + currentResponse.id} class="btn btn-primary mb-4">编辑</a>
@@ -517,7 +517,7 @@ export default class Response extends Component {
             )}
             </div>
 
-            <div class="col-md-4">
+            <div class="col-sm-4">
             <h4>项目申请（{this.state.readonly?"浏览":"编辑"}）</h4>
             <form>
               <div className="form-group">
@@ -568,7 +568,7 @@ export default class Response extends Component {
             </form>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-sm-4">
            {!this.state.readonly && (<div>
               { this.state.newresponse? (
                 <button

@@ -227,7 +227,7 @@ const AttachmentsList = (props) => {
 
   return (
     <div className="list row">
-      {!embedded && (<div className="col-md-8">
+      {!embedded && (<div className="col-sm-8">
         <h4>附件列表</h4>
         <div className="input-group mb-3">
           <input
@@ -268,7 +268,7 @@ const AttachmentsList = (props) => {
         />
       </div>)}
 
-      <div className="col-md-12 list">
+      <div className="col-sm-12 list">
 
         <table
           className="table table-striped table-bordered"
@@ -312,7 +312,7 @@ const AttachmentsList = (props) => {
         </table>
       </div>
 
-      <div className="col-md-8">
+      <div className="col-sm-8">
       </div>
     </div>
   );

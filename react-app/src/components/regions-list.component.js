@@ -138,7 +138,7 @@ const RegionsList = (props) => {
 
   return (
     <div className="list row">
-      <div className="col-md-8">
+      <div className="col-sm-8">
         <h4>地区列表</h4>
 {/*}
         <div className="input-group mb-3">
@@ -162,7 +162,7 @@ const RegionsList = (props) => {
 */}
       </div>
 
-      <div className="col-md-12 list">
+      <div className="col-sm-12 list">
         <div className="mt-3">
           {"每页显示行数: "}
           <select onChange={handlePageSizeChange} value={pageSize}>

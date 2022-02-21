@@ -270,7 +270,7 @@ const CommentsList = (props) => {
   return (
     <div className="list row">
 
-      <div class="form-group col-md-12" >
+      <div class="form-group col-sm-12" >
         <label htmlFor="text"><h4>评论</h4></label>
         <textarea
           rows="4"
@@ -288,7 +288,7 @@ const CommentsList = (props) => {
       <div class="w-100"></div>
 
 
-      <div className="col-md-6">
+      <div className="col-sm-6">
         <h6>评论列表</h6>
         <div className="input-group mb-3">
           <input
@@ -309,7 +309,7 @@ const CommentsList = (props) => {
           </div>
         </div>
 
-        <div className="col-md-6 mt-3">
+        <div className="col-sm-6 mt-3">
           {"每页显示行数: "}
           <select onChange={handlePageSizeChange} value={pageSize}>
             {pageSizes.map((size) => (
@@ -334,7 +334,7 @@ const CommentsList = (props) => {
 
       <div class="w-100"></div>
 
-      <div className="col-md-12 list">
+      <div className="col-sm-12 list">
         <table
           className="table table-striped table-bordered"
           {...getTableProps()}
@@ -395,7 +395,7 @@ const CommentsList = (props) => {
         </table>
       </div>
 
-      <div className="col-md-8">
+      <div className="col-sm-8">
       </div>
     </div>
   );

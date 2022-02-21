@@ -675,7 +675,7 @@ export default class Project extends Component {
           </div>
         ) : (
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-sm-4">
 
               <div class="row">
                 <div onDragOver={this.onDrag} onDrop={this.onDrop}>
@@ -706,9 +706,9 @@ export default class Project extends Component {
 
             </div>
 
-            <div class="col-md-8">
+            <div class="col-sm-8">
               <div class="row">
-                <div class="form-group col-md-12">
+                <div class="form-group col-sm-12">
                 <label htmlFor="description">项目描述</label>
                 <textarea
                 readonly={this.state.readonly?"":false}
@@ -724,7 +724,7 @@ export default class Project extends Component {
                 <div class="w-100"></div>
 
 
-                <div class="col-md-8">
+                <div class="col-sm-8">
                   <label htmlFor="schoolId">学校</label>
                   {!this.state.readonly
                   ? (<Select onChange={this.onChangeSchoolId.bind(this)}
@@ -754,7 +754,7 @@ export default class Project extends Component {
 
                 <div class="w-100"></div>
 
-                <div class="col-md-4">
+                <div class="col-sm-4">
                 <label htmlFor="budget">费用</label>
                 <input
                 readonly={this.state.readonly?"":false}
@@ -769,7 +769,7 @@ export default class Project extends Component {
                 </div>
 
                 {(currentProject.responseId) ? (
-                <div class="col-md-4">
+                <div class="col-sm-4">
                 <label htmlFor="response">项目申请</label>
                 <Link
                   to={(this.state.readonly ? "/responsesView/" : "/responses/") + currentProject.responseId}
@@ -783,7 +783,7 @@ export default class Project extends Component {
 
 
                 {(!currentProject.xr) ? (
-                <div class="select-container form-group col-md-4">
+                <div class="select-container form-group col-sm-4">
                 <label htmlFor="status">项目状态</label>
                 <select onChange={this.onChangeStatus}
                 readonly={this.state.readonly?"":false}
@@ -802,7 +802,7 @@ export default class Project extends Component {
                 </div>
                 ) : '' }
 
-                <div className="col-md-4">
+                <div className="col-sm-4">
                   <label htmlFor="startAt">项目年份</label>
                   {(this.state.readonly)
                   ?<input

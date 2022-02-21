@@ -513,7 +513,7 @@ const ResponsesList = (props) => {
 
   return (
     <div className="list row">
-      <div className="col-md-8">
+      <div className="col-sm-8">
         <h4>{title ? title + " - " : ""}项目申请列表(总数：{totalItems})</h4>
         <div className="input-group mb-3">
           <input
@@ -580,7 +580,7 @@ const ResponsesList = (props) => {
         </div>
       </div>
 
-      <div className="col-md-4 mt-3">
+      <div className="col-sm-4 mt-3">
         {"每页显示行数: "}
         <select onChange={handlePageSizeChange} value={pageSize}>
           {pageSizes.map((size) => (
@@ -601,7 +601,7 @@ const ResponsesList = (props) => {
         />
       </div>
 
-      <div className="col-md-12 list">
+      <div className="col-sm-12 list">
 
         <table
           className="table table-striped table-bordered"

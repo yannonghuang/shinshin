@@ -858,7 +858,7 @@ export default class Survey extends Component {
           </div>
         ) : (
           <div class="row">
-            <div class="col-md-3">
+            <div class="col-sm-3">
               <div class="row">
               {!this.state.embedded &&
               (<div>
