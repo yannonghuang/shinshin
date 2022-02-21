@@ -781,20 +781,20 @@ const SchoolsList = (props) => {
 
   return (
     <div className="list row">
-      <div className="col-md-9">
+      <div className="col-sm-9">
         <h4>学校列表(总数：{totalItems})</h4>
-        <div className="row mb-3 ">
+        <div className="row mb-3">
 
           <input
             type="text"
-            className="form-control col-md-2 ml-2"
+            className="form-control col-sm-2 ml-2"
             placeholder="学校编号"
             value={searchCode}
             onChange={onChangeSearchCode}
           />
 
           <select
-            className="form-control col-md-2 ml-2"
+            className="form-control col-sm-2 ml-2"
             placeholder="...."
             value={searchRegion}
             onChange={onChangeSearchRegion}
@@ -809,7 +809,7 @@ const SchoolsList = (props) => {
 
           <input
             type="text"
-            className="form-control col-md-4 ml-2"
+            className="form-control col-sm-4 ml-2"
             placeholder="学校名称"
             value={searchName}
             onChange={onChangeSearchName}
@@ -819,7 +819,7 @@ const SchoolsList = (props) => {
           <input
             type="text"
             readonly=""
-            className="form-control col-md-1 ml-2"
+            className="form-control col-sm-1 ml-2"
             placeholder="建校"
             value={searchStartAt}
           />
@@ -836,7 +836,7 @@ const SchoolsList = (props) => {
           <input
             type="text"
             readonly=""
-            className="form-control col-md-1 ml-2"
+            className="form-control col-sm-1 ml-2"
             placeholder="访校"
             value={searchLastVisit}
           />
@@ -854,7 +854,7 @@ const SchoolsList = (props) => {
         <div className="row mb-3 ">
 
           <select
-            className="form-control col-md-2 ml-2"
+            className="form-control col-sm-2 ml-2"
             placeholder="...."
             value={searchStage}
             onChange={onChangeSearchStage}
@@ -868,7 +868,7 @@ const SchoolsList = (props) => {
           </select>
 
           <select
-            className="form-control col-md-2 ml-2"
+            className="form-control col-sm-2 ml-2"
             placeholder="...."
             value={searchStatus}
             onChange={onChangeSearchStatus}
@@ -882,7 +882,7 @@ const SchoolsList = (props) => {
           </select>
 
           <select
-            className="form-control col-md-2 ml-2"
+            className="form-control col-sm-2 ml-2"
             placeholder="...."
             value={searchRequest}
             onChange={onChangeSearchRequest}
@@ -897,14 +897,14 @@ const SchoolsList = (props) => {
 
           <input
             type="text"
-            className="form-control col-md-2 ml-2"
+            className="form-control col-sm-2 ml-2"
             placeholder="捐款人"
             value={searchDonor}
             onChange={onChangeSearchDonor}
           />
 
           <select
-            className="form-control col-md-2 ml-2"
+            className="form-control col-sm-2 ml-2"
             value={searchXR}
             onChange={onChangeSearchXR}
           >
@@ -960,7 +960,7 @@ const SchoolsList = (props) => {
         </div>
       </div>
 
-      <div className="mt-3 col-md-3">
+      <div className="mt-3 col-sm-3">
         {"每页显示行数: "}
         <select onChange={handlePageSizeChange} value={pageSize}>
           {pageSizes.map((size) => (
@@ -984,7 +984,7 @@ const SchoolsList = (props) => {
 
         <div class="w-100"></div>
 
-      <div className="col-md-12 list">
+      <div className="col-sm-12 list">
         <table
           className="table table-striped table-bordered"
           {...getTableProps()}
@@ -1033,7 +1033,7 @@ const SchoolsList = (props) => {
         </table>
       </div>
 
-      <div className="mt-3 col-md-12">
+      <div className="mt-3 col-sm-12">
         {"每页显示行数: "}
         <select onChange={handlePageSizeChange} value={pageSize}>
           {pageSizes.map((size) => (

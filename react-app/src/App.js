@@ -90,7 +90,7 @@ class App extends Component {
     return (
       <div>
         <div class="mb-3">
-          <img src={logo} alt="" height="60" width="370" />
+          <img src={logo} alt="" height="60" width="370" class="responsive" />
         </div>
 
         <nav class="navbar navbar-expand navbar-dark bg-dark">

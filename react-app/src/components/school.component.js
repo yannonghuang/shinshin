@@ -20,6 +20,7 @@ import SchoolDataService from "../services/school.service";
 import SurveyDataService from "../services/survey.service";
 import DocumentDataService from "../services/document.service";
 //import SchoolDetails from './collapsible-school.component';
+import defaultPhoto from '../defaultPhoto.jpg';
 
 import YearPicker from 'react-single-year-picker';
 
@@ -1027,17 +1028,17 @@ alert(JSON.stringify(this.state.currentSchool))
           </div>
         ) : (
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-sm-4">
               <div class="row">
                 <h4>学校基本信息</h4>
 
                 <div onDragOver={this.onDrag} onDrop={this.onDrop}>
                 {this.state.readonly ? "" :
-                <p>上传照片（拖拽照片文件到下框中）</p>
+                <p>编辑学校照片（拖拽照片文件替换欣欣图标）</p>
                 }
-                <img src={currentSchool.photo} height="250" width="350" readonly={this.state.readonly?"":false} />
+                <img src={currentSchool.photo ? currentSchool.photo : defaultPhoto}
+                  width="320" height="320" class="responsive" readonly={this.state.readonly?"":false} />
                 </div>
-
 
                 <div class="form-group">
                 <label htmlFor="code">学校编号</label>
@@ -1127,10 +1128,10 @@ alert(JSON.stringify(this.state.currentSchool))
               </div>
             </div>
 
-            <div class="col-md-8">
+            <div class="col-sm-8">
               <div class="row">
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-sm-4">
                 <div>
                 <div class="side"><label htmlFor="startAt">建校年份</label></div>
                 <div class="side">
@@ -1157,7 +1158,7 @@ alert(JSON.stringify(this.state.currentSchool))
                 />
                 </div>
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-sm-4">
                 <label htmlFor="donor">捐款人</label>
                 <input
                 readonly={this.state.readonly?"":false}
@@ -1171,7 +1172,7 @@ alert(JSON.stringify(this.state.currentSchool))
                 />
                 </div>
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-sm-4">
                 <div>
                 <div class="side"><label htmlFor="lastVisit">最近访校年份</label></div>
                 <div class="side">
@@ -1201,7 +1202,7 @@ alert(JSON.stringify(this.state.currentSchool))
                 <div class="w-100"></div>
 
 
-                <div class="select-container form-group col-md-4">
+                <div class="select-container form-group col-sm-4">
                 <label htmlFor="stage">学校阶段</label>
                 <select
                 readonly={this.state.readonly?"":false}
@@ -1219,7 +1220,7 @@ alert(JSON.stringify(this.state.currentSchool))
                 </select>
                 </div>
 
-                <div class="select-container form-group col-md-4">
+                <div class="select-container form-group col-sm-4">
                 <label htmlFor="status">学校状态</label>
                 <select
                 readonly={this.state.readonly?"":false}
@@ -1237,7 +1238,7 @@ alert(JSON.stringify(this.state.currentSchool))
                 </select>
                 </div>
 
-                <div class="select-container form-group col-md-4">
+                <div class="select-container form-group col-sm-4">
                 <label htmlFor="request">学校需求状态</label>
                 <select
                 readonly={this.state.readonly?"":false}
@@ -1257,7 +1258,7 @@ alert(JSON.stringify(this.state.currentSchool))
 
                 <div class="w-100"></div>
 
-                <div class="select-container form-group col-md-3">
+                <div class="select-container form-group col-sm-3">
                 <label htmlFor="region">省/自治区/直辖市</label>
                 <select
                 readonly={this.state.readonly?"":false}
@@ -1275,7 +1276,7 @@ alert(JSON.stringify(this.state.currentSchool))
                 </select>
                 </div>
 
-                <div class="form-group col-md-3">
+                <div class="form-group col-sm-3">
                 <label htmlFor="city">市</label>
                 <input
                 readonly={this.state.readonly?"":false}
@@ -1289,7 +1290,7 @@ alert(JSON.stringify(this.state.currentSchool))
                 />
                 </div>
 
-                <div class="form-group col-md-3">
+                <div class="form-group col-sm-3">
                 <label htmlFor="county">区/县</label>
                 <input
                 readonly={this.state.readonly?"":false}
@@ -1303,7 +1304,7 @@ alert(JSON.stringify(this.state.currentSchool))
                 />
                 </div>
 
-                <div class="form-group col-md-3">
+                <div class="form-group col-sm-3">
                 <label htmlFor="community">乡/镇</label>
                 <input
                 readonly={this.state.readonly?"":false}
@@ -1317,7 +1318,7 @@ alert(JSON.stringify(this.state.currentSchool))
                 />
                 </div>
 
-                <div class="form-group col-md-12">
+                <div class="form-group col-sm-12">
                 <label htmlFor="address">地址</label>
                 <input
                 readonly={this.state.readonly?"":false}
@@ -1333,7 +1334,7 @@ alert(JSON.stringify(this.state.currentSchool))
 
                 <div class="w-100"></div>
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-sm-4">
                 <label htmlFor="studentsCount">学生人数</label>
                 <input
                 readonly={this.state.readonly?"":false}
@@ -1347,7 +1348,7 @@ alert(JSON.stringify(this.state.currentSchool))
                 />
                 </div>
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-sm-4">
                 <label htmlFor="teachersCount">教师人数</label>
                 <input
                 readonly={this.state.readonly?"":false}
@@ -1361,7 +1362,7 @@ alert(JSON.stringify(this.state.currentSchool))
                 />
                 </div>
 
-                <div class="select-container form-group col-md-4">
+                <div class="select-container form-group col-sm-4">
                 <label htmlFor="category">学校类型</label>
                 <select
                 readonly={this.state.readonly?"":false}
@@ -1381,7 +1382,7 @@ alert(JSON.stringify(this.state.currentSchool))
 
                 <div class="w-100"></div>
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-sm-4">
                   <label htmlFor="principalId">校长</label>
                   {!this.state.readonly
                   ? (<Select onChange={this.onChangePrincipalId.bind(this)}
@@ -1401,7 +1402,7 @@ alert(JSON.stringify(this.state.currentSchool))
                   </Link>)}
                 </div>
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-sm-4">
                   <label htmlFor="contactId">联络人</label>
                   {!this.state.readonly
                   ? (<Select onChange={this.onChangeContactId.bind(this)}
@@ -1424,7 +1425,7 @@ alert(JSON.stringify(this.state.currentSchool))
                 <div class="w-100"></div>
 
 
-                <div class="form-group col-md-12">
+                <div class="form-group col-sm-12">
                 <label htmlFor="description">简介</label>
                 <textarea
                 readonly={this.state.readonly?"":false}

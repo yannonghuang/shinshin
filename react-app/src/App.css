@@ -131,18 +131,24 @@ font-size: 14px;
 
 .box {
   display: grid;
-  width: 350px;
-  grid-template-columns: 100px 100px 100px;
-  align-items: start;
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(50px, 100px));
+  align-items: flex-start;
   justify-content: space-between;
 }
 
 .side {
    display:inline-block;
-   vertical-align:top;
-   margin-right: 5px;
+
+   grid-auto-flow: dense;
+   grid-gap: 0.5rem;
 }
 
 .disabled-link {
   pointer-events: none;
+}
+
+.responsive {
+  max-width: 100%;
+  height: auto;
 }
