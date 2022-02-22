@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-
+const path = require("path");
 const app = express();
 
 var corsOptions = {
@@ -16,6 +16,9 @@ app.use(express.urlencoded({limit: '25mb'}));
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
+
+// Pick up React index.html file
+app.use(express.static(path.join(__dirname, "../react-app/build")));
 
 const db = require("./app/models");
 const Role = db.role;
@@ -45,6 +48,13 @@ require("./app/routes/form.routes")(app);
 require("./app/routes/tutorial.routes")(app);
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
+
+// Catch all requests that don't match any route
+app.get("*", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "../react-app/build/index.html")
+  );
+});
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
