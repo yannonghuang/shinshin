@@ -456,6 +456,7 @@ exports.findAll2 = async (req, res) => {
            model: Project,
            attributes: [],
            required: false,
+           where: { xr: null }
            //include: inner_include,
         },
       ];
@@ -480,6 +481,7 @@ exports.findAll2 = async (req, res) => {
   })
     .then(data => {
         School.count({where: condition})
+        //School.count({where: condition, include: include, distinct: true, col: 'id'})
           .then(count => {
             const response = getPagingData(count, data, page, limit);
             res.send(response);
