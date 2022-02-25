@@ -18,9 +18,10 @@ const ResponsesList = (props) => {
   const [searchTitle, setSearchTitle] = useState("");
   const [searchCode, setSearchCode] = useState("");
   const [searchStartAt, setSearchStartAt] = useState("");
-  const [title, setTitle] = useState(null);
 
   const [formId, setFormId] = useState(props.match? props.match.params.formId : props.formId);
+  const [title, setTitle] = useState(formId);
+
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
   const [userId, setUserId] = useState(props.match? props.match.params.userId : props.userId);
 
@@ -464,8 +465,8 @@ const ResponsesList = (props) => {
   const schoolKnownColumns = ['school.region', 'school.code', 'school.name'];
 
   var hiddenColumns = [];
-  if (embedded) hiddenColumns = schoolKnownColumns;
-  if (formId) hiddenColumns = formKnownColumns;
+  if (embedded || schoolId) hiddenColumns = schoolKnownColumns;
+  if (formId) hiddenColumns = [...hiddenColumns, ...formKnownColumns];
 
   const {
     getTableProps,
@@ -514,7 +515,11 @@ const ResponsesList = (props) => {
   return (
     <div className="list row">
       <div className="col-sm-8">
-        <h4>{title ? title + " - " : ""}项目申请列表(总数：{totalItems})</h4>
+        <h4>
+          {schoolId && !embedded && (<a href={'/schoolsView/' + schoolId}>学校{(schoolId) + '-'}</a>)}
+          {formId && (<a href={'/formsView/' + formId}> {title + " - "} </a>)}
+          项目申请列表(总数：{totalItems})
+        </h4>
         <div className="input-group mb-3">
           <input
             type="text"

@@ -392,7 +392,7 @@ const ProjectsList = (props) => {
   const exportOnlyColumns =
     ['school.studentsCount', 'school.teachersCount', 'school.category'];
 
-  var hiddenColumns = embedded
+  var hiddenColumns = (embedded || schoolId)
     ? [...schoolKnownColumns, ...exportOnlyColumns]
     : [];
 
@@ -452,8 +452,11 @@ const ProjectsList = (props) => {
 
   return (
     <div className="list row">
-      <div className="re9">
-        <h4>{xr && '向荣支持'}项目列表(总数：{totalItems})</h4>
+      <div className="col-sm-9">
+        <h4>
+          {schoolId && !embedded && (<a href={'/schoolsView/' + schoolId}>学校{(schoolId) + '-'}</a>)}
+          {xr && '向荣支持'}项目列表(总数：{totalItems})
+        </h4>
         <div className="input-group mb-3 ">
 
           <input
@@ -538,7 +541,7 @@ const ProjectsList = (props) => {
         </div>
       </div>
 
-      <div className="mt-3 col-md-3">
+      <div className="mt-3 col-sm-3">
         {"每页显示行数: "}
         <select onChange={handlePageSizeChange} value={pageSize}>
           {pageSizes.map((size) => (
@@ -562,7 +565,7 @@ const ProjectsList = (props) => {
 
         <div class="w-100"></div>
 
-      <div className="col-md-12 list">
+      <div className="col-sm-12 list">
         <table
           className="table table-striped table-bordered"
           {...getTableProps()}
@@ -607,7 +610,7 @@ const ProjectsList = (props) => {
         </table>
       </div>
 
-      <div className="mt-3 col-md-">
+      <div className="mt-3 col-sm-">
         {"每页显示行数: "}
         <select onChange={handlePageSizeChange} value={pageSize}>
           {pageSizes.map((size) => (
