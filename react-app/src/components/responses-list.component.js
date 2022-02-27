@@ -20,7 +20,7 @@ const ResponsesList = (props) => {
   const [searchStartAt, setSearchStartAt] = useState("");
 
   const [formId, setFormId] = useState(props.match? props.match.params.formId : props.formId);
-  const [title, setTitle] = useState(formId);
+  const [title, setTitle] = useState(null);
 
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
   const [userId, setUserId] = useState(props.match? props.match.params.userId : props.userId);
@@ -517,7 +517,7 @@ const ResponsesList = (props) => {
       <div className="col-sm-8">
         <h4>
           {schoolId && !embedded && (<a href={'/schoolsView/' + schoolId}>学校{(schoolId) + '-'}</a>)}
-          {formId && (<a href={'/formsView/' + formId}> {title + " - "} </a>)}
+          {title ? (title + '-') : ''}
           项目申请列表(总数：{totalItems})
         </h4>
         <div className="input-group mb-3">
