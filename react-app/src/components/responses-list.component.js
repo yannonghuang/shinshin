@@ -484,9 +484,9 @@ const ResponsesList = (props) => {
       hiddenColumns: hiddenColumns,
       sortBy: [
         {
-          //id: 'startAt',
-          id: 'school.code',
-          desc: false
+          id: 'startAt',
+          //id: 'school.code',
+          desc: true
         }
       ]
     },
