@@ -138,15 +138,15 @@ export default class School extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const newschool = window.location.pathname.includes('add');
     this.setState({newschool: newschool});
     this.setState({readonly: window.location.pathname.includes('View')});
 
     const schoolId = this.props.match? this.props.match.params.id : this.props.id;
     if (!newschool) {
-      this.getSchool(schoolId);
-      this.getSchoolPhoto(schoolId);
+      await this.getSchool(schoolId);
+      await this.getSchoolPhoto(schoolId);
     }
 
     this.getRegions();
