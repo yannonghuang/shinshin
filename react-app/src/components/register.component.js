@@ -644,12 +644,11 @@ export default class Register extends Component {
                   />
                 </div>
 */}
-                <div class="form-group col-sm-4">
+                <div class="form-group col-sm-4" hidden={!this.state.schoolId}>
                   <label htmlFor="title">职务</label>
                   <select onChange={this.onChangeTitle.bind(this)}
                     readonly={this.state.readonly?"":false}
                     class="form-control"
-                    required
                     id="title"
                     value={this.state.title}
                     name="title"
@@ -661,7 +660,7 @@ export default class Register extends Component {
                   </select>
                 </div>
 
-                <div class="form-group col-sm-4" hidden={this.state.contactOnly}>
+                {AuthService.getCurrentUser() && (<div class="form-group col-sm-4" hidden={this.state.contactOnly}>
                   <label htmlFor="roles">角色</label>
                   <select onChange={this.onChangeRoles.bind(this)}
                     readonly={this.state.readonly?"":false}
@@ -674,7 +673,7 @@ export default class Register extends Component {
                       <option value={option.name}>{option.label}</option>
                     ))}
                   </select>
-                </div>
+                </div>)}
 
                 <div class="form-group col-sm-4">
                   <label htmlFor="schoolId">所属学校</label>

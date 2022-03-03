@@ -107,7 +107,7 @@ class App extends Component {
 
           <div class="collapse navbar-collapse navbar-nav mr-auto" id="navbarSupportedContent">
 
-            {(currentUser && !currentUser.schoolId) && (
+            {(currentUser && !currentUser.schoolId && showAdminBoard) && (
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 管理
