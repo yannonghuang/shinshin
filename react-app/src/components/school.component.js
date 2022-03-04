@@ -957,7 +957,8 @@ alert(JSON.stringify(this.state.currentSchool))
   onDrop = event => {
     event.preventDefault();
     var file = event.dataTransfer.files[0];
-    if (!file) return;
+    var item = event.dataTransfer.items[0];
+    if (!item || item.kind !== 'file' || item.type.indexOf('image/') !== 0) return;
     
     this.setState(prevState => ({
           currentSchool: {
