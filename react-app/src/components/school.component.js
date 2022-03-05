@@ -28,35 +28,6 @@ export default class School extends Component {
   constructor(props) {
     super(props);
 
-/**
-    this.onChangeCode = this.onChangeCode.bind(this);
-    this.onChangeDescription = this.onChangeDescription.bind(this);
-
-    this.onChangePrincipal = this.onChangePrincipal.bind(this);
-    this.onChangePrincipalCell = this.onChangePrincipalCell.bind(this);
-    this.onChangePrincipalWechat = this.onChangePrincipalWechat.bind(this);
-    this.onChangeSchoolBoardRegisteredName = this.onChangeSchoolBoardRegisteredName.bind(this);
-    this.onChangeSchoolBoard = this.onChangeSchoolBoard.bind(this);
-
-    this.onChangeContact = this.onChangeContact.bind(this);
-    this.onChangeContactCell = this.onChangeContactCell.bind(this);
-    this.onChangeContactWechat = this.onChangeContactWechat.bind(this);
-
-    this.onChangePhoto = this.onChangePhoto.bind(this);
-    this.onChangeAddress = this.onChangeAddress.bind(this);
-    this.onChangePhone = this.onChangePhone.bind(this);
-    this.onChangeStudentsCount = this.onChangeStudentsCount.bind(this);
-    this.onChangeTeachersCount = this.onChangeTeachersCount.bind(this);
-    this.onChangeRegion = this.onChangeRegion.bind(this);
-    this.onChangeDonor = this.onChangeDonor.bind(this);
-
-
-    this.onChangeStage = this.onChangeStage.bind(this);
-    this.onChangeStatus = this.onChangeStatus.bind(this);
-    this.onChangeRequest = this.onChangeRequest.bind(this);
-    this.onChangeCategory = this.onChangeCategory.bind(this);
-    this.onChangeDocCategory = this.onChangeDocCategory.bind(this);
-*/
     this.onChangeGenerics = this.onChangeGenerics.bind(this);
 
     this.onChangeStartAt = this.onChangeStartAt.bind(this);
@@ -69,7 +40,7 @@ export default class School extends Component {
 
     this.getSchool = this.getSchool.bind(this);
     this.getSchoolPhoto = this.getSchoolPhoto.bind(this);
-    //this.updatePublished = this.updatePublished.bind(this);
+
     this.updateSchool = this.updateSchool.bind(this);
     this.updatePhoto = this.updatePhoto.bind(this);
     this.deleteSchool = this.deleteSchool.bind(this);
@@ -134,7 +105,8 @@ export default class School extends Component {
       categories: [],
 
       message: "",
-      submitted: false
+      submitted: false,
+      pastedPhotoType: null,
     };
   }
 
@@ -157,6 +129,39 @@ export default class School extends Component {
     this.getStatuses();
     this.getStages();
     this.getUsers(schoolId);
+
+    this.init();
+  }
+
+  init() {
+    document.onpaste = async (pasteEvent) => {
+      pasteEvent.preventDefault();
+
+      var items = pasteEvent.clipboardData.items;
+
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf("image") === 0) {
+          var blob = items[i].getAsFile();
+          const type = items[i].type;
+          var reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onload = async () => {
+            await this.setState(prevState => ({
+              currentSchool: {
+                ...prevState.currentSchool,
+                photo: reader.result
+              },
+              pastedPhotoType: type
+            }));
+
+            document.getElementById('schoolPhoto').src = reader.result;
+            return;
+          }
+
+        }
+      }
+    };
+
   }
 
   convert(users) {
@@ -315,79 +320,6 @@ export default class School extends Component {
     }));
   }
 
-/**
-  onChangeStage(e) {
-    const stage = e.target.value;
-
-    this.setState(prevState => ({
-      currentSchool: {
-        ...prevState.currentSchool,
-        stage: stage
-      }
-    }));
-  }
-
-  onChangeStatus(e) {
-    const status = e.target.value;
-
-    this.setState(prevState => ({
-      currentSchool: {
-        ...prevState.currentSchool,
-        status: status
-      }
-    }));
-  }
-
-  onChangeRequest(e) {
-    const request = e.target.value;
-
-    this.setState(prevState => ({
-      currentSchool: {
-        ...prevState.currentSchool,
-        request: request
-      }
-    }));
-  }
-
-  onChangeCategory(e) {
-    const category = e.target.value;
-
-    this.setState(prevState => ({
-      currentSchool: {
-        ...prevState.currentSchool,
-        category: category
-      }
-    }));
-  }
-
-
-  onChangeSchoolBoardRegisteredName(e) {
-    const schoolBoardRegisteredName = e.target.value;
-
-    this.setState(function(prevState) {
-      return {
-        currentSchool: {
-          ...prevState.currentSchool,
-          schoolBoardRegisteredName: schoolBoardRegisteredName
-        }
-      };
-    });
-  }
-
-  onChangeSchoolBoard(e) {
-    const schoolBoard = e.target.value;
-
-    this.setState(function(prevState) {
-      return {
-        currentSchool: {
-          ...prevState.currentSchool,
-          schoolBoard: schoolBoard
-        }
-      };
-    });
-  }
-*/
-
   onChangeStartAt(e) {
     const startAt = e.target.value;
 
@@ -441,192 +373,6 @@ export default class School extends Component {
     });
   }
 
-/**
-  onChangeDonor(e) {
-    const donor = e.target.value;
-
-    this.setState(function(prevState) {
-      return {
-        currentSchool: {
-          ...prevState.currentSchool,
-          donor: donor
-        }
-      };
-    });
-  }
-
-  onChangeDocCategory(e) {
-    const docCategory = e.target.value;
-
-    this.setState(function(prevState) {
-      return {
-        currentSchool: {
-          ...prevState.currentSchool,
-          docCategory: docCategory
-        }
-      };
-    });
-  }
-
-  onChangeCode(e) {
-    const code = e.target.value;
-
-    this.setState(function(prevState) {
-      return {
-        currentSchool: {
-          ...prevState.currentSchool,
-          code: code
-        }
-      };
-    });
-  }
-
-  onChangeDescription(e) {
-    const description = e.target.value;
-
-    this.setState(prevState => ({
-      currentSchool: {
-        ...prevState.currentSchool,
-        description: description
-      }
-    }));
-  }
-
-  onChangePrincipal(e) {
-    const principal = e.target.value;
-
-    this.setState(prevState => ({
-      currentSchool: {
-        ...prevState.currentSchool,
-        principal: principal
-      }
-    }));
-  }
-
-  onChangePrincipalCell(e) {
-    const principalCell = e.target.value;
-
-    this.setState(prevState => ({
-      currentSchool: {
-        ...prevState.currentSchool,
-        principalCell: principalCell
-      }
-    }));
-  }
-
-  onChangePrincipalWechat(e) {
-    const principalWechat = e.target.value;
-
-    this.setState(prevState => ({
-      currentSchool: {
-        ...prevState.currentSchool,
-        principalWechat: principalWechat
-      }
-    }));
-  }
-
-  onChangeContact(e) {
-    const contact = e.target.value;
-
-    this.setState(prevState => ({
-      currentSchool: {
-        ...prevState.currentSchool,
-        contact: contact
-      }
-    }));
-  }
-
-  onChangeContactCell(e) {
-    const contactCell = e.target.value;
-
-    this.setState(prevState => ({
-      currentSchool: {
-        ...prevState.currentSchool,
-        contactCell: contactCell
-      }
-    }));
-  }
-
-  onChangeContactWechat(e) {
-    const contactWechat = e.target.value;
-
-    this.setState(prevState => ({
-      currentSchool: {
-        ...prevState.currentSchool,
-        contactWechat: contactWechat
-      }
-    }));
-  }
-
-
-  onChangePhoto(e) {
-    const photo = e.target.value;
-
-    this.setState(prevState => ({
-      currentSchool: {
-        ...prevState.currentSchool,
-        photo: photo
-      }
-    }));
-  }
-
-
-  onChangeAddress(e) {
-    const address = e.target.value;
-
-    this.setState(prevState => ({
-      currentSchool: {
-        ...prevState.currentSchool,
-        address: address
-      }
-    }));
-  }
-
-  onChangeRegion(e) {
-    const region = e.target.value;
-
-    this.setState(prevState => ({
-      currentSchool: {
-        ...prevState.currentSchool,
-        region: region
-      }
-    }));
-  }
-
-  onChangePhone(e) {
-    const phone = e.target.value;
-
-    this.setState(prevState => ({
-      currentSchool: {
-        ...prevState.currentSchool,
-        phone: phone
-      }
-    }));
-  }
-
-  onChangeTeachersCount(e) {
-    const teachersCount = e.target.value;
-
-    this.setState(prevState => ({
-      currentSchool: {
-        ...prevState.currentSchool,
-        teachersCount: teachersCount
-      }
-    }));
-  }
-
-  onChangeStudentsCount(e) {
-    const studentsCount = e.target.value;
-
-    this.setState(prevState => ({
-      currentSchool: {
-        ...prevState.currentSchool,
-        studentsCount: studentsCount
-      }
-    }));
-  }
-*/
-
   async getSchool(schoolId) {
     const {
       id,
@@ -649,60 +395,13 @@ export default class School extends Component {
           ...y,
           id: schoolId
         }
-
-        });
+      });
 
     } catch (err) {
       alert(err.message);
     };
 
   }
-
-/**
-  SAVE_getSchool(schoolId) {
-    const {
-      id,
-      photo,
-      file,
-      docFiles,
-      docCategory,
-      ...others} = this.state.currentSchool;
-
-    SchoolDataService.get(schoolId)
-      .then(response => {
-alert(JSON.stringify(response.data))
-        SurveyDataService.get(schoolId)
-        .then (r => {
-          this.setState({
-              currentSchool: {...others, ...response.data}
-            }, () => {
-alert(JSON.stringify(this.state.currentSchool))
-            let xxx= SchoolDataService.reduce(r.data, others);
-            const {id, ...others2} = xxx;
-alert(JSON.stringify(xxx))
-            this.setState(prevState => ({
-                    currentSchool: {
-                      ...prevState.currentSchool,
-                      ...others2
-                    }
-            }), () => {
-alert(JSON.stringify(this.state.currentSchool))
-            });
-          });
-
-        })
-        .catch (err => {
-          alert(err.message);
-        });
-
-        //this.getSchoolPhoto(id);
-        console.log(response.data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  }
-*/
 
   getSchoolPhoto(id) {
     SchoolDataService.getPhoto(id)
@@ -805,7 +504,7 @@ alert(JSON.stringify(this.state.currentSchool))
           });
         })
 
-        if (this.state.currentSchool.file) { // photo, followed by docs
+        if (this.state.currentSchool.file || this.state.pastedPhotoType) { // photo, followed by docs
           this.updatePhoto();
         } else {
           if (this.state.currentSchool.docFiles) // docs
@@ -881,7 +580,7 @@ alert(JSON.stringify(this.state.currentSchool))
           });
         });
 
-        if (this.state.currentSchool.file) { // photo, followed by docs
+        if (this.state.currentSchool.file || this.state.pastedPhotoType) { // photo, followed by docs
           this.updatePhoto();
         } else {
           if (this.state.currentSchool.docFiles) // docs
@@ -904,9 +603,15 @@ alert(JSON.stringify(this.state.currentSchool))
   }
 
 
-  updatePhoto() {
+  async updatePhoto() {
     var data = new FormData();
-    data.append('multi-files', this.state.currentSchool.file, this.state.currentSchool.file.name);
+    if (this.state.currentSchool.file)
+      data.append('multi-files', this.state.currentSchool.file, this.state.currentSchool.file.name);
+    else if (this.state.pastedPhotoType) {
+      const base64Response = await fetch(this.state.currentSchool.photo);
+      const blob = await base64Response.blob();
+      data.append('multi-files', new Blob([blob], {type: this.state.pastedPhotoType}));
+    }
     SchoolDataService.updatePhoto(this.state.currentSchool.id, data)
     .then(response => {
       if (this.state.currentSchool.docFiles) { // docs
@@ -1035,12 +740,13 @@ alert(JSON.stringify(this.state.currentSchool))
               <div class="row">
                 <h4>学校基本信息</h4>
 
-                <div onDragOver={this.onDrag} onDrop={this.onDrop}>
-                {this.state.readonly ? "" :
-                <p>编辑学校照片（拖拽照片文件替换欣欣图标）</p>
-                }
-                <img src={currentSchool.photo ? currentSchool.photo : defaultPhoto}
-                  width="320" height="320" class="responsive" readonly={this.state.readonly?"":false} />
+                <div contenteditable="true" onDragOver={this.onDrag} onDrop={this.onDrop}>
+                  {this.state.readonly ? "" :
+                    <p contenteditable="false">编辑学校照片（拖拽照片文件或复制粘贴图标）</p>
+                  }
+                  <img id="schoolPhoto" src={currentSchool.photo ? currentSchool.photo : defaultPhoto}
+                    width="320" height="320" class="responsive" readonly={this.state.readonly?"":false}
+                  />
                 </div>
 
                 <div class="form-group">
