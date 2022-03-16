@@ -502,10 +502,12 @@ export default class Register extends Component {
         expiresIn: 900 // 15 minutes
       });
 
+      const url = window.location.host;
       var templateParams = {
             to: this.state.email,
             username: this.state.chineseName ?this.state.chineseName : this.state.username,
-            link: "http://localhost:8081/login?token=" + token
+            link: url + "/login?token=" + token
+            //link: "http://localhost:8081/login?token=" + token
       };
 
       emailjs.send("icloud_2021_12_27","template_vye2wfs", templateParams)
