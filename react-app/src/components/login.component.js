@@ -137,11 +137,12 @@ export default class Login extends Component {
 
       AuthService.findByEmail(this.state.email)
       .then(r => {
-
+        const url = window.location.host;
         var templateParams = {
               to: this.state.email,
               username: r.data.chineseName ? r.data.chineseName : r.data.username,
-              link: "http://localhost:8081/reset?token=" + token
+              link: url + "/reset?token=" + token
+              //link: "http://localhost:8081/reset?token=" + token
         };
 
         emailjs.send("icloud_2021_12_27","template_ae0k3bj", templateParams)
