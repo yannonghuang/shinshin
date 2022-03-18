@@ -59,8 +59,7 @@ db.USER_TITLES = [
   "校长",
   "副校长",
   "主任",
-  "老师",
-  "欣欣义工"
+  "老师"
 ];
 
 db.DOCUMENT_CATEGORIES = [
