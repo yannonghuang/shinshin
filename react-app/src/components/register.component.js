@@ -702,7 +702,7 @@ export default class Register extends Component {
                 </div>
 
 
-                <div class="form-group col-sm-4" hidden={this.state.contactOnly}>
+                <div class="form-group col-sm-4" hidden={!AuthService.getCurrentUser()}>
                   <label htmlFor="lastLogin">上次登录时间</label>
                   <Input
                     readonly={""}
@@ -713,7 +713,7 @@ export default class Register extends Component {
                   />
                 </div>
 
-                <div class="form-group col-sm-4">
+                <div class="form-group col-sm-4" hidden={!AuthService.getCurrentUser()}>
                   <label htmlFor="createdAt">创建时间</label>
                   <Input
                     readonly={""}
