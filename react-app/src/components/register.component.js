@@ -646,7 +646,7 @@ export default class Register extends Component {
                   />
                 </div>
 */}
-                <div class="form-group col-sm-4" hidden={AuthService.getCurrentUser() && !this.state.schoolId}>
+                <div class="form-group col-sm-4" hidden={!this.state.schoolId}>
                   <label htmlFor="title">职务</label>
                   <select onChange={this.onChangeTitle.bind(this)}
                     readonly={this.state.readonly?"":false}
@@ -681,7 +681,11 @@ export default class Register extends Component {
                   </select>
                 </div>)}
 
-                <div class="form-group col-sm-4" hidden={AuthService.getCurrentUser() && !this.state.schoolId}>
+                <div class="form-group col-sm-4"
+                  hidden={AuthService.getCurrentUser() &&
+                  !AuthService.getCurrentUser().roles.includes("ROLE_ADMIN") &&
+                  !this.state.schoolId}
+                >
                   <label htmlFor="schoolId">所属学校</label>
                   {!this.state.readonly
                   ? (<Select onChange={this.onChangeSchoolId.bind(this)}
@@ -702,7 +706,7 @@ export default class Register extends Component {
                 </div>
 
 
-                <div class="form-group col-sm-4" hidden={!AuthService.getCurrentUser()}>
+                <div class="form-group col-sm-4" hidden={this.state.newuser}>
                   <label htmlFor="lastLogin">上次登录时间</label>
                   <Input
                     readonly={""}
@@ -713,7 +717,7 @@ export default class Register extends Component {
                   />
                 </div>
 
-                <div class="form-group col-sm-4" hidden={!AuthService.getCurrentUser()}>
+                <div class="form-group col-sm-4" hidden={this.state.newuser}>
                   <label htmlFor="createdAt">创建时间</label>
                   <Input
                     readonly={""}
