@@ -288,7 +288,7 @@ export default class Login extends Component {
                 </div>
 
                 <button
-                  style={{ float: "left", width: "25%" }}
+                  style={{ float: "left", width: "45%" }}
                   className="btn btn-primary badge mt-2"
                   type="button"
                   onClick={this.onReset}
