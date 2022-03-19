@@ -681,7 +681,7 @@ export default class Register extends Component {
                   </select>
                 </div>)}
 
-                <div class="form-group col-sm-4">
+                <div class="form-group col-sm-4" hidden={!this.state.schoolId}>
                   <label htmlFor="schoolId">所属学校</label>
                   {!this.state.readonly
                   ? (<Select onChange={this.onChangeSchoolId.bind(this)}
