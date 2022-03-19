@@ -662,7 +662,8 @@ export default class Register extends Component {
                   </select>
                 </div>
 
-                {AuthService.getCurrentUser() && (<div class="form-group col-sm-4" hidden={this.state.contactOnly}>
+                {AuthService.getCurrentUser() && AuthService.getCurrentUser().roles.includes("ROLE_ADMIN") &&
+                (<div class="form-group col-sm-4" hidden={this.state.contactOnly}>
                   <label htmlFor="roles">角色</label>
                   <select onChange={this.onChangeRoles.bind(this)}
                     readonly={this.state.readonly?"":false}
