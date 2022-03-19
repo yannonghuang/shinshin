@@ -668,7 +668,7 @@ export default class Register extends Component {
                   <select onChange={this.onChangeRoles.bind(this)}
                     disabled={this.state.readonly || !AuthService.getCurrentUser().roles.includes("ROLE_ADMIN")
                                ? "disabled"
-                               :false
+                               : false
                              }
                     class="form-control"
                     id="roles"
