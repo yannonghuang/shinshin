@@ -293,7 +293,7 @@ export default class Login extends Component {
                   type="button"
                   onClick={this.onReset}
                 >
-                  忘记密码?
+                  忘记用户名或密码?
                 </button>
 
               </div>
