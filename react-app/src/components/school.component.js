@@ -1206,7 +1206,7 @@ export default class School extends Component {
             <div class="w-100"></div>
 
 
-            <Tabs>
+            {!this.state.newschool && (<Tabs>
               <TabList>
                 <Tab>更多信息 <i class="fas fa-hand-point-right"></i></Tab>
                 <Tab>学校详情</Tab>
@@ -1271,7 +1271,7 @@ export default class School extends Component {
                   xr = {true}
                 />
               </TabPanel>) : null}
-            </Tabs>
+            </Tabs>)}
 
           </div>
         ) }
