@@ -877,7 +877,7 @@ export default class Project extends Component {
 
             <div class="w-100"></div>
 
-            {(!currentProject.xr) &&
+            {(!currentProject.xr && !this.state.newproject) &&
             <Tabs>
               <TabList>
                 <Tab>更多信息 <i class="fas fa-hand-point-right"></i></Tab>
