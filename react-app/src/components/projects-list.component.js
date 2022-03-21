@@ -507,7 +507,7 @@ const ProjectsList = (props) => {
 
           <div>
             <button
-              className="btn btn-primary badge btn-block ml-2"
+              className="btn btn-primary ml-2"
               type="button"
               onClick={onClearSearch}
             >
@@ -521,7 +521,7 @@ const ProjectsList = (props) => {
         <div className="input-group mb-4">
           <div>
             <button
-              className="btn btn-primary badge-success"
+              className="btn btn-primary "
               type="button"
               onClick={search}
             >
@@ -529,7 +529,7 @@ const ProjectsList = (props) => {
             </button>
           </div>
 
-          <div>
+          <div hidden={!currentUser}>
             <button
               className="btn btn-primary ml-2"
               type="button"

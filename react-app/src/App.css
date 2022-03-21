@@ -151,3 +151,7 @@ font-size: 14px;
   max-width: 100%;
   height: auto;
 }
+
+.navbar-custom {
+    background-color: rgb(4, 10, 80);
+}

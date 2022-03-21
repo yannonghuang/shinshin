@@ -294,7 +294,7 @@ const FormsList = (props) => {
 
           <div>
             <button
-              className="btn btn-primary badge btn-block ml-2"
+              className="btn btn-primary ml-2"
               type="button"
               onClick={onClearSearch}
             >
@@ -305,7 +305,7 @@ const FormsList = (props) => {
 
         <div className="input-group mb-3">
           <button
-            className="btn btn-primary badge-success"
+            className="btn btn-primary "
             type="button"
             onClick={findByTitle}
           >

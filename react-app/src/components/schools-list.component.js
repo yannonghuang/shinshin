@@ -919,7 +919,7 @@ const SchoolsList = (props) => {
           
           <div>
             <button
-              className="btn btn-primary badge btn-block ml-2"
+              className="btn btn-primary  ml-2"
               type="button"
               onClick={onClearSearch}
             >
@@ -932,14 +932,14 @@ const SchoolsList = (props) => {
         <div className="input-group mb-4">
           <div>
             <button
-              className="btn btn-primary badge-success"
+              className="btn btn-primary "
               type="button"
               onClick={findByName}
             >
               查询
             </button>
           </div>
-          <div>
+          <div hidden={!currentUser}>
             <button
               className="btn btn-primary ml-2"
               type="button"
@@ -948,7 +948,7 @@ const SchoolsList = (props) => {
               导出
             </button>
           </div>
-          <div>
+          <div hidden={!currentUser}>
             <button
               className="btn btn-primary ml-2"
               type="button"

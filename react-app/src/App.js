@@ -94,8 +94,10 @@ class App extends Component {
         </div>
 
 
-
+{/*
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+*/}
+        <nav class="navbar navbar-expand-sm navbar-dark navbar-custom">
           <Link to={"/"} class="navbar-brand">
             学校项目管理系统
           </Link>
