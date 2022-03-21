@@ -425,7 +425,7 @@ export default class Register extends Component {
     const user = AuthService.getCurrentUser(); //localStorage.getItem('user');
 
     if ((!user && !this.state.schoolId) ||
-        (user && user.schoolId && !this.state.schoolId)){
+        (user && user.schoolId && !this.state.schoolId)) {
       this.setState({
         message: "请选择学校",
         successful: false
@@ -436,7 +436,28 @@ export default class Register extends Component {
     return true;
   }
 
-  handleRegister(e) {
+  async validatePrincipal() {
+    if (AuthService.getCurrentUser() || !this.state.schoolId) return true;
+
+    try {
+      let response = await SchoolDataService.getPrincipal(this.state.schoolId);
+
+      let principal = prompt("请输入校长姓名", "");
+      if (!principal) return false;
+
+      if (principal === response.data.principal)
+        return true;
+      else {
+        alert('校长姓名输入有误！');
+        return false;
+      }
+    } catch(e) {
+      alert(e.message);
+    }
+    return false;
+  }
+
+  async handleRegister(e) {
     e.preventDefault();
 
     if (this.state.contactOnly) return this.createContactOnly();
@@ -454,6 +475,8 @@ export default class Register extends Component {
     }
 
     if (!this.validateSchool()) return;
+    let vp = await this.validatePrincipal();
+    if (!vp) return;
 
     this.form.validateAll();
 
@@ -682,14 +705,12 @@ export default class Register extends Component {
                 </div>)}
 
                 <div class="form-group col-sm-4"
-                  hidden={AuthService.getCurrentUser() &&
-                  !AuthService.getCurrentUser().roles.includes("ROLE_ADMIN") &&
-                  !this.state.schoolId}
                 >
                   <label htmlFor="schoolId">所属学校</label>
-                  {!this.state.readonly
+                  {this.state.newuser ||
+                  (!this.state.readonly && AuthService.getCurrentUser() &&
+                  AuthService.getCurrentUser().roles.includes("ROLE_ADMIN"))
                   ? (<Select onChange={this.onChangeSchoolId.bind(this)}
-                    readonly={this.state.readonly?"":false}
                     class="form-control"
                     id="schoolId"
                     value={this.display(this.state.schoolId)}

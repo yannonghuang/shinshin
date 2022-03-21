@@ -80,6 +80,12 @@ module.exports = function(app) {
     //[authJwt.verifyToken],
     schools.findOne);
 
+  // Retrieve school principal with id
+  app.get("/api/schoolsPrincipal/:id",
+    //[authJwt.verifyToken],
+    schools.getPrincipal);
+
+
   // Retrieve a single School photo with id
   app.get("/api/schoolPhoto/:id",
     //[authJwt.verifyToken],

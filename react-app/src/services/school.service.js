@@ -66,6 +66,10 @@ class SchoolDataService {
     return http.get(`/schools/${id}`/*, { headers: authHeader() }*/);
   }
 
+  getPrincipal(id) {
+    return http.get(`/schoolsPrincipal/${id}`/*, { headers: authHeader() }*/);
+  }
+
   getPhoto(id) {
     return http.get(`/schoolPhoto/${id}`/*, { headers: authHeader() }*/);
   }

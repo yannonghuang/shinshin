@@ -709,6 +709,32 @@ exports.findOne = (req, res) => {
     });
 };
 
+// get School Principal with an id
+exports.getPrincipal = (req, res) => {
+  const id = req.params.id;
+
+  School.findByPk(id, {
+      attributes: ['principal'],
+      raw: true,
+    }
+  )
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find School with id=${id}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving School with id=" + id
+      });
+    });
+};
+
+
 // Update a School by the id in the request
 exports.SAVE_update = (req, res) => {
   const id = req.params.id;
