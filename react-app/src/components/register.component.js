@@ -181,7 +181,7 @@ export default class Register extends Component {
     var data = {
       username: this.state.username,
       email: this.state.email,
-      password: this.state.password,
+      //password: this.state.password,
       roles: this.state.roles,
       schoolId: this.state.schoolId,
       chineseName: this.state.chineseName,
@@ -551,11 +551,9 @@ export default class Register extends Component {
   }
 
   render() {
-    localStorage.setItem("email", this.state.email);
+
     return (
       <div>
-        {!this.state.readonly && !this.state.newuser &&
-        <a href='/reset'><button className="btn btn-primary">{'重置密码'}</button></a>}
 {/*}
         <div className="card card-container">
 */}
@@ -762,6 +760,21 @@ export default class Register extends Component {
                   <button className="btn btn-primary btn-block">{this.state.newuser?'创建新用户':'修改用户'}</button>
                 </div>
                 )}
+
+                <div class="w-100"></div>
+
+                {!this.state.readonly && !this.state.newuser &&
+                  <Link
+                    to={'/reset?token=' +
+                      jwt.sign({ email: this.state.email }, "config.secret", {
+                        expiresIn: 900 // 15 minutes
+                      })
+                    }
+                    className="btn btn-primary">
+                      重置密码
+                  </Link>
+                }
+
             </div>
           )}
 
@@ -785,6 +798,7 @@ export default class Register extends Component {
                 this.checkBtn = c;
               }}
             />
+
           </Form>
 {/*}
         </div>

@@ -54,6 +54,8 @@ import Profile from "./components/profile.component";
 //import BoardModerator from "./components/board-moderator.component";
 //import BoardAdmin from "./components/board-admin.component";
 
+const jwt = require("jsonwebtoken");
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -187,9 +189,17 @@ class App extends Component {
                 <a class="dropdown-item" href={"/users/" + currentUser.id}>
                   个人信息
                 </a>
-                <a class="dropdown-item" href='/reset'>
-                  {localStorage.setItem("email", currentUser.email)}重置密码
+
+                <a class="dropdown-item"
+                  href={'/reset?token=' +
+                    jwt.sign({ email: currentUser.email }, "config.secret", {
+                      expiresIn: 900 // 15 minutes
+                    })
+                  }
+                >
+                  重置密码
                 </a>
+
                 {currentUser.schoolId
                   ? <a class="dropdown-item" href={"/schoolsView/" + currentUser.schoolId}>我的学校</a>
                   : ''
