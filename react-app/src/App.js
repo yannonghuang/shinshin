@@ -187,6 +187,9 @@ class App extends Component {
                 <a class="dropdown-item" href={"/users/" + currentUser.id}>
                   个人信息
                 </a>
+                <a class="dropdown-item" href='/reset'>
+                  {localStorage.setItem("email", currentUser.email)}重置密码
+                </a>
                 {currentUser.schoolId
                   ? <a class="dropdown-item" href={"/schoolsView/" + currentUser.schoolId}>我的学校</a>
                   : ''

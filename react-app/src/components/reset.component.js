@@ -53,9 +53,14 @@ export default class Reset extends Component {
         email = decoded.email;
     });
 
+    if (!email && localStorage.getItem('email')) {
+      email = localStorage.getItem('email');
+      localStorage.removeItem("email");
+    }
+
     if (!email) {
       this.setState({
-        message: '您的密码重置请求失效，请到登录页面重新提供注册邮箱。。。',
+        message: '您的邮箱地址无效，密码重置请求失效，请到登录页面重新提供注册邮箱。。。',
         email: null
       });
     } else {
@@ -89,13 +94,16 @@ export default class Reset extends Component {
     if (this.state.passwordVerified === this.state.password) {
       AuthService.reset(this.state.email, this.state.password)
       .then(response => {
-        alert('您的密码已经成功重置');
+        alert('密码已经成功重置');
         //this.props.history.push("/profile");
-        this.props.history.push("/login?username=" + response.data.username);
-        window.location.reload();
-        this.setState({
-          message: '您的密码已经成功重置！'
-        });
+        if (!AuthService.getCurrentUser()) {
+          this.props.history.push("/login?username=" + response.data.username);
+          window.location.reload();
+          this.setState({
+            message: '您的密码已经成功重置！'
+          });
+        } else
+          this.props.history.goBack();
       })
       .catch(error => {
         this.setState({
