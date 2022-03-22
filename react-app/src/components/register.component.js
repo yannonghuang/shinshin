@@ -512,7 +512,7 @@ export default class Register extends Component {
 
           this.setState({
             successful: false,
-            message: '创建用户异常，密码是必填项。。。' + resMessage
+            message: resMessage
           });
         }
       );
