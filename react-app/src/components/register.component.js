@@ -707,6 +707,10 @@ export default class Register extends Component {
                 </div>)}
 
                 <div class="form-group col-sm-4"
+                  hidden={!(
+                    this.state.newuser || this.state.schoolId ||
+                    (AuthService.getCurrentUser() && AuthService.getCurrentUser().roles.includes("ROLE_ADMIN"))
+                  )}
                 >
                   <label htmlFor="schoolId">所属学校</label>
                   {this.state.newuser ||
