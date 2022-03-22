@@ -607,7 +607,7 @@ export default class Register extends Component {
                 </div>
 
 
-                <div class="form-group col-sm-4" hidden={this.state.contactOnly}>
+                <div class="form-group col-sm-4" hidden={this.state.contactOnly || !this.state.newuser}>
                   <label htmlFor="password">密码</label>
                   <Input
                     readonly={this.state.readonly?"":false}
