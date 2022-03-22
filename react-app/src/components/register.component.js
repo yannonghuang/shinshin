@@ -554,7 +554,8 @@ export default class Register extends Component {
     localStorage.setItem("email", this.state.email);
     return (
       <div>
-        {!this.state.readonly && <a href='/reset'><button className="btn btn-primary">{'重置密码'}</button></a>}
+        {!this.state.readonly && !this.state.newuser &&
+        <a href='/reset'><button className="btn btn-primary">{'重置密码'}</button></a>}
 {/*}
         <div className="card card-container">
 */}
