@@ -99,14 +99,15 @@ class App extends Component {
 {/*
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
 */}
-        <nav class="navbar navbar-expand-sm navbar-custom">
+        <nav class="navbar navbar-expand-sm navbar-dark navbar-custom">
           <Link to={"/"} class="navbar-brand">
             学校项目管理系统
           </Link>
 
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon">
+            </span>
           </button>
 
           <div class="collapse navbar-collapse navbar-nav mr-auto" id="navbarSupportedContent">
