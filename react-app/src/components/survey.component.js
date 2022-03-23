@@ -1082,6 +1082,37 @@ export default class Survey extends Component {
 
                 <div class="w-100"></div>
 
+                <div class="form-group col-md-5">
+                <label htmlFor="phone">学校电话</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="phone"
+                required
+                value={currentSurvey.phone}
+                onChange={this.onChangeGenerics}
+                name="phone"
+                />
+                </div>
+
+
+                <div class="form-group col-md-5">
+                <label htmlFor="email">学校电子邮箱</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="email"
+                required
+                value={currentSurvey.email}
+                onChange={this.onChangeGenerics}
+                name="email"
+                />
+                </div>
+
+                <div class="w-100"></div>
+
                 <div class="form-group col-md-4">
                 <label htmlFor="studentsCount">学生人数</label>
                 <input
@@ -1189,37 +1220,6 @@ export default class Survey extends Component {
 
 
               <div class="row">
-                <div class="w-100"></div>
-
-                <div class="form-group col-md-5">
-                <label htmlFor="phone">学校电话</label>
-                <input
-                readonly={this.state.readonly?"":false}
-                type="text"
-                class="form-control"
-                id="phone"
-                required
-                value={currentSurvey.phone}
-                onChange={this.onChangeGenerics}
-                name="phone"
-                />
-                </div>
-
-
-                <div class="form-group col-md-5">
-                <label htmlFor="email">学校电子邮箱</label>
-                <input
-                readonly={this.state.readonly?"":false}
-                type="text"
-                class="form-control"
-                id="email"
-                required
-                value={currentSurvey.email}
-                onChange={this.onChangeGenerics}
-                name="email"
-                />
-                </div>
-
                 <div class="w-100"></div>
 
                 <div class="form-group col-md-2">
@@ -1465,18 +1465,17 @@ export default class Survey extends Component {
                 />
                 </div>
 
-
                 <div class="form-group col-md-2">
-                <label htmlFor="computersCount">办公电脑数</label>
+                <label htmlFor="internetExists">可否上网</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="checkbox"
                 class="form-control"
-                id="computersCount"
+                id="internetExists"
                 required
-                value={currentSurvey.computersCount}
+                checked={currentSurvey.internetExists}
                 onChange={this.onChangeGenerics}
-                name="computersCount"
+                name="internetExists"
                 />
                 </div>
 
@@ -1509,16 +1508,16 @@ export default class Survey extends Component {
                 </div>
 
                 <div class="form-group col-md-2">
-                <label htmlFor="internetExists">可否上网</label>
+                <label htmlFor="computersCount">办公电脑数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="checkbox"
+                type="number"
                 class="form-control"
-                id="internetExists"
+                id="computersCount"
                 required
-                checked={currentSurvey.internetExists}
+                value={currentSurvey.computersCount}
                 onChange={this.onChangeGenerics}
-                name="internetExists"
+                name="computersCount"
                 />
                 </div>
 

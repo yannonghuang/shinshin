@@ -84,6 +84,7 @@ export default class School extends Component {
         community: "",
         address: "",
         phone: "",
+        email: "",
         studentsCount: 0,
         teachersCount: 0,
         description: "",
@@ -437,6 +438,7 @@ export default class School extends Component {
       region: "",
       address: "",
       phone: "",
+      email: "",
       studentsCount: 0,
       teachersCount: 0,
       docFiles: [],
@@ -1041,6 +1043,38 @@ export default class School extends Component {
                 name="address"
                 />
                 </div>
+
+                <div class="w-100"></div>
+
+
+                <div class="form-group col-sm-4">
+                <label htmlFor="phone">学校电话</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="phone"
+                required
+                value={currentSchool.phone}
+                onChange={this.onChangeGenerics}
+                name="phone"
+                />
+                </div>
+
+                <div class="form-group col-sm-4">
+                <label htmlFor="email">学校电子邮箱</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="email"
+                required
+                value={currentSchool.email}
+                onChange={this.onChangeGenerics}
+                name="email"
+                />
+                </div>
+
 
                 <div class="w-100"></div>
 
