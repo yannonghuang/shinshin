@@ -777,7 +777,7 @@ export default class School extends Component {
                 </div>
 */}
                 <div class="form-group">
-                <label htmlFor="name">学校名称</label>
+                <label htmlFor="name">欣欣学校名称</label>
                 <textarea
                 readonly={this.state.readonly?"":false}
                 class="form-control"
@@ -792,7 +792,7 @@ export default class School extends Component {
 
 
                 <div class="form-group">
-                <label htmlFor="schoolBoardRegisteredName">教育局校名</label>
+                <label htmlFor="schoolBoardRegisteredName">教育局注册校名</label>
                 <textarea
                 readonly={this.state.readonly?"":false}
                 cols="31"
@@ -806,7 +806,7 @@ export default class School extends Component {
                 </div>
 
                 <div class="form-group">
-                <label htmlFor="schoolBoard">教育局</label>
+                <label htmlFor="schoolBoard">教育局名称</label>
                 <textarea
                 readonly={this.state.readonly?"":false}
                 cols="31"
@@ -823,12 +823,13 @@ export default class School extends Component {
 
                 {(this.state.readonly && AuthService.getCurrentUser()) && (
                 <div class="box">
-                  <a target="_blank" href={"/surveys/" + currentSchool.id} class="btn btn-primary mb-4">更新信息</a>
+
                   {AuthService.getCurrentUser().schoolId &&
                     <a target="_blank" href={"/forms"} class="btn btn-primary">项目申请</a>}
                   <a target="_blank" href={"/users/school/" + currentSchool.id} class="btn btn-primary">用户</a>
                   {!AuthService.getCurrentUser().schoolId &&
-                    <a target="_blank" href={"/logs/school/" + currentSchool.id} class="btn btn-primary">历史</a>}
+                    <a target="_blank" href={"/logs/school/" + currentSchool.id} class="btn btn-primary">更新历史</a>}
+                  <a target="_blank" href={"/surveys/" + currentSchool.id} class="btn btn-primary mb-4">更新信息</a>
                   {!AuthService.getCurrentUser().schoolId &&
                     <a target="_blank" href={"/schools/" + currentSchool.id} class="btn btn-primary mb-4">编辑</a>}
                 </div>
@@ -948,7 +949,7 @@ export default class School extends Component {
                 </div>
 
                 <div class="select-container form-group col-sm-4">
-                <label htmlFor="request">学校需求状态</label>
+                <label htmlFor="request">学校需求</label>
                 <select
                 readonly={this.state.readonly?"":false}
                 class="form-control"
@@ -1155,13 +1156,13 @@ export default class School extends Component {
 
             <div>
 
-            <button onClick={this.saveSchool} class="btn btn-success" hidden={!this.state.newschool}>
+            <button onClick={this.saveSchool} class="btn btn-primary" hidden={!this.state.newschool}>
               提交
             </button>
 
             <button hidden={this.state.newschool}
               type="submit"
-              className="btn btn-success"
+              className="btn btn-primary"
               onClick={this.updateSchool}
             >
               更新

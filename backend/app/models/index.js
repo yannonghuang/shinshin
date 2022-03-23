@@ -82,9 +82,10 @@ db.PROJECT_STATUSES = [
 
 db.SCHOOL_STAGES = [
   "捐款到位",
+  "审核考察",
+  "完成拨款",
+  "后续支持",
   "一期支票",
-  "合同签订",
-  "后续计划",
   "项目冻结",
 ];
 
@@ -111,8 +112,9 @@ db.SCHOOL_STATUSES_SS = [
 db.SCHOOL_REQUESTS = [
   "基本设施",
   "教学设备",
-  "教师培训",
-  "学生活动",
+  "师资培训",
+  "暂停支持",
+  "终止支持",
 ];
 
 db.SCHOOL_REQUESTS_SS = [
