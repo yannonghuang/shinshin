@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+//import React, { Component } from "react";
+import React, { Component, createRef } from "react"; //For react component
 //import 'bootstrap/dist/css/bootstrap.min.css';
 //import {Tabs, Tab} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -109,6 +110,8 @@ export default class School extends Component {
       submitted: false,
       pastedPhotoType: null,
     };
+
+    this.surveyRef = createRef();
   }
 
   async componentDidMount() {
@@ -531,6 +534,8 @@ export default class School extends Component {
   }
 
   updateSchool() {
+    if (this.surveyRef.current) this.surveyRef.current.updateSurvey();
+
     const {
       id,
       photo,
@@ -1260,7 +1265,8 @@ export default class School extends Component {
                 <Survey
                   schoolId = {currentSchool.id}
                   embedded = {true}
-                  readonly = {true}
+                  readonly = {this.state.readonly}
+                  ref = {this.surveyRef}
                 />
               </TabPanel>
               <TabPanel>

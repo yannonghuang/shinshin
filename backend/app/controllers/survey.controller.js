@@ -182,6 +182,11 @@ exports.update = (req, res) => {
     where: { schoolId: schoolId }
   })
     .then(num => {
+      res.send({
+        message: "Survey was updated successfully."
+      });
+
+    /**
       if (num == 1) {
         res.send({
           message: "Survey was updated successfully."
@@ -197,16 +202,12 @@ exports.update = (req, res) => {
             err.message || "Some error occurred while creating the Survey."
           });
         });
-        /**
-        res.send({
-          message: `Cannot update Survey with id=${id}. Maybe Survey was not found or req.body is empty!`
-        });
-        */
       }
+    */
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error updating Survey with id=" + id
+        message: "Error updating Survey with id=" + schoolId
       });
     });
 };
