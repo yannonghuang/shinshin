@@ -131,8 +131,8 @@ font-size: 14px;
 
 .box {
   display: grid;
-  width: 90%;
-  grid-template-columns: repeat(auto-fit, minmax(50px, 100px));
+  width: 80%;
+  grid-template-columns: repeat(auto-fit, minmax(50px, 90px));
   align-items: start;
   justify-content: space-between;
 }
