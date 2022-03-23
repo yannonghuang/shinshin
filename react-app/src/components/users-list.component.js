@@ -479,13 +479,21 @@ const UsersList = (props) => {
 
         <div className="input-group mb-4">
           <button
-            className="btn btn-primary "
+            className="btn btn-primary mr-2"
             type="button"
             onClick={search}
           >
             查询
           </button>
+
+          {schoolId && (<a target="_blank"
+            href={"/addU?schoolId=" + schoolId} class="btn btn-primary ">
+              新建联络方式
+          </a>)}
+
         </div>
+
+
       </div>
 
       <div className="mb-3 col-sm-4">
@@ -509,10 +517,7 @@ const UsersList = (props) => {
           onChange={handlePageChange}
         />
 
-        {schoolId && (<a target="_blank"
-          href={"/addU?schoolId=" + schoolId} class="btn btn-primary ">
-            新建联络方式
-        </a>)}
+
 
       </div>
 
