@@ -118,12 +118,11 @@ db.SCHOOL_REQUESTS = [
 ];
 
 db.SCHOOL_REQUESTS_SS = [
-  "基本设施",
+  "基础设施",
   "教学设备",
-  "教师培训",
-  "学生活动",
+  "师资培训",
   "暂停捐赠",
-  "终止捐赠",
+  "终止支持",
 ];
 
 db.SCHOOL_CATEGORIES = [
