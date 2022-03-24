@@ -170,7 +170,7 @@ nav a {
 }
 
 nav a:hover {
-  border-bottom: 2px solid white;
+  //border-bottom: 2px solid white;
   padding: 6px 0;
   color: white;
 }
