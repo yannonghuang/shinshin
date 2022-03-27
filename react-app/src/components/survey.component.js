@@ -1468,7 +1468,7 @@ export default class Survey extends Component {
                 <div class="form-group col-md-2">
                 <label htmlFor="internetExists">可否上网</label>
                 <input
-                readonly={this.state.readonly?"":false}
+                disabled={this.state.readonly?"disabled":false}
                 type="checkbox"
                 class="form-control"
                 id="internetExists"
@@ -1482,7 +1482,7 @@ export default class Survey extends Component {
                 <div class="form-group col-md-2">
                 <label htmlFor="computerRoomExists">是否有电脑室</label>
                 <input
-                readonly={this.state.readonly?"":false}
+                disabled={this.state.readonly?"disabled":false}
                 type="checkbox"
                 class="form-control"
                 id="computerRoomExists"
@@ -1540,7 +1540,7 @@ export default class Survey extends Component {
                 <div class="form-group col-md-2">
                 <label htmlFor="libraryExists">是否有图书室</label>
                 <input
-                readonly={this.state.readonly?"":false}
+                disabled={this.state.readonly?"disabled":false}
                 type="checkbox"
                 class="form-control"
                 id="libraryExists"

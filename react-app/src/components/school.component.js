@@ -923,7 +923,7 @@ export default class School extends Component {
                 <div class="select-container form-group col-sm-4">
                 <label htmlFor="stage">学校阶段</label>
                 <select
-                readonly={this.state.readonly?"":false}
+                disabled={this.state.readonly?"disabled":false}
                 class="form-control"
                 id="stage"
                 required
@@ -941,7 +941,7 @@ export default class School extends Component {
                 <div class="select-container form-group col-sm-4">
                 <label htmlFor="status">学校状态</label>
                 <select
-                readonly={this.state.readonly?"":false}
+                disabled={this.state.readonly?"disabled":false}
                 class="form-control"
                 id="status"
                 required
@@ -959,7 +959,7 @@ export default class School extends Component {
                 <div class="select-container form-group col-sm-4">
                 <label htmlFor="request">学校需求</label>
                 <select
-                readonly={this.state.readonly?"":false}
+                disabled={this.state.readonly?"disabled":false}
                 class="form-control"
                 id="request"
                 required
@@ -979,7 +979,7 @@ export default class School extends Component {
                 <div class="select-container form-group col-sm-3">
                 <label htmlFor="region">省/自治区/直辖市</label>
                 <select
-                readonly={this.state.readonly?"":false}
+                disabled={this.state.readonly?"disabled":false}
                 class="form-control"
                 id="region"
                 required
@@ -1115,7 +1115,7 @@ export default class School extends Component {
                 <div class="select-container form-group col-sm-4">
                 <label htmlFor="category">学校类型</label>
                 <select
-                readonly={this.state.readonly?"":false}
+                disabled={this.state.readonly?"disabled":false}
                 class="form-control"
                 id="category"
                 required
