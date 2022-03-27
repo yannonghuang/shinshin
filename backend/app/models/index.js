@@ -51,8 +51,8 @@ db.ROLES2 = ["user", "admin", "moderator", "volunteer"];
 
 db.ROLES = [
   {name: "user", label: "学校用户"},
-  {name: "admin", label: "管理员"},
   {name: "volunteer", label: "欣欣义工"},
+  {name: "admin", label: "管理员"},
 ];
 
 db.USER_TITLES = [

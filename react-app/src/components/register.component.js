@@ -387,6 +387,24 @@ export default class Register extends Component {
     });
   }
 
+  getRelevantRoles(isSchoolUser) {
+    let schoolRoles = [];
+    let ssRoles = [];
+
+    if (!this.state.rolesFull) return [];
+
+    for (var i = 0; i < this.state.rolesFull.length; i++)
+      if (this.state.rolesFull[i].name === 'user')
+        schoolRoles.push(this.state.rolesFull[i]);
+      else
+        ssRoles.push(this.state.rolesFull[i]);
+
+    if (isSchoolUser)
+      return schoolRoles;
+    else
+      return ssRoles;
+  }
+
   createContactOnly() {
 
       AuthService.createContactOnly({
@@ -698,7 +716,8 @@ export default class Register extends Component {
                     value={this.state.roles}
                     name="roles"
                 >
-                    {this.state.rolesFull.map((option) => (
+                    {//this.state.rolesFull.map((option) => (
+                      this.getRelevantRoles(this.state.schoolId).map((option) => (
                       <option value={option.name}>{option.label}</option>
                     ))}
                   </select>
