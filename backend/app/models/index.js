@@ -135,6 +135,36 @@ db.SCHOOL_CATEGORIES = [
 ];
 
 db.REGIONS = [
+"山东",
+"江苏",
+"河南",
+"陕西",
+"湖南",
+"湖南湘西",
+"重庆",
+"福建",
+"云南",
+"四川",
+"广西",
+"安徽",
+"海南",
+"江西",
+"湖北",
+"山西",
+"辽宁",
+"黑龙江",
+"内蒙古",
+"贵州",
+"甘肃",
+"青海",
+"新疆",
+"西藏",
+"吉林",
+"宁夏"
+];
+
+/**
+db.REGIONS = [
 "山东省",
 "江苏省",
 "河南省",
@@ -162,6 +192,7 @@ db.REGIONS = [
 "吉林省",
 "宁夏回族自治区"
 ];
+*/
 
 db.forms.hasMany(db.responses, {foreignKey: 'formId'}, {as: 'Responses'})
 db.responses.belongsTo(db.forms);
