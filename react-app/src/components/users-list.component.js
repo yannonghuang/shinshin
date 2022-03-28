@@ -49,6 +49,12 @@ const UsersList = (props) => {
     setSearchUsername(searchUsername);
   };
 
+  const [searchEmail, setSearchEmail] = useState("");
+  const onChangeSearchEmail = (e) => {
+    const searchEmail = e.target.value;
+    setSearchEmail(searchEmail);
+  };
+
   const [searchSchoolCode, setSearchSchoolCode] = useState("");
   const onChangeSearchSchoolCode = (e) => {
     const searchSchoolCode = e.target.value;
@@ -72,6 +78,10 @@ const UsersList = (props) => {
 
     if (searchUsername) {
       params["username"] = searchUsername;
+    }
+
+    if (searchEmail) {
+      params["email"] = searchEmail;
     }
 
     if (searchRole) {
@@ -111,6 +121,7 @@ const UsersList = (props) => {
 
   const onClearSearch = (e) => {
     setSearchUsername("");
+    setSearchEmail("");
     setSearchSchoolCode("");
     setSearchRole("");
     setSearchContactOnly("");
@@ -180,7 +191,7 @@ const UsersList = (props) => {
       });
   };
 
-  useEffect(retrieveUsers, [page, pageSize, orderby, searchRole, searchUsername, searchSchoolCode,
+  useEffect(retrieveUsers, [page, pageSize, orderby, searchRole, searchUsername, searchEmail, searchSchoolCode,
     searchContactOnly, searchEmailVerified]);
 
   const refreshList = () => {
@@ -227,11 +238,13 @@ const UsersList = (props) => {
 
   const columns = useMemo(
     () => [
+/*
       {
         Header: "id",
         accessor: "id",
         disableSortBy: true,
       },
+*/
       {
         Header: "用户名",
         accessor: "username",
@@ -240,13 +253,11 @@ const UsersList = (props) => {
         Header: "中文名",
         accessor: "chineseName",
       },
-/*
       {
         Header: "电子邮件",
         accessor: "email",
         disableSortBy: true,
       },
-*/
       {
         Header: "职务",
         accessor: "title",
@@ -307,10 +318,12 @@ const UsersList = (props) => {
         Header: "上次登录时间",
         accessor: "lastLogin",
       },
+/*
       {
         Header: "创建时间",
         accessor: "createdAt",
       },
+*/
       {
         Header: "注册用户",
         accessor: 'contactOnly',
@@ -405,7 +418,7 @@ const UsersList = (props) => {
 
   return (
     <div className="list row">
-      <div className="col-sm-8">
+      <div className="col-sm-10">
         <h4>{schoolTitle ? schoolTitle + " - " : ""}用户列表(总数：{totalItems})</h4>
         <div className="input-group mb-3">
           <select
@@ -435,6 +448,14 @@ const UsersList = (props) => {
             placeholder="用户名/中文名"
             value={searchUsername}
             onChange={onChangeSearchUsername}
+          />
+
+          <input
+            type="text"
+            className="form-control ml-2"
+            placeholder="电子邮件"
+            value={searchEmail}
+            onChange={onChangeSearchEmail}
           />
 
           <select
@@ -496,7 +517,7 @@ const UsersList = (props) => {
 
       </div>
 
-      <div className="mb-3 col-sm-4">
+      <div className="mb-3 col-sm-2">
         {"每页显示行数: "}
         <select onChange={handlePageSizeChange} value={pageSize}>
           {pageSizes.map((size) => (

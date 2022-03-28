@@ -138,6 +138,7 @@ exports.findAll2 = async (req, res) => {
   const sid = await authJwt.getSchoolId(req);
 
   const username = req.body.username;
+  const email = req.body.email;
   const role = req.body.role;
   const schoolCode = req.body.schoolCode;
   const contactOnly = req.body.contactOnly;
@@ -169,6 +170,7 @@ var orderbyObject = null;
                         {username: { [Op.like]: `%${username}%` }},
                         {chineseName: { [Op.like]: `%${username}%` }},
                       ] } : null,
+            email ? { email: { [Op.like]: `%${email}%` }} : null,
             schoolId ? { schoolId: { [Op.eq]: `${schoolId}` }} : null,
             role ? {'$roles.name$': { [Op.eq]: `${role}` }} : null,
             //schoolCode ? {'$school.code$': { [Op.like]: `%${schoolCode}%` }} : null,
