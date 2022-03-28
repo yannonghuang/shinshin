@@ -47,8 +47,8 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t) => {
 
     //if (newv && (!oldObj || !oldObj[key] || (oldv != newv))) {
     if (getAttributes(School).includes(key) &&
-        (newv && newv !== undefined)
-        && (!oldObj || !oldObj[key] || (oldv != newv))) {
+        (newv && newv !== undefined) &&
+        (!oldObj || !oldObj[key] || (oldv != newv))) {
       updates.push({field: key, oldv: oldv, newv: newv, schoolId, userId});
       if (oldObj) oldObj.set(key, newObj[key]);
     }
