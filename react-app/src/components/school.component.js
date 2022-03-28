@@ -1132,11 +1132,10 @@ export default class School extends Component {
 
                 <div class="w-100"></div>
 
-                <div class="form-group col-sm-4">
+                <div class="form-group col-sm-4" hidden={!AuthService.getCurrentUser()}>
                   <label htmlFor="principalId">校长</label>
                   {!this.state.readonly
                   ? (<Select onChange={this.onChangePrincipalId.bind(this)}
-                    readonly={this.state.readonly?"":false}
                     class="form-control"
                     id="principalId"
                     value={this.display(currentSchool.principalId)}
@@ -1152,11 +1151,10 @@ export default class School extends Component {
                   </Link>)}
                 </div>
 
-                <div class="form-group col-sm-4">
+                <div class="form-group col-sm-4" hidden={!AuthService.getCurrentUser()}>
                   <label htmlFor="contactId">联络人</label>
                   {!this.state.readonly
                   ? (<Select onChange={this.onChangeContactId.bind(this)}
-                    readonly={this.state.readonly?"":false}
                     class="form-control"
                     id="contactId"
                     value={this.display(currentSchool.contactId)}
