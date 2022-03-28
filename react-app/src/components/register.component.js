@@ -461,6 +461,10 @@ export default class Register extends Component {
       let response = await SchoolDataService.getPrincipal(this.state.schoolId);
 
       let principal = prompt("请输入校长姓名", "");
+
+      console.log('user input principal: ' + principal);
+      console.log('db retrieved principal: ' + response.data.principal);
+
       if (!principal) return false;
 
       if (principal === response.data.principal)
