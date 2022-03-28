@@ -297,7 +297,8 @@ export default class School extends Component {
     this.setState(prevState => ({
       currentSchool: {
         ...prevState.currentSchool,
-        principalId: e.value //.target.value
+        principalId: e.value, //.target.value
+        principal: this.displayName(e.value)
       }
     }));
   }
