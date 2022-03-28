@@ -418,15 +418,15 @@ const UsersList = (props) => {
 
   return (
     <div className="list row">
-      <div className="col-sm-10">
+      <div className="col-sm-7">
         <h4>{schoolTitle ? schoolTitle + " - " : ""}用户列表(总数：{totalItems})</h4>
-        <div className="input-group mb-3">
+        <div className="row mb-3">
           <select
-            className="form-control"
+            className="form-control col-sm-2"
             value={searchRole}
             onChange={onChangeSearchRole}
           >
-            <option value="">角色查询</option>
+            <option value="">角色</option>
             {rolesFull.map((option) => (
               <option value={option.name}>
                 {option.label}
@@ -436,30 +436,32 @@ const UsersList = (props) => {
 
           {!schoolId && (<input
             type="text"
-            className="form-control ml-2"
-            placeholder="学校编码"
+            className="form-control col-sm-2 ml-2"
+            placeholder="学校编号"
             value={searchSchoolCode}
             onChange={onChangeSearchSchoolCode}
           />)}
 
           <input
             type="text"
-            className="form-control ml-2"
+            className="form-control col-sm-4 ml-2"
+            placeholder="电子邮件"
+            value={searchEmail}
+            onChange={onChangeSearchEmail}
+          />
+        </div>
+
+        <div className="row mb-3">
+          <input
+            type="text"
+            className="form-control col-sm-3"
             placeholder="用户名/中文名"
             value={searchUsername}
             onChange={onChangeSearchUsername}
           />
 
-          <input
-            type="text"
-            className="form-control ml-2"
-            placeholder="电子邮件"
-            value={searchEmail}
-            onChange={onChangeSearchEmail}
-          />
-
           <select
-            className="form-control ml-2"
+            className="form-control col-sm-2 ml-2"
             value={searchContactOnly}
             onChange={onChangeSearchContactOnly}
           >
@@ -473,7 +475,7 @@ const UsersList = (props) => {
           </select>
 
           <select
-            className="form-control ml-2"
+            className="form-control col-sm-2 ml-2"
             value={searchEmailVerified}
             onChange={onChangeSearchEmailVerified}
           >
@@ -498,7 +500,7 @@ const UsersList = (props) => {
 
         </div>
 
-        <div className="input-group mb-4">
+        <div className="row mb-4">
           <button
             className="btn btn-primary mr-2"
             type="button"
@@ -511,13 +513,10 @@ const UsersList = (props) => {
             href={"/addU?schoolId=" + schoolId} class="btn btn-primary ">
               新建联络方式
           </a>)}
-
         </div>
-
-
       </div>
 
-      <div className="mb-3 col-sm-2">
+      <div className="mt-3 col-sm-5">
         {"每页显示行数: "}
         <select onChange={handlePageSizeChange} value={pageSize}>
           {pageSizes.map((size) => (
@@ -537,9 +536,6 @@ const UsersList = (props) => {
           shape="rounded"
           onChange={handlePageChange}
         />
-
-
-
       </div>
 
       <div class="w-100"></div>
