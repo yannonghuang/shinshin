@@ -40,13 +40,15 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t) => {
     var newv = newObj[key];
     var oldv = oldObj ? oldObj[key] : null;
 
-    if (key == 'startAt' && newv && oldv) {
+    if ((key === 'startAt' || key === 'lastVisit') && newv && oldv) {
       newv = JSON.stringify(newv).substring(1, 5);
       oldv = JSON.stringify(oldv).substring(1, 5);
     }
 
     //if (newv && (!oldObj || !oldObj[key] || (oldv != newv))) {
-    if ((newv !== undefined) && (!oldObj || !oldObj[key] || (oldv != newv))) {
+    if (getAttributes(School).includes(key) &&
+        (newv && newv !== undefined)
+        && (!oldObj || !oldObj[key] || (oldv != newv))) {
       updates.push({field: key, oldv: oldv, newv: newv, schoolId, userId});
       if (oldObj) oldObj.set(key, newObj[key]);
     }
