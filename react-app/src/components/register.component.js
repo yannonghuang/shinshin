@@ -462,6 +462,7 @@ export default class Register extends Component {
 
       let principal = prompt("请输入校长姓名", "");
 
+      console.log(response);
       console.log('user input principal: ' + principal);
       console.log('db retrieved principal: ' + response.data.principal);
 
