@@ -56,11 +56,30 @@ app.get("*", (req, res) => {
   );
 });
 
-// set port, listen for requests
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
-});
+if (process.argv[2] && process.argv[2] === 'secure') {
+  // SECURE: Import builtin NodeJS modules to instantiate the service
+  const https = require("https");
+  const fs = require("fs");
+  const SECURE_PORT = process.env.SECURE_PORT || 443;
+  https.createServer(
+    // Provide the private and public key to the server by reading each
+	// file's content with the readFileSync() method.
+    {
+      key: fs.readFileSync("./security/key.pem"),
+      cert: fs.readFileSync("./security/cert.pem"),
+    },
+    app
+  )
+  .listen(SECURE_PORT, () => {
+    console.log(`Server is running on port ${SECURE_PORT}`);
+  });
+} else {
+  // NON-SECURE: set port, listen for requests
+  const PORT = process.env.PORT || 8080;
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}.`);
+  });
+}
 
 function initial() {
 
