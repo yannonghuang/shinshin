@@ -528,6 +528,7 @@ exports.findExport = async (req, res) => {
 
         {
            model: User,
+           as: 'users',
            attributes: [['chineseName', 'principalId'], ['phone', 'principalPhone'], ['wechat', 'principalWechat']],
            required: false,
            where: db.Sequelize.literal('surveys.principalId = users.id')

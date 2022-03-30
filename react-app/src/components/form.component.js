@@ -140,7 +140,6 @@ export default class Form extends Component {
     FormDataService.get(id)
       .then(response => {
 
-
       const {startAt, ...others} = response.data;
         this.setState({
           //currentForm: response.data
