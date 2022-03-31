@@ -4,6 +4,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING
     },
     fdata: {
+      //type: Sequelize.TEXT,
       type: Sequelize.JSON,
     },
     startAt: {

@@ -10,6 +10,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.BOOLEAN
     },
     fdata: {
+      //type: Sequelize.TEXT,
       type: Sequelize.JSON,
     },
     deadline: {
