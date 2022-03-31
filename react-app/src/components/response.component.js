@@ -140,7 +140,9 @@ export default class Response extends Component {
       .then(response => {
 
       try {
-        const formData = JSON.stringify(response.data.fdata);
+        //const formData = JSON.stringify(response.data.fdata);
+        var formData = response.data.fdata;
+        if (!((typeof formData) === "string")) formData = JSON.stringify(response.data.fdata);
         this.fRender = $(this.fb.current).formRender({ formData });
       } catch (e) {
         alert(e);
@@ -176,7 +178,9 @@ export default class Response extends Component {
     ResponseDataService.get(id)
       .then(response => {
         try {
-          const formData = JSON.stringify(response.data.fdata);
+          //const formData = JSON.stringify(response.data.fdata);
+          var formData = response.data.fdata;
+          if (!((typeof formData) === "string")) formData = JSON.stringify(response.data.fdata);
           this.fRender = $(this.fb.current).formRender({ formData });
           //this.fRender = $(this.fb.current).formRender(this.state.currentResponse.fdata);
           if (readonly)

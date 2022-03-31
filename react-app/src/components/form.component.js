@@ -151,8 +151,12 @@ export default class Form extends Component {
 
         });
 
+        console.log(response.data);
+
         if (readonly) {
-          const formData = JSON.stringify(response.data.fdata);
+          var formData = response.data.fdata;
+          if (!((typeof formData) === "string")) formData = JSON.stringify(response.data.fdata);
+          //this.fRender = $(this.fb.current).formRender({formData: response.data.fdata });
           this.fRender = $(this.fb.current).formRender({ formData });
         } else {
           $(this.fb.current).formBuilder(this.oldFormOptions).promise
@@ -161,7 +165,7 @@ export default class Form extends Component {
               this.fBuilder = formBuilder;
             });
         }
-        console.log(response.data);
+
       })
       .catch(e => {
         console.log(e);
