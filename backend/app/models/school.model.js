@@ -12,6 +12,9 @@ module.exports = (sequelize, Sequelize) => {
     principal: {
       type: Sequelize.STRING
     },
+    contact: {
+      type: Sequelize.STRING
+    },
     photo: {
       type: Sequelize.BLOB('medium')
     },
