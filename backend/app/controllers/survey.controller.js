@@ -2,6 +2,7 @@ const db = require("../models");
 const Survey = db.surveys;
 const Op = db.Sequelize.Op;
 const User = db.user;
+const Log = db.logs;
 
 const getPagination = (page, size) => {
   const limit = size ? +size : 3;
@@ -18,6 +19,41 @@ const getPagingData = (data, page, limit) => {
   return { totalItems, surveys, totalPages, currentPage };
 };
 
+const updateAndLog = async (newObj, oldObj, schoolId, userId, t) => {
+  var updates = [];
+  Object.keys(newObj).forEach(key => {
+    var newv = newObj[key];
+    var oldv = oldObj ? oldObj[key] : null;
+
+    if ((key === 'startAt' || key === 'lastVisit') && newv && oldv) {
+      newv = JSON.stringify(newv).substring(1, 5);
+      oldv = JSON.stringify(oldv).substring(1, 5);
+    }
+
+    if ((key !== 'createdAt' && key !== 'updatedAt') &&
+        getAttributes(Survey).includes(key) &&
+        (newv && newv !== undefined) &&
+        (!oldObj || !oldObj[key] || (oldv != newv))) {
+      updates.push({field: key, oldv: oldv, newv: newv, schoolId, userId});
+      if (oldObj) oldObj.set(key, newObj[key]);
+    }
+  });
+
+  try {
+    if (oldObj) await oldObj.save({ transaction: t });
+    await Log.bulkCreate(updates, { transaction: t });
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
+    throw error;
+  }
+};
+
+const getAttributes = (model) => {
+  result = [];
+  for( let key in model.rawAttributes ) result.push(key);
+  return result;
+}
 
 // Create and Save a new Survey
 exports.create = (req, res) => {
@@ -167,9 +203,43 @@ exports.findOne = (req, res) => {
     });
 };
 
+// Update a survey by school id in the request
+exports.update = async (req, res) => {
+  if (!req.body.schoolId) {
+    res.status(400).send({
+      message: "学校ID必须提供!"
+    });
+    return;
+  }
+
+  const schoolId = req.body.schoolId;
+  const userId = req.userId;
+  const newObj = req.body;
+
+  try {
+    const t = await db.sequelize.transaction();
+    let oldObj = await Survey.findOne({where: {schoolId: schoolId}, limit: 1}, {transaction: t});
+    if (oldObj) {
+      await updateAndLog(newObj, oldObj, schoolId, userId, t);
+      res.send({
+        message: "Survey was updated successfully."
+      });
+    } else {
+      console.log("Cannot update Survey with school id=${schoolId}. Maybe Survey was not found or req.body is empty!");
+      res.send({
+        message: "Cannot update Survey with school id=${schoolId}. Maybe Survey was not found or req.body is empty!"
+      });
+    }
+  } catch(err) {
+    console.log(err.message || "Error updating Survey with school id=" + schoolId);
+    res.status(500).send({
+      message: err.message || "Error updating Survey with school id=" + schoolId
+    });
+  }
+};
 
 // Update a Survey by the id in the request
-exports.update = (req, res) => {
+exports.SAVE_update = (req, res) => {
   if (!req.body.schoolId) {
     res.status(400).send({
       message: "学校必须填写!"
