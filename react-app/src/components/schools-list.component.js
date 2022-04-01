@@ -279,8 +279,15 @@ const SchoolsList = (props) => {
         link.click();
         link.remove();
       })
-      .catch((e) => {
-        console.log(e);
+      .catch(error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        console.log(error);
+        console.log(resMessage);
       });
   };
 
