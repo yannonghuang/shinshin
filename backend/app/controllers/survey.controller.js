@@ -1,8 +1,10 @@
 const db = require("../models");
 const Survey = db.surveys;
+const School = db.schools;
 const Op = db.Sequelize.Op;
 const User = db.user;
 const Log = db.logs;
+const { authJwt } = require("../middleware");
 
 const getPagination = (page, size) => {
   const limit = size ? +size : 3;
@@ -19,22 +21,19 @@ const getPagingData = (data, page, limit) => {
   return { totalItems, surveys, totalPages, currentPage };
 };
 
-const updateAndLog = async (newObj, oldObj, schoolId, userId, t) => {
+const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
   var updates = [];
   Object.keys(newObj).forEach(key => {
     var newv = newObj[key];
     var oldv = oldObj ? oldObj[key] : null;
 
-    if ((key === 'startAt' || key === 'lastVisit') && newv && oldv) {
-      newv = JSON.stringify(newv).substring(1, 5);
-      oldv = JSON.stringify(oldv).substring(1, 5);
-    }
-
     if ((key !== 'createdAt' && key !== 'updatedAt') &&
         getAttributes(Survey).includes(key) &&
         (newv && newv !== undefined) &&
         (!oldObj || !oldObj[key] || (oldv != newv))) {
-      updates.push({field: key, oldv: oldv, newv: newv, schoolId, userId});
+      if ((authJwt.getSchoolId(req) && key !== 'contactId' && key !== 'principalId') || // school user
+        !getAttributes(School).includes(key))
+        updates.push({field: key, oldv: oldv, newv: newv, schoolId, userId});
       if (oldObj) oldObj.set(key, newObj[key]);
     }
   });
@@ -220,7 +219,7 @@ exports.update = async (req, res) => {
     const t = await db.sequelize.transaction();
     let oldObj = await Survey.findOne({where: {schoolId: schoolId}, limit: 1}, {transaction: t});
     if (oldObj) {
-      await updateAndLog(newObj, oldObj, schoolId, userId, t);
+      await updateAndLog(newObj, oldObj, schoolId, userId, t, req);
       res.send({
         message: "Survey was updated successfully."
       });

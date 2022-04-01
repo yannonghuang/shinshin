@@ -626,7 +626,8 @@ export default class Survey extends Component {
     this.setState(prevState => ({
       currentSurvey: {
         ...prevState.currentSurvey,
-        principalId: e.value //.target.value
+        principalId: e.value, //.target.value
+        principal: this.displayNameUser(e.value)
       }
     }));
   }
@@ -635,7 +636,8 @@ export default class Survey extends Component {
     this.setState(prevState => ({
       currentSurvey: {
         ...prevState.currentSurvey,
-        contactId: e.value //.target.value
+        contactId: e.value, //.target.value
+        contact: this.displayNameUser(e.value)
       }
     }));
   }

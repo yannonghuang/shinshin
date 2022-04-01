@@ -49,44 +49,13 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t) => {
     if (getAttributes(School).includes(key) &&
         (newv && newv !== undefined) &&
         (!oldObj || !oldObj[key] || (oldv != newv))) {
-      updates.push({field: key, oldv: oldv, newv: newv, schoolId, userId});
-      if (oldObj) oldObj.set(key, newObj[key]);
-    }
-  });
-
-  try {
-    if (oldObj) await oldObj.save({ transaction: t });
-    await Log.bulkCreate(updates, { transaction: t });
-    await t.commit();
-  } catch (error) {
-    await t.rollback();
-    throw error;
-  }
-};
-
-const SAVE_updateAndLog = async (newObj, oldObj, schoolId, userId, t) => {
-  var updates = [];
-  Object.keys(newObj).forEach(key => {
-    var newv = null;
-    if (newObj[key]) newv = JSON.stringify(newObj[key]).trim();
-    var oldv = null;
-    if (oldObj && oldObj[key]) oldv = JSON.stringify(oldObj[key]).trim();
-
-    if (newv &&
-        (!oldObj || !oldObj[key] || (oldv != newv))
-        ) {
-      if (key == 'startAt') { // ugly, but for datetype handling)
-        if (oldv && (oldv.substring(0, 5) != newv.substring(0, 5)))
-        updates.push({field: key, oldv: oldv.substring(0, 5), newv: newv.substring(0, 5), schoolId, userId});
-      } else
+      if ((key !== 'contactId' && key !== 'principalId'))
         updates.push({field: key, oldv: oldv, newv: newv, schoolId, userId});
-
       if (oldObj) oldObj.set(key, newObj[key]);
     }
   });
 
   try {
-    //const t = await db.sequelize.transaction();
     if (oldObj) await oldObj.save({ transaction: t });
     await Log.bulkCreate(updates, { transaction: t });
     await t.commit();
@@ -528,7 +497,6 @@ exports.findExport = async (req, res) => {
 
         {
            model: User,
-           as: 'users',
            attributes: [['chineseName', 'principalId'], ['phone', 'principalPhone'], ['wechat', 'principalWechat']],
            required: false,
            where: db.Sequelize.literal('surveys.principalId = users.id')
