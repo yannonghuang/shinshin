@@ -538,7 +538,7 @@ exports.findExport = async (req, res) => {
            as: 'Utilisateurs',
            attributes: [['chineseName', 'contactId'], ['phone', 'contactPhone'], ['wechat', 'contactWechat']],
            required: false,
-           where: db.Sequelize.literal('surveys.contactId = utilisateurs.id')
+           where: db.Sequelize.literal('surveys.contactId = Utilisateurs.id')
         },
     ];
 
