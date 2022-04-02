@@ -762,26 +762,53 @@ exports.update = async (req, res) => {
 };
 
 // Delete a school with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
   const id = req.params.id;
 
+  try {
+    await Survey.destroy({
+      where: { schoolId: id },
+      force: true
+    });
+
+    await School.destroy({
+      where: { id: id }
+    });
+
+    res.send({
+      message: "School & associated survey was deleted successfully!"
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: error.message || " Could not delete School with id=" + id
+    });
+  }
+
+/**
   School.destroy({
     where: { id: id }
   })
     .then(schoolN => {
       if (schoolN == 1) {
+        res.send({
+          message: "School & associated survey was deleted successfully!"
+        });
 
         Survey.destroy({
-          where: { schoolId: id }
+          where: { schoolId: id },
+          force: true
         })
-          .then(surveyN => {
-            res.send({
-              message: "School & associated survey was deleted successfully!"
-            });
-          })
-          .catch(e => {
-            res.status(500).send({
-              message: "Could not delete School with id=" + id
+        .then(surveyN => {
+          console.log('Number of survey instances deleted: ' + surveyN);
+          res.send({
+            message: "School & associated survey was deleted successfully!"
+          });
+        })
+        .catch(e => {
+          console.log(e);
+          res.status(500).send({
+            message: "Could not delete School with id=" + id
           })
         });
       } else {
@@ -795,6 +822,7 @@ exports.delete = (req, res) => {
         message: "Could not delete School with id=" + id
       });
     });
+*/
 };
 
 
