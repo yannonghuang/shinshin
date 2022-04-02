@@ -132,12 +132,16 @@ class App extends Component {
                 <a class="dropdown-item" href={"/schools"}>学校列表</a>
                 <a class="dropdown-item" href={"/regions"}>地区列表</a>
                 <a class="dropdown-item" href={"/addS"}>新增学校</a>
+{/*
                 <a class="dropdown-item" href={"/addSurvey"}>新增调查表</a>
+*/}
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href={"/documents"}>学校文档</a>
                 <a class="dropdown-item" href={"/comments"}>留言</a>
                 <a class="dropdown-item" href={"/logs"}>修改记录</a>
+{/*
                 <a class="dropdown-item" href={"/surveys"}>调查表列表</a>
+*/}
               </div>
             </li>)}
 
