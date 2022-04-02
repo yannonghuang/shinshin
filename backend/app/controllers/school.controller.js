@@ -768,10 +768,21 @@ exports.delete = (req, res) => {
   School.destroy({
     where: { id: id }
   })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "School was deleted successfully!"
+    .then(schoolN => {
+      if (schoolN == 1) {
+
+        Survey.destroy({
+          where: { schoolId: id }
+        })
+          .then(surveyN => {
+            res.send({
+              message: "School & associated survey was deleted successfully!"
+            });
+          })
+          .catch(e => {
+            res.status(500).send({
+              message: "Could not delete School with id=" + id
+          })
         });
       } else {
         res.send({
