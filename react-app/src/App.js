@@ -130,7 +130,7 @@ class App extends Component {
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href={"/schools"}>学校列表</a>
-                <a class="dropdown-item" href={"/regions"}>地区列表</a>
+                <a class="dropdown-item" href={"/regions"} hidden={!currentUser}>地区列表</a>
                 <a class="dropdown-item" href={"/addS"} hidden={!currentUser} >新增学校</a>
 {/*
                 <a class="dropdown-item" href={"/addSurvey"}>新增调查表</a>
