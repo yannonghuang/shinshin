@@ -203,9 +203,10 @@ export default class Login extends Component {
             error.message ||
             error.toString();
 
+          console.log(resMessage);
           this.setState({
             loading: false,
-            message: resMessage
+            message: '登录失败，请确认用户名/密码正确'
           });
         }
       );
