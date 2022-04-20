@@ -167,11 +167,15 @@ class App extends Component {
                 项目申请
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+{/*
                 <a class="dropdown-item" href={"/responses"}>项目申请列表</a>
-                <a class="dropdown-item" href={"/forms"}>项目征集列表</a>
-                <a class="dropdown-item" href={"/addF"}>新增项目征集</a>
+*/}
+                <a class="dropdown-item" href={"/forms"}>项目申请表</a>
+                <a class="dropdown-item" href={"/addF"}>新增项目申请表</a>
+{/*
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href={"/attachments"}>项目申请附件</a>
+*/}
               </div>
             </li>)}
 
