@@ -265,7 +265,7 @@ const FormsList = (props) => {
   return (
     <div className="list row">
       <div className="col-sm-8">
-        <h4>项目征集列表(总数：{totalItems})</h4>
+        <h4>项目申请表(总数：{totalItems})</h4>
         <div className="input-group mb-3">
           <input
             type="text"
