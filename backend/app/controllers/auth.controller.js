@@ -485,6 +485,7 @@ exports.reset = (req, res) => {
 
       user.update({
         password: bcrypt.hashSync(req.body.password, 8),
+        emailVerified: 1
       })
       .then(r => {
         //console.log(r);
