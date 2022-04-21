@@ -37,10 +37,11 @@ class AuthService {
 */
   }
 
-  findByEmail(email) {
+  findByEmail(email, emailVerified = false) {
     return axios
       .post(API_URL + "findByEmail", {
         email,
+        emailVerified
       });
   }
 

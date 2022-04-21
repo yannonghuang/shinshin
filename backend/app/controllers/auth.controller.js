@@ -405,6 +405,17 @@ exports.signin = (req, res) => {
         });
       }
 
+      if (!user.emailVerified) {
+        return res.status(401).send({
+          notEmailVerified: true,
+          accessToken: null,
+          username: user.username,
+          chineseName: user.chineseName,
+          email: user.email,
+          message: "email not verified!!!"
+        });
+      }
+
       var token = jwt.sign({ id: user.id }, config.secret, {
         expiresIn: config.validity //86400  24 hours
       });
@@ -412,7 +423,7 @@ exports.signin = (req, res) => {
       const lastLastLogin = user.lastLogin;
       user.update({
         lastLogin: db.sequelize.literal('CURRENT_TIMESTAMP'),
-        emailVerified: 1
+        //emailVerified: 1
       });
 
       var authorities = [];
@@ -498,8 +509,12 @@ exports.findByEmail = (req, res) => {
     .then(user => {
       if (!user)
         res.status(404).send({ message: "User Not found." });
-      else
+      else {
+        if (req.body.emailVerified)
+          user.update({emailVerified: 1});
+
         res.status(200).send(user);
+      }
     })
     .catch(err => {
       res.status(500).send({ message: err.message });

@@ -114,7 +114,7 @@ export default class Login extends Component {
 
 
   handleEmailVerification(email) {
-      AuthService.findByEmail(email)
+      AuthService.findByEmail(email, true)
       .then(r => {
         this.setState({
           username: r.data.username
@@ -127,7 +127,57 @@ export default class Login extends Component {
       });
   }
 
+
+  sendEmail(user, message) {
+
+    var token = jwt.sign({ email: user.email }, "config.secret", {
+      expiresIn: 900 // 15 minutes
+    });
+
+    const url = window.location.host;
+
+    var templateParams = {
+      to: user.email,
+      username: user.chineseName ? user.chineseName : user.username,
+      link: url + "/reset?token=" + token
+    };
+
+    emailjs.send("icloud_2021_12_27","template_ae0k3bj", templateParams)
+    .then((result) => {
+      console.log(result.text);
+      this.setState({
+        message: message //"邮件已发至您的邮箱，请在15分钟内完成密码重置。。。"
+      });
+      }, (error) => {
+        console.log(error.text);
+        this.setState({
+          message: error.text
+        });
+      });
+  }
+
   handleReset(e) {
+    e.preventDefault();
+
+    if (this.state.email) {
+      AuthService.findByEmail(this.state.email)
+      .then(r => {
+        this.sendEmail(r, "邮件已发至您的邮箱，请在15分钟内完成密码重置。。。");
+      })
+      .catch(e => {
+        this.setState({
+          message: '您的注册邮箱地址有误，请提供正确的注册邮箱 。。。' //+ e.toString()
+        });
+      });
+    } else {
+      this.setState({
+        message: '请提供注册邮箱 。。。'
+      });
+    }
+  }
+
+
+  SAVE_handleReset(e) {
     e.preventDefault();
 
     if (this.state.email) {
@@ -208,10 +258,15 @@ export default class Login extends Component {
             error.toString();
 
           console.log(resMessage);
-          this.setState({
-            loading: false,
-            message: '登录失败，请确认用户名/密码正确'
-          });
+
+          if (error.response.data.notEmailVerified) {
+            this.sendEmail(error.response.data, "您尚未确认邮箱地址。确认邮件已发至您的邮箱，请在15分钟内完成确认回执 。。。");
+          } else {
+            this.setState({
+              loading: false,
+              message: '登录失败，请确认用户名/密码正确'
+            });
+          }
         }
       );
     } else {
