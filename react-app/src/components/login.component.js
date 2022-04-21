@@ -128,10 +128,9 @@ export default class Login extends Component {
   }
 
 
-  sendEmail(user, message) {
+  sendEmail(user, message, isReset) {
 
     this.setState({
-      message: "准备发邮件",
       loading: true
     });
 
@@ -144,7 +143,7 @@ export default class Login extends Component {
     var templateParams = {
       to: user.email,
       username: user.chineseName ? user.chineseName : user.username,
-      link: url + "/reset?token=" + token
+      link: url + "/" + (isReset ? "reset" : "login") + "?token=" + token
     };
 
     emailjs.send("icloud_2021_12_27","template_ae0k3bj", templateParams)
@@ -169,7 +168,9 @@ export default class Login extends Component {
     if (this.state.email) {
       AuthService.findByEmail(this.state.email)
       .then(r => {
-        this.sendEmail(r.data, "邮件已发至您的邮箱，请在15分钟内完成密码重置。。。");
+        this.sendEmail(r.data,
+          "邮件已发至您的邮箱，请在15分钟内完成密码重置。。。",
+          true);
       })
       .catch(e => {
         this.setState({
@@ -269,7 +270,9 @@ export default class Login extends Component {
           console.log(resMessage);
 
           if (error.response.data.notEmailVerified) {
-            this.sendEmail(error.response.data, "您尚未确认邮箱地址。确认邮件已发至您的邮箱，请在15分钟内完成确认回执 。。。");
+            this.sendEmail(error.response.data,
+              "您尚未确认邮箱地址。确认邮件已发至您的邮箱，请在15分钟内完成确认回执 。。。",
+              false);
           } else {
             this.setState({
               //loading: false,
