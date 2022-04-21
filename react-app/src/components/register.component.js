@@ -520,8 +520,9 @@ export default class Register extends Component {
         response => {
           this.emailVerification();
 
+          console.log(response.data.message);
           this.setState({
-            message: response.data.message,
+            message: "成功创建账号，待邮件确认。。。", //response.data.message,
             successful: true
           });
         },
