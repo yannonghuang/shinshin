@@ -130,6 +130,11 @@ export default class Login extends Component {
 
   sendEmail(user, message) {
 
+    this.setState({
+      message: "准备发邮件",
+      loading: true
+    });
+
     var token = jwt.sign({ email: user.email }, "config.secret", {
       expiresIn: 900 // 15 minutes
     });
@@ -146,12 +151,14 @@ export default class Login extends Component {
     .then((result) => {
       console.log(result.text);
       this.setState({
-        message: message //"邮件已发至您的邮箱，请在15分钟内完成密码重置。。。"
+        message: message, //"邮件已发至您的邮箱，请在15分钟内完成密码重置。。。",
+        loading: false
       });
       }, (error) => {
         console.log(error.text);
         this.setState({
-          message: error.text
+          message: error.text,
+          loading: false
         });
       });
   }
@@ -162,7 +169,7 @@ export default class Login extends Component {
     if (this.state.email) {
       AuthService.findByEmail(this.state.email)
       .then(r => {
-        this.sendEmail(r, "邮件已发至您的邮箱，请在15分钟内完成密码重置。。。");
+        this.sendEmail(r.data, "邮件已发至您的邮箱，请在15分钟内完成密码重置。。。");
       })
       .catch(e => {
         this.setState({
@@ -223,10 +230,12 @@ export default class Login extends Component {
   handleLogin(e) {
     e.preventDefault();
 
+/**
     this.setState({
       message: "",
       loading: true
     });
+*/
 
     this.form.validateAll();
 
@@ -263,16 +272,18 @@ export default class Login extends Component {
             this.sendEmail(error.response.data, "您尚未确认邮箱地址。确认邮件已发至您的邮箱，请在15分钟内完成确认回执 。。。");
           } else {
             this.setState({
-              loading: false,
+              //loading: false,
               message: '登录失败，请确认用户名/密码正确'
             });
           }
         }
       );
     } else {
+/**
       this.setState({
         loading: false
       });
+*/
     }
   }
 

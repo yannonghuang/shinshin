@@ -560,7 +560,9 @@ export default class Register extends Component {
       .then((result) => {
         console.log(result.text);
         this.setState({
-          message: "注册确认邮件已发至您的邮箱 。。。",
+          message: "注册确认邮件已发至" +
+                    (AuthService.getCurrentUser() ? "新用户" : "您的注册") +
+                    "邮箱 。。。",
           successful: true
         });
       }, (error) => {
