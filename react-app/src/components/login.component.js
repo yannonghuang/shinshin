@@ -163,6 +163,10 @@ export default class Login extends Component {
           message: '您的注册邮箱地址有误，请提供正确的注册邮箱 。。。' //+ e.toString()
         });
       });
+    } else {
+      this.setState({
+        message: '请提供注册邮箱 。。。'
+      });
     }
   }
 
