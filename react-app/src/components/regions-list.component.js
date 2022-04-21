@@ -162,7 +162,9 @@ const RegionsList = (props) => {
 */}
       </div>
 
+
       <div className="col-sm-12 list">
+{/*}
         <div className="mt-3">
           {"每页显示行数: "}
           <select onChange={handlePageSizeChange} value={pageSize}>
@@ -184,6 +186,7 @@ const RegionsList = (props) => {
             onChange={handlePageChange}
           />
         </div>
+*/}
 
         <table
           className="table table-striped table-bordered"
