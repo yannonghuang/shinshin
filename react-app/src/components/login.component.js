@@ -34,7 +34,7 @@ export default class Login extends Component {
     this.onReset = this.onReset.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.handleEmailVerification = this.handleEmailVerification.bind(this);
-
+    this.toggle = this.toggle.bind(this);
 
     this.state = {
       username: "",
@@ -46,7 +46,6 @@ export default class Login extends Component {
 
     };
 
-    this.init();
   }
 
   componentDidMount() {
@@ -68,7 +67,10 @@ export default class Login extends Component {
       this.setState({
         username: username
       });
+
+    this.init();
   }
+
 
   init() {
     $(document).ready(function() {
@@ -85,7 +87,23 @@ export default class Login extends Component {
           $('#password').attr('type','password');
         }
       });
+
     });
+  }
+
+
+  toggle(e) {
+    e.preventDefault();
+
+    if($('#toggle').hasClass('fas fa-eye-slash')) {
+      $('#toggle').removeClass('fas fa-eye-slash');
+      $('#toggle').addClass('fas fa-eye');
+      $('#password').attr('type','text');
+    } else {
+      $('#toggle').removeClass('fas fa-eye');
+      $('#toggle').addClass('fas fa-eye-slash');
+      $('#password').attr('type','password');
+    }
   }
 
   onChangeUsername(e) {
@@ -274,9 +292,10 @@ export default class Login extends Component {
               "您尚未确认邮箱地址。确认邮件已发至您的邮箱，请在15分钟内完成确认回执 。。。",
               false);
           } else {
+            alert('登录失败，请确认用户名/密码正确');
             this.setState({
               //loading: false,
-              message: '登录失败，请确认用户名/密码正确'
+              //message: '登录失败，请确认用户名/密码正确'
             });
           }
         }
@@ -292,6 +311,7 @@ export default class Login extends Component {
 
 
   render() {
+
     return (
     <div>
     { /* AuthService.getCurrentUser() */ AuthService.isValid()
