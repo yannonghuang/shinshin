@@ -80,6 +80,13 @@ class App extends Component {
     }
   }
 
+  componentWillReceiveProps = (nextProps)=> {
+    if (nextProps.location.pathname === this.props.location.pathname &&
+      nextProps.location.pathname === '/login') {
+      window.location.reload();
+    }
+  };
+
   logOut() {
     AuthService.logout();
     this.props.history.push('/login');
@@ -101,7 +108,7 @@ class App extends Component {
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
 */}
         <nav class="navbar navbar-expand-sm navbar-dark navbar-custom">
-          <Link to={"/"} onClick={() => window.location.reload()} class="navbar-brand">
+          <Link to={"/login"} class="navbar-brand">
             学校项目管理系统
           </Link>
 
