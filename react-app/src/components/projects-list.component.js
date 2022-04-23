@@ -491,7 +491,7 @@ const ProjectsList = (props) => {
             onChange={onChangeSearchCode}
           />)}
 
-          <select
+          {!embedded && (<select
             className="form-control ml-2"
             placeholder="...."
             value={searchRegion}
@@ -503,7 +503,7 @@ const ProjectsList = (props) => {
             {option}
             </option>
             ))}
-          </select>
+          </select>)}
 
           <div>
             <button

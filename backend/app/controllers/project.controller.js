@@ -220,7 +220,7 @@ exports.findAll2 = async (req, res) => {
               ? null
               : xr === 'true'*/
                 ? { xr: { [Op.eq]: `1` }}
-                : { xr: null },
+                : {[Op.or] : [{ xr: null }, { xr: { [Op.eq]: `0` }}]},
         ]};
 
   var include = [
