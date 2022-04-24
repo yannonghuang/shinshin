@@ -40,6 +40,11 @@ module.exports = function(app) {
     [authJwt.verifyToken],
     forms.copy);
 
+  // publish a Form with id
+  app.get("/api/formsPublish/:id",
+    [authJwt.verifyToken],
+    forms.publish);
+
   // Update a Form with id
   app.put("/api/forms/:id",
     [authJwt.verifyToken],

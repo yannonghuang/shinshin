@@ -44,6 +44,10 @@ class FormDataService {
     return http.delete(`/forms/${id}`, { headers: authHeader() });
   }
 
+  publish(id) {
+    return http.get(`/formsPublish/${id}`, { headers: authHeader() });
+  }
+
   deleteAll() {
     return http.delete(`/forms`, { headers: authHeader() });
   }

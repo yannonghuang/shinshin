@@ -442,6 +442,23 @@ exports.copy = async (req, res) => {
   };
 };
 
+// publish a form with the specified id in the request
+exports.publish = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    await Form.update({published: true}, { where: {id: id }});
+    res.status(200).send({
+      message: "successfully publish Form with id=" + id
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      message: "Could not publish Form with id=" + id
+    });
+  };
+};
+
 // Update a Form by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;

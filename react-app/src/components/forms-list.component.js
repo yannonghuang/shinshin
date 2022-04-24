@@ -146,6 +146,19 @@ const FormsList = (props) => {
       });
   };
 
+  const publishForm = (rowIndex) => {
+    const id = formsRef.current[rowIndex].id;
+
+    FormDataService.publish(id)
+      .then((response) => {
+        refreshList();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+
   const copyForm = async (rowIndex) => {
     const id = formsRef.current[rowIndex].id;
     try {
@@ -247,9 +260,14 @@ const FormsList = (props) => {
                   <i className="far fa-copy action mr-2"></i>
               </span>}
 
+              {AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId &&
+              !formsRef.current[rowIdx].published &&
+                <span onClick={() => window.confirm("您确定发布吗 ?") && publishForm(rowIdx)} >
+                  <i className="fa fa-check action mr-2"></i>
+              </span>}
 
               {AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId &&
-                <span onClick={() => window.confirm("您确定要删除吗 ?") && deleteForm(rowIdx)}>
+                <span onClick={() => window.confirm("您确定要删除吗 ?") && deleteForm(rowIdx)} >
                   <i className="fas fa-trash action"></i>
               </span>}
             </div>
