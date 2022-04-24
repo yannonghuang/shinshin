@@ -151,7 +151,8 @@ const FormsList = (props) => {
 
     FormDataService.publish(id)
       .then((response) => {
-        refreshList();
+        //refreshList();
+        props.history.go(0);
       })
       .catch((e) => {
         console.log(e);
@@ -247,7 +248,7 @@ const FormsList = (props) => {
               <Link title="查看"
                 to={"/formsView/" + formsRef.current[rowIdx].id}
               >
-                <i className="fas fa-eye action mr-2"></i>
+                <i className='fa fa-eye action mr-2' ></i>
               </Link>
 
               {AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId &&
