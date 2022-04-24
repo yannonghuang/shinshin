@@ -237,39 +237,43 @@ const FormsList = (props) => {
             : false;
           return (
             <div>
-              <Link
+              {formsRef.current[rowIdx].published && <Link
                 to={"/addR/" + formsRef.current[rowIdx].id}
                 className= {expired ? "disabled-link" : "badge badge-success mr-2"}
               >
                 {expired ? "逾期 " : "申请"}
-              </Link>
+              </Link>}
 
-              <Link
+              <Link title="查看"
                 to={"/formsView/" + formsRef.current[rowIdx].id}
               >
                 <i className="fas fa-eye action mr-2"></i>
               </Link>
 
               {AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId &&
-                <span onClick={() => openForm(rowIdx)}>
+                <span title="编辑" onClick={() => openForm(rowIdx)}>
                   <i className="far fa-edit action mr-2"></i>
-              </span>}
+                </span>
+              }
 
               {AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId &&
-                <span onClick={() => copyForm(rowIdx)}>
+                <span title="复制" onClick={() => copyForm(rowIdx)}>
                   <i className="far fa-copy action mr-2"></i>
-              </span>}
+                </span>
+              }
 
               {AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId &&
               !formsRef.current[rowIdx].published &&
-                <span onClick={() => window.confirm("您确定发布吗 ?") && publishForm(rowIdx)} >
+                <span title="发布" onClick={() => window.confirm("您确定发布吗 ?") && publishForm(rowIdx)} >
                   <i className="fa fa-check action mr-2"></i>
-              </span>}
+                </span>
+              }
 
               {AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId &&
-                <span onClick={() => window.confirm("您确定要删除吗 ?") && deleteForm(rowIdx)} >
+                <span title="删除" onClick={() => window.confirm("您确定要删除吗 ?") && deleteForm(rowIdx)} >
                   <i className="fas fa-trash action"></i>
-              </span>}
+                </span>
+              }
             </div>
           );
         },
