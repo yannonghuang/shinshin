@@ -335,8 +335,8 @@ export default class Form extends Component {
                 }
               </div>
 
-                <div class="form-group col-md-2">
-                <label htmlFor="published">已发布？</label>
+              <div class="form-group col-md-2">
+                <label htmlFor="published">发布?</label>
                 <input
                 disabled={this.state.readonly?"disabled":false}
                 type="checkbox"
@@ -347,7 +347,7 @@ export default class Form extends Component {
                 onChange={this.onChangePublished}
                 name="published"
                 />
-                </div>
+              </div>
 
             </form>
 

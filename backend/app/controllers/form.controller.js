@@ -431,6 +431,7 @@ exports.copy = async (req, res) => {
   try {
     const f = await Form.findOne({ where: {id: id}, raw:  true, attributes: { exclude: ['id'] } });
     f.title = "复制: " + f.title;
+    f.published = null;
     const newF = await Form.create(f);
     res.send(newF);
   } catch (err) {
