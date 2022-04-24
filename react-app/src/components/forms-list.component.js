@@ -16,6 +16,7 @@ const FormsList = (props) => {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [searchTitle, setSearchTitle] = useState("");
   const [searchStartAt, setSearchStartAt] = useState("");
+  const [searchPublished, setSearchPublished] = useState(null);
 
   const formsRef = useRef();
   formsRef.current = forms;
@@ -45,6 +46,11 @@ const FormsList = (props) => {
     setSearchStartAt(searchStartAt);
   };
 
+  const onChangeSearchPublished = (e) => {
+    const searchPublished = e.target.value;
+    setSearchPublished(searchPublished);
+  };
+
   const getRequestParams = (/*searchTitle, page, pageSize, orderby*/) => {
     let params = {};
 
@@ -64,6 +70,10 @@ const FormsList = (props) => {
       params["size"] = pageSize;
     }
 
+    if (searchPublished) {
+      params["published"] = searchPublished;
+    }
+
     if (orderby) {
       params["orderby"] = orderby;
     }
@@ -74,6 +84,7 @@ const FormsList = (props) => {
   const onClearSearch = (e) => {
     setSearchTitle("");
     setSearchStartAt("");
+    setSearchPublished("");
     setOrderby([]);
   };
 
@@ -95,7 +106,7 @@ const FormsList = (props) => {
       });
   };
 
-  useEffect(retrieveForms, [page, pageSize, orderby, searchTitle, searchStartAt]);
+  useEffect(retrieveForms, [page, pageSize, orderby, searchTitle, searchStartAt, searchPublished]);
 
   const refreshList = () => {
     retrieveForms();
@@ -186,6 +197,18 @@ const FormsList = (props) => {
               >
                 {formsRef.current[rowIdx].responsesCount}
               </Link>
+            </div>
+          );
+        },
+      },
+      {
+        Header: "已发布？",
+        accessor: 'published',
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+                {formsRef.current[rowIdx].published ? '是' : '否'}
             </div>
           );
         },
@@ -309,6 +332,20 @@ const FormsList = (props) => {
             onChange={onChangeSearchTitle}
           />
 
+          <select
+            className="form-control col-sm-2 ml-2"
+            value={searchPublished}
+            onChange={onChangeSearchPublished}
+          >
+            <option value="">已发布?</option>
+              <option value={false}>
+                {'否'}
+              </option>
+              <option value={true}>
+                {'是'}
+              </option>
+          </select>
+
           <div>
             <button
               className="btn btn-primary ml-2"
@@ -367,7 +404,8 @@ const FormsList = (props) => {
                      {column.render('Header')}
                      {/* Add a sort direction indicator */}
                        <span>
-                         {/*column.isSorted*/ (column.id === 'startAt' || column.id === 'deadline' || column.id === 'responsesCount')
+                         {/*column.isSorted*/ (column.id === 'startAt' || column.id === 'deadline' ||
+                         column.id === 'responsesCount' || column.id === 'published')
                            ? column.isSortedDesc
                              ? ' 🔽'
                              : ' 🔼'

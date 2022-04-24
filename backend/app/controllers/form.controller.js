@@ -280,6 +280,7 @@ exports.findAll2 = async(req, res) => {
   const page = req.body.page;
   const size = req.body.size;
   const orderby = req.body.orderby;
+  const published = sid ? 'true' : req.body.published;
 
   var orderbyObject = null;
   if (orderby) {
@@ -296,7 +297,12 @@ exports.findAll2 = async(req, res) => {
   const condition = {
         [Op.and]: [
           title ? { title: { [Op.like]: `%${title}%` } } : null,
-          startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('form.startAt')), `${startAt}`) } } : null
+          startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('form.startAt')), `${startAt}`) } } : null,
+          published === undefined
+            ? null
+            : published === 'true'
+              ? { published: { [Op.eq]: `1` }}
+              : {[Op.or]: [{ published: { [Op.ne]: `1` }}, { published: null }]},
         ]};
 
   const includeCondition = {
@@ -321,6 +327,7 @@ exports.findAll2 = async(req, res) => {
       [db.Sequelize.fn("COUNT", db.Sequelize.col("responses.id")), "responsesCount"],
       [db.Sequelize.fn('date_format', db.Sequelize.col("deadline"), '%Y-%m-%d'), "deadline"],
       "startAt", //[db.Sequelize.fn('date_format', db.Sequelize.col("form.startAt"), '%Y-%m-%d'), "startAt"],
+      "published"
   ],
   include: include,
   group: ['id'],
@@ -398,6 +405,7 @@ exports.findOne = (req, res) => {
       [db.Sequelize.fn('date_format', db.Sequelize.col("deadline"), '%Y-%m-%d'), "deadline"],
       "startAt", //[db.Sequelize.fn('YEAR', db.Sequelize.col('form.startAt')), "startAt"],
       //[db.Sequelize.fn('date_format', db.Sequelize.col("startAt"), '%Y-%m-%d'), "startAt"],
+      "published"
   ]
   })
     .then(data => {

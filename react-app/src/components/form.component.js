@@ -21,7 +21,7 @@ export default class Form extends Component {
     this.onChangeDeadline = this.onChangeDeadline.bind(this);
     this.onChangeStartAt = this.onChangeStartAt.bind(this);
     this.getForm = this.getForm.bind(this);
-    //this.updatePublished = this.updatePublished.bind(this);
+    this.onChangePublished = this.onChangePublished.bind(this);
     this.updateForm = this.updateForm.bind(this);
     this.deleteForm = this.deleteForm.bind(this);
     this.saveForm = this.saveForm.bind(this);
@@ -136,6 +136,16 @@ export default class Form extends Component {
     }));
   }
 
+  onChangePublished(e) {
+    const value = e.target.checked;
+    this.setState(prevState => ({
+      currentForm: {
+        ...prevState.currentForm,
+        published: value
+      }
+    }));
+  }
+
   getForm(id, readonly) {
     FormDataService.get(id)
       .then(response => {
@@ -202,6 +212,7 @@ export default class Form extends Component {
       title: this.state.currentForm.title,
       description: this.state.currentForm.description,
       deadline: this.state.currentForm.deadline,
+      published: this.state.currentForm.published,
       startAt: this.state.currentForm.startAt ? (this.state.currentForm.startAt + '-02-01') : null,
       fdata: this.fBuilder.actions.getData() /* formData */
     };
@@ -231,6 +242,7 @@ export default class Form extends Component {
         description: "",
         deadline: null,
         startAt: null,
+        published: false,
       },
       submitted: false
     }));
@@ -323,7 +335,22 @@ export default class Form extends Component {
                 }
               </div>
 
+                <div class="form-group col-md-2">
+                <label htmlFor="published">已发布？</label>
+                <input
+                disabled={this.state.readonly?"disabled":false}
+                type="checkbox"
+                class="form-control"
+                id="published"
+                required
+                checked={currentForm.published}
+                onChange={this.onChangePublished}
+                name="published"
+                />
+                </div>
+
             </form>
+
           </div>
 
           <div id="fb-editor" ref={this.fb} />
