@@ -40,6 +40,7 @@ module.exports = function(app) {
     //[authJwt.verifyToken],
     projects.findOne);
 
+
   // Retrieve a single Project photo with id
   app.get("/api/projectPhoto/:id",
     [authJwt.verifyToken],

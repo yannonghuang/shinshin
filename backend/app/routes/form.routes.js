@@ -35,6 +35,11 @@ module.exports = function(app) {
     [authJwt.verifyToken],
   forms.findOne);
 
+  // copy a Form with id
+  app.get("/api/formsCopy/:id",
+    [authJwt.verifyToken],
+    forms.copy);
+
   // Update a Form with id
   app.put("/api/forms/:id",
     [authJwt.verifyToken],

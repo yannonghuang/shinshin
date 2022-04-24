@@ -457,6 +457,7 @@ exports.update = (req, res) => {
     });
 };
 
+
 // Delete a project with the specified id in the request
 exports.delete = async (req, res) => {
   const id = req.params.id;

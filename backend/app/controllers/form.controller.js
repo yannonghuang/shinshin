@@ -416,6 +416,23 @@ exports.findOne = (req, res) => {
     });
 };
 
+// copy a form with the specified id in the request
+exports.copy = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const f = await Form.findOne({ where: {id: id}, raw:  true, attributes: { exclude: ['id'] } });
+    f.title = "复制: " + f.title;
+    const newF = await Form.create(f);
+    res.send(newF);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      message: "Could not copy Form with id=" + id
+    });
+  };
+};
+
 // Update a Form by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;

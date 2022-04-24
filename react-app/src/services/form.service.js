@@ -36,6 +36,10 @@ class FormDataService {
     return http.put(`/forms/${id}`, data, { headers: authHeader() });
   }
 
+  copy(id) {
+    return http.get(`/formsCopy/${id}`, { headers: authHeader() });
+  }
+
   delete(id) {
     return http.delete(`/forms/${id}`, { headers: authHeader() });
   }

@@ -135,6 +135,17 @@ const FormsList = (props) => {
       });
   };
 
+  const copyForm = async (rowIndex) => {
+    const id = formsRef.current[rowIndex].id;
+    try {
+      let newF = await FormDataService.copy(id);
+      props.history.push("/forms/" + newF.data.id);
+    } catch(e) {
+      console.log(e);
+      alert(JSON.stringify(e));
+    };
+  };
+
   const columns = useMemo(
     () => [
       {
@@ -207,6 +218,12 @@ const FormsList = (props) => {
                 <span onClick={() => openForm(rowIdx)}>
                   <i className="far fa-edit action mr-2"></i>
               </span>}
+
+              {AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId &&
+                <span onClick={() => copyForm(rowIdx)}>
+                  <i className="far fa-copy action mr-2"></i>
+              </span>}
+
 
               {AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId &&
                 <span onClick={() => window.confirm("您确定要删除吗 ?") && deleteForm(rowIdx)}>

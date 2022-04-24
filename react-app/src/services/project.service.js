@@ -38,6 +38,7 @@ class ProjectDataService {
     return http.get(`/projects/${id}`/*, { headers: authHeader() }*/);
   }
 
+
   getPhoto(id) {
     return http.get(`/projectPhoto/${id}`, { headers: authHeader() });
   }
