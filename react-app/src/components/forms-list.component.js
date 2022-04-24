@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
 
 import { useState, useEffect, useMemo, useRef } from "react";
-import { useTable, useSortBy } from "react-table";
+import { useTable, useSortBy, useFlexLayout } from "react-table";
 
 import YearPicker from 'react-single-year-picker';
 
@@ -196,6 +196,9 @@ const FormsList = (props) => {
       {
         Header: "标题",
         accessor: "title",
+        maxWidth: 320,
+        minWidth: 200,
+        width: 280,
         disableSortBy: true,
       },
       {
@@ -231,6 +234,9 @@ const FormsList = (props) => {
         Header: "操作",
         accessor: "actions",
         disableSortBy: true,
+        maxWidth: 180,
+        minWidth: 120,
+        width: 150,
         Cell: (props) => {
           const rowIdx = props.row.id;
           const expired = formsRef.current[rowIdx].deadline
@@ -304,6 +310,7 @@ const FormsList = (props) => {
       ]
     },
   },
+  useFlexLayout,
   useSortBy);
 
   const findByTitle = () => {
