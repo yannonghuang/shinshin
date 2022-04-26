@@ -442,7 +442,7 @@ const ProjectsList = (props) => {
       ]
     },
   },
-  useFlexLayout,
+  //useFlexLayout,
   useSortBy,
   );
 
