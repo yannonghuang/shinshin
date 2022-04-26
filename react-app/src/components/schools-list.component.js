@@ -586,11 +586,13 @@ const SchoolsList = (props) => {
 
   const columns = useMemo(
     () => [
+/**
       {
         Header: "ID",
         accessor: "id",
         disableSortBy: true,
       },
+*/
       {
         Header: "学校编号",
         accessor: "code",

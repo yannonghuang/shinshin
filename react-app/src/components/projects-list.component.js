@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import ProjectDataService from "../services/project.service";
+import SchoolDataService from "../services/school.service";
 import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
 
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
-import { useTable, useSortBy } from "react-table";
+import { useTable, useSortBy, useFlexLayout } from "react-table";
 
 import YearPicker from 'react-single-year-picker';
 
@@ -22,6 +23,7 @@ const ProjectsList = (props) => {
   const [searchStartAt, setSearchStartAt] = useState("");
 
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
+  const [schoolDisplay, setSchoolDisplay] = useState(null);
 
   const [embedded, setEmbedded] = useState(props.embedded ? props.embedded : false);
 
@@ -199,6 +201,18 @@ const ProjectsList = (props) => {
   const refreshList = () => {
     retrieveProjects();
   };
+
+  const getSchoolDisplay = () => {
+    SchoolDataService.get(schoolId)
+    .then(response => {
+      setSchoolDisplay(response.data.name + '(编号：' + response.data.code + ')');
+    })
+    .catch (err => {
+      console.log(err);
+    });
+  }
+
+  useEffect(getSchoolDisplay, [schoolId]);
 
   const removeAllProjects = () => {
     ProjectDataService.deleteAll()
@@ -428,6 +442,7 @@ const ProjectsList = (props) => {
       ]
     },
   },
+  useFlexLayout,
   useSortBy,
   );
 
@@ -455,7 +470,7 @@ const ProjectsList = (props) => {
     <div className="list row">
       <div className="col-sm-9">
         <h4>
-          {schoolId && !embedded && (<a href={'/schoolsView/' + schoolId}>学校{(schoolId) + '-'}</a>)}
+          {schoolId && !embedded && (<a href={'/schoolsView/' + schoolId}>{schoolDisplay + '-'}</a>)}
           {xr && '向荣支持'}项目列表(总数：{totalItems})
         </h4>
         <div className="input-group mb-3 ">
