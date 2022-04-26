@@ -427,7 +427,8 @@ exports.findAll2 = async (req, res) => {
            model: Project,
            attributes: [],
            required: false,
-           where: { xr: null }
+           //where: { xr: null }
+           where: {[Op.or] : [{ xr: null }, { xr: { [Op.eq]: `0` }}]}
            //include: inner_include,
         },
       ];
