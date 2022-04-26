@@ -501,6 +501,7 @@ const UsersList = (props) => {
         </div>
 
         <div className="row mb-4">
+{/*
           <button
             className="btn btn-primary mr-2"
             type="button"
@@ -508,7 +509,7 @@ const UsersList = (props) => {
           >
             查询
           </button>
-
+*/}
           {schoolId && (<a target="_blank"
             href={"/addU?schoolId=" + schoolId} class="btn btn-primary ">
               新建联络方式
