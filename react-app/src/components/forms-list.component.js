@@ -386,7 +386,7 @@ const FormsList = (props) => {
             </button>
           </div>
         </div>
-
+{/*}
         <div className="input-group mb-3">
           <button
             className="btn btn-primary "
@@ -396,6 +396,7 @@ const FormsList = (props) => {
             查找
           </button>
         </div>
+*/}
       </div>
 
       <div className="mt-3 col-sm-3">
