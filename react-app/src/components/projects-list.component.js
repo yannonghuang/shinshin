@@ -205,7 +205,7 @@ const ProjectsList = (props) => {
   const getSchoolDisplay = () => {
     SchoolDataService.get(schoolId)
     .then(response => {
-      setSchoolDisplay(response.data.name + '(编号：' + response.data.code + ')');
+      setSchoolDisplay('学校' + response.data.code);
     })
     .catch (err => {
       console.log(err);

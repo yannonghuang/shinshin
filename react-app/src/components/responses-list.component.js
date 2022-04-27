@@ -3,6 +3,7 @@ import ResponseDataService from "../services/response.service";
 import AttachmentDataService from "../services/attachment.service";
 import AuthService from "../services/auth.service";
 import ProjectDataService from "../services/project.service";
+import SchoolDataService from "../services/school.service";
 
 import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
@@ -24,6 +25,7 @@ const ResponsesList = (props) => {
 
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
   const [userId, setUserId] = useState(props.match? props.match.params.userId : props.userId);
+  const [schoolDisplay, setSchoolDisplay] = useState(null);
 
   const [orderby, setOrderby] = useState([]);
 
@@ -234,6 +236,18 @@ const ResponsesList = (props) => {
   };
 
   useEffect(retrieveResponses, [page, pageSize, orderby, searchTitle, searchCode, searchStartAt]);
+
+  const getSchoolDisplay = () => {
+    SchoolDataService.get(schoolId)
+    .then(response => {
+      setSchoolDisplay('学校' + response.data.code);
+    })
+    .catch (err => {
+      console.log(err);
+    });
+  }
+
+  useEffect(getSchoolDisplay, [schoolId]);
 
   const refreshList = () => {
     retrieveResponses();
@@ -516,7 +530,7 @@ const ResponsesList = (props) => {
     <div className="list row">
       <div className="col-sm-8">
         <h4>
-          {schoolId && !embedded && (<a href={'/schoolsView/' + schoolId}>学校{(schoolId) + '-'}</a>)}
+          {schoolId && !embedded && (<a href={'/schoolsView/' + schoolId}>{schoolDisplay + '-'}</a>)}
           {title ? (title + '-') : ''}
           项目申请列表(总数：{totalItems})
         </h4>
