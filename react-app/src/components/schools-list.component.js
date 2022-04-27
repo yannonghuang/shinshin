@@ -939,6 +939,7 @@ const SchoolsList = (props) => {
         </div>
 
         <div className="input-group mb-4">
+{/*
           <div>
             <button
               className="btn btn-primary "
@@ -948,6 +949,7 @@ const SchoolsList = (props) => {
               查询
             </button>
           </div>
+*/}
           <div hidden={!currentUser}>
             <button
               className="btn btn-primary ml-2"
