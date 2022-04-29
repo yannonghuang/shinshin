@@ -29,7 +29,7 @@ const multipleUpload = async (req, res) => {
           encoding: req.files[i].encoding,
           mimetype: req.files[i].mimetype,
           destination: req.files[i].destination,
-          filename: req.files[i].destination,
+          filename: req.files[i].filename,
           path: req.files[i].path,
           responseId: req.body.responseId
         };
@@ -74,7 +74,7 @@ const attachmentsUpload = async (req, res) => {
           encoding: req.files[i].encoding,
           mimetype: req.files[i].mimetype,
           destination: req.files[i].destination,
-          filename: req.files[i].destination,
+          filename: req.files[i].filename,
           path: req.files[i].path,
           responseId: req.params.id,
           description: descriptions[i]
@@ -121,7 +121,7 @@ const dossiersUpload = async (req, res) => {
           encoding: req.files[i].encoding,
           mimetype: req.files[i].mimetype,
           destination: req.files[i].destination,
-          filename: req.files[i].destination,
+          filename: req.files[i].filename,
           path: req.files[i].path,
           projectId: projectId,
           docCategory: req.body.docCategory
@@ -169,7 +169,7 @@ const documentsUpload = async (req, res) => {
           encoding: req.files[i].encoding,
           mimetype: req.files[i].mimetype,
           destination: req.files[i].destination,
-          filename: req.files[i].destination,
+          filename: req.files[i].filename,
           path: req.files[i].path,
           schoolId: schoolId,
           docCategory: req.body.docCategory

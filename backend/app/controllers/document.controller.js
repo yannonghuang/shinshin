@@ -2,6 +2,8 @@ const db = require("../models");
 const Document = db.documents;
 const Op = db.Sequelize.Op;
 const fs = require('fs');
+const path = require("path");
+
 const DOCUMENT_CATEGORIES = db.DOCUMENT_CATEGORIES;
 
 const getPagination = (page, size) => {
@@ -19,6 +21,10 @@ const getPagingData = (data, page, limit) => {
   return { totalItems, documents, totalPages, currentPage };
 };
 
+const getPath = (filename) => {
+  return path.join(`${__dirname}/../../upload`, filename);
+}
+
 // Create and Save a new Document
 exports.create = (req, res) => {
   // Validate request
@@ -35,7 +41,7 @@ exports.create = (req, res) => {
     encoding: req.body.encoding,
     mimetype: req.body.mimetype,
     destination: req.body.destination,
-    filename: req.body.destination,
+    filename: req.body.filename,
     path: req.body.path,
   };
 
@@ -181,7 +187,7 @@ exports.findOneContent = (req, res) => {
   Document.findByPk(id)
     .then(data => {
       if (data) {
-        res.sendFile(data.path);
+        res.sendFile(getPath(data.filename));
       } else {
         res.status(404).send({
           message: `Cannot find Document with id=${id}.`

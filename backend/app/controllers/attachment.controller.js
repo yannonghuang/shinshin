@@ -2,6 +2,7 @@ const db = require("../models");
 const Attachment = db.attachments;
 const Op = db.Sequelize.Op;
 const fs = require('fs');
+const path = require("path");
 
 const getPagination = (page, size) => {
   const limit = size ? +size : 3;
@@ -17,6 +18,10 @@ const getPagingData = (data, page, limit) => {
 
   return { totalItems, attachments, totalPages, currentPage };
 };
+
+const getPath = (filename) => {
+  return path.join(`${__dirname}/../../upload`, filename);
+}
 
 // Create and Save a new Attachment
 exports.create = (req, res) => {
@@ -34,7 +39,7 @@ exports.create = (req, res) => {
     encoding: req.body.encoding,
     mimetype: req.body.mimetype,
     destination: req.body.destination,
-    filename: req.body.destination,
+    filename: req.body.filename,
     path: req.body.path,
   };
 
@@ -164,7 +169,7 @@ exports.findOneContent = (req, res) => {
   Attachment.findByPk(id)
     .then(data => {
       if (data) {
-        res.sendFile(data.path);
+        res.sendFile(getPath(data.filename));
       } else {
         res.status(404).send({
           message: `Cannot find Attachment with id=${id}.`
