@@ -93,11 +93,30 @@ const getSchoolId = async (req) => {
   }
 };
 
+hasAdminRole = async (req) => {
+  if (!req.userId) return false;
+
+  try {
+    let user = await User.findByPk(req.userId);
+    let roles = await user.getRoles();
+    for (let i = 0; i < roles.length; i++) {
+      if (roles[i].name === "admin")
+        return true;
+
+    return false;
+    }
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 const authJwt = {
   verifyToken: verifyToken,
   isAdmin: isAdmin,
   isModerator: isModerator,
   isModeratorOrAdmin: isModeratorOrAdmin,
-  getSchoolId: getSchoolId
+  getSchoolId: getSchoolId,
+  hasAdminRole: hasAdminRole
 };
 module.exports = authJwt;

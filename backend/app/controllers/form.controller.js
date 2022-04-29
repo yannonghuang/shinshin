@@ -274,13 +274,14 @@ exports.findAll = (req, res) => {
 
 exports.findAll2 = async(req, res) => {
   const sid = await authJwt.getSchoolId(req);
+  const hasAdminRole = await authJwt.hasAdminRole(req);
 
   const title = req.body.title;
   const startAt = req.body.startAt;
   const page = req.body.page;
   const size = req.body.size;
   const orderby = req.body.orderby;
-  const published = sid ? 'true' : req.body.published;
+  const published = (sid || !hasAdminRole) ? 'true' : req.body.published;
 
   var orderbyObject = null;
   if (orderby) {
