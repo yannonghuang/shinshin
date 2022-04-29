@@ -166,7 +166,7 @@ const DocumentsList = (props) => {
           return (
             <div>
               {(documentsRef.current[rowIdx].mimetype.startsWith('image') ||
-                documentsRef.current[rowIdx].mimetype.indexOf('pdf') > 0) && (
+                documentsRef.current[rowIdx].mimetype.indexOf('pdf') > 0 ) && (
               <a href="#" onClick={() => download(documentsRef.current[rowIdx].id,
                                                 documentsRef.current[rowIdx].originalname,
                                                 documentsRef.current[rowIdx].mimetype, true)} >
@@ -257,9 +257,11 @@ const DocumentsList = (props) => {
 
   return (
     <div className="list row">
-      {!embedded && (<div className="col-sm-8">
-        <h4>附件列表</h4>
+      <div className="col-sm-8">
+        {!embedded && (
         <div className="input-group mb-3">
+          <h4>附件列表</h4>
+          <div class="w-100"></div>
           <input
             type="text"
             className="form-control"
@@ -277,6 +279,7 @@ const DocumentsList = (props) => {
             </button>
           </div>
         </div>
+        )}
 
         {"每页显示行数: "}
         <select onChange={handlePageSizeChange} value={pageSize}>
@@ -297,7 +300,7 @@ const DocumentsList = (props) => {
           shape="rounded"
           onChange={handlePageChange}
         />
-      </div>)}
+      </div>
 
       <div className="col-sm-12 list">
         <table
