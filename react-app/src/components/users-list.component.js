@@ -419,7 +419,7 @@ const UsersList = (props) => {
   return (
     <div className="list row">
       <div className="col-sm-7">
-        <h4>{schoolTitle ? schoolTitle + " - " : ""}用户列表(总数：{totalItems})</h4>
+        <h4>{schoolTitle ? schoolTitle + " - " : ""}联络人(总数：{totalItems})</h4>
         <div className="row mb-3">
           <select
             className="form-control col-sm-2"
@@ -512,7 +512,7 @@ const UsersList = (props) => {
 */}
           {schoolId && (<a target="_blank"
             href={"/addU?schoolId=" + schoolId} class="btn btn-primary ">
-              新建联络方式
+              新建联络人
           </a>)}
         </div>
       </div>
