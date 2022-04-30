@@ -33,6 +33,8 @@ const AttachmentsList = (props) => {
 
   const pageSizes = [5, 10, 20];
 
+  const [totalItems, setTotalItems] = useState(0);
+
   const onChangeSearchOriginalname = (e) => {
     const searchOriginalname = e.target.value;
     setSearchOriginalname(searchOriginalname);
@@ -65,10 +67,11 @@ const AttachmentsList = (props) => {
 
     AttachmentDataService.getAll2(params)
       .then((response) => {
-        const { attachments, totalPages } = response.data;
+        const { attachments, totalPages, totalItems } = response.data;
 
         setAttachments(attachments);
         setCount(totalPages);
+        setTotalItems(totalItems);
 
         console.log(response.data);
       })
@@ -227,9 +230,9 @@ const AttachmentsList = (props) => {
 
   return (
     <div className="list row">
-      {!embedded && (<div className="col-sm-8">
-        <h4>附件列表</h4>
-        <div className="input-group mb-3">
+      <div className="col-sm-8">
+        <h4>项目申请附件列表(总数：{totalItems})</h4>
+        {!embedded && (<div className="input-group mb-3">
           <input
             type="text"
             className="form-control"
@@ -246,8 +249,10 @@ const AttachmentsList = (props) => {
               Search
             </button>
           </div>
-        </div>
+        </div>)}
+      </div>
 
+      <div className="col-sm-4">
         {"每页显示行数: "}
         <select onChange={handlePageSizeChange} value={pageSize}>
           {pageSizes.map((size) => (
@@ -266,7 +271,7 @@ const AttachmentsList = (props) => {
           shape="rounded"
           onChange={handlePageChange}
         />
-      </div>)}
+      </div>
 
       <div className="col-sm-12 list">
 

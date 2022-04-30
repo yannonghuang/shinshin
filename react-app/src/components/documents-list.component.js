@@ -27,6 +27,8 @@ const DocumentsList = (props) => {
 
   const pageSizes = [5, 10, 20];
 
+  const [totalItems, setTotalItems] = useState(0);
+
   const onChangeSearchOriginalname = (e) => {
     const searchOriginalname = e.target.value;
     setSearchOriginalname(searchOriginalname);
@@ -63,10 +65,11 @@ const DocumentsList = (props) => {
 
     DocumentDataService.getAll2(params)
       .then((response) => {
-        const { documents, totalPages } = response.data;
+        const { documents, totalPages, totalItems } = response.data;
 
         setDocuments(documents);
         setCount(totalPages);
+        setTotalItems(totalItems);
 
         console.log(response.data);
       })
@@ -258,29 +261,30 @@ const DocumentsList = (props) => {
   return (
     <div className="list row">
       <div className="col-sm-8">
-        {!embedded && (
         <div className="input-group mb-3">
-          <h4>附件列表</h4>
-          <div class="w-100"></div>
-          <input
+          <h4>学校附件列表(总数：{totalItems})</h4>
+          <div className="input-group mb-3">
+            <input
             type="text"
             className="form-control"
-            placeholder="Search by originalname"
+            placeholder="文件名查找。。。"
             value={searchOriginalname}
             onChange={onChangeSearchOriginalname}
-          />
-          <div className="input-group-append">
-            <button
+            />
+            <div className="input-group-append">
+              <button
               className="btn btn-outline-secondary"
               type="button"
               onClick={findByOriginalname}
-            >
+              >
               Search
-            </button>
+              </button>
+            </div>
           </div>
         </div>
-        )}
+      </div>
 
+      <div className="col-sm-4">
         {"每页显示行数: "}
         <select onChange={handlePageSizeChange} value={pageSize}>
           {pageSizes.map((size) => (
