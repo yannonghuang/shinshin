@@ -28,7 +28,7 @@ const getDirectory = async (req) => {
   }
 
   if (req.originalUrl.includes('attachments')) {
-    type = 'response';
+    type = 'Response';
     code = '' + req.params.id;
   }
 
