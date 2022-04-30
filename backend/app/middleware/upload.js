@@ -21,8 +21,16 @@ const getDirectory = async (req) => {
       }
     }
   }
-  if (req.originalUrl.includes('dossiers')) type = 'Project';
-  if (req.originalUrl.includes('attachments')) type = 'response';
+
+  if (req.originalUrl.includes('dossiers')) {
+    type = 'Project';
+    code = '' + req.params.id;
+  }
+
+  if (req.originalUrl.includes('attachments')) {
+    type = 'response';
+    code = '' + req.params.id;
+  }
 
   let dir = path.join(`${__dirname}/../../upload`, type, code);
 
