@@ -1274,14 +1274,14 @@ export default class School extends Component {
                 <ProjectsList
                   schoolId = {currentSchool.id}
                   embedded = {true}
-                  readonly = {this.state.readonly}
+                  readonly = {this.state.readonly && !AuthService.getCurrentUser().schoolId}
                 />
               </TabPanel>
               <TabPanel>
                 <ResponsesList
                   schoolId = {currentSchool.id}
                   embedded = {true}
-                  readonly = {this.state.readonly}
+                  readonly = {this.state.readonly && !AuthService.getCurrentUser().schoolId}
                 />
               </TabPanel>
               <TabPanel>
@@ -1289,7 +1289,7 @@ export default class School extends Component {
                   schoolId = {currentSchool.id}
                   docCategory = {'!照片'}
                   embedded = {true}
-                  readonly = {this.state.readonly}
+                  readonly = {this.state.readonly && !AuthService.getCurrentUser().schoolId}
                 />
               </TabPanel>
               <TabPanel>
@@ -1297,20 +1297,20 @@ export default class School extends Component {
                   schoolId = {currentSchool.id}
                   docCategory = {'照片'}
                   embedded = {true}
-                  readonly = {this.state.readonly}
+                  readonly = {this.state.readonly && !AuthService.getCurrentUser().schoolId}
                 />
               </TabPanel>
               <TabPanel>
                 <CommentsList
                   schoolId = {currentSchool.id}
-                  readonly = {this.state.readonly}
+                  readonly = {this.state.readonly && !AuthService.getCurrentUser().schoolId}
                 />
               </TabPanel>
               {currentSchool.xr ? (<TabPanel>
                 <ProjectsList
                   schoolId = {currentSchool.id}
                   embedded = {true}
-                  readonly = {this.state.readonly}
+                  readonly = {this.state.readonly && !AuthService.getCurrentUser().schoolId}
                   xr = {true}
                 />
               </TabPanel>) : null}
