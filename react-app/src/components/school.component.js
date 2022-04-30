@@ -1274,7 +1274,7 @@ export default class School extends Component {
                 <ProjectsList
                   schoolId = {currentSchool.id}
                   embedded = {true}
-                  readonly = {this.state.readonly && !AuthService.getCurrentUser().schoolId}
+                  readonly = {this.state.readonly}
                 />
               </TabPanel>
               <TabPanel>

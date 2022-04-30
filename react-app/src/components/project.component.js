@@ -698,7 +698,8 @@ export default class Project extends Component {
                 </div>
               </div>
 
-                {this.state.readonly && localStorage.getItem('user') && (
+                {this.state.readonly && AuthService.getCurrentUser() &&
+                 !AuthService.getCurrentUser().schoolId && (
                 <div class="box">
                   <a target="_blank" href={"/projects/" + currentProject.id} class="btn btn-primary mb-4">编辑</a>
                 </div>
