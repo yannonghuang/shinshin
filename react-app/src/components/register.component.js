@@ -738,9 +738,11 @@ export default class Register extends Component {
                   )}
                 >
                   <label htmlFor="schoolId">所属学校</label>
-                  {this.state.newuser ||
-                  (!this.state.readonly && AuthService.getCurrentUser() &&
-                  AuthService.getCurrentUser().roles.includes("ROLE_ADMIN"))
+                  {(this.state.newuser ||
+                    (!this.state.readonly && AuthService.getCurrentUser() &&
+                    AuthService.getCurrentUser().roles.includes("ROLE_ADMIN"))
+                    ) &&
+                    !this.state.contactOnly
                   ? (<Select onChange={this.onChangeSchoolId.bind(this)}
                     class="form-control"
                     id="schoolId"
