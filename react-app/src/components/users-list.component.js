@@ -418,9 +418,11 @@ const UsersList = (props) => {
 
   return (
     <div className="list row">
+      <h4>{schoolTitle ? schoolTitle + " - " : ""}联络人(总数：{totalItems})</h4>
+      <div class="w-100"></div>
+
       <div className="col-sm-7">
-        <h4>{schoolTitle ? schoolTitle + " - " : ""}联络人(总数：{totalItems})</h4>
-        <div className="row mb-3">
+        <div className="row mb-3" hidden={schoolId}>
           <select
             className="form-control col-sm-2"
             value={searchRole}
@@ -451,7 +453,7 @@ const UsersList = (props) => {
           />
         </div>
 
-        <div className="row mb-3">
+        <div className="row mb-3" hidden={schoolId}>
           <input
             type="text"
             className="form-control col-sm-3"
@@ -517,7 +519,7 @@ const UsersList = (props) => {
         </div>
       </div>
 
-      <div className="mt-3 col-sm-5">
+      <div className="mt-3 col-sm-5" hidden={schoolId}>
         {"每页显示行数: "}
         <select onChange={handlePageSizeChange} value={pageSize}>
           {pageSizes.map((size) => (
@@ -584,7 +586,7 @@ const UsersList = (props) => {
         </table>
       </div>
 
-      <div className="mb-3 col-sm-12">
+      <div className="mb-3 col-sm-12" hidden={schoolId}>
         {"每页显示行数: "}
         <select onChange={handlePageSizeChange} value={pageSize}>
           {pageSizes.map((size) => (
