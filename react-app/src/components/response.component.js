@@ -506,11 +506,12 @@ export default class Response extends Component {
         </div>
       )
       : (this.state.submitted
-        ? (
-          <div>
-            <p><h4>{this.state.message}</h4></p>
-          </div>
-        )
+        ? (<div>
+          <h4>{this.state.message}</h4>
+          <a href="javascript:window.close();">
+            <button class="btn btn-primary">关闭</button>
+          </a>
+        </div>)
         : (
           <div class="row">
             <div class="col-sm-4">
@@ -587,7 +588,7 @@ export default class Response extends Component {
                 <button
                   style={{ position: "absolute", right: "10px" }}
                   type="submit"
-                  className="btn btn-success"
+                  className="btn btn-primary"
                   onClick={this.updateResponse}
                 >
                   保存
@@ -648,7 +649,7 @@ export default class Response extends Component {
           ) : (
             <button
               type="submit"
-              className="btn btn-success"
+              className="btn btn-primary"
               onClick={this.updateResponse}
             >
               保存

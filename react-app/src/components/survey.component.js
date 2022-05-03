@@ -849,8 +849,9 @@ export default class Survey extends Component {
         {(this.state.submitted /*&& this.state.newsurvey*/) ? (
           <div>
             <h4>{this.state.message}</h4>
-
-            <a href={"/surveysView/" + currentSurvey.schoolId} class="btn btn-success">返回</a>
+            <a href="javascript:window.close();">
+              <button class="btn btn-primary">关闭</button>
+            </a>
 {/*}
             <h4>学校信息成功提交!</h4>
             <button class="btn btn-success" onClick={this.newSurvey}>
@@ -943,10 +944,10 @@ export default class Survey extends Component {
                 </button>
                 <button hidden={this.state.newsurvey}
                   type="submit"
-                  className="btn btn-success"
+                  className="btn btn-primary"
                   onClick={this.updateSurvey}
                 >
-                  更新
+                  保存
                 </button>
 
                 <p>{this.state.message}</p>

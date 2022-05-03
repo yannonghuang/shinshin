@@ -733,10 +733,13 @@ export default class School extends Component {
       <div>
         {(this.state.submitted /*&& this.state.newschool*/) ? (
           <div>
-            <div>{this.state.message}</div>
+            <h4>{this.state.message}</h4>
 
-            <a href={"/schoolsView/" + currentSchool.id} class="btn btn-success">返回</a>
+            <a href="javascript:window.close();">
+              <button class="btn btn-primary">关闭</button>
+            </a>
 {/*}
+            <a href={"/schoolsView/" + currentSchool.id} class="btn btn-primary" >关闭</a>
             <h4>学校信息成功提交!</h4>
             <button class="btn btn-success" onClick={this.newSchool}>
               Add
@@ -1206,7 +1209,7 @@ export default class School extends Component {
               className="btn btn-primary"
               onClick={this.updateSchool}
             >
-              更新
+              保存
             </button>
 
             <div class="w-100"></div>

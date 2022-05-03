@@ -664,8 +664,10 @@ export default class Project extends Component {
       <div>
         {(this.state.submitted /*&& this.state.newproject*/) ? (
           <div>
-            <div>{this.state.message}</div>
-            <a href={"/projectsView/" + currentProject.id} class="btn btn-success">返回</a>
+            <h4>{this.state.message}</h4>
+            <a href="javascript:window.close();">
+              <button class="btn btn-primary">关闭</button>
+            </a>
 {/*}
             <h4>项目信息成功提交!</h4>
             <button class="btn btn-success" onClick={this.newProject}>
@@ -838,10 +840,10 @@ export default class Project extends Component {
 
               <button hidden={this.state.newproject}
                 type="submit"
-                className="btn btn-success"
+                className="btn btn-primary"
                 onClick={this.updateProject}
               >
-                更新
+                保存
               </button>
 
               {(!currentProject.xr) &&

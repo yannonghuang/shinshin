@@ -93,6 +93,16 @@ class App extends Component {
     window.location.reload();
   }
 
+  noNavBar() {
+
+    if (this.props.location.pathname.match(/schools\/(\d)*/)) return true;
+    if (this.props.location.pathname.match(/projects\/(\d)*/)) return true;
+    if (this.props.location.pathname.match(/responses\/(\d)*/)) return true;
+    if (this.props.location.pathname.match(/surveys\/(\d)*/)) return true;
+
+    return false;
+  }
+
   render() {
     const { currentUser, showModeratorBoard, showAdminBoard } = this.state;
 
@@ -107,7 +117,7 @@ class App extends Component {
 {/*
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
 */}
-        <nav class="navbar navbar-expand-sm navbar-dark navbar-custom">
+        <nav class="navbar navbar-expand-sm navbar-dark navbar-custom" hidden={this.noNavBar()} >
           <Link to={"/login"} class="navbar-brand">
             学校项目管理系统
           </Link>
