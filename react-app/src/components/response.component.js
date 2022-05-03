@@ -59,6 +59,8 @@ export default class Response extends Component {
       submitted: false,
       updatedRecently: true,
       updatedAt: null,
+
+      dirty: true,
     };
 
     this.fb = createRef();
@@ -502,7 +504,7 @@ export default class Response extends Component {
       ? (
         <div>
             <p>{'您的学校信息上次更新时间是：' + this.state.updatedAt + ', 请点击下面更新学校信息'}</p>
-            <a href={"/surveys/" + currentResponse.schoolId} class="btn btn-success">更新</a>
+            <a href={"/surveys/" + currentResponse.schoolId} class="btn btn-primary">更新</a>
         </div>
       )
       : (this.state.submitted
@@ -579,7 +581,7 @@ export default class Response extends Component {
                 <button
                   style={{ position: "absolute", right: "10px" }}
                   type="submit"
-                  className="btn btn-success"
+                  className="btn btn-primary"
                   onClick={this.submitResponse}
                 >
                   提交
@@ -594,6 +596,15 @@ export default class Response extends Component {
                   保存
                 </button>
               )}
+
+              <button
+                style={{ position: "absolute", right: "-60px" }}
+                type="submit"
+                className="btn btn-primary ml-2"
+                onClick={() => (!this.state.dirty || window.confirm("您确定要取消吗 ?")) && window.close()}
+              >
+                取消
+              </button>
 
               {(progress < 100 && progress > 0) && (
                 <div className="progress">
@@ -638,28 +649,36 @@ export default class Response extends Component {
           <div class="w-100"></div>
 
           {!this.state.readonly && (<div>
-          { this.state.newresponse? (
+            { this.state.newresponse? (
+              <button
+                type="submit"
+                className="btn btn-primary"
+                onClick={this.submitResponse}
+              >
+                提交
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="btn btn-primary"
+                onClick={this.updateResponse}
+              >
+                保存
+              </button>
+            )}
+
             <button
               type="submit"
-              className="btn btn-success"
-              onClick={this.submitResponse}
+              className="btn btn-primary ml-2"
+              onClick={() => (!this.state.dirty || window.confirm("您确定要取消吗 ?")) && window.close()}
             >
-              提交
+              取消
             </button>
-          ) : (
-            <button
-              type="submit"
-              className="btn btn-primary"
-              onClick={this.updateResponse}
-            >
-              保存
-            </button>
-          )}
           </div>)}
 
           <div class="w-100"></div>
           <div className="alert-danger">
-            <p><h4>{this.state.message}</h4></p>
+            <p><h6>{this.state.message}</h6></p>
           </div>
         </div>)
       )}

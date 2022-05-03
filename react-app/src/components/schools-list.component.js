@@ -724,6 +724,7 @@ const SchoolsList = (props) => {
               </Link>
 
               {currentUser && (<Link
+                target="_blank"
                 to={"/schools/" + schoolsRef.current[rowIdx].id}
               >
                 <i className="far fa-edit action mr-2"></i>

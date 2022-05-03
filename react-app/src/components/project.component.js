@@ -71,7 +71,9 @@ export default class Project extends Component {
       readonly: true,
       docCategories: [],
       message: "",
-      submitted: false
+      submitted: false,
+
+      dirty: false,
     };
   }
 
@@ -199,7 +201,8 @@ export default class Project extends Component {
         currentProject: {
           ...prevState.currentProject,
           name: name
-        }
+        },
+        dirty: true
       };
     });
   }
@@ -212,7 +215,8 @@ export default class Project extends Component {
         currentProject: {
           ...prevState.currentProject,
           schoolId: schoolId
-        }
+        },
+        dirty: true
       };
     });
   }
@@ -225,7 +229,8 @@ export default class Project extends Component {
         currentProject: {
           ...prevState.currentProject,
           responseId: responseId
-        }
+        },
+        dirty: true
       };
     });
   }
@@ -238,7 +243,8 @@ export default class Project extends Component {
         currentProject: {
           ...prevState.currentProject,
           docCategory: docCategory
-        }
+        },
+        dirty: true
       };
     });
   }
@@ -250,7 +256,8 @@ export default class Project extends Component {
       currentProject: {
         ...prevState.currentProject,
         budget: budget
-      }
+      },
+      dirty: true
     }));
   }
 
@@ -262,7 +269,8 @@ export default class Project extends Component {
       currentProject: {
         ...prevState.currentProject,
         photo: photo
-      }
+      },
+      dirty: true
     }));
   }
 
@@ -273,7 +281,8 @@ export default class Project extends Component {
       currentProject: {
         ...prevState.currentProject,
         status: status
-      }
+      },
+      dirty: true
     }));
   }
 
@@ -284,7 +293,8 @@ export default class Project extends Component {
       currentProject: {
         ...prevState.currentProject,
         description: description
-      }
+      },
+      dirty: true
     }));
   }
 
@@ -295,7 +305,8 @@ export default class Project extends Component {
         currentProject: {
           ...prevState.currentProject,
           startAt: startAt
-        }
+        },
+        dirty: true
       };
     });
   };
@@ -609,7 +620,8 @@ export default class Project extends Component {
           currentProject: {
             ...prevState.currentProject,
             file: file
-          }
+          },
+          dirty: true
         }));
 
     var reader = new FileReader();
@@ -630,7 +642,8 @@ export default class Project extends Component {
           currentProject: {
             ...prevState.currentProject,
             docFiles: docFiles
-          }
+          },
+          dirty: true
         }));
   }
 
@@ -834,7 +847,7 @@ export default class Project extends Component {
             {!this.state.readonly && (
 
             <div>
-              <button onClick={this.saveProject} class="btn btn-success" hidden={!this.state.newproject}>
+              <button onClick={this.saveProject} class="btn btn-primary" hidden={!this.state.newproject}>
                 提交
               </button>
 
@@ -844,6 +857,14 @@ export default class Project extends Component {
                 onClick={this.updateProject}
               >
                 保存
+              </button>
+
+              <button
+                type="submit"
+                className="btn btn-primary ml-2"
+                onClick={() => (!this.state.dirty || window.confirm("您确定要取消吗 ?")) && window.close()}
+              >
+                取消
               </button>
 
               {(!currentProject.xr) &&

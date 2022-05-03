@@ -126,7 +126,9 @@ const FormsList = (props) => {
 
   const openForm = (rowIndex) => {
     const id = formsRef.current[rowIndex].id;
-    props.history.push("/forms/" + id);
+    //props.history.push("/forms/" + id);
+    const win = window.open("/forms/" + id, "_blank");
+    win.focus();
   };
 
   const deleteForm = (rowIndex) => {
@@ -164,7 +166,9 @@ const FormsList = (props) => {
     const id = formsRef.current[rowIndex].id;
     try {
       let newF = await FormDataService.copy(id);
-      props.history.push("/forms/" + newF.data.id);
+      //props.history.push("/forms/" + newF.data.id);
+      const win = window.open("/forms/" + newF.data.id, "_blank");
+      win.focus();
     } catch(e) {
       console.log(e);
       alert(JSON.stringify(e));
@@ -245,6 +249,7 @@ const FormsList = (props) => {
           return (
             <div>
               {formsRef.current[rowIdx].published && <Link
+                target="_blank"
                 to={"/addR/" + formsRef.current[rowIdx].id}
                 className= {expired ? "disabled-link" : "badge badge-success mr-2"}
               >

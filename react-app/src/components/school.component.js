@@ -109,6 +109,8 @@ export default class School extends Component {
       message: "",
       submitted: false,
       pastedPhotoType: null,
+
+      dirty: false,
     };
 
     this.surveyRef = createRef();
@@ -299,7 +301,8 @@ export default class School extends Component {
         ...prevState.currentSchool,
         principalId: e.value, //.target.value
         principal: this.displayName(e.value)
-      }
+      },
+      dirty: true
     }));
   }
 
@@ -309,7 +312,8 @@ export default class School extends Component {
         ...prevState.currentSchool,
         contactId: e.value, //.target.value
         contact: this.displayName(e.value)
-      }
+      },
+      dirty: true
     }));
   }
 
@@ -322,7 +326,8 @@ export default class School extends Component {
       currentSchool: {
         ...prevState.currentSchool,
         [name]: value
-      }
+      },
+      dirty: true
     }));
   }
 
@@ -334,7 +339,8 @@ export default class School extends Component {
         currentSchool: {
           ...prevState.currentSchool,
           startAt: startAt
-        }
+        },
+        dirty: true
       };
     });
   }
@@ -348,7 +354,8 @@ export default class School extends Component {
         currentSchool: {
           ...prevState.currentSchool,
           startAt: startAt
-        }
+        },
+        dirty: true
       };
     });
   }
@@ -361,7 +368,8 @@ export default class School extends Component {
         currentSchool: {
           ...prevState.currentSchool,
           lastVisit: lastVisit
-        }
+        },
+        dirty: true
       };
     });
   }
@@ -374,7 +382,8 @@ export default class School extends Component {
         currentSchool: {
           ...prevState.currentSchool,
           lastVisit: lastVisit
-        }
+        },
+        dirty: true
       };
     });
   }
@@ -678,7 +687,8 @@ export default class School extends Component {
           currentSchool: {
             ...prevState.currentSchool,
             file: file
-          }
+          },
+          dirty: true
         }));
 
     var reader = new FileReader();
@@ -699,7 +709,8 @@ export default class School extends Component {
           currentSchool: {
             ...prevState.currentSchool,
             docFiles: docFiles
-          }
+          },
+          dirty: true
         }));
   }
 
@@ -1210,6 +1221,14 @@ export default class School extends Component {
               onClick={this.updateSchool}
             >
               保存
+            </button>
+
+            <button
+              type="submit"
+              className="btn btn-primary ml-2"
+              onClick={() => (!this.state.dirty || window.confirm("您确定要取消吗 ?")) && window.close()}
+            >
+              取消
             </button>
 
             <div class="w-100"></div>
