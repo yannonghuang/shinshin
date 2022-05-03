@@ -170,19 +170,23 @@ const DocumentsList = (props) => {
             <div>
               {(documentsRef.current[rowIdx].mimetype.startsWith('image') ||
                 documentsRef.current[rowIdx].mimetype.indexOf('pdf') > 0 ) && (
-              <a href="#" onClick={() => {
+              <a href="#" onClick={() =>
                 download(documentsRef.current[rowIdx].id,
                   documentsRef.current[rowIdx].originalname,
                   documentsRef.current[rowIdx].mimetype, true)
-                }} >
+                }
+              >
                 <i className="fas fa-eye action mr-2"></i>
               </a>
               )}
 
               {!(documentsRef.current[rowIdx].mimetype.indexOf('pdf') > 0 ) && (
-              <a href="#" onClick={() => download(documentsRef.current[rowIdx].id,
-                                                documentsRef.current[rowIdx].originalname,
-                                                documentsRef.current[rowIdx].mimetype, false)} >
+              <a href="#" onClick={() =>
+                download(documentsRef.current[rowIdx].id,
+                  documentsRef.current[rowIdx].originalname,
+                  documentsRef.current[rowIdx].mimetype, false)
+                }
+              >
                 <i className="fas fa-download action mr-2"></i>
               </a>
               )}
