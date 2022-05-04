@@ -212,7 +212,9 @@ const UsersList = (props) => {
 
   const openUser = (rowIndex) => {
     const id = usersRef.current[rowIndex].id;
-    props.history.push("/users/" + id);
+    //props.history.push("/users/" + id);
+    const win = window.open("/users/" + id, "_blank");
+    win.focus();
   };
 
   const deleteUser = (rowIndex) => {

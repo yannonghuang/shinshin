@@ -102,7 +102,9 @@ export default class Register extends Component {
       rolesFull: [],
       successful: false,
       message: "",
-      readonly: true
+      readonly: true,
+
+      dirty: false,
     };
   }
 
@@ -323,67 +325,78 @@ export default class Register extends Component {
   onChangeRoles(event) {
     const selected = [...event.target.selectedOptions].map(opt => opt.value);
     this.setState({
-      roles: selected
+      roles: selected,
+      dirty: true
     });
   }
 
   onChangeContactOnly(e) {
     this.setState({
-      contactOnly: e.target.checked
+      contactOnly: e.target.checked,
+      dirty: true
     });
   }
 
   onChangeChineseName(e) {
     this.setState({
-      chineseName: e.target.value
+      chineseName: e.target.value,
+      dirty: true
     });
   }
 
   onChangeTitle(e) {
     this.setState({
-      title: e.target.value
+      title: e.target.value,
+      dirty: true
     });
   }
 
   onChangePhone(e) {
     this.setState({
-      phone: e.target.value
+      phone: e.target.value,
+      dirty: true
     });
   }
 
   onChangeWechat(e) {
     this.setState({
-      wechat: e.target.value
+      wechat: e.target.value,
+      dirty: true
     });
   }
 
   onChangeStartAt(e) {
     this.setState({
-      startAt: e.target.value
+      startAt: e.target.value,
+      dirty: true
     });
   }
 
   onChangeUsername(e) {
     this.setState({
-      username: e.target.value
+      username: e.target.value,
+      dirty: true
     });
   }
 
   onChangeSchoolId(e) {
     this.setState({
-      schoolId: e.value //.target.value
+      schoolId: e.value, //.target.value
+      dirty: true
     });
   }
 
   onChangeEmail(e) {
     this.setState({
-      email: e.target.value
+      email: e.target.value,
+      dirty: true
     });
   }
 
   onChangePassword(e) {
     this.setState({
-      password: e.target.value
+      password: e.target.value,
+      dirty: true
     });
   }
 
@@ -419,7 +432,7 @@ export default class Register extends Component {
       }).then(
         response => {
           this.setState({
-            message: response.data.message,
+            message: '创建联络人成功', //response.data.message,
             successful: true
           });
         },
@@ -433,7 +446,7 @@ export default class Register extends Component {
 
           this.setState({
             successful: false,
-            message: '创建用户异常，' + resMessage
+            message: '创建联络人异常，' + resMessage
           });
         }
       );
@@ -522,7 +535,7 @@ export default class Register extends Component {
 
           console.log(response.data.message);
           this.setState({
-            message: "成功创建账号，待邮件确认。。。", //response.data.message,
+            message: "成功创建用户账号，待邮件确认。。。", //response.data.message,
             successful: true
           });
         },
@@ -580,32 +593,25 @@ export default class Register extends Component {
 
     return (
       <div>
-{/*}
-        <div className="card card-container">
-*/}
-          <Form
+
+          {this.state.successful
+          ? (<div>
+            <h4>{this.state.message}</h4>
+
+            <a href="javascript:window.close();">
+              <button class="btn btn-primary">关闭</button>
+            </a>
+
+            </div>)
+
+          : (<Form
             onSubmit={this.state.newuser ? this.handleRegister : this.updateUser}
             ref={c => {
               this.form = c;
             }}
           >
-          {!this.state.successful && (
-            <div class="row">
-{/*}
-                <div class="form-group col-sm-4">
-                  <label htmlFor="contactOnly"><h5>仅联络方式(信息不作校验)</h5></label>
-                  <Input
-                    readonly={!this.state.newuser?"":false}
-                    type="checkbox"
-                    class="form-control"
-                    name="contactOnly"
-                    checked={this.state.contactOnly}
-                    onChange={this.onChangeContactOnly}
-                  />
-                </div>
 
-                <div class="w-100"></div>
-*/}
+          <div class="row">
                 <div class="form-group col-sm-4" hidden={this.state.contactOnly}>
                   <label htmlFor="username">用户名</label>
                   <Input
@@ -682,19 +688,7 @@ export default class Register extends Component {
                     onChange={this.onChangeWechat}
                   />
                 </div>
-{/*
-                <div class="form-group col-sm-4">
-                  <label htmlFor="startAt">加入时间</label>
-                  <Input
-                    readonly={this.state.readonly?"":false}
-                    type="date"
-                    class="form-control"
-                    name="startAt"
-                    value={this.state.startAt}
-                    onChange={this.onChangeStartAt}
-                  />
-                </div>
-*/}
+
                 <div class="form-group col-sm-4" hidden={!this.state.schoolId}>
                   <label htmlFor="title">职务</label>
                   <select onChange={this.onChangeTitle.bind(this)}
@@ -785,27 +779,45 @@ export default class Register extends Component {
                 <div class="w-100"></div>
 
                 {this.state.readonly ? '' : (
-                <div class="form-group">
-                  <button className="btn btn-primary btn-block">{this.state.newuser?'创建新用户':'修改用户'}</button>
-                </div>
+
+                  <button className="btn btn-primary"
+                    onClick={this.state.newuser ? this.handleRegister : this.updateUser}
+                  >
+                    {this.state.newuser
+                      ? this.state.contactOnly
+                        ? '创建新联络人'
+                        : '创建新用户'
+                      : this.state.contactOnly
+                        ? '修改联络人'
+                        : '修改用户'
+                    }
+                  </button>
+
                 )}
 
-                <div class="w-100"></div>
-
-                {!this.state.readonly && !this.state.newuser &&
+                {!this.state.contactOnly && !this.state.readonly && !this.state.newuser &&
                   <Link
                     to={'/reset?token=' +
                       jwt.sign({ email: this.state.email }, "config.secret", {
                         expiresIn: 900 // 15 minutes
                       })
                     }
-                    className="btn btn-primary">
+                    className="btn btn-primary  ml-2">
                       重置密码
                   </Link>
                 }
 
+                <button
+                  type="submit"
+                  className="btn btn-primary ml-2"
+                  onClick={() => (!this.state.dirty ||
+                            window.confirm("您确定要取消吗 ?")) &&
+                  window.close()}
+                >
+                  取消
+                </button>
+
             </div>
-          )}
 
             {this.state.message && (
               <div class="form-group">
@@ -828,10 +840,8 @@ export default class Register extends Component {
               }}
             />
 
-          </Form>
-{/*}
-        </div>
-*/}
+          </Form>)}
+
       </div>
     );
   }

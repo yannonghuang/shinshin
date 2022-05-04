@@ -100,10 +100,13 @@ class App extends Component {
     if (this.props.location.pathname.match(/responses\/(\d)+/)) return true;
     if (this.props.location.pathname.match(/surveys\/(\d)+/)) return true;
     if (this.props.location.pathname.match(/forms\/(\d)+/)) return true;
+    if (this.props.location.pathname.match(/users\/(\d)+/)) return true;
+
     if (this.props.location.pathname.match(/addS/)) return true;
     if (this.props.location.pathname.match(/addP/)) return true;
     if (this.props.location.pathname.match(/addPXR/)) return true;
     if (this.props.location.pathname.match(/addF/)) return true;
+    if (this.props.location.pathname.match(/addU/)) return true;
 
     return false;
   }
@@ -142,7 +145,7 @@ class App extends Component {
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href={"/users"}>用户列表</a>
-                <a class="dropdown-item" href={"/addU"}>创建用户</a>
+                <a class="dropdown-item" href={"/addU"} target="_blank">创建用户</a>
               </div>
             </li>)}
 
