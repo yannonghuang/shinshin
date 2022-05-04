@@ -590,258 +590,248 @@ export default class Register extends Component {
   }
 
   render() {
-
     return (
       <div>
+        {this.state.successful
 
-          {this.state.successful
-          ? (<div>
-            <h4>{this.state.message}</h4>
+        ? (<div>
+          <h4>{this.state.message}</h4>
+          <a href="javascript:window.close();">
+            <button class="btn btn-primary">关闭</button>
+          </a>
+          </div>)
 
-            <a href="javascript:window.close();">
-              <button class="btn btn-primary">关闭</button>
-            </a>
-
-            </div>)
-
-          : (<Form
+        : (<Form
             onSubmit={this.state.newuser ? this.handleRegister : this.updateUser}
             ref={c => {
               this.form = c;
             }}
           >
 
-          <div class="row">
-                <div class="form-group col-sm-4" hidden={this.state.contactOnly}>
-                  <label htmlFor="username">用户名</label>
-                  <Input
-                    readonly={!this.state.newuser?"":false}
-                    type="text"
-                    class="form-control"
-                    name="username"
-                    value={this.state.username}
-                    onChange={this.onChangeUsername}
-                    validations={[required, vusername]}
-                  />
-                </div>
-
-                <div class="form-group col-sm-4">
-                  <label htmlFor="email">电子邮箱</label>
-                  <Input
-                    readonly={!this.state.newuser?"":false}
-                    type="text"
-                    class="form-control"
-                    name="email"
-                    value={this.state.email}
-                    onChange={this.onChangeEmail}
-                    validations={[required, email]}
-                  />
-                </div>
-
-
-                <div class="form-group col-sm-4" hidden={this.state.contactOnly || !this.state.newuser}>
-                  <label htmlFor="password">密码</label>
-                  <Input
-                    readonly={this.state.readonly?"":false}
-                    type="password"
-                    class="form-control"
-                    name="password"
-                    value={this.state.password}
-                    onChange={this.onChangePassword}
-                    validations={[vpassword]}
-                  />
-                </div>
-
-                <div class="form-group col-sm-4">
-                  <label htmlFor="chineseName">中文名</label>
-                  <Input
-                    readonly={this.state.readonly?"":false}
-                    type="text"
-                    class="form-control"
-                    required
-                    name="chineseName"
-                    value={this.state.chineseName}
-                    onChange={this.onChangeChineseName}
-                  />
-                </div>
-
-                <div class="form-group col-sm-4">
-                  <label htmlFor="phone">电话</label>
-                  <Input
-                    readonly={this.state.readonly?"":false}
-                    type="text"
-                    class="form-control"
-                    name="phone"
-                    value={this.state.phone}
-                    onChange={this.onChangePhone}
-                  />
-                </div>
-
-                <div class="form-group col-sm-4">
-                  <label htmlFor="wechat">微信</label>
-                  <Input
-                    readonly={this.state.readonly?"":false}
-                    type="text"
-                    class="form-control"
-                    name="wechat"
-                    value={this.state.wechat}
-                    onChange={this.onChangeWechat}
-                  />
-                </div>
-
-                <div class="form-group col-sm-4" hidden={!this.state.schoolId}>
-                  <label htmlFor="title">职务</label>
-                  <select onChange={this.onChangeTitle.bind(this)}
-                    readonly={this.state.readonly?"":false}
-                    class="form-control"
-                    id="title"
-                    value={this.state.title}
-                    name="title"
-                >
-                    <option value="">{this.state.readonly ? '' : '请选择' }</option>
-                    {this.state.titles.map((option) => (
-                      <option value={option}>{option}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {AuthService.getCurrentUser() &&
-                (<div class="form-group col-sm-4" hidden={this.state.contactOnly}>
-                  <label htmlFor="roles">角色</label>
-                  <select onChange={this.onChangeRoles.bind(this)}
-                    disabled={this.state.readonly || !AuthService.getCurrentUser().roles.includes("ROLE_ADMIN")
-                               ? "disabled"
-                               : false
-                             }
-                    class="form-control"
-                    id="roles"
-                    value={this.state.roles}
-                    name="roles"
-                >
-                    {//this.state.rolesFull.map((option) => (
-                      this.getRelevantRoles(this.state.schoolId).map((option) => (
-                      <option value={option.name}>{option.label}</option>
-                    ))}
-                  </select>
-                </div>)}
-
-                <div class="form-group col-sm-4"
-                  hidden={!(
-                    this.state.newuser || this.state.schoolId ||
-                    (AuthService.getCurrentUser() && AuthService.getCurrentUser().roles.includes("ROLE_ADMIN"))
-                  )}
-                >
-                  <label htmlFor="schoolId">所属学校</label>
-                  {(this.state.newuser ||
-                    (!this.state.readonly && AuthService.getCurrentUser() &&
-                    AuthService.getCurrentUser().roles.includes("ROLE_ADMIN"))
-                    ) &&
-                    !this.state.contactOnly
-                  ? (<Select onChange={this.onChangeSchoolId.bind(this)}
-                    class="form-control"
-                    id="schoolId"
-                    value={this.display(this.state.schoolId)}
-                    name="schoolId"
-                    options={this.state.schools}
-                  />)
-                  : (<Link
-                    to={ "/schoolsView/" + this.state.schoolId}
-                    id="schoolId"
-                    name="schoolId"
-                  >
-                    {this.displayName(this.state.schoolId)}
-                  </Link>)}
-                </div>
-
-
-                <div class="form-group col-sm-4" hidden={this.state.newuser}>
-                  <label htmlFor="lastLogin">上次登录时间</label>
-                  <Input
-                    readonly={""}
-                    type="date"
-                    class="form-control"
-                    name="lastLogin"
-                    value={this.state.lastLogin}
-                  />
-                </div>
-
-                <div class="form-group col-sm-4" hidden={this.state.newuser}>
-                  <label htmlFor="createdAt">创建时间</label>
-                  <Input
-                    readonly={""}
-                    type="date"
-                    class="form-control"
-                    name="createdAt"
-                    value={this.state.createdAt}
-                  />
-                </div>
-
-                <div class="w-100"></div>
-
-                {this.state.readonly ? '' : (
-
-                  <button className="btn btn-primary"
-                    onClick={this.state.newuser ? this.handleRegister : this.updateUser}
-                  >
-                    {this.state.newuser
-                      ? this.state.contactOnly
-                        ? '创建新联络人'
-                        : '创建新用户'
-                      : this.state.contactOnly
-                        ? '修改联络人'
-                        : '修改用户'
-                    }
-                  </button>
-
-                )}
-
-                {!this.state.contactOnly && !this.state.readonly && !this.state.newuser &&
-                  <Link
-                    to={'/reset?token=' +
-                      jwt.sign({ email: this.state.email }, "config.secret", {
-                        expiresIn: 900 // 15 minutes
-                      })
-                    }
-                    className="btn btn-primary  ml-2">
-                      重置密码
-                  </Link>
-                }
-
-                <button
-                  type="submit"
-                  className="btn btn-primary ml-2"
-                  onClick={() => (!this.state.dirty ||
-                            window.confirm("您确定要取消吗 ?")) &&
-                  window.close()}
-                >
-                  取消
-                </button>
-
-            </div>
-
-            {this.state.message && (
-              <div class="form-group">
-                <div
-                  className={
-                    this.state.successful
-                      ? "alert alert-success"
-                      : "alert alert-danger"
-                  }
-                  role="alert"
-                >
-                  {this.state.message}
-                </div>
+            <div class="row">
+              <div class="form-group col-sm-4" hidden={this.state.contactOnly}>
+                <label htmlFor="username">用户名</label>
+                <Input
+                  readonly={!this.state.newuser?"":false}
+                  type="text"
+                  class="form-control"
+                  name="username"
+                  value={this.state.username}
+                  onChange={this.onChangeUsername}
+                  validations={[required, vusername]}
+                />
               </div>
-            )}
-            <CheckButton
-              style={{ display: "none" }}
-              ref={c => {
-                this.checkBtn = c;
-              }}
-            />
 
-          </Form>)}
+              <div class="form-group col-sm-4">
+                <label htmlFor="email">电子邮箱</label>
+                <Input
+                  readonly={!this.state.newuser?"":false}
+                  type="text"
+                  class="form-control"
+                  name="email"
+                  value={this.state.email}
+                  onChange={this.onChangeEmail}
+                  validations={[required, email]}
+                />
+              </div>
 
+              <div class="form-group col-sm-4" hidden={this.state.contactOnly || !this.state.newuser}>
+                <label htmlFor="password">密码</label>
+                <Input
+                  readonly={this.state.readonly?"":false}
+                  type="password"
+                  class="form-control"
+                  name="password"
+                  value={this.state.password}
+                  onChange={this.onChangePassword}
+                  validations={[vpassword]}
+                />
+              </div>
+
+              <div class="form-group col-sm-4">
+                <label htmlFor="chineseName">中文名</label>
+                <Input
+                  readonly={this.state.readonly?"":false}
+                  type="text"
+                  class="form-control"
+                  required
+                  name="chineseName"
+                  value={this.state.chineseName}
+                  onChange={this.onChangeChineseName}
+                />
+              </div>
+
+              <div class="form-group col-sm-4">
+                <label htmlFor="phone">电话</label>
+                <Input
+                  readonly={this.state.readonly?"":false}
+                  type="text"
+                  class="form-control"
+                  name="phone"
+                  value={this.state.phone}
+                  onChange={this.onChangePhone}
+                />
+              </div>
+
+              <div class="form-group col-sm-4">
+                <label htmlFor="wechat">微信</label>
+                <Input
+                  readonly={this.state.readonly?"":false}
+                  type="text"
+                  class="form-control"
+                  name="wechat"
+                  value={this.state.wechat}
+                  onChange={this.onChangeWechat}
+                />
+              </div>
+
+              <div class="form-group col-sm-4" hidden={!this.state.schoolId}>
+                <label htmlFor="title">职务</label>
+                <select onChange={this.onChangeTitle.bind(this)}
+                  readonly={this.state.readonly?"":false}
+                  class="form-control"
+                  id="title"
+                  value={this.state.title}
+                  name="title"
+              >
+                  <option value="">{this.state.readonly ? '' : '请选择' }</option>
+                  {this.state.titles.map((option) => (
+                    <option value={option}>{option}</option>
+                  ))}
+                </select>
+              </div>
+
+              {AuthService.getCurrentUser() &&
+              (<div class="form-group col-sm-4" hidden={this.state.contactOnly}>
+                <label htmlFor="roles">角色</label>
+                <select onChange={this.onChangeRoles.bind(this)}
+                  disabled={this.state.readonly || !AuthService.getCurrentUser().roles.includes("ROLE_ADMIN")
+                             ? "disabled"
+                             : false
+                           }
+                  class="form-control"
+                  id="roles"
+                  value={this.state.roles}
+                  name="roles"
+              >
+                  {//this.state.rolesFull.map((option) => (
+                    this.getRelevantRoles(this.state.schoolId).map((option) => (
+                    <option value={option.name}>{option.label}</option>
+                  ))}
+                </select>
+              </div>)}
+
+              <div class="form-group col-sm-4"
+                hidden={!(
+                  this.state.newuser || this.state.schoolId ||
+                  (AuthService.getCurrentUser() && AuthService.getCurrentUser().roles.includes("ROLE_ADMIN"))
+                )}
+              >
+                <label htmlFor="schoolId">所属学校</label>
+                {(this.state.newuser ||
+                  (!this.state.readonly && AuthService.getCurrentUser() &&
+                  AuthService.getCurrentUser().roles.includes("ROLE_ADMIN"))
+                  ) &&
+                  !this.state.contactOnly
+                ? (<Select onChange={this.onChangeSchoolId.bind(this)}
+                  class="form-control"
+                  id="schoolId"
+                  value={this.display(this.state.schoolId)}
+                  name="schoolId"
+                  options={this.state.schools}
+                />)
+                : (<Link
+                  to={ "/schoolsView/" + this.state.schoolId}
+                  id="schoolId"
+                  name="schoolId"
+                >
+                  {this.displayName(this.state.schoolId)}
+                </Link>)}
+              </div>
+
+              <div class="form-group col-sm-4" hidden={this.state.newuser}>
+                <label htmlFor="lastLogin">上次登录时间</label>
+                <Input
+                  readonly={""}
+                  type="date"
+                  class="form-control"
+                  name="lastLogin"
+                  value={this.state.lastLogin}
+                />
+              </div>
+
+              <div class="form-group col-sm-4" hidden={this.state.newuser}>
+                <label htmlFor="createdAt">创建时间</label>
+                <Input
+                  readonly={""}
+                  type="date"
+                  class="form-control"
+                  name="createdAt"
+                  value={this.state.createdAt}
+                />
+              </div>
+
+              <div class="w-100"></div>
+
+              {this.state.readonly ? '' : (
+                <button className="btn btn-primary ml-3"
+                  onClick={this.state.newuser ? this.handleRegister : this.updateUser}
+                >
+                  {this.state.newuser
+                    ? this.state.contactOnly
+                      ? '创建新联络人'
+                      : '创建新用户'
+                    : this.state.contactOnly
+                      ? '修改联络人'
+                      : '修改用户'
+                  }
+                </button>
+              )}
+
+              {!this.state.contactOnly && !this.state.readonly && !this.state.newuser &&
+                <Link
+                  to={'/reset?token=' +
+                    jwt.sign({ email: this.state.email }, "config.secret", {
+                      expiresIn: 900 // 15 minutes
+                    })
+                  }
+                  className="btn btn-primary  ml-2">
+                    重置密码
+                </Link>
+              }
+
+              <button
+                type="submit"
+                className="btn btn-primary ml-2"
+                onClick={() => (!this.state.dirty ||
+                          window.confirm("您确定要取消吗 ?")) &&
+                window.close()}
+              >
+                取消
+              </button>
+          </div>
+
+          {this.state.message && (
+            <div class="form-group">
+              <div
+                className={
+                  this.state.successful
+                    ? "alert alert-success"
+                    : "alert alert-danger"
+                }
+                role="alert"
+              >
+                {this.state.message}
+              </div>
+            </div>
+          )}
+          <CheckButton
+            style={{ display: "none" }}
+            ref={c => {
+              this.checkBtn = c;
+            }}
+          />
+        </Form>)}
       </div>
     );
   }
