@@ -1226,7 +1226,9 @@ export default class School extends Component {
             <button
               type="submit"
               className="btn btn-primary ml-2"
-              onClick={() => (!this.state.dirty || window.confirm("您确定要取消吗 ?")) && window.close()}
+              onClick={() => ((!this.state.dirty && !this.surveyRef.current) ||
+                            window.confirm("您确定要取消吗 ?")) &&
+                window.close()}
             >
               取消
             </button>

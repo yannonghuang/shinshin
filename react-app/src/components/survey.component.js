@@ -135,7 +135,9 @@ export default class Survey extends Component {
       categories: [],
 
       message: "",
-      submitted: false
+      submitted: false,
+
+      dirty: false,
     };
   }
 
@@ -351,7 +353,8 @@ export default class Survey extends Component {
       currentSurvey: {
         ...prevState.currentSurvey,
         schoolId: schoolId
-      }
+      },
+      dirty: true
     }));
   }
 
@@ -628,7 +631,8 @@ export default class Survey extends Component {
         ...prevState.currentSurvey,
         principalId: e.value, //.target.value
         principal: this.displayNameUser(e.value)
-      }
+      },
+      dirty: true
     }));
   }
 
@@ -638,7 +642,8 @@ export default class Survey extends Component {
         ...prevState.currentSurvey,
         contactId: e.value, //.target.value
         contact: this.displayNameUser(e.value)
-      }
+      },
+      dirty: true
     }));
   }
 
@@ -651,7 +656,8 @@ export default class Survey extends Component {
       currentSurvey: {
         ...prevState.currentSurvey,
         [name]: value
-      }
+      },
+      dirty: true
     }));
   }
 
@@ -814,7 +820,8 @@ export default class Survey extends Component {
           currentSurvey: {
             ...prevState.currentSurvey,
             docFiles: docFiles
-          }
+          },
+          dirty: true
         }));
   }
 
@@ -948,6 +955,14 @@ export default class Survey extends Component {
                   onClick={this.updateSurvey}
                 >
                   保存
+                </button>
+
+                <button
+                  type="submit"
+                  className="btn btn-primary ml-2"
+                  onClick={() => (!this.state.dirty || window.confirm("您确定要取消吗 ?")) && window.close()}
+                >
+                  取消
                 </button>
 
                 <p>{this.state.message}</p>
