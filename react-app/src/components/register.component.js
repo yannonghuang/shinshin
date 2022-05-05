@@ -607,7 +607,7 @@ export default class Register extends Component {
               this.form = c;
             }}
           >
-          
+
             <div class="row">
               <div class="form-group col-sm-4" hidden={this.state.contactOnly}>
                 <label htmlFor="username">用户名</label>
@@ -622,7 +622,7 @@ export default class Register extends Component {
                 />
               </div>
 
-              <div class="form-group col-sm-4">
+              <div class="form-group col-sm-4" hidden={!this.state.contactOnly} >
                 <label htmlFor="email">电子邮箱</label>
                 <Input
                   readonly={!this.state.contactOnly && !this.state.newuser ? "" : false}
@@ -631,7 +631,20 @@ export default class Register extends Component {
                   name="email"
                   value={this.state.email}
                   onChange={this.onChangeEmail}
-                  validations={[email]}
+                  validations={[]}
+                />
+              </div>
+
+              <div class="form-group col-sm-4" hidden={this.state.contactOnly}>
+                <label htmlFor="email">电子邮箱</label>
+                <Input
+                  readonly={!this.state.contactOnly && !this.state.newuser ? "" : false}
+                  type="text"
+                  class="form-control"
+                  name="email"
+                  value={this.state.email}
+                  onChange={this.onChangeEmail}
+                  validations={[required, email]}
                 />
               </div>
 
@@ -824,13 +837,27 @@ export default class Register extends Component {
                     重置密码
                 </Link>
               }
-
+{/*
               {AuthService.getCurrentUser() && !this.state.readonly && (<button
-                type="submit"
                 className="btn btn-primary ml-2"
                 onClick={() => (!this.state.dirty ||
                             window.confirm("您确定要取消吗 ?")) &&
                   window.close()}
+              >
+                取消
+              </button>)}
+*/}
+              {AuthService.getCurrentUser() && !this.state.readonly && (<button
+                className="btn btn-primary ml-2"
+                onClick={() => {
+                  if (!this.state.dirty) return false;
+
+                  if (window.confirm("您确定要取消吗 ?"))
+                    window.close();
+                  else
+                    return false;
+                  }
+                }
               >
                 取消
               </button>)}
