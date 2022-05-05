@@ -176,9 +176,9 @@ export default class Register extends Component {
 
     if (!this.validateSchool()) return;
 
-    this.form.validateAll();
-    if (this.checkBtn.context._errors.length !== 0)
-        return;
+    //this.form.validateAll();
+    //if (this.checkBtn.context._errors.length !== 0)
+      //return;
 
     var data = {
       username: this.state.username,
@@ -729,7 +729,8 @@ export default class Register extends Component {
                   id="roles"
                   value={this.state.roles}
                   name="roles"
-              >
+                >
+                  <option value="">请选择角色</option>
                   {//this.state.rolesFull.map((option) => (
                     this.getRelevantRoles(this.state.schoolId).map((option) => (
                     <option value={option.name}>{option.label}</option>
