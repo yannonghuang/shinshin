@@ -837,30 +837,19 @@ export default class Register extends Component {
                     重置密码
                 </Link>
               }
-{/*
-              {AuthService.getCurrentUser() && !this.state.readonly && (<button
-                className="btn btn-primary ml-2"
-                onClick={() => (!this.state.dirty ||
-                            window.confirm("您确定要取消吗 ?")) &&
-                  window.close()}
-              >
-                取消
-              </button>)}
-*/}
-              {AuthService.getCurrentUser() && !this.state.readonly && (<button
-                className="btn btn-primary ml-2"
-                onClick={() => {
-                  if (!this.state.dirty) return false;
 
-                  if (window.confirm("您确定要取消吗 ?"))
-                    window.close();
-                  else
-                    return false;
+              {AuthService.getCurrentUser() && !this.state.readonly && (<button
+                className="btn btn-primary ml-2"
+                onClick={(e) => {
+                    e.preventDefault();
+                    if (!this.state.dirty || window.confirm("您确定要取消吗 ?"))
+                      window.close()
                   }
                 }
               >
                 取消
               </button>)}
+
           </div>
 
           {this.state.message && (
