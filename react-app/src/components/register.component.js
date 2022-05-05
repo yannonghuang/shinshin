@@ -596,18 +596,18 @@ export default class Register extends Component {
 
         ? (<div>
           <h4>{this.state.message}</h4>
-          <a href="javascript:window.close();">
-            <button class="btn btn-primary">关闭</button>
-          </a>
+          {AuthService.getCurrentUser()
+            ? <a href="javascript:window.close();"><button class="btn btn-primary">关闭</button></a>
+            : <Link to={"/"}><button class="btn btn-primary">返回</button></Link>
+          }
           </div>)
 
         : (<Form
-            onSubmit={this.state.newuser ? this.handleRegister : this.updateUser}
             ref={c => {
               this.form = c;
             }}
           >
-
+          
             <div class="row">
               <div class="form-group col-sm-4" hidden={this.state.contactOnly}>
                 <label htmlFor="username">用户名</label>
@@ -625,13 +625,13 @@ export default class Register extends Component {
               <div class="form-group col-sm-4">
                 <label htmlFor="email">电子邮箱</label>
                 <Input
-                  readonly={!this.state.newuser?"":false}
+                  readonly={!this.state.contactOnly && !this.state.newuser ? "" : false}
                   type="text"
                   class="form-control"
                   name="email"
                   value={this.state.email}
                   onChange={this.onChangeEmail}
-                  validations={[required, email]}
+                  validations={[email]}
                 />
               </div>
 
@@ -654,7 +654,7 @@ export default class Register extends Component {
                   readonly={this.state.readonly?"":false}
                   type="text"
                   class="form-control"
-                  required
+
                   name="chineseName"
                   value={this.state.chineseName}
                   onChange={this.onChangeChineseName}
@@ -720,7 +720,7 @@ export default class Register extends Component {
                   ))}
                 </select>
               </div>)}
-
+{/*
               <div class="form-group col-sm-4"
                 hidden={!(
                   this.state.newuser || this.state.schoolId ||
@@ -739,14 +739,39 @@ export default class Register extends Component {
                   value={this.display(this.state.schoolId)}
                   name="schoolId"
                   options={this.state.schools}
-                />)
+                  />)
                 : (<Link
                   to={ "/schoolsView/" + this.state.schoolId}
                   id="schoolId"
                   name="schoolId"
-                >
+                  >
                   {this.displayName(this.state.schoolId)}
-                </Link>)}
+                  </Link>)}
+              </div>
+*/}
+              <div class="form-group col-sm-4"
+                hidden={!(
+                  (this.state.readonly && this.state.schoolId) ||
+                  (!this.state.readonly && (this.state.newuser ||
+                  (AuthService.getCurrentUser() && AuthService.getCurrentUser().roles.includes("ROLE_ADMIN"))))
+                )}
+              >
+                <label htmlFor="schoolId">所属学校</label>
+                {!this.state.readonly
+                ? (<Select onChange={this.onChangeSchoolId.bind(this)}
+                  class="form-control"
+                  id="schoolId"
+                  value={this.display(this.state.schoolId)}
+                  name="schoolId"
+                  options={this.state.schools}
+                  />)
+                : (<Link
+                  to={ "/schoolsView/" + this.state.schoolId}
+                  id="schoolId"
+                  name="schoolId"
+                  >
+                  {this.displayName(this.state.schoolId)}
+                  </Link>)}
               </div>
 
               <div class="form-group col-sm-4" hidden={this.state.newuser}>
@@ -773,7 +798,7 @@ export default class Register extends Component {
 
               <div class="w-100"></div>
 
-              {this.state.readonly ? '' : (
+              {!this.state.readonly && (
                 <button className="btn btn-primary ml-3"
                   onClick={this.state.newuser ? this.handleRegister : this.updateUser}
                 >
@@ -800,15 +825,15 @@ export default class Register extends Component {
                 </Link>
               }
 
-              <button
+              {AuthService.getCurrentUser() && !this.state.readonly && (<button
                 type="submit"
                 className="btn btn-primary ml-2"
                 onClick={() => (!this.state.dirty ||
-                          window.confirm("您确定要取消吗 ?")) &&
-                window.close()}
+                            window.confirm("您确定要取消吗 ?")) &&
+                  window.close()}
               >
                 取消
-              </button>
+              </button>)}
           </div>
 
           {this.state.message && (
