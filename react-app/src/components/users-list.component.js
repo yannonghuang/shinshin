@@ -24,9 +24,8 @@ const UsersList = (props) => {
 
   const [rolesFull, setRolesFull] = useState([
                                                {name: "user", label: "学校用户"},
-                                               {name: "admin", label: "管理员"},
-                                               {name: "moderator", label: "教师"},
                                                {name: "volunteer", label: "欣欣义工"},
+                                               {name: "admin", label: "管理员"},
                                              ]);
 
   const pageSizes = [20, 30, 50];

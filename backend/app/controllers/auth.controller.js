@@ -301,7 +301,7 @@ exports.signup = (req, res) => {
         });
       } else {
         // user role = 1
-        user.setRoles([1]).then(() => {
+        user.setRoles(req.body.schoolId ? [1] : [2]).then(() => {
           res.send({ message: "User was registered successfully!" });
         });
       }
@@ -372,7 +372,7 @@ exports.createContactOnly = (req, res) => {
         });
       } else {
         // user role = 1
-        user.setRoles([1]).then(() => {
+        user.setRoles(req.body.schoolId ? [1] : [2]).then(() => {
           res.send({ message: "User was registered successfully!" });
         });
       }

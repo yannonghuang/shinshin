@@ -660,7 +660,7 @@ export default class Register extends Component {
                   name="password"
                   value={this.state.password}
                   onChange={this.onChangePassword}
-                  validations={[vpassword]}
+                  validations={[required, vpassword]}
                 />
               </div>
 

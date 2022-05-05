@@ -92,7 +92,7 @@ function initial() {
 
   Role.create({
     id: 2,
-    name: "moderator"
+    name: "volunteer"
   });
 
   Role.create({
@@ -100,8 +100,4 @@ function initial() {
     name: "admin"
   });
 
-  Role.create({
-    id: 4,
-    name: "volunteer"
-  });
 }
