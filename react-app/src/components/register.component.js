@@ -602,13 +602,16 @@ export default class Register extends Component {
           }
           </div>)
 
-        : (<Form
-            ref={c => {
-              this.form = c;
-            }}
-          >
+        : (
+          <div>
+            <Form
+              ref={c => {
+                this.form = c;
+              }}
+            >
 
-            <div class="row">
+              <div className="row">
+
               <div class="form-group col-sm-4" hidden={this.state.contactOnly}>
                 <label htmlFor="username">用户名</label>
                 <Input
@@ -733,35 +736,7 @@ export default class Register extends Component {
                   ))}
                 </select>
               </div>)}
-{/*
-              <div class="form-group col-sm-4"
-                hidden={!(
-                  this.state.newuser || this.state.schoolId ||
-                  (AuthService.getCurrentUser() && AuthService.getCurrentUser().roles.includes("ROLE_ADMIN"))
-                )}
-              >
-                <label htmlFor="schoolId">所属学校</label>
-                {(this.state.newuser ||
-                  (!this.state.readonly && AuthService.getCurrentUser() &&
-                  AuthService.getCurrentUser().roles.includes("ROLE_ADMIN"))
-                  ) &&
-                  !this.state.contactOnly
-                ? (<Select onChange={this.onChangeSchoolId.bind(this)}
-                  class="form-control"
-                  id="schoolId"
-                  value={this.display(this.state.schoolId)}
-                  name="schoolId"
-                  options={this.state.schools}
-                  />)
-                : (<Link
-                  to={ "/schoolsView/" + this.state.schoolId}
-                  id="schoolId"
-                  name="schoolId"
-                  >
-                  {this.displayName(this.state.schoolId)}
-                  </Link>)}
-              </div>
-*/}
+
               <div class="form-group col-sm-4"
                 hidden={!(
                   (this.state.readonly && this.state.schoolId) ||
@@ -809,70 +784,74 @@ export default class Register extends Component {
                 />
               </div>
 
-              <div class="w-100"></div>
+              </div>
 
-              {!this.state.readonly && (
-                <button className="btn btn-primary ml-3"
-                  onClick={this.state.newuser ? this.handleRegister : this.updateUser}
-                >
-                  {this.state.newuser
-                    ? this.state.contactOnly
-                      ? '创建新联络人'
-                      : '创建新用户'
-                    : this.state.contactOnly
-                      ? '修改联络人'
-                      : '修改用户'
-                  }
-                </button>
+              {this.state.message && (
+                <div class="form-group">
+                  <div
+                    className={
+                      this.state.successful
+                        ? "alert alert-success"
+                        : "alert alert-danger"
+                    }
+                    role="alert"
+                  >
+                    {this.state.message}
+                  </div>
+                </div>
               )}
+              <CheckButton
+                style={{ display: "none" }}
+                ref={c => {
+                  this.checkBtn = c;
+                }}
+              />
 
-              {!this.state.contactOnly && !this.state.readonly && !this.state.newuser &&
-                <Link
-                  to={'/reset?token=' +
-                    jwt.sign({ email: this.state.email }, "config.secret", {
-                      expiresIn: 900 // 15 minutes
-                    })
-                  }
-                  className="btn btn-primary  ml-2">
-                    重置密码
-                </Link>
-              }
+            </Form>
 
-              {AuthService.getCurrentUser() && !this.state.readonly && (<button
-                className="btn btn-primary ml-2"
-                onClick={(e) => {
-                    e.preventDefault();
-                    if (!this.state.dirty || window.confirm("您确定要取消吗 ?"))
-                      window.close()
-                  }
-                }
+
+            <div class="w-100"></div>
+            {!this.state.readonly && (
+              <button className="btn btn-primary"
+                onClick={this.state.newuser ? this.handleRegister : this.updateUser}
               >
-                取消
-              </button>)}
+                {this.state.newuser
+                  ? this.state.contactOnly
+                    ? '创建新联络人'
+                    : '创建新用户'
+                  : this.state.contactOnly
+                    ? '修改联络人'
+                    : '修改用户'
+                }
+              </button>
+            )}
+
+            {!this.state.contactOnly && !this.state.readonly && !this.state.newuser &&
+              <Link
+                to={'/reset?token=' +
+                  jwt.sign({ email: this.state.email }, "config.secret", {
+                    expiresIn: 900 // 15 minutes
+                  })
+                }
+                className="btn btn-primary  ml-2">
+                  重置密码
+              </Link>
+            }
+
+            {AuthService.getCurrentUser() && !this.state.readonly && (<button
+              className="btn btn-primary ml-2"
+              onClick={(e) => {
+                  //e.preventDefault();
+                  if (!this.state.dirty || window.confirm("您确定要取消吗 ?"))
+                    window.close()
+                }
+              }
+            >
+              取消
+            </button>)}
 
           </div>
-
-          {this.state.message && (
-            <div class="form-group">
-              <div
-                className={
-                  this.state.successful
-                    ? "alert alert-success"
-                    : "alert alert-danger"
-                }
-                role="alert"
-              >
-                {this.state.message}
-              </div>
-            </div>
-          )}
-          <CheckButton
-            style={{ display: "none" }}
-            ref={c => {
-              this.checkBtn = c;
-            }}
-          />
-        </Form>)}
+        )}
       </div>
     );
   }
