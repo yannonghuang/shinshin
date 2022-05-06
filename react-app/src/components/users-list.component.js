@@ -419,7 +419,7 @@ const UsersList = (props) => {
 
   return (
     <div className="list row">
-      <h4>{schoolTitle ? schoolTitle + " - " : ""}联络人(总数：{totalItems})</h4>
+      <h4>{schoolTitle ? schoolTitle + " - " : ""}用户及联络人(总数：{totalItems})</h4>
       <div class="w-100"></div>
 
       <div className="col-sm-7">

@@ -151,13 +151,13 @@ export default class Register extends Component {
       .then(response => {
         console.log(response.data);
         this.setState({
-          message: "用户信息成功更新!",
+          message: "联络人信息成功更新!",
           successful: true
         });
       })
       .catch(e => {
         this.setState({
-          message: "用户信息修改失败：" + e,
+          message: "联络人信息修改失败：" + e,
           successful: false
         });
         console.log(e);
@@ -625,6 +625,31 @@ export default class Register extends Component {
                 />
               </div>
 
+              <div class="form-group col-sm-4">
+                <label htmlFor="chineseName">中文名</label>
+                <Input
+                  readonly={this.state.readonly?"":false}
+                  type="text"
+                  class="form-control"
+
+                  name="chineseName"
+                  value={this.state.chineseName}
+                  onChange={this.onChangeChineseName}
+                />
+              </div>
+
+              <div class="form-group col-sm-4">
+                <label htmlFor="phone">电话</label>
+                <Input
+                  readonly={this.state.readonly?"":false}
+                  type="text"
+                  class="form-control"
+                  name="phone"
+                  value={this.state.phone}
+                  onChange={this.onChangePhone}
+                />
+              </div>
+
               <div class="form-group col-sm-4" hidden={!this.state.contactOnly} >
                 <label htmlFor="email">电子邮箱</label>
                 <Input
@@ -661,31 +686,6 @@ export default class Register extends Component {
                   value={this.state.password}
                   onChange={this.onChangePassword}
                   validations={[required, vpassword]}
-                />
-              </div>
-
-              <div class="form-group col-sm-4">
-                <label htmlFor="chineseName">中文名</label>
-                <Input
-                  readonly={this.state.readonly?"":false}
-                  type="text"
-                  class="form-control"
-
-                  name="chineseName"
-                  value={this.state.chineseName}
-                  onChange={this.onChangeChineseName}
-                />
-              </div>
-
-              <div class="form-group col-sm-4">
-                <label htmlFor="phone">电话</label>
-                <Input
-                  readonly={this.state.readonly?"":false}
-                  type="text"
-                  class="form-control"
-                  name="phone"
-                  value={this.state.phone}
-                  onChange={this.onChangePhone}
                 />
               </div>
 
