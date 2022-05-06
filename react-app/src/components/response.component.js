@@ -89,7 +89,7 @@ export default class Response extends Component {
   }
 
   async setUpdateStatus() {
-    const UPDATE_THRESHOLD = 2; // number of days
+    const UPDATE_THRESHOLD = 0.1; // number of days
     const user = AuthService.getCurrentUser();
     if (user && user.schoolId) {
       try {
