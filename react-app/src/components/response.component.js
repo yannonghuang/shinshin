@@ -90,7 +90,7 @@ export default class Response extends Component {
 
   async setUpdateStatus() {
     const UPDATE_THRESHOLD = 0.01; // number of days
-    const REFRESH_RATE = 1; // number of seconds
+    const REFRESH_RATE = 3; // number of seconds
 
     const user = AuthService.getCurrentUser();
     if (user && user.schoolId) {
