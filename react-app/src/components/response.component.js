@@ -89,7 +89,9 @@ export default class Response extends Component {
   }
 
   async setUpdateStatus() {
-    const UPDATE_THRESHOLD = 0.1; // number of days
+    const UPDATE_THRESHOLD = 0.01; // number of days
+    const REFRESH_RATE = 1; // number of seconds
+
     const user = AuthService.getCurrentUser();
     if (user && user.schoolId) {
       try {
@@ -100,6 +102,11 @@ export default class Response extends Component {
           updatedRecently: updatedRecently,
           updatedAt: updatedAtObj.toLocaleDateString('zh-cn', { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })
         });
+
+        if (!updatedRecently)
+          //this.refresher = window.setTimeout(this.props.history.go(0), REFRESH_RATE * 1000);
+          setTimeout(function() {window.location.reload()}, REFRESH_RATE * 1000);
+
       } catch (e) {
         console.log(e.message);
       }
@@ -503,7 +510,7 @@ export default class Response extends Component {
       {!this.state.updatedRecently
       ? (
         <div>
-            <h4>{'您的学校信息上次更新时间是：' + this.state.updatedAt + ', 请点击下面打开新窗口更新学校信息，然后回到本页刷新页面，继续操作'}</h4>
+            <p>{'您的学校信息上次更新时间是：' + this.state.updatedAt + ', 请点击下面打开新窗口更新学校信息，然后回到本页刷新页面，继续操作'}</p>
             <a target='_blank' href={"/surveys/" + currentResponse.schoolId} class="btn btn-primary">更新</a>
         </div>
       )
