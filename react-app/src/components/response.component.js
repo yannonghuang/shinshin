@@ -503,8 +503,8 @@ export default class Response extends Component {
       {!this.state.updatedRecently
       ? (
         <div>
-            <p>{'您的学校信息上次更新时间是：' + this.state.updatedAt + ', 请点击下面更新学校信息'}</p>
-            <a href={"/surveys/" + currentResponse.schoolId} class="btn btn-primary">更新</a>
+            <h4>{'您的学校信息上次更新时间是：' + this.state.updatedAt + ', 请点击下面打开新窗口更新学校信息，然后回到本页刷新页面，继续操作'}</h4>
+            <a target='_blank' href={"/surveys/" + currentResponse.schoolId} class="btn btn-primary">更新</a>
         </div>
       )
       : (this.state.submitted
