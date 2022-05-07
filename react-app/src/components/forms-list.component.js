@@ -268,7 +268,7 @@ const FormsList = (props) => {
                 </span>
               }
 
-              {AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId &&
+              {AuthService.isAdmin() &&
                 <span title="复制" onClick={() => copyForm(rowIdx)}>
                   <i className="far fa-copy action mr-2"></i>
                 </span>

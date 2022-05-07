@@ -105,7 +105,7 @@ class AuthService {
 
   isAdmin() {
     const user = JSON.parse(localStorage.getItem('user'));
-    user && !user.schoolId && user.roles.includes("ROLE_ADMIN");
+    return user && !user.schoolId && user.roles.includes("ROLE_ADMIN");
   }
 
 
