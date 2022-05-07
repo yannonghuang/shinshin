@@ -626,7 +626,7 @@ export default class Register extends Component {
               </div>
 
               <div class="form-group col-sm-4">
-                <label htmlFor="chineseName">中文名</label>
+                <label htmlFor="chineseName">姓名</label>
                 <Input
                   readonly={this.state.readonly?"":false}
                   type="text"
@@ -639,7 +639,7 @@ export default class Register extends Component {
               </div>
 
               <div class="form-group col-sm-4">
-                <label htmlFor="phone">电话</label>
+                <label htmlFor="phone">手机号</label>
                 <Input
                   readonly={this.state.readonly?"":false}
                   type="text"
