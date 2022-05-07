@@ -64,7 +64,7 @@ class App extends Component {
     this.state = {
       showModeratorBoard: false,
       showAdminBoard: false,
-      currentUser: undefined,
+
     };
   }
 
@@ -73,7 +73,6 @@ class App extends Component {
 
     if (user) {
       this.setState({
-        currentUser: user,
         showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
         showAdminBoard: user.roles.includes("ROLE_ADMIN"),
       });
@@ -111,7 +110,6 @@ class App extends Component {
   }
 
   render() {
-    const { currentUser, showModeratorBoard, showAdminBoard } = this.state;
 
     return (
       <div>
@@ -143,7 +141,8 @@ class App extends Component {
 
             {AuthService.isAdmin() && (
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 管理
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -154,7 +153,8 @@ class App extends Component {
 
             {(!AuthService.isLogin() || AuthService.isVolunteer()) && (
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 学校
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -222,28 +222,33 @@ class App extends Component {
 
           </div>
 
-          {currentUser
+          {AuthService.isLogin()
           ? (
             <div class="navbar-nav ml-auto">
 
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
-                {currentUser.lastLogin
-                  ? <span title={"上次登录时间: " + currentUser.lastLogin}>
-                    我的欣欣({currentUser.chineseName ? currentUser.chineseName : currentUser.username})
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {AuthService.getCurrentUser().lastLogin
+                  ? <span title={"上次登录时间: " + AuthService.getCurrentUser().lastLogin}>
+                    我的欣欣({AuthService.getCurrentUser().chineseName
+                    ? AuthService.getCurrentUser().chineseName
+                    : AuthService.getCurrentUser().username})
                     </span>
-                  : <span> 我的欣欣({currentUser.chineseName ? currentUser.chineseName : currentUser.username}) </span>
+                  : <span> 我的欣欣({AuthService.getCurrentUser().chineseName
+                    ? AuthService.getCurrentUser().chineseName
+                    : AuthService.getCurrentUser().username})
+                    </span>
                 }
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href={"/users/" + currentUser.id} target='_blank'>
+                <a class="dropdown-item" href={"/users/" + AuthService.getCurrentUser().id} target='_blank'>
                   个人信息
                 </a>
 
                 <a class="dropdown-item"
                   href={'/reset?token=' +
-                    jwt.sign({ email: currentUser.email }, "config.secret", {
+                    jwt.sign({ email: AuthService.getCurrentUser().email }, "config.secret", {
                       expiresIn: 900 // 15 minutes
                     })
                   }
@@ -251,11 +256,11 @@ class App extends Component {
                   重置密码
                 </a>
 
-                {currentUser.schoolId
-                  ? <a class="dropdown-item" href={"/schoolsView/" + currentUser.schoolId}>我的学校</a>
+                {AuthService.getCurrentUser().schoolId
+                  ? <a class="dropdown-item" href={"/schoolsView/" + AuthService.getCurrentUser().schoolId}>我的学校</a>
                   : ''
                 }
-                <a class="dropdown-item" href={"/responses/user/" + currentUser.id}>我的项目申请</a>
+                <a class="dropdown-item" href={"/responses/user/" + AuthService.getCurrentUser().id}>我的项目申请</a>
 {/*}
                 <a class="dropdown-item" href={"/login"} onClick={this.logOut}>退出</a>
 */}
@@ -270,7 +275,7 @@ class App extends Component {
 {/*}
               <li class="nav-item">
                 <Link to={"/profile"} class="nav-link">
-                  {currentUser.username}
+                  {AuthService.getCurrentUser().username}
                 </Link>
               </li>
 */}
