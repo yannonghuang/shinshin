@@ -204,7 +204,7 @@ export default class School extends Component {
   getUsers(schoolId) {
     //UserDataService.getAll2({schoolId: this.state.currentSchool.id})
     if (!schoolId) return;
-    
+
     UserDataService.getAllSimple({schoolId: schoolId})
       .then(response => {
         this.setState({

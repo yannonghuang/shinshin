@@ -161,7 +161,10 @@ class App extends Component {
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href={"/schools"}>学校列表</a>
                 <a class="dropdown-item" href={"/regions"} hidden={!currentUser}>地区列表</a>
-                <a class="dropdown-item" href={"/addS"} hidden={!currentUser} target="_blank">新增学校</a>
+                <a class="dropdown-item" href={"/addS"}
+                  hidden={!currentUser || !(currentUser && !currentUser.schoolId && showAdminBoard)}
+                  target="_blank">新增学校
+                </a>
 {/*
                 <a class="dropdown-item" href={"/addSurvey"}>新增调查表</a>
 */}
@@ -182,10 +185,16 @@ class App extends Component {
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href={"/projects"}>项目列表</a>
-                <a class="dropdown-item" href={"/addP"} hidden={!currentUser} target="_blank">新增项目</a>
+                <a class="dropdown-item" href={"/addP"}
+                  hidden={!currentUser || !(currentUser && !currentUser.schoolId && showAdminBoard)}
+                  target="_blank">新增项目
+                </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href={"/projectsXR"}>向荣支持项目列表</a>
-                <a class="dropdown-item" href={"/addPXR"} hidden={!currentUser} target="_blank">新增向荣支持项目</a>
+                <a class="dropdown-item" href={"/addPXR"}
+                  hidden={!currentUser || !(currentUser && !currentUser.schoolId && showAdminBoard)}
+                  target="_blank">新增向荣支持项目
+                </a>
                 <div class="dropdown-divider" hidden={!currentUser}></div>
                 <a class="dropdown-item" href={"/dossiers"} hidden={!currentUser} >项目文档</a>
               </div>
@@ -201,7 +210,10 @@ class App extends Component {
                 <a class="dropdown-item" href={"/responses"}>项目申请列表</a>
 */}
                 <a class="dropdown-item" href={"/forms"}>项目申请表</a>
-                <a class="dropdown-item" href={"/addF"} target="_blank">新增项目申请表</a>
+                <a class="dropdown-item" href={"/addF"}
+                  hidden={!(currentUser && !currentUser.schoolId && showAdminBoard)}
+                  target="_blank">新增项目申请表
+                </a>
 {/*
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href={"/attachments"}>项目申请附件</a>
