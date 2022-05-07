@@ -183,8 +183,15 @@ exports.findOneContent = (req, res) => {
   Dossier.findByPk(id)
     .then(data => {
       if (data) {
-        res.sendFile(data.path);
-        //res.sendFile(getPath(data.filename));
+        if (fs.existsSync(data.path))
+          res.sendFile(data.path);
+          //res.sendFile(getPath(data.filename));
+        else if (fs.existsSync(data.destination))
+          res.sendFile(data.destination);
+        else
+          res.status(404).send({
+            message: `Cannot find Dossier with id=${id}.`
+          });
       } else {
         res.status(404).send({
           message: `Cannot find Dossier with id=${id}.`
