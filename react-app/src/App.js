@@ -225,7 +225,7 @@ class App extends Component {
                 }
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href={"/users/" + currentUser.id}>
+                <a class="dropdown-item" href={"/users/" + currentUser.id} target='_blank'>
                   个人信息
                 </a>
 
