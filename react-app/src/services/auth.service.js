@@ -104,7 +104,7 @@ class AuthService {
   }
 
   isLogin() {
-    return localStorage.getItem('user');
+    return this.getCurrentUser();
   }
 
   isAdmin() {

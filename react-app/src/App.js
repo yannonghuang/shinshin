@@ -222,7 +222,7 @@ class App extends Component {
 
           </div>
 
-          {AuthService.isLogin()
+          {currentUser
           ? (
             <div class="navbar-nav ml-auto">
 
