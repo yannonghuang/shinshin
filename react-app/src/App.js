@@ -94,7 +94,6 @@ class App extends Component {
   }
 
   noNavBar() {
-
     if (this.props.location.pathname.match(/schools\/(\d)+/)) return true;
     if (this.props.location.pathname.match(/projects\/(\d)+/)) return true;
     if (this.props.location.pathname.match(/responses\/(\d)+/)) return true;
@@ -130,7 +129,7 @@ class App extends Component {
             学校项目管理系统
           </Link>
 
-          {currentUser && currentUser.schoolId && <Link to={"/"} class="navbar-brand">
+          {AuthService.isSchoolUser() && <Link to={"/"} class="navbar-brand">
             主页
           </Link>}
 
@@ -142,7 +141,7 @@ class App extends Component {
 
           <div class="collapse navbar-collapse navbar-nav mr-auto" id="navbarSupportedContent">
 
-            {(currentUser && !currentUser.schoolId && showAdminBoard) && (
+            {AuthService.isAdmin() && (
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 管理
@@ -153,32 +152,32 @@ class App extends Component {
               </div>
             </li>)}
 
-            {(!currentUser || (currentUser && !currentUser.schoolId)) && (
+            {(!AuthService.isLogin() || AuthService.isVolunteer()) && (
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 学校
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href={"/schools"}>学校列表</a>
-                <a class="dropdown-item" href={"/regions"} hidden={!currentUser}>地区列表</a>
+                <a class="dropdown-item" href={"/regions"} hidden={!AuthService.isLogin()}>地区列表</a>
                 <a class="dropdown-item" href={"/addS"}
-                  hidden={!currentUser || !(currentUser && !currentUser.schoolId && showAdminBoard)}
+                  hidden={!AuthService.isLogin() || !AuthService.isAdmin()}
                   target="_blank">新增学校
                 </a>
 {/*
                 <a class="dropdown-item" href={"/addSurvey"}>新增调查表</a>
 */}
-                <div class="dropdown-divider" hidden={!currentUser}></div>
-                <a class="dropdown-item" href={"/documents"} hidden={!currentUser}>学校文档</a>
-                <a class="dropdown-item" href={"/comments"} hidden={!currentUser}>留言</a>
-                <a class="dropdown-item" href={"/logs"} hidden={!currentUser}>修改记录</a>
+                <div class="dropdown-divider" hidden={!AuthService.isLogin()}></div>
+                <a class="dropdown-item" href={"/documents"} hidden={!AuthService.isLogin()}>学校文档</a>
+                <a class="dropdown-item" href={"/comments"} hidden={!AuthService.isLogin()}>留言</a>
+                <a class="dropdown-item" href={"/logs"} hidden={!AuthService.isLogin()}>修改记录</a>
 {/*
                 <a class="dropdown-item" href={"/surveys"}>调查表列表</a>
 */}
               </div>
             </li>)}
 
-            {(!currentUser || (currentUser && !currentUser.schoolId)) && (
+            {(!AuthService.isLogin() || AuthService.isVolunteer()) && (
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 项目
@@ -186,21 +185,21 @@ class App extends Component {
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href={"/projects"}>项目列表</a>
                 <a class="dropdown-item" href={"/addP"}
-                  hidden={!currentUser || !(currentUser && !currentUser.schoolId && showAdminBoard)}
+                  hidden={!AuthService.isLogin() || !AuthService.isAdmin()}
                   target="_blank">新增项目
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href={"/projectsXR"}>向荣支持项目列表</a>
                 <a class="dropdown-item" href={"/addPXR"}
-                  hidden={!currentUser || !(currentUser && !currentUser.schoolId && showAdminBoard)}
+                  hidden={!AuthService.isLogin() || !AuthService.isAdmin()}
                   target="_blank">新增向荣支持项目
                 </a>
-                <div class="dropdown-divider" hidden={!currentUser}></div>
-                <a class="dropdown-item" href={"/dossiers"} hidden={!currentUser} >项目文档</a>
+                <div class="dropdown-divider" hidden={!AuthService.isLogin()}></div>
+                <a class="dropdown-item" href={"/dossiers"} hidden={!AuthService.isLogin()} >项目文档</a>
               </div>
             </li>)}
 
-            {(currentUser && !currentUser.schoolId) && (
+            {AuthService.isVolunteer() && (
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 项目申请
@@ -211,7 +210,7 @@ class App extends Component {
 */}
                 <a class="dropdown-item" href={"/forms"}>项目申请表</a>
                 <a class="dropdown-item" href={"/addF"}
-                  hidden={!(currentUser && !currentUser.schoolId && showAdminBoard)}
+                  hidden={!AuthService.isAdmin()}
                   target="_blank">新增项目申请表
                 </a>
 {/*
@@ -223,7 +222,8 @@ class App extends Component {
 
           </div>
 
-          {currentUser ? (
+          {AuthService.isLogin()
+          ? (
             <div class="navbar-nav ml-auto">
 
             <li class="nav-item dropdown">
@@ -275,7 +275,8 @@ class App extends Component {
               </li>
 */}
             </div>
-          ) : (
+            )
+          : (
             <div class="navbar-nav ml-auto">
               <li class="nav-item">
                 <Link to={"/login"} class="nav-link">

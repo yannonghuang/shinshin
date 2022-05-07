@@ -103,11 +103,24 @@ class AuthService {
     return (user.thisLogin + user.validity) > Math.floor(Date.now()/1000);
   }
 
+  isLogin() {
+    return localStorage.getItem('user');
+  }
+
   isAdmin() {
     const user = JSON.parse(localStorage.getItem('user'));
     return user && !user.schoolId && user.roles.includes("ROLE_ADMIN");
   }
 
+  isVolunteer() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    return user && !user.schoolId;
+  }
+
+  isSchoolUser() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    return user && user.schoolId;
+  }
 
   getRoles() {
     return axios.get(API_URL + "roles");
