@@ -516,7 +516,7 @@ export default class Response extends Component {
       )
       : (this.state.submitted
         ? (<div>
-          <h4>{this.state.message}</h4>
+          <p>{this.state.message}</p>
           <a href="javascript:window.close();">
             <button class="btn btn-primary">关闭</button>
           </a>

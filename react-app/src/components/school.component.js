@@ -744,8 +744,7 @@ export default class School extends Component {
       <div>
         {(this.state.submitted /*&& this.state.newschool*/) ? (
           <div>
-            <h4>{this.state.message}</h4>
-
+            <p>{this.state.message}</p>
             <a href="javascript:window.close();">
               <button class="btn btn-primary">关闭</button>
             </a>
