@@ -9,6 +9,8 @@ import { useTable, useSortBy, useFlexLayout } from "react-table";
 
 import YearPicker from 'react-single-year-picker';
 
+import AuthService from "./../services/auth.service";
+
 const ProjectsList = (props) => {
   const [projects, setProjects] = useState([]);
   const [exportProjects, setExportProjects] = useState([]);
@@ -391,7 +393,7 @@ const ProjectsList = (props) => {
               </Link>)}
 
 
-              {!readonly && currentUser && (<span onClick={() => window.confirm("您确定要删除吗 ?") && deleteProject(rowIdx)}>
+              {!readonly && AuthService.isAdmin() && (<span onClick={() => window.confirm("您确定要删除吗 ?") && deleteProject(rowIdx)}>
                 <i className="fas fa-trash action"></i>
               </span>)}
             </div>

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import SchoolDataService from "../services/school.service";
 import ProjectDataService from "../services/project.service";
+import AuthService from "../services/auth.service";
 import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
 import { withRouter } from "react-router-dom";
@@ -730,7 +731,7 @@ const SchoolsList = (props) => {
                 <i className="far fa-edit action mr-2"></i>
               </Link>)}
 
-              {currentUser && (<span onClick={() => window.confirm("您确定要删除吗 ?") && deleteSchool(rowIdx)}>
+              {AuthService.isAdmin() && (<span onClick={() => window.confirm("您确定要删除吗 ?") && deleteSchool(rowIdx)}>
                 <i className="fas fa-trash action"></i>
               </span>)}
             </div>

@@ -274,14 +274,14 @@ const FormsList = (props) => {
                 </span>
               }
 
-              {AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId &&
+              {AuthService.isAdmin() &&
               !formsRef.current[rowIdx].published &&
                 <span title="发布" onClick={() => window.confirm("您确定发布吗 ?") && publishForm(rowIdx)} >
                   <i className="fa fa-check action mr-2"></i>
                 </span>
               }
 
-              {AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId &&
+              {AuthService.isAdmin() &&
                 <span title="删除" onClick={() => window.confirm("您确定要删除吗 ?") && deleteForm(rowIdx)} >
                   <i className="fas fa-trash action"></i>
                 </span>
