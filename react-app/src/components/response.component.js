@@ -512,6 +512,9 @@ export default class Response extends Component {
         <div>
             <p>{'您的学校信息上次更新时间是：' + this.state.updatedAt + ', 请点击下面更新学校信息'}</p>
             <a target='_blank' href={"/surveys/" + currentResponse.schoolId} class="btn btn-primary">更新</a>
+            <a href="javascript:window.close();">
+              <button class="btn btn-primary ml-2">暂不申请</button>
+            </a>
         </div>
       )
       : (this.state.submitted
