@@ -954,7 +954,7 @@ const SchoolsList = (props) => {
 */}
           <div hidden={!currentUser}>
             <button
-              className="btn btn-primary ml-2"
+              className="btn btn-primary"
               type="button"
               onClick={retrieveExportSchools}
             >

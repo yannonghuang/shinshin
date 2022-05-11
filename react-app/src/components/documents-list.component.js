@@ -168,8 +168,10 @@ const DocumentsList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
+{/*
               {(documentsRef.current[rowIdx].mimetype.startsWith('image') ||
                 documentsRef.current[rowIdx].mimetype.indexOf('pdf') > 0 ) && (
+*/}
               <a href="#" onClick={() =>
                 download(documentsRef.current[rowIdx].id,
                   documentsRef.current[rowIdx].originalname,
@@ -178,9 +180,13 @@ const DocumentsList = (props) => {
               >
                 <i className="fas fa-eye action mr-2"></i>
               </a>
+{/*
               )}
+*/}
 
+{/*
               {!(documentsRef.current[rowIdx].mimetype.indexOf('pdf') > 0 ) && (
+*/}
               <a href="#" onClick={() =>
                 download(documentsRef.current[rowIdx].id,
                   documentsRef.current[rowIdx].originalname,
@@ -189,7 +195,9 @@ const DocumentsList = (props) => {
               >
                 <i className="fas fa-download action mr-2"></i>
               </a>
+{/*
               )}
+*/}
 
               {!readonly && (<span onClick={() => window.confirm("您确定要删除吗 ?") && deleteDocument(rowIdx)}>
                 <i className="fas fa-trash action"></i>
