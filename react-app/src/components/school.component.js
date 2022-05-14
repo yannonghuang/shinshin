@@ -1306,7 +1306,10 @@ export default class School extends Component {
                 <ResponsesList
                   schoolId = {currentSchool.id}
                   embedded = {true}
-                  readonly = {this.state.readonly && !AuthService.getCurrentUser().schoolId}
+                  readonly = {this.state.readonly &&
+                    ((AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId) ||
+                    !AuthService.getCurrentUser())
+                  }
                 />
               </TabPanel>
               <TabPanel>
@@ -1314,7 +1317,10 @@ export default class School extends Component {
                   schoolId = {currentSchool.id}
                   docCategory = {'!照片'}
                   embedded = {true}
-                  readonly = {this.state.readonly && !AuthService.getCurrentUser().schoolId}
+                  readonly = {this.state.readonly &&
+                    ((AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId) ||
+                    !AuthService.getCurrentUser())
+                  }
                 />
               </TabPanel>
               <TabPanel>
@@ -1322,20 +1328,29 @@ export default class School extends Component {
                   schoolId = {currentSchool.id}
                   docCategory = {'照片'}
                   embedded = {true}
-                  readonly = {this.state.readonly && !AuthService.getCurrentUser().schoolId}
+                  readonly = {this.state.readonly &&
+                    ((AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId) ||
+                    !AuthService.getCurrentUser())
+                  }
                 />
               </TabPanel>
               <TabPanel>
                 <CommentsList
                   schoolId = {currentSchool.id}
-                  readonly = {this.state.readonly && !AuthService.getCurrentUser().schoolId}
+                  readonly = {this.state.readonly &&
+                    ((AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId) ||
+                    !AuthService.getCurrentUser())
+                  }
                 />
               </TabPanel>
               {currentSchool.xr ? (<TabPanel>
                 <ProjectsList
                   schoolId = {currentSchool.id}
                   embedded = {true}
-                  readonly = {this.state.readonly && !AuthService.getCurrentUser().schoolId}
+                  readonly = {this.state.readonly &&
+                    ((AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId) ||
+                    !AuthService.getCurrentUser())
+                  }
                   xr = {true}
                 />
               </TabPanel>) : null}
