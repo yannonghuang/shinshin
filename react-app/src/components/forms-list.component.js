@@ -262,7 +262,7 @@ const FormsList = (props) => {
                 <i className='fa fa-eye action mr-2' ></i>
               </Link>
 
-              {AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId &&
+              {AuthService.isAdmin() &&
                 <span title="编辑" onClick={() => openForm(rowIdx)}>
                   <i className="far fa-edit action mr-2"></i>
                 </span>
