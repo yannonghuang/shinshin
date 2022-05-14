@@ -198,7 +198,13 @@ const ProjectsList = (props) => {
       });
   };
 
-  useEffect(retrieveProjects, [page, pageSize, orderby, searchCode, searchName, searchStartAt, searchRegion]);
+  const search = () => {
+    setPage(1);
+    retrieveProjects();
+  };
+
+  useEffect(search, [pageSize, orderby, searchCode, searchName, searchStartAt, searchRegion]);
+  useEffect(retrieveProjects, [page]);
 
   const refreshList = () => {
     retrieveProjects();
@@ -448,11 +454,6 @@ const ProjectsList = (props) => {
   //useFlexLayout,
   useSortBy,
   );
-
-  const search = () => {
-    setPage(1);
-    retrieveProjects();
-  };
 
   const handlePageChange = (event, value) => {
     setPage(value);

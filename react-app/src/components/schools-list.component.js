@@ -321,8 +321,15 @@ const SchoolsList = (props) => {
       });
   };
 
-  useEffect(retrieveSchools, [page, pageSize, orderby, searchName, searchCode, searchRegion, searchStartAt,
+  const search = () => {
+    setPage(1);
+    retrieveSchools();
+  };
+
+  useEffect(search, [pageSize, orderby, searchName, searchCode, searchRegion, searchStartAt,
                             searchLastVisit, searchDonor, searchStage, searchStatus, searchRequest, searchXR]);
+
+  useEffect(retrieveSchools, [page]);
 
   const refreshList = () => {
     retrieveSchools();
