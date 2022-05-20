@@ -297,8 +297,8 @@ const buildFilters = async (req) => {
   const lastVisit = req.body.lastVisit;
   const exportFlag = req.body.exportFlag;
   const region = req.body.region
-    ? req.body.region.startsWith('湖南湘西')
-      ? req.body.region.substring(0, 4)
+    ? req.body.region.startsWith('湖南省湘西州')
+      ? req.body.region.substring(0, 6)
       : req.body.region.substring(0, 2)
     : null;
   const xr = req.body.xr;
