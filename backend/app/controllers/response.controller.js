@@ -54,6 +54,60 @@ exports.create = async (req, res) => {
     startAt: startAt,
   };
 
+  try {
+    // Save Response in the database
+    let data = await Response.create(response);
+
+    // Create a Project
+    const project = {
+      name: data.title, //req.body.name,
+      schoolId: data.schoolId,
+      responseId: data.id,
+      startAt: startAt,
+      status: '申请'
+    };
+
+    // Save Project in the database
+    let pdata = await Project.create(project);
+
+    res.send(data);
+
+  } catch(err) {
+    console.log(err.message || "Some error occurred while creating the Project.");
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while creating the Project."
+      });
+    }
+};
+
+// Create and Save a new Response
+exports.SAVE_create = async (req, res) => {
+  // Validate request
+  if (!req.body.title) {
+    res.status(400).send({
+      message: "Content can not be empty!"
+    });
+    return;
+  }
+
+  const formId = req.body.formId;
+  var startAt = null;
+  if (formId) {
+    const f = await Form.findByPk(formId);
+    if (f) startAt = f.startAt;
+  }
+
+  // Create a Response
+  const response = {
+    title: req.body.title,
+    fdata: req.body.fdata,
+    formId: req.body.formId,
+    schoolId: req.body.schoolId,
+    userId: req.body.userId,
+    startAt: startAt,
+  };
+
   // Save Response in the database
   Response.create(response)
     .then(data => {
@@ -316,22 +370,55 @@ exports.update = (req, res) => {
 };
 
 // Delete a Response with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    await Project.destroy({
+      where: { responseId: id },
+      force: true
+    })
+
+    await Response.destroy({
+      where: { id: id }
+    });
+
+    res.send({
+      message: "Response & associated project deleted successfully!"
+    });
+  } catch (err) {
+    res.status(500).send({
+      message: "Could not delete Response with id=" + id
+    });
+  };
+};
+
+// Delete a Response with the specified id in the request
+exports.SAVE_delete = (req, res) => {
   const id = req.params.id;
 
   Response.destroy({
     where: { id: id }
   })
     .then(num => {
+/**
       if (num == 1) {
-        res.send({
-          message: "Response was deleted successfully!"
+*/
+        Project.destroy({
+          where: { responseId: id }
+        })
+        .then(n => {
+          res.send({
+            message: "Response & associated project deleted successfully!"
+          });
         });
+/**
       } else {
         res.send({
           message: `Cannot delete Response with id=${id}. Maybe Response was not found!`
         });
       }
+*/
     })
     .catch(err => {
       res.status(500).send({

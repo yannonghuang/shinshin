@@ -52,7 +52,7 @@ export default class Project extends Component {
         name: "",
         schoolId: null,
         responseId: null,
-        status: "",
+        status: "申请",
         budget: 0,
         photo: null,
         file: null, // for photo
@@ -392,7 +392,7 @@ export default class Project extends Component {
       budget: 0,
       photo: null,
       file: null,
-      status: "",
+      status: "申请",
       docFiles: [],
       docCategory: "",
       description: "",

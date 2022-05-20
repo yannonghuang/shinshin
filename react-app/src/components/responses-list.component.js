@@ -464,7 +464,7 @@ const ResponsesList = (props) => {
                 <i className="far fa-edit action mr-2"></i>
               </Link>)}
 
-              {!readonly && AuthService.isAdmin() && (<span onClick={() => window.confirm("您确定要删除吗 ?") && deleteResponse(rowIdx)}>
+              {!readonly && AuthService.isVolunteer() && (<span onClick={() => window.confirm("您确定要删除吗 ?") && deleteResponse(rowIdx)}>
                 <i className="fas fa-trash action"></i>
               </span>)}
             </div>

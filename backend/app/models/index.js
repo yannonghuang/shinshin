@@ -77,6 +77,7 @@ db.DOSSIER_CATEGORIES = [
 
 db.PROJECT_STATUSES = [
   "申请",
+  "实施",
   "已完成",
 ];
 

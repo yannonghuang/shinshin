@@ -22,6 +22,7 @@ const getPagingData = (data, page, limit) => {
 };
 
 const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
+  const isSchoolUser = await authJwt.getSchoolId(req);
   var updates = [];
   Object.keys(newObj).forEach(key => {
     var newv = newObj[key];
@@ -31,9 +32,10 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
         getAttributes(Survey).includes(key) &&
         ((newv || newv === false) && newv !== undefined) &&
         (!oldObj || !oldObj[key] || (oldv != newv))) {
-      if ((authJwt.getSchoolId(req) && key !== 'contactId' && key !== 'principalId') || // school user
-        !getAttributes(School).includes(key))
+      if ((isSchoolUser && key !== 'contactId' && key !== 'principalId') || // school user
+        !getAttributes(School).includes(key)) {
         updates.push({field: key, oldv: oldv, newv: newv, schoolId, userId});
+      }
       if (oldObj) oldObj.set(key, newObj[key]);
     }
   });
