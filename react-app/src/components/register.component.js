@@ -613,7 +613,8 @@ export default class Register extends Component {
               <div className="row">
 
               <div class="form-group col-sm-4" hidden={this.state.contactOnly}>
-                <label htmlFor="username">用户名</label>
+                <label htmlFor="username">用户名<span class="required">*</span>
+                </label>
                 <Input
                   readonly={!this.state.newuser?"":false}
                   type="text"
@@ -626,7 +627,8 @@ export default class Register extends Component {
               </div>
 
               <div class="form-group col-sm-4">
-                <label htmlFor="chineseName">姓名</label>
+                <label htmlFor="chineseName">姓名<span class="required">*</span>
+                </label>
                 <Input
                   readonly={this.state.readonly?"":false}
                   type="text"
@@ -635,11 +637,13 @@ export default class Register extends Component {
                   name="chineseName"
                   value={this.state.chineseName}
                   onChange={this.onChangeChineseName}
+                  validations={[required]}
                 />
               </div>
 
               <div class="form-group col-sm-4">
-                <label htmlFor="phone">手机号</label>
+                <label htmlFor="phone">手机号<span class="required">*</span>
+                </label>
                 <Input
                   readonly={this.state.readonly?"":false}
                   type="text"
@@ -647,24 +651,14 @@ export default class Register extends Component {
                   name="phone"
                   value={this.state.phone}
                   onChange={this.onChangePhone}
+                  validations={[required]}
                 />
               </div>
 
-              <div class="form-group col-sm-4" hidden={!this.state.contactOnly} >
-                <label htmlFor="email">电子邮箱</label>
-                <Input
-                  readonly={!this.state.contactOnly && !this.state.newuser ? "" : false}
-                  type="text"
-                  class="form-control"
-                  name="email"
-                  value={this.state.email}
-                  onChange={this.onChangeEmail}
-                  validations={[]}
-                />
-              </div>
 
-              <div class="form-group col-sm-4" hidden={this.state.contactOnly}>
-                <label htmlFor="email">电子邮箱</label>
+              <div class="form-group col-sm-4" >
+                <label htmlFor="email">电子邮箱<span class="required">*</span>
+                </label>
                 <Input
                   readonly={!this.state.contactOnly && !this.state.newuser ? "" : false}
                   type="text"
@@ -677,7 +671,8 @@ export default class Register extends Component {
               </div>
 
               <div class="form-group col-sm-4" hidden={this.state.contactOnly || !this.state.newuser}>
-                <label htmlFor="password">密码</label>
+                <label htmlFor="password">密码<span class="required">*</span>
+                </label>
                 <Input
                   readonly={this.state.readonly?"":false}
                   type="password"
@@ -745,7 +740,8 @@ export default class Register extends Component {
                   (AuthService.getCurrentUser() && AuthService.getCurrentUser().roles.includes("ROLE_ADMIN"))))
                 )}
               >
-                <label htmlFor="schoolId">所属学校</label>
+                <label htmlFor="schoolId">所属学校<span class="required">*</span>
+                </label>
                 {!this.state.readonly
                 ? (<Select onChange={this.onChangeSchoolId.bind(this)}
                   class="form-control"

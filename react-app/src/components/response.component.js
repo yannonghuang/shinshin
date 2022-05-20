@@ -89,11 +89,11 @@ export default class Response extends Component {
   }
 
   async setUpdateStatus() {
-    const UPDATE_THRESHOLD = 0.01; // number of days
+    const UPDATE_THRESHOLD = 10; // number of days
     const REFRESH_RATE = 3; // number of seconds
 
     const user = AuthService.getCurrentUser();
-    if (user && user.schoolId) {
+    if (this.state.newresponse && user && user.schoolId) {
       try {
         let r = await SurveyDataService.getUpdatedAt(user.schoolId);
         let updatedAtObj =  (new Date(r.data.updatedAt.updatedAt));
