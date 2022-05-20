@@ -296,11 +296,13 @@ const buildFilters = async (req) => {
   const startAt = req.body.startAt;
   const lastVisit = req.body.lastVisit;
   const exportFlag = req.body.exportFlag;
-  const region = req.body.region
+  const region = req.body.region;
+  /**
     ? req.body.region.startsWith('湖南省湘西州')
       ? req.body.region.substring(0, 6)
       : req.body.region.substring(0, 2)
     : null;
+  */
   const xr = req.body.xr;
 
   var orderbyObject = null;
@@ -323,8 +325,8 @@ const buildFilters = async (req) => {
             name ? { name: { [Op.like]: `%${name}%` } } : null,
             code ? { code: { [Op.like]: `${code}` } } : null,
             donor ? { donor: { [Op.like]: `%${donor}%` } } : null,
-            //region ? { region: { [Op.eq]: `${region}` } } : null,
-            region ? { region: { [Op.like]: `%${region}%` } } : null,
+            region ? { region: { [Op.eq]: `${region}` } } : null,
+            //region ? { region: { [Op.like]: `%${region}%` } } : null,
             stage ? { stage: { [Op.eq]: `${stage}` } } : null,
             status ? { status: { [Op.eq]: `${status}` } } : null,
             request ? { request: { [Op.eq]: `${request}` } } : null,
