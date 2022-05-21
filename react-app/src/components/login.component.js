@@ -203,7 +203,7 @@ export default class Login extends Component {
     }
   }
 
-
+/**
   SAVE_handleReset(e) {
     e.preventDefault();
 
@@ -247,6 +247,7 @@ export default class Login extends Component {
       });
     }
   }
+*/
 
   handleLogin(e) {
     e.preventDefault();
