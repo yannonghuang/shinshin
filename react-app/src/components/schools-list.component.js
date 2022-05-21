@@ -621,10 +621,12 @@ const SchoolsList = (props) => {
         Header: "省/自治区/直辖市",
         accessor: "region",
       },
+/**
       {
         Header: "学校名称",
         accessor: "name",
       },
+*/
       {
         Header: "建校年份",
         accessor: "startAt",
