@@ -164,7 +164,8 @@ export default class Login extends Component {
       link: url + "/" + (isReset ? "reset" : "login") + "?token=" + token
     };
 
-    emailjs.send("icloud_2021_12_27","template_ae0k3bj", templateParams)
+    //emailjs.send("icloud_2021_12_27","template_ae0k3bj", templateParams)
+    emailjs.send("Gmail 2022","template_ae0k3bj", templateParams)
     .then((result) => {
       console.log(result.text);
       this.setState({
@@ -221,7 +222,8 @@ export default class Login extends Component {
               //link: "http://localhost:8081/reset?token=" + token
         };
 
-        emailjs.send("icloud_2021_12_27","template_ae0k3bj", templateParams)
+        //emailjs.send("icloud_2021_12_27","template_ae0k3bj", templateParams)
+        emailjs.send("Gmail 2022", "template_ae0k3bj", templateParams)
         .then((result) => {
           console.log(result.text);
           this.setState({
