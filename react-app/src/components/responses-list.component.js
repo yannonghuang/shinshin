@@ -535,12 +535,12 @@ const ResponsesList = (props) => {
           {title ? (title + '-') : ''}
           项目申请列表(总数：{totalItems})
         </h4>
-        <div className="input-group mb-3">
+        <div className="row mb-3">
           <input
             type="text"
             readonly=""
-            className="form-control"
-            placeholder="项目年份"
+            className="form-control col-sm-1 ml-2"
+            placeholder="年份"
             value={searchStartAt}
             onChange={onChangeSearchInputStartAt}
           />
@@ -555,7 +555,7 @@ const ResponsesList = (props) => {
 
           {!formId && (<input
             type="text"
-            className="form-control ml-2"
+            className="form-control col-sm-3 ml-2"
             placeholder="标题查找"
             value={searchTitle}
             onChange={onChangeSearchTitle}

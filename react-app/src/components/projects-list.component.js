@@ -477,11 +477,11 @@ const ProjectsList = (props) => {
           {schoolId && !embedded && (<a href={'/schoolsView/' + schoolId}>{schoolDisplay + '-'}</a>)}
           {xr && '向荣支持'}项目列表(总数：{totalItems})
         </h4>
-        <div className="input-group mb-3 ">
+        <div className="row mb-3 ">
 
           <input
             type="text"
-            className="form-control mr-2"
+            className="form-control col-sm-4 ml-2"
             placeholder="项目名称"
             value={searchName}
             onChange={onChangeSearchName}
@@ -490,8 +490,8 @@ const ProjectsList = (props) => {
           <input
             type="text"
             readonly=""
-            className="form-control ml-2"
-            placeholder="项目年份"
+            className="form-control col-sm-1 ml-2"
+            placeholder="年份"
             value={searchStartAt}
           />
           <YearPicker
@@ -505,14 +505,14 @@ const ProjectsList = (props) => {
 
           {!embedded && (<input
             type="text"
-            className="form-control ml-2"
+            className="form-control col-sm-2 ml-2"
             placeholder="学校编号"
             value={searchCode}
             onChange={onChangeSearchCode}
           />)}
 
           {!embedded && (<select
-            className="form-control ml-2"
+            className="form-control col-sm-2 ml-2"
             placeholder="...."
             value={searchRegion}
             onChange={onChangeSearchRegion}

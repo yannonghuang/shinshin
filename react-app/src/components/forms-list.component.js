@@ -341,12 +341,12 @@ const FormsList = (props) => {
     <div className="list row">
       <div className="col-sm-8">
         <h4>项目申请表(总数：{totalItems})</h4>
-        <div className="input-group mb-3">
+        <div className="row mb-3">
           <input
             type="text"
             readonly=""
-            className="form-control"
-            placeholder="项目年份"
+            className="form-control col-sm-1 ml-2"
+            placeholder="年份"
             value={searchStartAt}
             onChange={onChangeSearchInputStartAt}
           />
@@ -361,7 +361,7 @@ const FormsList = (props) => {
 
           <input
             type="text"
-            className="form-control ml-2"
+            className="form-control col-sm-3 ml-2"
             placeholder="标题查找"
             value={searchTitle}
             onChange={onChangeSearchTitle}
