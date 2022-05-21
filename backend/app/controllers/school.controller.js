@@ -16,6 +16,7 @@ const SCHOOL_REQUESTS_SS = db.SCHOOL_REQUESTS_SS;
 const SCHOOL_CATEGORIES = db.SCHOOL_CATEGORIES;
 
 const { authJwt } = require("../middleware");
+const fs = require('fs');
 
 const getPagination = (page, size) => {
   const limit = size ? +size : 30;
@@ -613,6 +614,37 @@ exports.findAllPublished = (req, res) => {
     });
 };
 
+const getLegacyPhoto = async (schoolId) => {
+  try {
+    const documents = await Document.findAll({
+      where: {
+        schoolId: schoolId,
+        mimetype: 'image/jpeg',
+        //docCategory: '...'
+      }
+    });
+
+    if (!documents)
+      return null;
+
+    for (var i = 0; i < documents.length; i++) {
+
+      if (fs.existsSync(documents[i].path))
+        return fs.readFileSync(documents[i].path);
+
+      if (fs.existsSync(documents[i].destination))
+        return fs.readFileSync(documents[i].destination);
+    }
+
+    return null;
+
+  } catch (err) {
+    console.log(err);
+  }
+
+  return null;
+}
+
 // Find a single School photo with an id
 exports.findOnePhoto = (req, res) => {
   const id = req.params.id;
@@ -622,14 +654,19 @@ exports.findOnePhoto = (req, res) => {
       raw: true,
     }
   )
-    .then(photo => {
-      if (photo) {
+    .then(async photo => {
+      if (photo.photo) {
         //res.send(photo);
         res.json({ success: true, data: photo });
       } else {
-        res.status(404).send({
-          message: `Cannot find School photo with id=${id}.`
-        });
+        let legacyPhoto = await getLegacyPhoto(id);
+        if (legacyPhoto) {
+          res.json({ success: true, data: {photo: legacyPhoto}});
+        } else {
+          res.status(404).send({
+            message: `Cannot find School photo with id=${id}.`
+          });
+        }
       }
     })
     .catch(err => {

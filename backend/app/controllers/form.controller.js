@@ -297,6 +297,7 @@ exports.findAll2 = async(req, res) => {
 
   const condition = {
         [Op.and]: [
+          sid ? { deadline: { [Op.gt]: new Date() } } : null,
           title ? { title: { [Op.like]: `%${title}%` } } : null,
           startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('form.startAt')), `${startAt}`) } } : null,
           published === undefined
