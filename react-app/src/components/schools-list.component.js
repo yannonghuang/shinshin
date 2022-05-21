@@ -11,6 +11,8 @@ import { useTable, useSortBy } from "react-table";
 
 import YearPicker from 'react-single-year-picker';
 
+import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
+
 const SchoolsList = (props) => {
   const [schools, setSchools] = useState([]);
   const [exportSchools, setExportSchools] = useState([]);
@@ -751,6 +753,10 @@ const SchoolsList = (props) => {
     []
   );
 
+  var hiddenColumns = (isMobile)
+    ? ['donor', 'xr', 'responsesCount', 'projectsCount', 'lastVisit', 'region']
+    : [];
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -765,6 +771,7 @@ const SchoolsList = (props) => {
     disableSortRemove: true,
     manualSortBy: true,
     initialState: {
+      hiddenColumns: hiddenColumns,
       sortBy: [
         {
           id: 'code',
@@ -839,7 +846,7 @@ const SchoolsList = (props) => {
           <input
             type="text"
             readonly=""
-            className="form-control col-sm-1 ml-2"
+            className="form-control col-sm-2 ml-2"
             placeholder="建校"
             value={searchStartAt}
           />
@@ -856,7 +863,7 @@ const SchoolsList = (props) => {
           <input
             type="text"
             readonly=""
-            className="form-control col-sm-1 ml-2"
+            className="form-control col-sm-2 ml-2"
             placeholder="访校"
             value={searchLastVisit}
           />
@@ -869,9 +876,7 @@ const SchoolsList = (props) => {
             maxRange={2022}
           />
 
-        </div>
 
-        <div className="row mb-3 ">
 
           <select
             className="form-control col-sm-2 ml-2"
@@ -961,7 +966,7 @@ const SchoolsList = (props) => {
             </button>
           </div>
 */}
-          <div hidden={!currentUser}>
+          <div hidden={!currentUser || isMobile}>
             <button
               className="btn btn-primary"
               type="button"
@@ -970,7 +975,7 @@ const SchoolsList = (props) => {
               导出
             </button>
           </div>
-          <div hidden={!currentUser}>
+          <div hidden={!currentUser || isMobile}>
             <button
               className="btn btn-primary ml-2"
               type="button"

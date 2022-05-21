@@ -9,6 +9,8 @@ import { useTable, useSortBy, useFlexLayout } from "react-table";
 
 import YearPicker from 'react-single-year-picker';
 
+import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
+
 import AuthService from "./../services/auth.service";
 
 const ProjectsList = (props) => {
@@ -287,12 +289,14 @@ const ProjectsList = (props) => {
         Header: "项目状态",
         accessor: "status",
       },
+/**
       {
         Header: "项目名称",
         accessor: "name",
       },
+*/
       {
-        Header: "项目申请",
+        Header: "项目申请/名称",
         accessor: "response.title",
         disableSortBy: true,
         Cell: (props) => {
@@ -410,6 +414,10 @@ const ProjectsList = (props) => {
     []
   );
 
+  var hiddenColumnsMobile = (isMobile)
+    ? ['school.category', 'school.teachersCount', 'school.studentsCount', "school.region", 'description']
+    : [];
+
   const schoolKnownColumns =
     ['id', 'school.region', 'school.code', 'school.name'];
 
@@ -426,6 +434,8 @@ const ProjectsList = (props) => {
   hiddenColumns = xr
     ? [...hiddenColumns, ...xrColumns]
     : hiddenColumns;
+
+  hiddenColumns = [...hiddenColumns, ...hiddenColumnsMobile];
 
   const {
     getTableProps,
@@ -490,7 +500,7 @@ const ProjectsList = (props) => {
           <input
             type="text"
             readonly=""
-            className="form-control col-sm-1 ml-2"
+            className="form-control col-sm-2 ml-2"
             placeholder="年份"
             value={searchStartAt}
           />
@@ -549,7 +559,7 @@ const ProjectsList = (props) => {
             </button>
           </div>
 */}
-          <div hidden={!currentUser}>
+          <div hidden={!currentUser || isMobile}>
             <button
               className="btn btn-primary ml-2"
               type="button"

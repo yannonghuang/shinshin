@@ -20,6 +20,7 @@
     "multer": "^1.4.3",
     "react": "^16.14.0",
     "react-collapsible": "^2.8.4",
+    "react-device-detect": "^2.2.2",
     "react-dom": "^16.14.0",
     "react-idle-timer": "^4.6.4",
     "react-router-dom": "^5.1.2",
