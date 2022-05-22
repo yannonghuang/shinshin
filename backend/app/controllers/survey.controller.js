@@ -22,7 +22,7 @@ const getPagingData = (data, page, limit) => {
 };
 
 const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
-  const isSchoolUser = await authJwt.getSchoolId(req);
+  //const isSchoolUser = await authJwt.getSchoolId(req);
   var updates = [];
   Object.keys(newObj).forEach(key => {
     var newv = newObj[key];
@@ -80,11 +80,11 @@ exports.create = (req, res) => {
         .then(num => {
           if (num == 1) {
             res.send({
-            message: "Survey was updated successfully."
-          });
+              message: "Survey was updated successfully."
+            });
           } else {
             res.status(500).send({
-            message: "Error updating Survey with req.body.schoolId =" + req.body.schoolId
+              message: "Error updating Survey with req.body.schoolId =" + req.body.schoolId
             });
           }
         })
