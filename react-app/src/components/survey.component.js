@@ -746,26 +746,95 @@ export default class Survey extends Component {
 
   updateSurvey() {
 
+/**
     const {
       id,
       schoolId,
       docFiles,
       docCategory,
       ...dataSchool} = this.state.currentSurvey;
+*/
+
+    const {
+      status,
+      request,
+      category,
+      principal,
+      principalCell,
+      principalWechat,
+      contact,
+      contactCell,
+      contactWechat,
+      schoolBoard,
+      schoolBoardRegisteredName,
+      region,
+      city,
+      county,
+      community,
+      address,
+      phone,
+      email,
+      studentsCount,
+      teachersCount,
+      description,
+      principalId,
+      contactId,
+      ...dataSurveyMinusSchool} = this.state.currentSurvey;
+
+    const {
+      id,
+      schoolId,
+      docFiles,
+      docCategory,
+
+      stayBehindCount,
+      boarderCount,
+      kClassesCount,
+      g1ClassesCount,
+      g2ClassesCount,
+      g3ClassesCount,
+      g4ClassesCount,
+      g5ClassesCount,
+      g6ClassesCount,
+      kStudentsCount,
+      g1StudentsCount,
+      g2StudentsCount,
+      g3StudentsCount,
+      g4StudentsCount,
+      g5StudentsCount,
+      g6StudentsCount,
+      mStudentsCount,
+      computersCount,
+      computerRoomExists,
+      computerRoomCount,
+      internetExists,
+      multimediaSystemsCount,
+      libraryExists,
+      bookCornersCount,
+      booksCount,
+
+      ...dataSchool} = this.state.currentSurvey;
+
+
+    const dataSurvey = this.state.embedded
+      ? dataSurveyMinusSchool
+      : this.state.currentSurvey;
 
     SurveyDataService.update(
       this.state.currentSurvey.schoolId,
-      this.state.currentSurvey
+      dataSurvey
       //this.state.currentSurvey
     )
       .then(response => {
         console.log(response.data);
 
-        SchoolDataService.update(
-          this.state.currentSurvey.schoolId,
-          dataSchool)
-          .then(r => {});
-
+        if (!this.state.embedded) {
+          SchoolDataService.update(
+            this.state.currentSurvey.schoolId,
+            dataSchool)
+            .then(r => {});
+        }
+        
         if (this.state.currentSurvey.docFiles) // docs
           this.uploadDocuments();
 
