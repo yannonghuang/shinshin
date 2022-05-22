@@ -746,6 +746,13 @@ export default class Survey extends Component {
 
   updateSurvey() {
 
+    const {
+      id,
+      schoolId,
+      docFiles,
+      docCategory,
+      ...dataSchool} = this.state.currentSurvey;
+
     SurveyDataService.update(
       this.state.currentSurvey.schoolId,
       this.state.currentSurvey
@@ -753,6 +760,11 @@ export default class Survey extends Component {
     )
       .then(response => {
         console.log(response.data);
+
+        SchoolDataService.update(
+          this.state.currentSurvey.schoolId,
+          dataSchool)
+          .then(r => {});
 
         if (this.state.currentSurvey.docFiles) // docs
           this.uploadDocuments();

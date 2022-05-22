@@ -47,7 +47,8 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t) => {
     }
 
     //if (newv && (!oldObj || !oldObj[key] || (oldv != newv))) {
-    if (getAttributes(School).includes(key) &&
+    if ((key !== 'createdAt' && key !== 'updatedAt') &&
+        getAttributes(School).includes(key) &&
         (newv && newv !== undefined) &&
         (!oldObj || !oldObj[key] || (oldv != newv))) {
       if ((key !== 'contactId' && key !== 'principalId'))

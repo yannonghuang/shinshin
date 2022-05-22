@@ -32,7 +32,7 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
         getAttributes(Survey).includes(key) &&
         ((newv || newv === false) && newv !== undefined) &&
         (!oldObj || !oldObj[key] || (oldv != newv))) {
-      if ((isSchoolUser && key !== 'contactId' && key !== 'principalId') || // school user
+      if (//(isSchoolUser && key !== 'contactId' && key !== 'principalId') || // school user
         !getAttributes(School).includes(key)) {
         updates.push({field: key, oldv: oldv, newv: newv, schoolId, userId});
       }
