@@ -834,7 +834,7 @@ export default class Survey extends Component {
             dataSchool)
             .then(r => {});
         }
-        
+
         if (this.state.currentSurvey.docFiles) // docs
           this.uploadDocuments();
 

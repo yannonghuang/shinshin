@@ -1070,7 +1070,7 @@ export default class School extends Component {
                 <div class="w-100"></div>
 
 
-                <div class="form-group col-sm-4">
+                <div class="form-group col-sm-4" hidden={!AuthService.getCurrentUser()}>
                 <label htmlFor="phone">学校电话</label>
                 <input
                 readonly={this.state.readonly?"":false}
@@ -1084,7 +1084,7 @@ export default class School extends Component {
                 />
                 </div>
 
-                <div class="form-group col-sm-4">
+                <div class="form-group col-sm-4" hidden={!AuthService.getCurrentUser()}>
                 <label htmlFor="email">学校电子邮箱</label>
                 <input
                 readonly={this.state.readonly?"":false}
