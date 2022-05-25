@@ -620,8 +620,8 @@ const getLegacyPhoto = async (schoolId) => {
     const documents = await Document.findAll({
       where: {
         schoolId: schoolId,
-        mimetype: 'image/jpeg',
-        //docCategory: '...'
+        //mimetype: 'image/jpeg',
+        docCategory: 'profile_photo'
       }
     });
 
