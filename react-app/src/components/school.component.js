@@ -768,7 +768,7 @@ export default class School extends Component {
                   {this.state.readonly ? "" :
                     <p contenteditable="false">编辑学校照片（拖拽照片文件或复制粘贴图标）</p>
                   }
-                  <img id="schoolPhoto" src={currentSchool.photo ? currentSchool.photo : defaultPhoto}
+                  <img id="schoolPhoto" src={currentSchool.photo /* ? currentSchool.photo : defaultPhoto */}
                     width="320" height="320" class="responsive" readonly={this.state.readonly?"":false}
                   />
                 </div>
