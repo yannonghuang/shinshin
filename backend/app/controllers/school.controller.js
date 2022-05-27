@@ -317,6 +317,9 @@ const buildFilters = async (req) => {
       else if (orderby[i].id == "responsesCount")
         orderbyObject.push([db.Sequelize.fn("COUNT", db.Sequelize.col("projects.responseId")),
           (orderby[i].desc ? "desc" : "asc")]);
+      else if (orderby[i].id == "latestProjectYear")
+        orderbyObject.push([db.Sequelize.fn("MAX", db.Sequelize.col("projects.startAt")),
+          (orderby[i].desc ? "desc" : "asc")]);
       else orderbyObject.push([orderby[i].id, (orderby[i].desc ? "desc" : "asc")]);
     }
   };
@@ -449,6 +452,7 @@ exports.findAll2 = async (req, res) => {
             [db.Sequelize.fn("year", db.Sequelize.col("schools.lastVisit")), "lastVisit"],
             [db.Sequelize.fn("COUNT", db.Sequelize.col("projects.id")), "projectsCount"],
             [db.Sequelize.fn("COUNT", db.Sequelize.col("projects.responseId")), "responsesCount"], //`projects->response`.`id`
+            [db.Sequelize.fn("MAX", db.Sequelize.col("projects.startAt")), "latestProjectYear"],
   ],
 
   include: include,

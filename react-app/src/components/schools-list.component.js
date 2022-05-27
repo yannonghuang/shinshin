@@ -663,6 +663,21 @@ const SchoolsList = (props) => {
         accessor: "donor",
         disableSortBy: true,
       },
+      {
+        Header: "最近项目年份",
+        accessor: "latestProjectYear",
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+            var d = null;
+            if ((schoolsRef.current[rowIdx].latestProjectYear))
+              d = new Date(schoolsRef.current[rowIdx].latestProjectYear);
+            return (
+              <div>
+                {d ? d.getUTCFullYear() : ''}
+              </div>
+            );
+        }
+      },
 /**
       {
         Header: "教师人数",
@@ -754,7 +769,7 @@ const SchoolsList = (props) => {
   );
 
   var hiddenColumns = (isMobile)
-    ? ['donor', 'xr', 'responsesCount', 'projectsCount', 'lastVisit', 'region']
+    ? ['donor', 'xr', 'responsesCount', 'projectsCount', 'lastVisit', 'region', 'latestProjectYear']
     : [];
 
   const {
@@ -1030,6 +1045,7 @@ const SchoolsList = (props) => {
                       column.id === 'startAt' || column.id === 'teachersCount' ||
                       column.id === 'studentsCount' || column.id === 'name' ||
                       column.id === 'projectsCount' || column.id === 'responsesCount' ||
+                      column.id === 'latestProjectYear' ||
                       column.id === 'stage' || column.id === 'lastVisit' ||
                       column.id === 'status' || column.id === 'request' || column.id === 'xr'
                       )
