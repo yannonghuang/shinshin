@@ -26,6 +26,8 @@ const SchoolsList = (props) => {
   const [searchRegion, setSearchRegion] = useState(props.match? props.match.params.region : props.region);
   const [searchStartAt, setSearchStartAt] = useState("");
   const [searchLastVisit, setSearchLastVisit] = useState("");
+  const [searchLatestProjectYear, setSearchLatestProjectYear] = useState("");
+
   const [searchDonor, setSearchDonor] = useState("");
   const [searchStage, setSearchStage] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
@@ -96,6 +98,11 @@ const SchoolsList = (props) => {
     setSearchLastVisit(searchLastVisit);
   };
 
+  const onChangeSearchLatestProjectYear = (e) => {
+    const searchLatestProjectYear = e; //e.target.value;
+    setSearchLatestProjectYear(searchLatestProjectYear);
+  };
+
   const onChangeSearchXR = (e) => {
     const searchXR = e.target.value;
     setSearchXR(searchXR);
@@ -107,6 +114,7 @@ const SchoolsList = (props) => {
     setSearchRegion("");
     setSearchStartAt("");
     setSearchLastVisit("");
+    setSearchLatestProjectYear("");
     setSearchDonor("");
     setSearchStage("");
     setSearchStatus("");
@@ -147,6 +155,10 @@ const SchoolsList = (props) => {
 
     if (searchStartAt) {
       params["startAt"] = searchStartAt;
+    }
+
+    if (searchLatestProjectYear) {
+      params["latestProjectYear"] = searchLatestProjectYear;
     }
 
     if (searchLastVisit) {
@@ -328,7 +340,7 @@ const SchoolsList = (props) => {
     retrieveSchools();
   };
 
-  useEffect(search, [pageSize, orderby, searchName, searchCode, searchRegion, searchStartAt,
+  useEffect(search, [pageSize, orderby, searchName, searchCode, searchRegion, searchStartAt, searchLatestProjectYear,
                             searchLastVisit, searchDonor, searchStage, searchStatus, searchRequest, searchXR]);
 
   useEffect(retrieveSchools, [page]);
@@ -409,7 +421,10 @@ const SchoolsList = (props) => {
         Header: "最近访校年份",
         accessor: "lastVisit",
       },
-
+      {
+        Header: "最近项目年份",
+        accessor: "latestProjectYear",
+      },
       {
         Header: "学校阶段",
         accessor: "stage",
@@ -892,6 +907,21 @@ const SchoolsList = (props) => {
           />
 
 
+          <input
+            type="text"
+            readonly=""
+            className="form-control col-sm-2 ml-2"
+            placeholder="最近项目"
+            value={searchLatestProjectYear}
+          />
+          <YearPicker
+            yearArray={['2019', '2020']}
+            value={searchLatestProjectYear}
+            onSelect={onChangeSearchLatestProjectYear}
+            hideInput={true}
+            minRange={1995}
+            maxRange={2022}
+          />
 
           <select
             className="form-control col-sm-2 ml-2"

@@ -299,6 +299,7 @@ const buildFilters = async (req) => {
   const lastVisit = req.body.lastVisit;
   const exportFlag = req.body.exportFlag;
   const region = req.body.region;
+  const latestProjectYear = req.body.latestProjectYear;
   /**
     ? req.body.region.startsWith('湖南省湘西州')
       ? req.body.region.substring(0, 6)
@@ -344,12 +345,19 @@ const buildFilters = async (req) => {
                 : {[Op.or]: [{ xr: { [Op.ne]: `1` }}, { xr: null }]},
         ]};
 
-  return {condition, orderbyObject}
+  const having = {
+        [Op.and]: [
+            latestProjectYear ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR',
+                db.Sequelize.fn("MAX", db.Sequelize.col("projects.startAt"))
+              ), `${latestProjectYear}`) } } : null,
+        ]};
+
+  return {condition, orderbyObject, having}
 }
 
 
-exports.findAll2 = async (req, res) => {
-  const {condition, orderbyObject} = await buildFilters(req);
+exports.SAVE_findAll2 = async (req, res) => {
+  const {condition, orderbyObject, having} = await buildFilters(req);
 
   const page = req.body.page;
   const size = req.body.size;
@@ -457,10 +465,13 @@ exports.findAll2 = async (req, res) => {
 
   include: include,
   group: ['id'],
+  having: having,
   order: orderbyObject
   })
     .then(data => {
-        School.count({where: condition})
+        School.count({
+          where: condition,
+        })
         //School.count({where: condition, include: include, distinct: true, col: 'id'})
           .then(count => {
             const response = getPagingData(count, data, page, limit);
@@ -482,8 +493,78 @@ exports.findAll2 = async (req, res) => {
     });
 };
 
+exports.findAll2 = async (req, res) => {
+  const {condition, orderbyObject, having} = await buildFilters(req);
+
+  const page = req.body.page;
+  const size = req.body.size;
+  const exportFlag = req.body.exportFlag;
+
+  const { limit, offset } = getPagination(page, size);
+
+  let limits = {};
+  if (!exportFlag) {
+    limits = {
+      offset: offset,
+      limit: limit
+    }
+  }
+
+  const inner_include = [
+        {
+           model: Response,
+           attributes: [],
+           required: false,
+        },
+      ];
+
+  const include = [
+        {
+           model: Project,
+           attributes: [],
+           required: false,
+           //where: { xr: null }
+           where: {[Op.or] : [{ xr: null }, { xr: { [Op.eq]: `0` }}]}
+           //include: inner_include,
+        },
+      ];
+
+  School.findAndCountAll({
+  where: condition,
+  ...limits,
+//  limit: limit,
+//  offset: offset,
+  subQuery: false,
+  attributes: ['id', 'code', 'name', 'description', 'principal', 'region', 'address', 'phone', 'teachersCount', 'studentsCount',
+            'stage', 'status', 'request', 'category', 'principalId', 'contactId', 'donor', 'xr',
+            [db.Sequelize.fn("year", db.Sequelize.col("schools.startAt")), "startAt"],
+            [db.Sequelize.fn("year", db.Sequelize.col("schools.lastVisit")), "lastVisit"],
+            [db.Sequelize.fn("COUNT", db.Sequelize.col("projects.id")), "projectsCount"],
+            [db.Sequelize.fn("COUNT", db.Sequelize.col("projects.responseId")), "responsesCount"], //`projects->response`.`id`
+            [db.Sequelize.fn("MAX", db.Sequelize.col("projects.startAt")), "latestProjectYear"],
+  ],
+
+  include: include,
+  group: ['id'],
+  having: having,
+  order: orderbyObject
+  })
+    .then(data => {
+      const { count: totalItems, rows: schools } = data;
+      const response = getPagingData(totalItems.length, schools, page, limit);
+      res.send(response);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).send({
+        message:
+        err.message || "Some error occurred while retrieving responses."
+      });
+    });
+};
+
 exports.findExport = async (req, res) => {
-  const {condition, orderbyObject} = await buildFilters(req);
+  const {condition, orderbyObject, having} = await buildFilters(req);
 
   const mainAttributes = req.body.main;
   const detailAttributes = req.body.detail;
@@ -517,6 +598,13 @@ exports.findExport = async (req, res) => {
            required: false,
            where: db.Sequelize.literal('surveys.contactId = Utilisateurs.id')
         },
+
+        {
+           model: Project,
+           attributes: [],
+           required: false,
+           where: {[Op.or] : [{ xr: null }, { xr: { [Op.eq]: `0` }}]}
+        },
     ];
 
   School.findAll({
@@ -525,11 +613,13 @@ exports.findExport = async (req, res) => {
     attributes: [
             [db.Sequelize.fn("year", db.Sequelize.col("schools.startAt")), "startAt"],
             [db.Sequelize.fn("year", db.Sequelize.col("schools.lastVisit")), "lastVisit"],
+            [db.Sequelize.fn("year", db.Sequelize.fn("MAX", db.Sequelize.col("projects.startAt"))), "latestProjectYear"],
             ...schoolAttributes,
     ],
 
     include: include,
-    //order: [ ['code', 'asc'] ]
+    group: ['schools.id', 'surveys.id'],
+    having: having,
     order: orderbyObject
   })
   .then(schools => {
@@ -578,7 +668,7 @@ exports.findCountsByRegion = (req, res) => {
     });
 };
 
-exports.SAVE_findAll2 = (req, res) => {
+exports.SAVE_SAVE_findAll2 = (req, res) => {
   const title = req.body.title;
   const page = req.body.page;
   const size = req.body.size;
