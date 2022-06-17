@@ -1062,7 +1062,7 @@ export default class Survey extends Component {
               (<div class="row">
 
                 <div class="w-100"></div>
-
+{/*
                 <div class="col-md-4">
                 </div>
 
@@ -1103,6 +1103,7 @@ export default class Survey extends Component {
                 </div>
 
                 <div class="w-100"></div>
+*/}
 
                 <div class="select-container form-group col-md-3">
                 <label htmlFor="region">省/自治区/直辖市</label>
@@ -1182,7 +1183,8 @@ export default class Survey extends Component {
                 <div class="w-100"></div>
 
                 <div class="form-group col-md-5">
-                <label htmlFor="phone">学校电话</label>
+                <label htmlFor="phone">学校电话<span class="required">*</span>
+                </label>
                 <input
                 readonly={this.state.readonly?"":false}
                 type="text"
@@ -1213,7 +1215,8 @@ export default class Survey extends Component {
                 <div class="w-100"></div>
 
                 <div class="form-group col-md-4">
-                <label htmlFor="studentsCount">学生人数</label>
+                <label htmlFor="studentsCount">学生人数<span class="required">*</span>
+                </label>
                 <input
                 readonly={this.state.readonly?"":false}
                 type="number"
@@ -1227,7 +1230,8 @@ export default class Survey extends Component {
                 </div>
 
                 <div class="form-group col-md-4">
-                <label htmlFor="teachersCount">教师人数</label>
+                <label htmlFor="teachersCount">教师人数<span class="required">*</span>
+                </label>
                 <input
                 readonly={this.state.readonly?"":false}
                 type="number"

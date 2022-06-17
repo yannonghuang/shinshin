@@ -743,7 +743,7 @@ export default class Register extends Component {
               >
                 <label htmlFor="schoolId">所属学校<span class="required">*</span>
                 </label>
-                {!this.state.readonly
+                {!this.state.readonly && !this.state.schoolId
                 ? (<Select onChange={this.onChangeSchoolId.bind(this)}
                   class="form-control"
                   id="schoolId"

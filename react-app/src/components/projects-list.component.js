@@ -395,8 +395,8 @@ const ProjectsList = (props) => {
                 <i className="fas fa-eye action mr-2"></i>
               </Link>)}
 
-              {!readonly && currentUser && (<Link
-                target = {embedded ? '_self' : '_blank'}
+              {!readonly && AuthService.isVolunteer() && (<Link
+                target = '_blank' // {embedded ? '_self' : '_blank'}
                 to={"/projects" + (xr ? 'XR' : '') + "/" + projectsRef.current[rowIdx].id}
               >
                 <i className="far fa-edit action mr-2"></i>

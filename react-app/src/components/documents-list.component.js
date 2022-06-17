@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import DocumentDataService from "../services/document.service";
+import AuthService from "./../services/auth.service";
+
 import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
 
@@ -199,7 +201,7 @@ const DocumentsList = (props) => {
               )}
 */}
 
-              {!readonly && (<span onClick={() => window.confirm("您确定要删除吗 ?") && deleteDocument(rowIdx)}>
+              {!readonly && AuthService.isVolunteer() && (<span onClick={() => window.confirm("您确定要删除吗 ?") && deleteDocument(rowIdx)}>
                 <i className="fas fa-trash action"></i>
               </span>)}
             </div>

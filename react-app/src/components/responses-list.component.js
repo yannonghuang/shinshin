@@ -458,7 +458,7 @@ const ResponsesList = (props) => {
                 <i className="fas fa-eye action mr-2"></i>
               </Link>
               {!readonly && (<Link
-                target = {(!embedded || AuthService.getCurrentUser().schoolId) ? '_blank' : '_self'}
+                target = '_blank' //{(!embedded || AuthService.getCurrentUser().schoolId) ? '_blank' : '_self'}
                 to={"/responses/" + responsesRef.current[rowIdx].id}
               >
                 <i className="far fa-edit action mr-2"></i>
