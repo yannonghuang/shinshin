@@ -100,6 +100,7 @@ export default class School extends Component {
       docCategories: [],
 
       users: [],
+      principals: [],
 
       stages: [],
       statuses: [],
@@ -181,6 +182,18 @@ export default class School extends Component {
     }
   }
 
+  convertPrincipals(users) {
+    const result = [];
+    if (users) {
+    for (var i = 0; i < users.length; i++) {
+      if (users[i].title === "校长" || users[i].title === "副校长")
+        result.push({value: users[i].id,
+          label: users[i].chineseName });
+    }
+    return result;
+    }
+  }
+
   display(userId) {
     if (this.state.users) {
       for (var i = 0; i < this.state.users.length; i++) {
@@ -208,7 +221,8 @@ export default class School extends Component {
     UserDataService.getAllSimple({schoolId: schoolId})
       .then(response => {
         this.setState({
-          users: this.convert(response.data)
+          users: this.convert(response.data),
+          principals: this.convertPrincipals(response.data)
         });
 
         console.log(response);
@@ -1157,7 +1171,7 @@ export default class School extends Component {
                     id="principalId"
                     value={this.display(currentSchool.principalId)}
                     name="principalId"
-                    options={this.state.users}
+                    options={this.state.principals}
                   />)
                   : (<Link
                     to={ "/usersView/" + currentSchool.principalId}

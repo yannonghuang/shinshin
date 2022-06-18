@@ -120,7 +120,7 @@ exports.findAllSimple = (req, res) => {
 
   User.findAll({
     where: condition,
-    attributes: ['id', 'username', 'chineseName' ],
+    attributes: ['id', 'username', 'chineseName', 'title' ],
     order: [ ['chineseName', 'asc'] ]
   })
       .then(data => {
