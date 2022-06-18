@@ -565,7 +565,8 @@ export default class Register extends Component {
       const url = window.location.host;
       var templateParams = {
             to: this.state.email,
-            username: this.state.chineseName ?this.state.chineseName : this.state.username,
+            username: (this.state.chineseName ? this.state.chineseName : this.state.username)
+                + '(登录名: ' + this.state.username + ')',
             link: url + "/login?token=" + token
             //link: "http://localhost:8081/login?token=" + token
       };

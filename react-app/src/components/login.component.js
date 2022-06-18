@@ -160,12 +160,15 @@ export default class Login extends Component {
 
     var templateParams = {
       to: user.email,
-      username: user.chineseName ? user.chineseName : user.username,
+      username: (user.chineseName ? user.chineseName : user.username)
+        + '(登录名: ' + user.username + ')',
       link: url + "/" + (isReset ? "reset" : "login") + "?token=" + token
     };
 
+    let template = isReset ? 'template_ae0k3bj' : 'template_vye2wfs';
+
     //emailjs.send("icloud_2021_12_27","template_ae0k3bj", templateParams)
-    emailjs.send("Gmail 2022","template_ae0k3bj", templateParams)
+    emailjs.send("Gmail 2022", template, templateParams)
     .then((result) => {
       console.log(result.text);
       this.setState({

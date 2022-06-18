@@ -55,7 +55,7 @@ export default class Reset extends Component {
 
     if (!email) {
       this.setState({
-        message: '您的邮箱地址无效，密码重置请求失效，请到登录页面重新提供注册邮箱。。。',
+        message: '密码重置请求失效，请到登录页面重新提供注册邮箱。。。',
         email: null
       });
     } else {
