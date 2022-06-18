@@ -826,6 +826,7 @@ export default class Register extends Component {
             )}
 
             {!this.state.contactOnly && !this.state.readonly && !this.state.newuser &&
+            (AuthService.isAdmin() || this.state.username === AuthService.getCurrentUser().username) &&
               <Link
                 to={'/reset?token=' +
                   jwt.sign({ email: this.state.email }, "config.secret", {
