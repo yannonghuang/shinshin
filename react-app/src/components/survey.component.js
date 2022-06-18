@@ -12,6 +12,7 @@ import UserDataService from "../services/auth.service";
 import SurveyDataService from "../services/survey.service";
 import SchoolDataService from "../services/school.service";
 import DocumentDataService from "../services/document.service";
+import AuthService from "../services/auth.service";
 
 import YearPicker from 'react-single-year-picker';
 
@@ -1108,7 +1109,7 @@ export default class Survey extends Component {
                 <div class="select-container form-group col-md-3">
                 <label htmlFor="region">省/自治区/直辖市</label>
                 <select
-                readonly={this.state.readonly?"":false}
+                disabled={this.state.readonly || AuthService.isSchoolUser() ? "disabled" : false}
                 class="form-control"
                 id="region"
                 required
