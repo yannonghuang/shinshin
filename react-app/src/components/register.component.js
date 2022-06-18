@@ -589,7 +589,7 @@ export default class Register extends Component {
       };
 
 //      emailjs.send("icloud_2021_12_27","template_vye2wfs", templateParams)
-      emailjs.send("Gmail 2022","template_vye2wfs", templateParams)
+      emailjs.send("Gmail 2022","template_email_check", templateParams)
       .then((result) => {
         console.log(result.text);
         this.setState({

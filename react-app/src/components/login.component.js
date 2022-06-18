@@ -165,7 +165,7 @@ export default class Login extends Component {
       link: url + "/" + (isReset ? "reset" : "login") + "?token=" + token
     };
 
-    let template = isReset ? 'template_ae0k3bj' : 'template_vye2wfs';
+    let template = isReset ? 'template_password_reset' : 'template_email_check';
 
     //emailjs.send("icloud_2021_12_27","template_ae0k3bj", templateParams)
     emailjs.send("Gmail 2022", template, templateParams)
