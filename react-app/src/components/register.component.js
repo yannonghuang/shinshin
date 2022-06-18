@@ -174,6 +174,8 @@ export default class Register extends Component {
       successful: false
     });
 
+    if (!this.validateTitle()) return;
+
     if (!this.validateSchool()) return;
 
     //this.form.validateAll();
@@ -452,6 +454,19 @@ export default class Register extends Component {
       );
   }
 
+  validateTitle() {
+
+    if (this.state.schoolId && !this.state.title) {
+      this.setState({
+        message: "请选择职务",
+        successful: false
+      });
+      return false;
+    }
+
+    return true;
+  }
+
   validateSchool() {
     const user = AuthService.getCurrentUser(); //localStorage.getItem('user');
 
@@ -509,6 +524,8 @@ export default class Register extends Component {
       });
       return;
     }
+
+    if (!this.validateTitle()) return;
 
     if (!this.validateSchool()) return;
     let vp = await this.validatePrincipal();
@@ -700,13 +717,14 @@ export default class Register extends Component {
 
               <div class="form-group col-sm-4" hidden={!this.state.schoolId}>
                 <label htmlFor="title">职务</label>
-                <select onChange={this.onChangeTitle.bind(this)}
-                  readonly={this.state.readonly?"":false}
+                <select required
+                  onChange={this.onChangeTitle.bind(this)}
+                  disabled={this.state.readonly ? "disabled" : false}
                   class="form-control"
                   id="title"
                   value={this.state.title}
                   name="title"
-              >
+                >
                   <option value="">{this.state.readonly ? '' : '请选择' }</option>
                   {this.state.titles.map((option) => (
                     <option value={option}>{option}</option>
@@ -785,20 +803,7 @@ export default class Register extends Component {
 
               </div>
 
-              {this.state.message && (
-                <div class="form-group">
-                  <div
-                    className={
-                      this.state.successful
-                        ? "alert alert-success"
-                        : "alert alert-danger"
-                    }
-                    role="alert"
-                  >
-                    {this.state.message}
-                  </div>
-                </div>
-              )}
+
               <CheckButton
                 style={{ display: "none" }}
                 ref={c => {
@@ -849,6 +854,21 @@ export default class Register extends Component {
             >
               取消
             </button>)}
+
+            {this.state.message && (
+              <div class="form-group">
+                <div
+                  className={
+                    this.state.successful
+                      ? "alert alert-success"
+                      : "alert alert-danger"
+                  }
+                  role="alert"
+                >
+                  {this.state.message}
+                </div>
+              </div>
+            )}
 
           </div>
         )}
