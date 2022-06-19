@@ -579,7 +579,8 @@ export default class Register extends Component {
         expiresIn: 900 // 15 minutes
       });
 
-      const url = window.location.host;
+      //const url = window.location.host;
+      const url = window.location.protocol + '//' + window.location.host;
       var templateParams = {
             to: this.state.email,
             username: (this.state.chineseName ? this.state.chineseName : this.state.username)

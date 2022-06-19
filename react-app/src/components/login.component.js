@@ -156,7 +156,8 @@ export default class Login extends Component {
       expiresIn: 900 // 15 minutes
     });
 
-    const url = window.location.host;
+    //const url = window.location.host;
+    const url = window.location.protocol + '//' + window.location.host;
 
     var templateParams = {
       to: user.email,
