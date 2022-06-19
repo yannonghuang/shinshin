@@ -135,7 +135,7 @@ export default class Survey extends Component {
       requests: [],
       categories: [],
 
-      message: "",
+      message: "打*的项必须更新；如校长或联络人是新人，请点击“新建联络人”添加后再选。",
       submitted: false,
 
       dirty: false,
@@ -1062,14 +1062,19 @@ export default class Survey extends Component {
 
                 <button
                   type="submit"
-                  className="btn btn-primary ml-2"
+                  className="btn btn-primary ml-2 mr-2"
                   onClick={() => (!this.state.dirty || window.confirm("您确定要取消吗 ?")) && window.close()}
                 >
                   取消
                 </button>
 
+                <a target="_blank"
+                  href={"/addU?schoolId=" + currentSurvey.schoolId} class="btn btn-primary ">
+                    新建联络人
+                </a>
+
                 {this.state.message && (
-                  <div class="form-group">
+                  <div class="form-group mt-2">
                     <div
                       className={
                       this.state.submitted
@@ -1300,7 +1305,8 @@ export default class Survey extends Component {
                 <div class="w-100"></div>
 
                 <div class="form-group col-md-4">
-                  <label htmlFor="principalId">校长</label>
+                  <label htmlFor="principalId">校长<span class="required">*</span>
+                  </label>
                   {!this.state.readonly
                   ? (<Select onChange={this.onChangePrincipalId.bind(this)}
                     readonly={this.state.readonly?"":false}
@@ -1320,7 +1326,8 @@ export default class Survey extends Component {
                 </div>
 
                 <div class="form-group col-md-4">
-                  <label htmlFor="contactId">联络人</label>
+                  <label htmlFor="contactId">联络人<span class="required">*</span>
+                  </label>
                   {!this.state.readonly
                   ? (<Select onChange={this.onChangeContactId.bind(this)}
                     readonly={this.state.readonly?"":false}

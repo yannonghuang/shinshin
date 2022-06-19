@@ -60,20 +60,23 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
     }
   });
 
+  let mandatoryC = 0;
   if (!isSchoolUser) {
     goodUpdate = true;
   } else {
     for (var i = 0; i < updates.length; i++) {
-      if (updates[i].field === "studentsCount" || updates[i].field === "teachersCount") {
-        goodUpdate = true;
-        break;
+      if (updates[i].field === "studentsCount" || updates[i].field === "teachersCount" ||
+        updates[i].field === "principal" || updates[i].field === "contact") {
+        mandatoryC++;
+        //goodUpdate = true;
       }
     }
+    goodUpdate = mandatoryC >= 2;
   }
   if (!goodUpdate) {
     console.log('未通过更新条件检验，需更新学生和教师人数');
     await t.rollback();
-    throw new Error('请更新学校信息，如：学生人数和教师人数');
+    throw new Error('请至少更新必修改项：学生人数，教师人数，校长，联络人');
   }
 
   try {
