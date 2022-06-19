@@ -833,9 +833,30 @@ export default class Survey extends Component {
           SchoolDataService.update(
             this.state.currentSurvey.schoolId,
             dataSchool)
-            .then(r => {});
-        }
+            .then(r => {
+              if (this.state.currentSurvey.docFiles) // docs
+                this.uploadDocuments();
 
+              this.setState({
+                message: "学校信息成功修改!",
+                submitted: true
+              });
+            })
+            .catch(e => {
+              const resMessage =
+                (e.response &&
+                e.response.data &&
+                e.response.data.message) ||
+                e.message ||
+                e.toString();
+
+              this.setState({
+                message: "学校信息修改失败! " + resMessage
+              });
+              console.log(e);
+            });
+        }
+/**
         if (this.state.currentSurvey.docFiles) // docs
           this.uploadDocuments();
 
@@ -843,7 +864,7 @@ export default class Survey extends Component {
           message: "学校信息成功修改!",
           submitted: true
         });
-
+*/
       })
       .catch(e => {
         const resMessage =
@@ -1047,7 +1068,20 @@ export default class Survey extends Component {
                   取消
                 </button>
 
-                <p>{this.state.message}</p>
+                {this.state.message && (
+                  <div class="form-group">
+                    <div
+                      className={
+                      this.state.submitted
+                        ? "alert alert-success"
+                        : "alert alert-danger"
+                      }
+                      role="alert"
+                    >
+                      {this.state.message}
+                    </div>
+                  </div>
+                )}
 
               </div>)}
 

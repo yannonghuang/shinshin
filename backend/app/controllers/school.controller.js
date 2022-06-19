@@ -35,7 +35,10 @@ const getPagingData = (count, data, page, limit) => {
   return { totalItems, schools, totalPages, currentPage };
 };
 
-const updateAndLog = async (newObj, oldObj, schoolId, userId, t) => {
+const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
+  const isSchoolUser = await authJwt.getSchoolId(req);
+  var goodUpdate = false;
+
   var updates = [];
   Object.keys(newObj).forEach(key => {
     var newv = newObj[key];
@@ -56,6 +59,24 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t) => {
       if (oldObj) oldObj.set(key, newObj[key]);
     }
   });
+
+  if (!isSchoolUser) {
+    console.log('非学校用户，无需检验更新条件');
+    goodUpdate = true;
+  } else {
+    console.log('学校用户，需检验更新条件');
+    for (var i = 0; i < updates.length; i++) {
+      if (updates[i].field === "studentsCount" || updates[i].field === "teachersCount") {
+        goodUpdate = true;
+        break;
+      }
+    }
+  }
+  if (!goodUpdate) {
+    console.log('未通过更新条件检验，需更新学生和教师人数');
+    await t.rollback();
+    throw new Error('请更新学生和教师人数');
+  }
 
   try {
     if (oldObj) await oldObj.save({ transaction: t });
@@ -163,7 +184,7 @@ exports.create = (req, res) => {
     .then(async (data) => {
       res.send(data);
       const t = await db.sequelize.transaction();
-      updateAndLog(newObj, null, data.id, userId, t);
+      updateAndLog(newObj, null, data.id, userId, t, req);
     })
     .catch(err => {
       console.log(err.message || "Some error occurred while creating the School.");
@@ -878,7 +899,7 @@ exports.update = async (req, res) => {
     const t = await db.sequelize.transaction();
     let oldObj = await School.findByPk(schoolId, {transaction: t});
     if (oldObj) {
-      await updateAndLog(newObj, oldObj, schoolId, userId, t);
+      await updateAndLog(newObj, oldObj, schoolId, userId, t, req);
       res.send({
         message: "School was updated successfully."
       });
