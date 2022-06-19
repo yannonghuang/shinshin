@@ -73,7 +73,7 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
   if (!goodUpdate) {
     console.log('未通过更新条件检验，需更新学生和教师人数');
     await t.rollback();
-    throw new Error('请更新学校信息如，学生人数和教师人数');
+    throw new Error('请更新学校信息，如：学生人数和教师人数');
   }
 
   try {
