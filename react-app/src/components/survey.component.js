@@ -851,7 +851,7 @@ export default class Survey extends Component {
                 e.toString();
 
               this.setState({
-                message: "学校信息修改失败! " + resMessage
+                message: "学校信息修改失败：" + resMessage
               });
               console.log(e);
             });
@@ -875,7 +875,7 @@ export default class Survey extends Component {
           e.toString();
 
         this.setState({
-          message: "学校信息修改失败! " + resMessage
+          message: "学校信息修改失败：" + resMessage
         });
         console.log(e);
       });
@@ -1218,7 +1218,7 @@ export default class Survey extends Component {
                 <div class="w-100"></div>
 
                 <div class="form-group col-md-5">
-                <label htmlFor="phone">学校电话<span class="required">*</span>
+                <label htmlFor="phone">学校电话
                 </label>
                 <input
                 readonly={this.state.readonly?"":false}

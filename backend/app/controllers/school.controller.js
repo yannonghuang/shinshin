@@ -61,10 +61,8 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
   });
 
   if (!isSchoolUser) {
-    console.log('非学校用户，无需检验更新条件');
     goodUpdate = true;
   } else {
-    console.log('学校用户，需检验更新条件');
     for (var i = 0; i < updates.length; i++) {
       if (updates[i].field === "studentsCount" || updates[i].field === "teachersCount") {
         goodUpdate = true;
@@ -75,7 +73,7 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
   if (!goodUpdate) {
     console.log('未通过更新条件检验，需更新学生和教师人数');
     await t.rollback();
-    throw new Error('请更新学生和教师人数');
+    throw new Error('请更新学校信息如，学生人数和教师人数');
   }
 
   try {
