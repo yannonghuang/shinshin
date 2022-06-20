@@ -616,6 +616,12 @@ export default class Response extends Component {
                 取消
               </button>
 
+              <div className="alert-danger"
+                style={{ position: "absolute", right: "-10px", top: "50px" }}
+              >
+                <p><h6>{this.state.message}</h6></p>
+              </div>
+
               {(progress < 100 && progress > 0) && (
                 <div className="progress">
                 <div
@@ -687,7 +693,7 @@ export default class Response extends Component {
           </div>)}
 
           <div class="w-100"></div>
-          <div className="alert-danger">
+          <div className="alert-danger mt-2">
             <p><h6>{this.state.message}</h6></p>
           </div>
         </div>)
