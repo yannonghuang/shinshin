@@ -168,6 +168,9 @@ export default class Form extends Component {
           if (!((typeof formData) === "string")) formData = JSON.stringify(response.data.fdata);
           //this.fRender = $(this.fb.current).formRender({formData: response.data.fdata });
           this.fRender = $(this.fb.current).formRender({ formData });
+
+          // make it readonly
+          $('input, textarea, select', '.rendered-form').attr('readonly', true).attr('disabled', true);
         } else {
           $(this.fb.current).formBuilder(this.oldFormOptions).promise
             .then(formBuilder => {
