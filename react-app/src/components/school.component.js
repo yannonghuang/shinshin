@@ -1171,7 +1171,8 @@ export default class School extends Component {
                     id="principalId"
                     value={this.display(currentSchool.principalId)}
                     name="principalId"
-                    options={this.state.principals}
+                    //options={this.state.principals}
+                    options={this.state.users}
                   />)
                   : (<Link
                     to={ "/usersView/" + currentSchool.principalId}

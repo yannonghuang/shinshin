@@ -73,20 +73,25 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
     }
     goodUpdate = mandatoryC >= 2;
   }
+
   if (!goodUpdate) {
-    console.log('未通过更新条件检验，需更新学生和教师人数');
     await t.rollback();
-    throw new Error('请至少更新必修改项：学生人数，教师人数，校长，联络人');
+    if (updates.length > 0) {
+console.log(updates)
+      throw new Error('请至少更新必修改项：学生人数，教师人数，校长，联络人。');
+    }
+  } else {
+    try {
+      if (oldObj) await oldObj.save({ transaction: t });
+      await Log.bulkCreate(updates, { transaction: t });
+      await t.commit();
+    } catch (error) {
+      await t.rollback();
+      throw error;
+    }
   }
 
-  try {
-    if (oldObj) await oldObj.save({ transaction: t });
-    await Log.bulkCreate(updates, { transaction: t });
-    await t.commit();
-  } catch (error) {
-    await t.rollback();
-    throw error;
-  }
+  return updates;
 };
 
 const joinArray = (arr1, arr2) => {
@@ -900,10 +905,13 @@ exports.update = async (req, res) => {
     const t = await db.sequelize.transaction();
     let oldObj = await School.findByPk(schoolId, {transaction: t});
     if (oldObj) {
-      await updateAndLog(newObj, oldObj, schoolId, userId, t, req);
+      let updates = await updateAndLog(newObj, oldObj, schoolId, userId, t, req);
+      res.send(updates);
+/**
       res.send({
         message: "School was updated successfully."
       });
+*/
     } else {
       console.log("Cannot update School with id=${schoolId}. Maybe School was not found or req.body is empty!");
       res.send({

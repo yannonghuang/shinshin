@@ -58,6 +58,7 @@ export default class Survey extends Component {
     this.onChangeSchoolId = this.onChangeSchoolId.bind(this);
     this.onChangePrincipalId = this.onChangePrincipalId.bind(this);
     this.onChangeContactId = this.onChangeContactId.bind(this);
+    this.onFocusUsers = this.onFocusUsers.bind(this);
 
     this.saveSurvey = this.saveSurvey.bind(this);
     this.newSurvey = this.newSurvey.bind(this);
@@ -135,7 +136,7 @@ export default class Survey extends Component {
       requests: [],
       categories: [],
 
-      message: "打*的项必须更新；如校长或联络人是新人，请点击“新建联络人”添加后再选。",
+      message: "注意：打*的项必须更新；如校长或联络人是新人，请点击“新建联络人”添加后再选。",
       submitted: false,
 
       dirty: false,
@@ -626,6 +627,10 @@ export default class Survey extends Component {
   }
 */
 
+  onFocusUsers(e) {
+    this.getUsers(this.state.currentSurvey.schoolId);
+  }
+
   onChangePrincipalId(e) {
     this.setState(prevState => ({
       currentSurvey: {
@@ -745,7 +750,114 @@ export default class Survey extends Component {
       //this.refs.formToSubmit.submit();
   }
 
-  updateSurvey() {
+
+  async updateSurvey() {
+
+    const {
+      status,
+      request,
+      category,
+      principal,
+      principalCell,
+      principalWechat,
+      contact,
+      contactCell,
+      contactWechat,
+      schoolBoard,
+      schoolBoardRegisteredName,
+      region,
+      city,
+      county,
+      community,
+      address,
+      phone,
+      email,
+      studentsCount,
+      teachersCount,
+      description,
+      principalId,
+      contactId,
+      ...dataSurveyMinusSchool} = this.state.currentSurvey;
+
+    const {
+      id,
+      schoolId,
+      docFiles,
+      docCategory,
+
+      stayBehindCount,
+      boarderCount,
+      kClassesCount,
+      g1ClassesCount,
+      g2ClassesCount,
+      g3ClassesCount,
+      g4ClassesCount,
+      g5ClassesCount,
+      g6ClassesCount,
+      kStudentsCount,
+      g1StudentsCount,
+      g2StudentsCount,
+      g3StudentsCount,
+      g4StudentsCount,
+      g5StudentsCount,
+      g6StudentsCount,
+      mStudentsCount,
+      computersCount,
+      computerRoomExists,
+      computerRoomCount,
+      internetExists,
+      multimediaSystemsCount,
+      libraryExists,
+      bookCornersCount,
+      booksCount,
+
+      ...dataSchool} = this.state.currentSurvey;
+
+    const dataSurvey = this.state.embedded
+      ? dataSurveyMinusSchool
+      : this.state.currentSurvey;
+
+    try {
+
+      if (!this.state.embedded) {
+        let r = await SchoolDataService.update(
+          this.state.currentSurvey.schoolId,
+          dataSchool);
+
+        this.setState({
+          message: r.data.length > 0 ? "学校信息成功修改!" : "学校信息没有修改...",
+          submitted: r.data.length > 0 || this.state.currentSurvey.docFiles ? true : false
+        });
+      }
+
+      let response = await SurveyDataService.update(
+        this.state.currentSurvey.schoolId,
+        dataSurvey
+        //this.state.currentSurvey
+      );
+
+      console.log(response.data);
+
+    } catch (e) {
+      const resMessage =
+        (e.response &&
+          e.response.data &&
+          e.response.data.message) ||
+        e.message ||
+        e.toString();
+
+      this.setState({
+        message: "学校信息没有修改：" + resMessage
+      });
+      console.log(e);
+    }
+
+    if (this.state.currentSurvey.docFiles) // docs
+      this.uploadDocuments();
+  }
+
+
+  SAVE_updateSurvey() {
 
 /**
     const {
@@ -834,11 +946,12 @@ export default class Survey extends Component {
             this.state.currentSurvey.schoolId,
             dataSchool)
             .then(r => {
+/**
               if (this.state.currentSurvey.docFiles) // docs
                 this.uploadDocuments();
-
+*/
               this.setState({
-                message: "学校信息成功修改!",
+                message: r.data.length > 0 ? "学校信息成功修改!" : "学校信息没有修改",
                 submitted: true
               });
             })
@@ -851,7 +964,7 @@ export default class Survey extends Component {
                 e.toString();
 
               this.setState({
-                message: "学校信息修改失败：" + resMessage
+                message: "学校信息没有修改：" + resMessage
               });
               console.log(e);
             });
@@ -875,13 +988,14 @@ export default class Survey extends Component {
           e.toString();
 
         this.setState({
-          message: "学校信息修改失败：" + resMessage
+          message: "学校信息没有修改：" + resMessage
         });
         console.log(e);
       });
 
+    if (this.state.currentSurvey.docFiles) // docs
+      this.uploadDocuments();
   }
-
 
   uploadDocuments() {
     var data = new FormData();
@@ -1308,14 +1422,16 @@ export default class Survey extends Component {
                   <label htmlFor="principalId">校长<span class="required">*</span>
                   </label>
                   {!this.state.readonly
-                  ? (<Select onChange={this.onChangePrincipalId.bind(this)}
+                  ? <Select
+                    onFocus={this.onFocusUsers}
+                    onChange={this.onChangePrincipalId.bind(this)}
                     readonly={this.state.readonly?"":false}
                     class="form-control"
                     id="principalId"
                     value={this.displayUser(currentSurvey.principalId)}
                     name="principalId"
                     options={this.state.users}
-                  />)
+                    />
                   : (<Link
                     to={ "/usersView/" + currentSurvey.principalId}
                     id="principalId"
@@ -1329,14 +1445,16 @@ export default class Survey extends Component {
                   <label htmlFor="contactId">联络人<span class="required">*</span>
                   </label>
                   {!this.state.readonly
-                  ? (<Select onChange={this.onChangeContactId.bind(this)}
+                  ? <Select
+                    onFocus={this.onFocusUsers}
+                    onChange={this.onChangeContactId.bind(this)}
                     readonly={this.state.readonly?"":false}
                     class="form-control"
                     id="contactId"
                     value={this.displayUser(currentSurvey.contactId)}
                     name="contactId"
                     options={this.state.users}
-                  />)
+                    />
                   : (<Link
                     to={ "/usersView/" + currentSurvey.contactId}
                     id="contactId"
