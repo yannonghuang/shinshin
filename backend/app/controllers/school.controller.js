@@ -77,7 +77,6 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
   if (!goodUpdate) {
     await t.rollback();
     if (updates.length > 0) {
-console.log(updates)
       throw new Error('请至少更新必修改项：学生人数，教师人数，校长，联络人。');
     }
   } else {
