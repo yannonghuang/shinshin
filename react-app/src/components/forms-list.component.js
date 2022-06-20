@@ -367,7 +367,7 @@ const FormsList = (props) => {
             onChange={onChangeSearchTitle}
           />
 
-          <select
+          {AuthService.isAdmin() && <select
             className="form-control col-sm-2 ml-2"
             value={searchPublished}
             onChange={onChangeSearchPublished}
@@ -379,7 +379,7 @@ const FormsList = (props) => {
               <option value={true}>
                 {'是'}
               </option>
-          </select>
+          </select>}
 
           <div>
             <button
