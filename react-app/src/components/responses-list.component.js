@@ -563,7 +563,7 @@ const ResponsesList = (props) => {
 
           {!embedded && (<input
             type="text"
-            className="form-control ml-2"
+            className="form-control col-sm-2 ml-2"
             placeholder="学校编码"
             value={searchCode}
             onChange={onChangeSearchCode}
