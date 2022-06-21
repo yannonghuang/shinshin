@@ -174,6 +174,10 @@ export default class Register extends Component {
       successful: false
     });
 
+    if (!this.validateChineseName()) return;
+
+    if (!this.validatePhone()) return;
+    
     if (!this.validateTitle()) return;
 
     if (!this.validateSchool()) return;
@@ -454,6 +458,28 @@ export default class Register extends Component {
       );
   }
 
+  validatePhone() {
+    if (!this.state.phone) {
+      this.setState({
+        message: "必须填写手机号",
+        successful: false
+      });
+      return false;
+    }
+    return true;
+  }
+
+  validateChineseName() {
+    if (!this.state.chineseName) {
+      this.setState({
+        message: "必须填写姓名",
+        successful: false
+      });
+      return false;
+    }
+    return true;
+  }
+
   validateTitle() {
 
     if (this.state.schoolId && !this.state.title) {
@@ -524,6 +550,10 @@ export default class Register extends Component {
       });
       return;
     }
+
+    if (!this.validateChineseName()) return;
+
+    if (!this.validatePhone()) return;
 
     if (!this.validateTitle()) return;
 
