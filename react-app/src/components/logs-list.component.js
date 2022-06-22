@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import LogDataService from "../services/log.service";
 import AuthService from "../services/auth.service";
+import SchoolDataService from "../services/school.service";
 
 import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
@@ -15,6 +16,7 @@ const LogsList = (props) => {
   const [text, setText] = useState("");
   const [searchText, setSearchText] = useState("");
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
+  const [school, setSchool] = useState(null);
   const [userId, setUserId] = useState(AuthService.getCurrentUser() ? AuthService.getCurrentUser().id : null);
 
   const [orderby, setOrderby] = useState([]);
@@ -81,13 +83,25 @@ const LogsList = (props) => {
       });
   };
 
-  useEffect(retrieveLogs, [page, pageSize, orderby]);
+  useEffect(retrieveLogs, [page, pageSize, orderby, searchText]);
 
   const refreshList = () => {
     retrieveLogs();
     setText("");
   };
 
+  const retrieveSchool = () => {
+    SchoolDataService.get(schoolId)
+      .then((response) => {
+        setSchool(response.data);
+        console.log(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  useEffect(retrieveSchool, [schoolId]);
 
   const save = (e) => {
 
@@ -152,7 +166,7 @@ const LogsList = (props) => {
       },
       {
         Header: "修改人",
-        accessor: 'userId',
+        accessor: 'user.chineseName',
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -175,7 +189,6 @@ const LogsList = (props) => {
       {
         Header: "修改字段",
         accessor: "field",
-        disableSortBy: true,
       },
       {
         Header: "老值",
@@ -251,29 +264,26 @@ const LogsList = (props) => {
   }, [sortBy]);
 
   return (
-    <div className="list row">
-      <div className="col-sm-6">
-        <h6>修改记录</h6>
-        <div className="input-group mb-3">
+    <div className="list">
+
+      <h4>
+        {school ? school.name + '-' : ''}
+        学校信息修改记录
+      </h4>
+
+      <div className="row">
+
+        <div className="col-sm-6 input-group">
           <input
             type="text"
             className="form-control"
-            placeholder="新值或老值"
+            placeholder="新值或老值查询"
             value={searchText}
             onChange={onChangeSearchText}
           />
-          <div className="input-group-append">
-            <button
-              className="btn btn-outline-secondary"
-              type="button"
-              onClick={search}
-            >
-              查找
-            </button>
-          </div>
         </div>
 
-        <div className="col-sm-6 mt-3">
+        <div className="col-sm-6">
           {"每页显示行数: "}
           <select onChange={handlePageSizeChange} value={pageSize}>
             {pageSizes.map((size) => (
@@ -321,7 +331,8 @@ const LogsList = (props) => {
                   {column.render('Header')}
                   {/* Add a sort direction indicator */}
                   <span>
-                    {/*column.isSorted*/ (column.id === 'createdAt' || column.id === 'user.username')
+                    {/*column.isSorted*/ (column.id === 'createdAt' || column.id === 'user.chineseName' ||
+                    column.id === 'field' || column.id === 'newv' || column.id === 'oldv')
                      ? column.isSortedDesc
                        ? ' 🔽'
                        : ' 🔼'

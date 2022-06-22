@@ -177,7 +177,7 @@ export default class Register extends Component {
     if (!this.validateChineseName()) return;
 
     if (!this.validatePhone()) return;
-    
+
     if (!this.validateTitle()) return;
 
     if (!this.validateSchool()) return;
