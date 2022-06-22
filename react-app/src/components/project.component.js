@@ -694,7 +694,7 @@ export default class Project extends Component {
 
               <div class="row">
                 <div onDragOver={this.onDrag} onDrop={this.onDrop}>
-                <p>上传照片（拖拽照片文件到下框中）</p>
+                {!this.state.readonly && <p>上传照片（拖拽照片文件到下框中）</p>}
                 <img src={currentProject.photo} height="200" width="300" readonly={this.state.readonly?"":false} />
                 </div>
 
