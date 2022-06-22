@@ -802,7 +802,7 @@ export default class Project extends Component {
                 <div class="select-container form-group col-sm-4">
                 <label htmlFor="status">项目状态</label>
                 <select onChange={this.onChangeStatus}
-                readonly={this.state.readonly?"":false}
+                disabled={this.state.readonly ? "disabled" : false}
                 class="form-control"
                 id="status"
                 required

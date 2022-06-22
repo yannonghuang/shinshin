@@ -78,7 +78,7 @@ db.DOSSIER_CATEGORIES = [
 db.PROJECT_STATUSES = [
   "申请",
   "实施",
-  "完成",
+  "已完成",
 ];
 
 db.SCHOOL_STAGES = [
