@@ -742,7 +742,7 @@ export default class Project extends Component {
 
                 <div class="col-sm-8">
                   <label htmlFor="schoolId">学校</label>
-                  {!this.state.readonly
+                  {(!this.state.readonly && AuthService.isAdmin()) || this.state.newproject
                   ? (<Select onChange={this.onChangeSchoolId.bind(this)}
                     readonly={this.state.readonly?"":false}
                     class="form-control"
