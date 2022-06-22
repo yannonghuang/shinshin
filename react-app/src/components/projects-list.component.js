@@ -289,12 +289,12 @@ const ProjectsList = (props) => {
         Header: "项目状态",
         accessor: "status",
       },
-/**
+
       {
         Header: "项目名称",
         accessor: "name",
       },
-*/
+/**
       {
         Header: "项目申请/名称",
         accessor: "response.title",
@@ -314,7 +314,7 @@ const ProjectsList = (props) => {
           );
         },
       },
-
+*/
       {
         Header: "项目描述",
         accessor: "description",
