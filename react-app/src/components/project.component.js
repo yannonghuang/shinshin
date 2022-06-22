@@ -701,7 +701,7 @@ export default class Project extends Component {
                 <div class="form-group">
                 <label htmlFor="name">{currentProject.xr && '向荣支持'}项目名称</label>
                 <textarea
-                readonly={this.state.readonly?"":false}
+                readonly={(this.state.readonly || !AuthService.isAdmin()) ? "" : false}
                 cols="26"
                 class="form-control"
                 id="name"
