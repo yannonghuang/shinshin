@@ -237,7 +237,6 @@ exports.findAll2 = async (req, res) => {
                 ];
 
   const { limit, offset } = getPagination(page, size);
-
   let limits = {};
   if (!exportFlag) {
     limits = {
@@ -246,17 +245,28 @@ exports.findAll2 = async (req, res) => {
     }
   }
 
+  var attributes = ['id', 'name', 'budget', 'description',
+    exportFlag
+    ? [db.Sequelize.fn("year", db.Sequelize.col("projects.startAt")), "startAt"]
+    : 'startAt'
+  ];
+  if (!xr)
+    attributes.push('status');
+
   Project.findAll({
   where: condition,
   ...limits,
 //  limit: limit,
 //  offset: offset,
   subQuery: false,
+
+  attributes: attributes,
+/**
   attributes: ['id', 'name', 'budget', 'status', 'description', //'schoolId', 'responseId'
             "startAt", //[db.Sequelize.fn("year", db.Sequelize.col("projects.startAt")), "startAt"],
   //          [db.Sequelize.fn("COUNT", db.Sequelize.col("responses.id")), "responsesCount"],
   ],
-
+*/
   include: include,
 
   //group: ['id'],

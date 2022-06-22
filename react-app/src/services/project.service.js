@@ -136,6 +136,7 @@ class ProjectDataService {
   }
 
   exportCSV = (obj, mapper) => {
+
     const render = (item) => {
       if (item === true) return '是';
       if (item === false) return '否';
@@ -193,8 +194,9 @@ class ProjectDataService {
     const index = [];
     for (var i = 0; i < mapper.length; i++) {
       for (var j = 0; j < header.length; j++)
-          //if (mapper[i].accessor === header[j])
-          if (header[j].endsWith(mapper[i].accessor))
+          if ((header[j].endsWith('name') && mapper[i].accessor === header[j]) ||
+            (!header[j].endsWith('name') && header[j].endsWith(mapper[i].accessor)))
+            // rather ugly, name & school.name prevent checking with endsWith
             index.push({mapper: i, data: j}); //index.push(j);
     }
 

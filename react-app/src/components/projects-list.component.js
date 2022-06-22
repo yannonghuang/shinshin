@@ -195,7 +195,6 @@ const ProjectsList = (props) => {
 
       })
       .catch((e) => {
-
         console.log(e);
       });
   };
@@ -289,14 +288,12 @@ const ProjectsList = (props) => {
         Header: "项目状态",
         accessor: "status",
       },
-
       {
         Header: "项目名称",
         accessor: "name",
       },
-/**
       {
-        Header: "项目申请/名称",
+        Header: "项目申请",
         accessor: "response.title",
         disableSortBy: true,
         Cell: (props) => {
@@ -314,7 +311,6 @@ const ProjectsList = (props) => {
           );
         },
       },
-*/
       {
         Header: "项目描述",
         accessor: "description",
@@ -402,7 +398,6 @@ const ProjectsList = (props) => {
                 <i className="far fa-edit action mr-2"></i>
               </Link>)}
 
-
               {!readonly && AuthService.isAdmin() && (<span onClick={() => window.confirm("您确定要删除吗 ?") && deleteProject(rowIdx)}>
                 <i className="fas fa-trash action"></i>
               </span>)}
@@ -415,7 +410,7 @@ const ProjectsList = (props) => {
   );
 
   var hiddenColumnsMobile = (isMobile)
-    ? ['school.category', 'school.teachersCount', 'school.studentsCount', "school.region", 'description']
+    ? ['school.category', 'school.teachersCount', 'school.studentsCount', "school.name", 'description']
     : [];
 
   const schoolKnownColumns =
