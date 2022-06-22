@@ -791,7 +791,7 @@ export default class Register extends Component {
                   (AuthService.getCurrentUser() && AuthService.getCurrentUser().roles.includes("ROLE_ADMIN"))))
                 )}
               >
-                <label htmlFor="schoolId">所属学校<span class="required">*</span>
+                <label htmlFor="schoolId">所属学校
                 </label>
                 {!this.state.readonly && !this.state.schoolId
                 ? (<Select onChange={this.onChangeSchoolId.bind(this)}
