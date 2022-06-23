@@ -115,6 +115,8 @@ export default class School extends Component {
     };
 
     this.surveyRef = createRef();
+
+    this.docFilesRef = createRef();
   }
 
   async componentDidMount() {
@@ -728,6 +730,16 @@ export default class School extends Component {
           },
           dirty: true
         }));
+
+
+    let fileButton = document.getElementById("input-multi-files-custom-button");
+    var msg = docFiles.length > 0
+        ? '已选文件：'
+        : fileButton.value;
+    for (var i = 0; i < docFiles.length; i++)
+      msg += docFiles[i].name + '; ';
+    fileButton.innerHTML = msg;
+
   }
 
   renderUpdates() {
@@ -1251,34 +1263,38 @@ export default class School extends Component {
 
             <div class="w-100"></div>
 
+{/*
             <form ref="formToSubmit" action="http://localhost:8080/api/documents-upload" method="POST" enctype="multipart/form-data">
-                <div class="form-group input-group">
-                <label for="input-multi-files">上传文件:</label>
-                <input type="file" name="multi-files"
-                multiple
-                id="input-multi-files"
-                class="form-control-file border"
-                onChange={e => this.onChangeDocFiles(e)}
-                />
+*/}
 
-                <select
-                  className="form-control input-group-append"
-                  name="docCategory" id="docCategory"
-                  placeholder=""
-                  value={currentSchool.docCategory}
-                  onChange={e => this.onChangeGenerics(e)}
-                >
-                  <option value="">附件类别</option>
-                  {this.state.docCategories.map((option) => (
-                    <option value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
+            <label for="input-multi-files">上传文件:</label>
+            <input type="file" name="multi-files"
+              multiple
+              id="input-multi-files"
+              class="form-control-file border"
+              onChange={this.onChangeDocFiles}
+              ref={this.docFilesRef}
+              hidden
+            />
 
-                <input type="hidden" name="schoolId" id="schoolId"/>
-                </div>
-            </form>
+            <button id="input-multi-files-custom-button" onClick={() => this.docFilesRef.current.click()}>
+              请选择上传文件 。。。
+            </button>
+
+            <select
+              className="form-control input-group-append"
+              name="docCategory" id="docCategory"
+              placeholder=""
+              value={currentSchool.docCategory}
+              onChange={e => this.onChangeGenerics(e)}
+            >
+              <option value="">附件类别</option>
+              {this.state.docCategories.map((option) => (
+                <option value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
 
             <p>{this.state.message}</p>
             </div>

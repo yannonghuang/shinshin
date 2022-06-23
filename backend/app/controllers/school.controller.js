@@ -52,7 +52,7 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
     //if (newv && (!oldObj || !oldObj[key] || (oldv != newv))) {
     if ((key !== 'createdAt' && key !== 'updatedAt') &&
         getAttributes(School).includes(key) &&
-        //(newv && newv !== undefined) &&
+        (newv && newv !== undefined) &&
         (!oldObj || !oldObj[key] || (oldv != newv))) {
       if ((key !== 'contactId' && key !== 'principalId'))
         updates.push({field: key, oldv: oldv, newv: newv, schoolId, userId});

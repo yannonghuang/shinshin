@@ -30,7 +30,7 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
 
     if ((key !== 'createdAt' && key !== 'updatedAt') &&
         getAttributes(Survey).includes(key) &&
-        //((newv || newv === false) && newv !== undefined) &&
+        ((newv || newv === false) && newv !== undefined) &&
         (!oldObj || !oldObj[key] || (oldv != newv))) {
       if (//(isSchoolUser && key !== 'contactId' && key !== 'principalId') || // school user
         !getAttributes(School).includes(key)) {
