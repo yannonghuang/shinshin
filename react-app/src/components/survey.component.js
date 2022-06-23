@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+//import React, { Component } from "react";
+import React, { Component, createRef } from "react"; //For react component
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -141,6 +142,8 @@ export default class Survey extends Component {
 
       dirty: false,
     };
+
+    this.docFilesRef = createRef();
   }
 
   componentDidMount() {
@@ -1040,6 +1043,14 @@ export default class Survey extends Component {
           },
           dirty: true
         }));
+
+    let fileButton = document.getElementById("input-multi-files-custom-button");
+    var msg = docFiles.length > 0
+        ? '已选文件：'
+        : fileButton.value;
+    for (var i = 0; i < docFiles.length; i++)
+      msg += docFiles[i].name + '; ';
+    fileButton.innerHTML = msg;
   }
 
   renderUpdates() {
@@ -1130,19 +1141,23 @@ export default class Survey extends Component {
                 />
                 </div>
 
-                <form ref="formToSubmit"
-                  action="http://localhost:8080/api/documents-upload" method="POST" enctype="multipart/form-data">
-                  <div class="form-group input-group">
-                  <label for="input-multi-files">上传文件:</label>
-                  <input type="file" name="multi-files"
+
+                <label for="input-multi-files">上传文件:</label>
+                <input type="file" name="multi-files"
                   multiple
                   id="input-multi-files"
                   class="form-control-file border"
                   onChange={e => this.onChangeDocFiles(e)}
+                  ref={this.docFilesRef}
+                  hidden
                 />
 
+                <button id="input-multi-files-custom-button" onClick={() => this.docFilesRef.current.click()}>
+                  请选择上传文件 。。。
+                </button>
+
                 <select
-                  className="form-control input-group-append"
+                  className="form-control input-group-append mb-2"
                   placeholder=""
                   name="docCategory" id="docCategory"
                   value={currentSurvey.docCategory}
@@ -1155,9 +1170,6 @@ export default class Survey extends Component {
                     </option>
                   ))}
                 </select>
-                <input type="hidden" name="surveyId" id="surveyId"/>
-                </div>
-                </form>
 
                 <div class="w-100"></div>
 

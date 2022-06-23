@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+//import React, { Component } from "react";
+import React, { Component, createRef } from "react"; //For react component
 //import 'bootstrap/dist/css/bootstrap.min.css';
 //import {Tabs, Tab} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -75,6 +76,8 @@ export default class Project extends Component {
 
       dirty: false,
     };
+
+    this.docFilesRef = createRef();
   }
 
   componentDidMount() {
@@ -645,6 +648,14 @@ export default class Project extends Component {
           },
           dirty: true
         }));
+
+    let fileButton = document.getElementById("input-multi-files-custom-button");
+    var msg = docFiles.length > 0
+        ? '已选文件：'
+        : fileButton.value;
+    for (var i = 0; i < docFiles.length; i++)
+      msg += docFiles[i].name + '; ';
+    fileButton.innerHTML = msg;
   }
 
   renderUpdates() {
@@ -867,16 +878,20 @@ export default class Project extends Component {
                 取消
               </button>
 
-              {(!currentProject.xr) &&
-              <form ref="formToSubmit" action="http://localhost:8080/api/dossiers-upload" method="POST" enctype="multipart/form-data">
-                <div class="form-group input-group">
+              {(!currentProject.xr) && <div class="form-group input-group">
                 <label for="input-multi-files">上传文件:</label>
                 <input type="file" name="multi-files"
                 multiple
                 id="input-multi-files"
                 class="form-control-file border"
                 onChange={e => this.onChangeDocFiles(e)}
+                ref={this.docFilesRef}
+                hidden
                 />
+
+                <button id="input-multi-files-custom-button" onClick={() => this.docFilesRef.current.click()}>
+                  请选择上传文件 。。。
+                </button>
 
                 <select
                   className="form-control input-group-append"
@@ -892,9 +907,7 @@ export default class Project extends Component {
                   ))}
                 </select>
 
-                <input type="hidden" name="projectId" id="projectId"/>
-                </div>
-              </form>}
+              </div>}
 
               <p>{this.state.message}</p>
             </div>)}
