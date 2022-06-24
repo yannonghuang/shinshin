@@ -192,7 +192,7 @@ nav a:hover {
     font-size: 1em;
     font-weight: 700;
     color: white;
-    background-color: blue;
+    background-color: #337aff;
     display: inline-block;
 	cursor: pointer; /* "hand" cursor */
 }
