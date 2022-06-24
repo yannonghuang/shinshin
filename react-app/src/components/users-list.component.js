@@ -247,6 +247,11 @@ const UsersList = (props) => {
       },
 */
       {
+        Header: "创建时间",
+        accessor: "createdAt",
+      },
+
+      {
         Header: "用户名",
         accessor: "username",
         disableSortBy: true,
@@ -323,12 +328,6 @@ const UsersList = (props) => {
         Header: "上次登录时间",
         accessor: "lastLogin",
       },
-
-      {
-        Header: "创建时间",
-        accessor: "createdAt",
-      },
-
       {
         Header: "注册用户",
         accessor: 'contactOnly',
