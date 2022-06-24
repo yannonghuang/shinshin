@@ -1045,11 +1045,15 @@ export default class Survey extends Component {
         }));
 
     let fileButton = document.getElementById("input-multi-files-custom-button");
-    var msg = docFiles.length > 0
+    var msgFilesPicked = docFiles.length > 0
         ? '已选文件：'
+        : null;
+    var msg = docFiles.length > 0
+        ? '已选择' + docFiles.length + '个文件，点击重选。。。'
         : fileButton.value;
     for (var i = 0; i < docFiles.length; i++)
-      msg += docFiles[i].name + '; ';
+      msgFilesPicked += docFiles[i].name + '; ';
+    fileButton.title = msgFilesPicked;
     fileButton.innerHTML = msg;
   }
 
