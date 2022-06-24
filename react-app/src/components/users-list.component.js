@@ -249,10 +249,12 @@ const UsersList = (props) => {
       {
         Header: "用户名",
         accessor: "username",
+        disableSortBy: true,
       },
       {
         Header: "中文名",
         accessor: "chineseName",
+        disableSortBy: true,
       },
       {
         Header: "电子邮件",
@@ -280,6 +282,7 @@ const UsersList = (props) => {
       {
         Header: "学校编号",
         accessor: 'school.code',
+        disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -299,6 +302,7 @@ const UsersList = (props) => {
       {
         Header: "学校名称",
         accessor: 'school.name',
+        disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -319,15 +323,16 @@ const UsersList = (props) => {
         Header: "上次登录时间",
         accessor: "lastLogin",
       },
-/*
+
       {
         Header: "创建时间",
         accessor: "createdAt",
       },
-*/
+
       {
         Header: "注册用户",
         accessor: 'contactOnly',
+        disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -340,6 +345,7 @@ const UsersList = (props) => {
       {
         Header: "登录过?",
         accessor: 'emailVerified',
+        disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -559,7 +565,7 @@ const UsersList = (props) => {
                     {column.render('Header')}
                     {/* Add a sort direction indicator */}
                       <span>
-                        {column.isSorted
+                        {/*column.isSorted*/ (column.id === 'lastLogin' || column.id === 'createdAt')
                         ? column.isSortedDesc
                           ? ' 🔽'
                           : ' 🔼'
