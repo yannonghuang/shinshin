@@ -317,7 +317,7 @@ export default class Response extends Component {
           label.style.fontSize = "1em";
           label.style.fontWeight = "700";
           label.style.color = "white";
-          label.style.backgroundColor = "green";
+          label.style.backgroundColor = "blue";
           label.style.display = "inline-block";
           label.style.cursor = "pointer"; /* "hand" cursor */
 
