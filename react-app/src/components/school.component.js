@@ -115,8 +115,6 @@ export default class School extends Component {
     };
 
     this.surveyRef = createRef();
-
-    this.docFilesRef = createRef();
   }
 
   async componentDidMount() {
@@ -719,8 +717,7 @@ export default class School extends Component {
     }));
   }
 
-
-  onChangeDocFiles(e) {
+  SAVE_onChangeDocFiles(e) {
     e.preventDefault();
     var docFiles = e.target.files;
     this.setState(prevState => ({
@@ -744,6 +741,31 @@ export default class School extends Component {
     fileButton.title = msgFilesPicked;
     fileButton.innerHTML = msg;
 
+  }
+
+  onChangeDocFiles(e) {
+    e.preventDefault();
+    var docFiles = e.target.files;
+    this.setState(prevState => ({
+          currentSchool: {
+            ...prevState.currentSchool,
+            docFiles: docFiles
+          },
+          dirty: true
+        }));
+
+	var label = e.target.nextElementSibling;
+
+    var msgFilesPicked = docFiles.length > 0
+        ? '已选文件：'
+        : null;
+    var msg = docFiles.length > 0
+        ? '已选择' + docFiles.length + '个文件，点击重选。。。'
+        : label.innerHTML;
+    for (var i = 0; i < docFiles.length; i++)
+      msgFilesPicked += docFiles[i].name + '; ';
+    label.title = msgFilesPicked;
+    label.innerHTML = msg;
   }
 
   renderUpdates() {
@@ -1271,20 +1293,20 @@ export default class School extends Component {
             <form ref="formToSubmit" action="http://localhost:8080/api/documents-upload" method="POST" enctype="multipart/form-data">
 */}
 
-            <label for="input-multi-files">上传文件:</label>
+
             <input type="file" name="multi-files"
               multiple
               id="input-multi-files"
-              class="form-control-file border"
+              class="inputfile form-control-file border"
               onChange={this.onChangeDocFiles}
-              ref={this.docFilesRef}
-              hidden
             />
+            <label for="input-multi-files">请选择上传文件 。。。</label>
 
+{/*
             <button id="input-multi-files-custom-button" onClick={() => this.docFilesRef.current.click()}>
               请选择上传文件 。。。
             </button>
-
+*/}
             <select
               className="form-control input-group-append"
               name="docCategory" id="docCategory"

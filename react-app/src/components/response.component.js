@@ -153,6 +153,8 @@ export default class Response extends Component {
         var formData = response.data.fdata;
         if (!((typeof formData) === "string")) formData = JSON.stringify(response.data.fdata);
         this.fRender = $(this.fb.current).formRender({ formData });
+
+        this.initInputfile();
       } catch (e) {
         alert(e);
       }
@@ -194,6 +196,8 @@ export default class Response extends Component {
           //this.fRender = $(this.fb.current).formRender(this.state.currentResponse.fdata);
           if (readonly)
             $('input, textarea, select', '.rendered-form').attr('readonly', true).attr('disabled', true);
+
+          this.initInputfile();
         } catch (e) {
           alert(e);
         }
@@ -289,18 +293,52 @@ export default class Response extends Component {
     var inputs = document.getElementsByTagName("input");
     const attFiles = [];
     if (inputs) {
-    for (var i = 0; i < inputs.length; i++) {
-      if (inputs[i].type === "file" && inputs[i].files) {
-        let filesN = inputs[i].files.length;
-        for (var j = 0; j < filesN; j++) {
-          attFiles.push({description: this.getLabel(inputs[i].type, inputs[i].name),
-            file: inputs[i].files[j]});
+      for (var i = 0; i < inputs.length; i++) {
+        if (inputs[i].type === "file" && inputs[i].files) {
+          let filesN = inputs[i].files.length;
+          for (var j = 0; j < filesN; j++) {
+            attFiles.push({description: this.getLabel(inputs[i].type, inputs[i].name),
+              file: inputs[i].files[j]});
           }
         }
       }
     }
-
     return attFiles;
+  }
+
+  initInputfile() {
+    var inputs = document.getElementsByTagName("input");
+    if (inputs) {
+      for (var i = 0; i < inputs.length; i++) {
+        if (inputs[i].type === "file") {
+          inputs[i].className = 'inputfile';
+
+          var label = inputs[i].previousElementSibling;
+          label.style.fontSize = "1em";
+          label.style.fontWeight = "700";
+          label.style.color = "white";
+          label.style.backgroundColor = "green";
+          label.style.display = "inline-block";
+          label.style.cursor = "pointer"; /* "hand" cursor */
+
+          inputs[i].addEventListener( 'change', function( e ) {
+            var docFiles = e.target.files;
+            var msgFilesPicked = docFiles.length > 0
+              ? '已选文件：'
+              : null;
+            var msg = docFiles.length > 0
+              ? '已选择' + docFiles.length + '个文件，点击重选。。。'
+              : label.innerHTML;
+            for (var i = 0; i < docFiles.length; i++)
+              msgFilesPicked += docFiles[i].name + '; ';
+            label.title = msgFilesPicked;
+            label.innerHTML = msg;
+          });
+
+        }
+      }
+    }
+
   }
 
   hasFiles() {

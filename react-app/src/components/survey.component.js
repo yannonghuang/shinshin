@@ -143,7 +143,6 @@ export default class Survey extends Component {
       dirty: false,
     };
 
-    this.docFilesRef = createRef();
   }
 
   componentDidMount() {
@@ -1031,9 +1030,32 @@ export default class Survey extends Component {
       });
   }
 
-
-
   onChangeDocFiles(e) {
+    e.preventDefault();
+    var docFiles = e.target.files;
+    this.setState(prevState => ({
+          currentSurvey: {
+            ...prevState.currentSurvey,
+            docFiles: docFiles
+          },
+          dirty: true
+        }));
+
+	var label = e.target.nextElementSibling;
+
+    var msgFilesPicked = docFiles.length > 0
+        ? '已选文件：'
+        : null;
+    var msg = docFiles.length > 0
+        ? '已选择' + docFiles.length + '个文件，点击重选。。。'
+        : label.innerHTML;
+    for (var i = 0; i < docFiles.length; i++)
+      msgFilesPicked += docFiles[i].name + '; ';
+    label.title = msgFilesPicked;
+    label.innerHTML = msg;
+  }
+
+  SAVE_onChangeDocFiles(e) {
     e.preventDefault();
     var docFiles = e.target.files;
     this.setState(prevState => ({
@@ -1145,20 +1167,13 @@ export default class Survey extends Component {
                 />
                 </div>
 
-
-                <label for="input-multi-files">上传文件:</label>
                 <input type="file" name="multi-files"
                   multiple
                   id="input-multi-files"
-                  class="form-control-file border"
+                  class="inputfile form-control-file border"
                   onChange={e => this.onChangeDocFiles(e)}
-                  ref={this.docFilesRef}
-                  hidden
                 />
-
-                <button id="input-multi-files-custom-button" onClick={() => this.docFilesRef.current.click()}>
-                  请选择上传文件 。。。
-                </button>
+                <label for="input-multi-files">请选择上传文件 。。。</label>
 
                 <select
                   className="form-control input-group-append mb-2"
