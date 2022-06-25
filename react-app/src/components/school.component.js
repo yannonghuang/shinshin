@@ -514,6 +514,14 @@ export default class School extends Component {
 
         SurveyDataService.create(dataSurvey)
         .then(r => {
+
+          if (this.state.currentSchool.file || this.state.pastedPhotoType) { // photo, followed by docs
+            this.updatePhoto();
+          } else {
+            if (this.state.currentSchool.docFiles) // docs
+              this.uploadDocuments();
+          }
+
            this.setState(prevState => ({
              currentSchool: {
                ...prevState.currentSchool,
@@ -536,13 +544,14 @@ export default class School extends Component {
           });
         })
 
+/**
         if (this.state.currentSchool.file || this.state.pastedPhotoType) { // photo, followed by docs
           this.updatePhoto();
         } else {
           if (this.state.currentSchool.docFiles) // docs
             this.uploadDocuments();
         }
-
+*/
         console.log(response.data);
       })
       .catch(e => {
@@ -596,6 +605,14 @@ export default class School extends Component {
           this.state.currentSchool.id,
           dataSurvey)
         .then (r => {
+
+          if (this.state.currentSchool.file || this.state.pastedPhotoType) { // photo, followed by docs
+            this.updatePhoto();
+          } else {
+            if (this.state.currentSchool.docFiles) // docs
+              this.uploadDocuments();
+          }
+
           this.setState({
             message: "学校信息成功修改!",
             submitted: true
@@ -613,13 +630,14 @@ export default class School extends Component {
             message: "学校信息修改失败! " + resMessage
           });
         });
-
+/**
         if (this.state.currentSchool.file || this.state.pastedPhotoType) { // photo, followed by docs
           this.updatePhoto();
         } else {
           if (this.state.currentSchool.docFiles) // docs
             this.uploadDocuments();
         }
+*/
       })
       .catch(e => {
         const resMessage =
@@ -659,6 +677,10 @@ export default class School extends Component {
   }
 
   uploadDocuments() {
+    if (!this.state.currentSchool.docCategory) {
+      throw new Error('学校信息附件没有上传，请选择文档类型!');
+    }
+
     var data = new FormData();
     for (var i = 0; i < this.state.currentSchool.docFiles.length; i++) {
       data.append('multi-files', this.state.currentSchool.docFiles[i],
@@ -1322,7 +1344,21 @@ export default class School extends Component {
               ))}
             </select>
 
-            <p>{this.state.message}</p>
+            {this.state.message && (
+              <div class="form-group mt-2">
+                <div
+                  className={
+                  this.state.submitted
+                    ? "alert alert-success"
+                    : "alert alert-danger"
+                  }
+                  role="alert"
+                >
+                  {this.state.message}
+                </div>
+              </div>
+              )}
+
             </div>
 
             )}

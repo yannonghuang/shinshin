@@ -1000,6 +1000,14 @@ export default class Survey extends Component {
   }
 
   uploadDocuments() {
+    if (!this.state.currentSurvey.docCategory) {
+      this.setState(prevState => ({
+        message: prevState.message + " 学校信息附件没有上传，请选择文档类型！",
+        submitted: false
+      }));
+      return;
+    }
+
     var data = new FormData();
     for (var i = 0; i < this.state.currentSurvey.docFiles.length; i++) {
       data.append('multi-files', this.state.currentSurvey.docFiles[i],
@@ -1047,7 +1055,7 @@ export default class Survey extends Component {
         ? '已选文件：'
         : null;
     var msg = docFiles.length > 0
-        ? '已选择' + docFiles.length + '个文件，请选下面附件类别。。。'
+        ? '已选择' + docFiles.length + '个文件，请选下面附件类别 。。。'
         : label.innerHTML;
     for (var i = 0; i < docFiles.length; i++)
       msgFilesPicked += docFiles[i].name + '; ';
