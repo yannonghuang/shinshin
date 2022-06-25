@@ -493,10 +493,18 @@ export default class Project extends Component {
       });
 
     } catch (e) {
+      const resMessage =
+        (e.response &&
+          e.response.data &&
+          e.response.data.message) ||
+        e.message ||
+        e.toString();
+
+        this.setState({
+          message: "项目信息提交失败! " + resMessage
+        });
+
       console.log(e);
-      this.setState({
-        message: "项目信息提交失败!" || e.message,
-      });
     };
 
   }
@@ -530,9 +538,17 @@ export default class Project extends Component {
       });
 
     } catch (e) {
+      const resMessage =
+        (e.response &&
+          e.response.data &&
+          e.response.data.message) ||
+        e.message ||
+        e.toString();
+
         this.setState({
-          message: "项目信息修改失败!" || e.message
+          message: "项目信息修改失败! " + resMessage
         });
+
         console.log(e);
     }
   }
@@ -590,6 +606,10 @@ export default class Project extends Component {
   }
 
   async uploadDossiers() {
+    if (!this.state.currentProject.docCategory) {
+      throw new Error('项目信息附件没有上传，请选择文档类型!');
+    }
+
     var data = new FormData();
     for (var i = 0; i < this.state.currentProject.docFiles.length; i++) {
       data.append('multi-files', this.state.currentProject.docFiles[i],
@@ -933,7 +953,6 @@ export default class Project extends Component {
 
               </div>}
 
-              <p>{this.state.message}</p>
             </div>)}
 
             <div class="w-100"></div>
@@ -956,9 +975,21 @@ export default class Project extends Component {
             </Tabs>}
 
             <div class="w-100"></div>
-            <div className="alert-danger">
-            <p><h4>{this.state.message}</h4></p>
-            </div>
+
+            {this.state.message && (
+              <div class="form-group mt-2">
+                <div
+                  className={
+                  this.state.submitted
+                    ? "alert alert-success"
+                    : "alert alert-danger"
+                  }
+                  role="alert"
+                >
+                  {this.state.message}
+                </div>
+              </div>
+              )}
 
           </div>
         ) }

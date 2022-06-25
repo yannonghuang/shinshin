@@ -1344,21 +1344,6 @@ export default class School extends Component {
               ))}
             </select>
 
-            {this.state.message && (
-              <div class="form-group mt-2">
-                <div
-                  className={
-                  this.state.submitted
-                    ? "alert alert-success"
-                    : "alert alert-danger"
-                  }
-                  role="alert"
-                >
-                  {this.state.message}
-                </div>
-              </div>
-              )}
-
             </div>
 
             )}
@@ -1438,8 +1423,23 @@ export default class School extends Component {
               </TabPanel>) : null}
             </Tabs>)}
 
+            {this.state.message && (
+              <div class="form-group mt-2">
+                <div
+                  className={
+                  this.state.submitted
+                    ? "alert alert-success"
+                    : "alert alert-danger"
+                  }
+                  role="alert"
+                >
+                  {this.state.message}
+                </div>
+              </div>
+              )}
+              
           </div>
-        ) }
+        )}
       </div>
     );
   }
