@@ -314,12 +314,7 @@ export default class Response extends Component {
           inputs[i].className = 'inputfile';
 
           var label = inputs[i].previousElementSibling;
-          label.style.fontSize = "1em";
-          label.style.fontWeight = "700";
-          label.style.color = "white";
-          label.style.backgroundColor = "#337aff";
-          label.style.display = "inline-block";
-          label.style.cursor = "pointer"; /* "hand" cursor */
+          label.className = 'inputfileLabel';
 
           inputs[i].addEventListener( 'change', function( e ) {
             var docFiles = e.target.files;
@@ -327,7 +322,7 @@ export default class Response extends Component {
               ? '已选文件：'
               : null;
             var msg = docFiles.length > 0
-              ? '已选择' + docFiles.length + '个文件，点击重选。。。'
+              ? '已选择' + docFiles.length + '个文件。。。'
               : label.innerHTML;
             for (var i = 0; i < docFiles.length; i++)
               msgFilesPicked += docFiles[i].name + '; ';

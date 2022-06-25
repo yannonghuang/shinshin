@@ -188,11 +188,26 @@ nav a:hover {
 	z-index: -1;
 }
 
-.inputfile + label {
+.inputfile + label,
+ .inputfileLabel {
+    height: 40px;
     font-size: 1em;
-    font-weight: 700;
     color: white;
     background-color: #337aff;
-    display: inline-block;
+    display: block;
 	cursor: pointer; /* "hand" cursor */
+    border-radius: 4px;
+}
+
+.inputfileLabel:hover,
+.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: #4868bc;
+	outline: 1px dotted #000;
+	outline: -webkit-focus-ring-color auto 5px;
+}
+
+.inputfileLabel *,
+.inputfile + label * {
+	pointer-events: none;
 }
