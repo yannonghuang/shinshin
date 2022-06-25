@@ -501,7 +501,7 @@ export default class Project extends Component {
         e.toString();
 
         this.setState({
-          message: "项目信息提交失败! " + resMessage
+          message: "项目信息提交失败：" + resMessage
         });
 
       console.log(e);
@@ -546,7 +546,7 @@ export default class Project extends Component {
         e.toString();
 
         this.setState({
-          message: "项目信息修改失败! " + resMessage
+          message: "项目信息修改失败：" + resMessage
         });
 
         console.log(e);
@@ -666,7 +666,6 @@ export default class Project extends Component {
           },
           dirty: true
         }));
-
 
 	var label = e.target.nextElementSibling;
 

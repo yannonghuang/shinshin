@@ -1437,7 +1437,7 @@ export default class School extends Component {
                 </div>
               </div>
               )}
-              
+
           </div>
         )}
       </div>
