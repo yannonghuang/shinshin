@@ -756,7 +756,7 @@ export default class School extends Component {
         ? '已选文件：'
         : null;
     var msg = docFiles.length > 0
-        ? '已选择' + docFiles.length + '个文件，点击重选。。。'
+        ? '已选择' + docFiles.length + '个文件，点击重选'
         : fileButton.value;
     for (var i = 0; i < docFiles.length; i++)
       msgFilesPicked += docFiles[i].name + '; ';
@@ -782,7 +782,7 @@ export default class School extends Component {
         ? '已选文件：'
         : null;
     var msg = docFiles.length > 0
-        ? '已选择' + docFiles.length + '个文件，请选下面附件类别。。。'
+        ? '已选择' + docFiles.length + '个文件，请选下面附件类别'
         : label.innerHTML;
     for (var i = 0; i < docFiles.length; i++)
       msgFilesPicked += docFiles[i].name + '; ';
@@ -1322,7 +1322,7 @@ export default class School extends Component {
               class="inputfile form-control-file border"
               onChange={this.onChangeDocFiles}
             />
-            <label for="input-multi-files">请选择上传文件 。。。</label>
+            <label for="input-multi-files">请选择上传文件</label>
 
 {/*
             <button id="input-multi-files-custom-button" onClick={() => this.docFilesRef.current.click()}>

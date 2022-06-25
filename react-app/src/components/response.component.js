@@ -322,7 +322,7 @@ export default class Response extends Component {
               ? '已选文件：'
               : null;
             var msg = docFiles.length > 0
-              ? '已选择' + docFiles.length + '个文件。。。'
+              ? '已选择' + docFiles.length + '个文件'
               : label.innerHTML;
             for (var i = 0; i < docFiles.length; i++)
               msgFilesPicked += docFiles[i].name + '; ';
