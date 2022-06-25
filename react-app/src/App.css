@@ -190,11 +190,14 @@ nav a:hover {
 
 .inputfile + label,
  .inputfileLabel {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 40px;
     font-size: 1em;
     color: white;
     background-color: #337aff;
-    display: block;
 	cursor: pointer; /* "hand" cursor */
     border-radius: 4px;
 }
