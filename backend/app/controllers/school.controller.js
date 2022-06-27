@@ -78,9 +78,7 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
 
   if (!goodUpdate) {
     await t.rollback();
-    if (updates.length > 0) {
-      throw new Error('请至少更新必修改项：学生人数，教师人数，校长，联络人。');
-    }
+    throw new Error('请至少更新必修改项：学生人数，教师人数，校长，联络人。');
   } else {
     try {
       if (oldObj) await oldObj.save({ transaction: t });
@@ -92,7 +90,7 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
     }
   }
 
-  return updates;
+  //return updates;
 };
 
 const joinArray = (arr1, arr2) => {
@@ -906,13 +904,12 @@ exports.update = async (req, res) => {
     const t = await db.sequelize.transaction();
     let oldObj = await School.findByPk(schoolId, {transaction: t});
     if (oldObj) {
-      let updates = await updateAndLog(newObj, oldObj, schoolId, userId, t, req);
-      res.send(updates);
-/**
+      await updateAndLog(newObj, oldObj, schoolId, userId, t, req);
+
       res.send({
         message: "School was updated successfully."
       });
-*/
+
     } else {
       console.log("Cannot update School with id=${schoolId}. Maybe School was not found or req.body is empty!");
       res.send({

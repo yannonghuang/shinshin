@@ -819,32 +819,25 @@ export default class Survey extends Component {
       ? dataSurveyMinusSchool
       : this.state.currentSurvey;
 
-    let goodUpdate = this.state.embedded;
-
     try {
       if (!this.state.embedded) {
-        let r = await SchoolDataService.update(
+        await SchoolDataService.update(
           this.state.currentSurvey.schoolId,
           dataSchool);
-
-        goodUpdate = (r.data.length > 0) ;
-
-        this.setState({
-          message: r.data.length > 0 ? "学校信息成功修改!" : "学校信息没有修改，请至少更新必修改项：学生人数，教师人数，校长，联络人",
-          submitted: r.data.length > 0 || this.state.currentSurvey.docFiles ? true : false
-        });
       }
 
-      if (goodUpdate) {
-        let response = await SurveyDataService.update(
-          this.state.currentSurvey.schoolId,
-          dataSurvey
-          //this.state.currentSurvey
-        );
+      let response = await SurveyDataService.update(
+        this.state.currentSurvey.schoolId,
+        dataSurvey
+        //this.state.currentSurvey
+      );
 
-        console.log(response.data);
-      }
+      this.setState({
+        message: "学校信息成功修改!",
+        submitted: true
+      });
 
+      console.log(response.data);
     } catch (e) {
       const resMessage =
         (e.response &&
@@ -1008,7 +1001,7 @@ export default class Survey extends Component {
     if (!this.state.currentSurvey.docCategory) {
       this.setState(prevState => ({
         message: prevState.message + " 学校信息附件没有上传，请选择文档类型！",
-        submitted: false
+        submitted: prevState.submitted || false
       }));
       return;
     }
@@ -1022,7 +1015,8 @@ export default class Survey extends Component {
     SchoolDataService.uploadDocuments(this.state.currentSurvey.schoolId, data)
     .then(response => {
       this.setState(prevState => ({
-        message: prevState.message + " 学校信息附件成功上传!"
+        message: prevState.message + " 学校信息附件成功上传!",
+        submitted: true
       }));
 
       console.log(response.data);

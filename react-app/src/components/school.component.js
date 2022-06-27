@@ -627,7 +627,7 @@ export default class School extends Component {
             err.toString();
 
           this.setState({
-            message: "学校信息修改失败! " + resMessage
+            message: "学校信息修改失败：" + resMessage
           });
         });
 /**
