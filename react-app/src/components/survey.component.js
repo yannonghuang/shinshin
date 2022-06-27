@@ -819,26 +819,31 @@ export default class Survey extends Component {
       ? dataSurveyMinusSchool
       : this.state.currentSurvey;
 
-    try {
+    let goodUpdate = this.state.embedded;
 
+    try {
       if (!this.state.embedded) {
         let r = await SchoolDataService.update(
           this.state.currentSurvey.schoolId,
           dataSchool);
 
+        goodUpdate = (r.data.length > 0) ;
+
         this.setState({
-          message: r.data.length > 0 ? "学校信息成功修改!" : "学校信息没有修改...",
+          message: r.data.length > 0 ? "学校信息成功修改!" : "学校信息没有修改，请至少更新必修改项：学生人数，教师人数，校长，联络人",
           submitted: r.data.length > 0 || this.state.currentSurvey.docFiles ? true : false
         });
       }
 
-      let response = await SurveyDataService.update(
-        this.state.currentSurvey.schoolId,
-        dataSurvey
-        //this.state.currentSurvey
-      );
+      if (goodUpdate) {
+        let response = await SurveyDataService.update(
+          this.state.currentSurvey.schoolId,
+          dataSurvey
+          //this.state.currentSurvey
+        );
 
-      console.log(response.data);
+        console.log(response.data);
+      }
 
     } catch (e) {
       const resMessage =
