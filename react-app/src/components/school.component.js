@@ -605,6 +605,10 @@ export default class School extends Component {
           this.state.currentSchool.id,
           dataSurvey)
         .then (r => {
+          this.setState({
+            message: "学校信息成功修改!",
+            submitted: true
+          });
 
           if (this.state.currentSchool.file || this.state.pastedPhotoType) { // photo, followed by docs
             this.updatePhoto();
@@ -613,10 +617,6 @@ export default class School extends Component {
               this.uploadDocuments();
           }
 
-          this.setState({
-            message: "学校信息成功修改!",
-            submitted: true
-          });
         })
         .catch(err => {
           const resMessage =
@@ -626,9 +626,10 @@ export default class School extends Component {
             err.message ||
             err.toString();
 
-          this.setState({
-            message: "学校信息修改失败：" + resMessage
-          });
+          this.setState(prevState => ({
+            message: prevState.message + resMessage,
+            submitted: false
+          }));
         });
 /**
         if (this.state.currentSchool.file || this.state.pastedPhotoType) { // photo, followed by docs
@@ -647,9 +648,10 @@ export default class School extends Component {
           e.message ||
           e.toString();
 
-        this.setState({
-          message: "学校信息修改失败：" + resMessage
-        });
+        this.setState(prevState => ({
+          message: prevState.message + resMessage,
+          submitted: false
+        }));
         console.log(e);
       });
   }
@@ -670,10 +672,12 @@ export default class School extends Component {
         this.uploadDocuments();
       }
       console.log(response.data);
-    })
+    });
+/**
     .catch(e => {
       console.log(e);
     });
+*/
   }
 
   uploadDocuments() {
@@ -694,10 +698,12 @@ export default class School extends Component {
       }));
 
       console.log(response.data);
-    })
+    });
+/**
     .catch(e => {
       console.log(e);
     });
+*/
   }
 
   deleteSchool() {
