@@ -143,7 +143,7 @@ class ProjectDataService {
 
       return (item
         ? typeof item === 'string'
-          ? item.replace(/(\r\n|\n|\r)/gm, "")
+          ? item.replace(/(\r\n|\n|\r)/gm, "").replace(/,/gm, "，")
           : item
         : ''
       );
