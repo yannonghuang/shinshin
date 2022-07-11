@@ -78,6 +78,9 @@ module.exports = (sequelize, Sequelize) => {
     gradesCount: {
       type: Sequelize.INTEGER
     },
+    notes: {
+      type: Sequelize.STRING
+    },
   });
 
   return School;

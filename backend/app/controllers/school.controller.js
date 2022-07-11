@@ -822,6 +822,9 @@ exports.findOne = (req, res) => {
                           [db.Sequelize.fn("year", db.Sequelize.col("schools.startAt")), "startAt"],
                           [db.Sequelize.fn("year", db.Sequelize.col("schools.lastVisit")), "lastVisit"],
                           'xr',
+                         'classesCount',
+                         'gradesCount',
+                         'notes',
                    ],
       raw: true,
     }

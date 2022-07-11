@@ -471,6 +471,14 @@ const SchoolsList = (props) => {
         accessor: "category",
       },
       {
+        Header: "总班级数",
+        accessor: "classesCount",
+      },
+      {
+        Header: "总年级数",
+        accessor: "gradesCount",
+      },
+      {
         Header: "校长",
         accessor: "principalId",
       },
@@ -493,6 +501,10 @@ const SchoolsList = (props) => {
       {
         Header: "联络人微信",
         accessor: "contactWechat",
+      },
+      {
+        Header: "内部注释",
+        accessor: "notes",
       },
   ];
 
@@ -1017,7 +1029,7 @@ const SchoolsList = (props) => {
               type="button"
               onClick={retrieveExportSchools}
             >
-              导出
+              基本导出
             </button>
           </div>
           <div hidden={!currentUser || isMobile}>

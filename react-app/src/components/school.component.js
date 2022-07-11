@@ -67,6 +67,7 @@ export default class School extends Component {
         lastVisit: null,
         donor: null,
         stage: "",
+        notes: "",
 
         status: "",
         request: "",
@@ -464,6 +465,7 @@ export default class School extends Component {
       name: "",
       code: "",
       description: "",
+      notes: "",
       principal: "",
       photo: null,
       file: null,
@@ -1304,7 +1306,6 @@ export default class School extends Component {
 
                 <div class="w-100"></div>
 
-
                 <div class="form-group col-sm-12">
                 <label htmlFor="description">简介</label>
                 <textarea
@@ -1318,10 +1319,29 @@ export default class School extends Component {
                 name="description"
                 />
                 </div>
+
+                <div class="w-100"></div>
+
+
+                {AuthService.isVolunteer() && <div class="form-group col-sm-12">
+                <label htmlFor="notes">内部注释</label>
+                <textarea
+                rows="4"
+                readonly={this.state.readonly?"":false}
+                class="form-control"
+                id="notes"
+                required
+                value={currentSchool.notes}
+                onChange={this.onChangeGenerics}
+                name="notes"
+                />
+                </div>}
+
               </div>
             </div>
 
             <div class="w-100"></div>
+
 
             {!this.state.readonly && (
 
