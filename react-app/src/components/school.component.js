@@ -88,6 +88,8 @@ export default class School extends Component {
         email: "",
         studentsCount: 0,
         teachersCount: 0,
+        classesCount: 0,
+        gradesCount: 0,
         description: "",
         principalId: null,
         contactId: null,
@@ -471,6 +473,8 @@ export default class School extends Component {
       email: "",
       studentsCount: 0,
       teachersCount: 0,
+      classesCount: 0,
+      gradesCount: 0,
       docFiles: [],
       docCategory: "",
 
@@ -1225,6 +1229,36 @@ export default class School extends Component {
                   <option value={option}>{option}</option>
                 ))}
                 </select>
+                </div>
+
+                <div class="w-100"></div>
+
+                <div class="form-group col-sm-4">
+                <label htmlFor="classesCount">总班级数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="classesCount"
+                required
+                value={currentSchool.classesCount}
+                onChange={this.onChangeGenerics}
+                name="classesCount"
+                />
+                </div>
+
+                <div class="form-group col-sm-4">
+                <label htmlFor="gradesCount">总年级数</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number"
+                class="form-control"
+                id="gradesCount"
+                required
+                value={currentSchool.gradesCount}
+                onChange={this.onChangeGenerics}
+                name="gradesCount"
+                />
                 </div>
 
                 <div class="w-100"></div>

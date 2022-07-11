@@ -68,6 +68,7 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
   } else {
     for (var i = 0; i < updates.length; i++) {
       if (updates[i].field === "studentsCount" || updates[i].field === "teachersCount" ||
+        updates[i].field === "classesCount" || updates[i].field === "gradesCount" ||
         updates[i].field === "principal" || updates[i].field === "contact") {
         mandatoryC++;
         //goodUpdate = true;
@@ -78,7 +79,7 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
 
   if (!goodUpdate) {
     await t.rollback();
-    throw new Error('请至少更新必修改项：学生人数，教师人数，校长，联络人。');
+    throw new Error('请至少更新必修改项：学生人数、教师人数、总班级数、总年级数、校长、联络人。');
   } else {
     try {
       if (oldObj) await oldObj.save({ transaction: t });

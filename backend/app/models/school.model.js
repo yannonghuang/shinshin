@@ -72,6 +72,12 @@ module.exports = (sequelize, Sequelize) => {
     xr: {
       type: Sequelize.BOOLEAN
     },
+    classesCount: {
+      type: Sequelize.INTEGER
+    },
+    gradesCount: {
+      type: Sequelize.INTEGER
+    },
   });
 
   return School;

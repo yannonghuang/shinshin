@@ -148,6 +148,12 @@ module.exports = (sequelize, Sequelize) => {
     code: {
       type: Sequelize.INTEGER
     },
+    classesCount: {
+      type: Sequelize.INTEGER
+    },
+    gradesCount: {
+      type: Sequelize.INTEGER
+    },
   });
 
   return Survey;
