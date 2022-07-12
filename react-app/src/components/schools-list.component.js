@@ -288,7 +288,7 @@ const SchoolsList = (props) => {
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download',
-                'schools_export' + (columns.detail[0] ? '_detail' : '') + '.csv'
+                'schools_export' + (columns.detail[0] ? '_detail' : '_basic') + '.csv'
             );
         document.body.appendChild(link);
         link.click();
