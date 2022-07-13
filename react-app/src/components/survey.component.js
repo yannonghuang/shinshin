@@ -71,8 +71,8 @@ export default class Survey extends Component {
         docFiles: [],
         docCategory: "",
 
-        status: "",
-        request: "",
+        status: "待填",
+        request: "待填",
         category: "",
         principal: "",
         principalCell: "",
@@ -707,9 +707,9 @@ export default class Survey extends Component {
       docFiles: [],
       docCategory: "",
 
-      stage: "",
-      status: "",
-      request: "",
+      stage: "待填",
+      status: "待填",
+      request: "待填",
       category: "",
       },
 

@@ -66,11 +66,11 @@ export default class School extends Component {
         startAt: null,
         lastVisit: null,
         donor: null,
-        stage: "",
+        stage: "待填",
         notes: "",
 
-        status: "",
-        request: "",
+        status: "待填",
+        request: "待填",
         category: "",
         principal: "",
         principalCell: null,
@@ -480,9 +480,9 @@ export default class School extends Component {
       docFiles: [],
       docCategory: "",
 
-      stage: "",
-      status: "",
-      request: "",
+      stage: "待填",
+      status: "待填",
+      request: "待填",
       category: "",
       },
 

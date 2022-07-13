@@ -111,6 +111,7 @@ db.SCHOOL_STAGES = [
   //"一期支票",
   //"项目冻结",
   "非持续支持",
+  "待填"
 ];
 
 db.SCHOOL_STATUSES = [
@@ -133,14 +134,16 @@ db.SCHOOL_STATUSES_SS = [
   //"已撤并",
   //"未建成",
   "非常规欣欣学校",
+  "待填"
 ];
 
 db.SCHOOL_REQUESTS = [
-  "基本设施",
+  "基础设施",
   "教学设备",
   "师资培训",
   "暂停支持",
   "终止支持",
+  "待填"
 ];
 
 db.SCHOOL_REQUESTS_SS = [
@@ -149,6 +152,7 @@ db.SCHOOL_REQUESTS_SS = [
   "师资培训",
   "暂停支持",
   "终止支持",
+  "待填"
 ];
 
 db.SCHOOL_CATEGORIES = [
