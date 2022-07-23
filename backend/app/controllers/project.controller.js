@@ -188,11 +188,13 @@ exports.findAll2 = async (req, res) => {
   const schoolId = sid ? sid : req.body.schoolId;
   const code = req.body.code;
   const exportFlag = req.body.exportFlag;
-  const region = req.body.region
+  const region = req.body.region;
+  /*
     ? req.body.region.startsWith('湖南湘西')
       ? req.body.region.substring(0, 4)
       : req.body.region.substring(0, 2)
     : null;
+  */
   const xr = req.body.xr;
 
   var orderbyObject = null;
@@ -216,7 +218,8 @@ exports.findAll2 = async (req, res) => {
             name ? { name: { [Op.like]: `%${name}%` } } : null,
             schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null,
             code ? { '$school.code$': { [Op.eq]: `${code}` } } : null,
-            region ? { '$school.region$': { [Op.like]: `%${region}%` } } : null,
+            //region ? { '$school.region$': { [Op.like]: `%${region}%` } } : null,
+            region ? { '$school.region$': { [Op.eq]: `${region}` } } : null,
             startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('projects.startAt')), `${startAt}`) } } : null,
             xr /*=== undefined
               ? null
