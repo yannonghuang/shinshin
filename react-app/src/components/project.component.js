@@ -98,7 +98,7 @@ export default class Project extends Component {
     if (schools) {
     for (var i = 0; i < schools.length; i++) {
       result.push({value: schools[i].id,
-        label: schools[i].code + "-" + schools[i].name + "-" + schools[i].region});
+        label: schools[i].code + "-" + schools[i].name + "-" + schools[i].region });
     }
     return result;
     }
@@ -729,6 +729,10 @@ export default class Project extends Component {
     );
   }
 
+  customFilter(option, inputValue) {
+    return (option.label.toString().match(inputValue) || []).length > 0;
+  }
+
   render() {
     const { currentProject } = this.state;
 
@@ -809,6 +813,7 @@ export default class Project extends Component {
                     id="schoolId"
                     value={this.display(currentProject.schoolId)}
                     name="schoolId"
+                    filterOption={this.customFilter}
                     options={this.state.schools}
                   />)
                   : (<Link
