@@ -60,6 +60,8 @@ exports.create = (req, res) => {
       if (xr)
         await School.update({xr: 1}, {where: { id: schoolId }});
 
+      console.log(data);
+
       res.send(data);
     })
     .catch(err => {

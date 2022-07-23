@@ -58,10 +58,10 @@ export default class Project extends Component {
         photo: null,
         file: null, // for photo
         description: "",
-        startAt: null,
+        startAt: new Date().getFullYear(), //null,
         xr: window.location.pathname.includes('XR'),
 
-        docFiles: [],
+        docFiles: null, //[],
         docCategory: ""
       },
       currentUser: null,
@@ -394,10 +394,10 @@ export default class Project extends Component {
       photo: null,
       file: null,
       status: "申请",
-      docFiles: [],
+      docFiles: null, //[],
       docCategory: "",
       description: "",
-      startAt: null
+      startAt: new Date().getFullYear(), //null
       },
 
       submitted: false
