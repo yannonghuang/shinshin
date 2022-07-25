@@ -533,6 +533,9 @@ export default class Response extends Component {
     this.setState({reload: !this.state.reload});
   }
 
+  isUploading() {
+    return (this.state.progress < 100 && this.state.progress > 0)
+  }
 
   render() {
     const { currentResponse, progress } = this.state;
@@ -620,55 +623,57 @@ export default class Response extends Component {
 
           <div class="col-sm-4">
            {!this.state.readonly && (<div>
-              { this.state.newresponse? (
+             {!this.isUploading()
+             ? <div>
+                {this.state.newresponse? (
+                  <button
+                    style={{ position: "absolute", right: "10px" }}
+                    type="submit"
+                    className="btn btn-primary"
+                    onClick={this.submitResponse}
+                  >
+                    提交
+                  </button>
+                ) : (
+                  <button
+                    style={{ position: "absolute", right: "10px" }}
+                    type="submit"
+                    className="btn btn-primary"
+                    onClick={this.updateResponse}
+                  >
+                    保存
+                  </button>
+                )}
+
                 <button
-                  style={{ position: "absolute", right: "10px" }}
+                  style={{ position: "absolute", right: "-60px" }}
                   type="submit"
-                  className="btn btn-primary"
-                  onClick={this.submitResponse}
+                  className="btn btn-primary ml-2"
+                  onClick={() => (!this.state.dirty || window.confirm("您确定要取消吗 ?")) && window.close()}
                 >
-                  提交
+                  取消
                 </button>
-              ) : (
-                <button
-                  style={{ position: "absolute", right: "10px" }}
-                  type="submit"
-                  className="btn btn-primary"
-                  onClick={this.updateResponse}
+
+                <div className="alert-danger"
+                  style={{ position: "absolute", right: "-10px", top: "50px" }}
                 >
-                  保存
-                </button>
-              )}
-
-              <button
-                style={{ position: "absolute", right: "-60px" }}
-                type="submit"
-                className="btn btn-primary ml-2"
-                onClick={() => (!this.state.dirty || window.confirm("您确定要取消吗 ?")) && window.close()}
-              >
-                取消
-              </button>
-
-              <div className="alert-danger"
-                style={{ position: "absolute", right: "-10px", top: "50px" }}
-              >
-                <p><h6>{this.state.message}</h6></p>
-              </div>
-
-              {(progress < 100 && progress > 0) && (
-                <div className="progress">
-                <div
-                  className="progress-bar progress-bar-info progress-bar-striped"
-                  role="progressbar"
-                  aria-valuenow={progress}
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                  style={{ width: progress + "%" }}
-                >
-                  {progress}%
+                  <p><h6>{this.state.message}</h6></p>
                 </div>
-                </div>
-              )}
+               </div>
+
+             : <div className="progress">
+               <div
+                 className="progress-bar progress-bar-info progress-bar-striped"
+                 role="progressbar"
+                 aria-valuenow={progress}
+                 aria-valuemin="0"
+                 aria-valuemax="100"
+                 style={{ width: progress + "%" }}
+               >
+                 {progress}%
+               </div>
+             </div>}
+
             </div>)}
           </div>
 

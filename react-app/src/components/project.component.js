@@ -75,6 +75,7 @@ export default class Project extends Component {
       submitted: false,
 
       dirty: false,
+      progress: 0,
     };
   }
 
@@ -616,7 +617,11 @@ export default class Project extends Component {
         this.state.currentProject.docFiles[i].name);
     }
     data.append('docCategory', this.state.currentProject.docCategory);
-    await ProjectDataService.uploadDossiers(this.state.currentProject.id, data);
+    await ProjectDataService.uploadDossiers(this.state.currentProject.id, data, (event) => {
+      this.setState({
+        progress: Math.round((100 * event.loaded) / event.total),
+      });
+    });
   }
 
   deleteProject() {
@@ -733,8 +738,12 @@ export default class Project extends Component {
     return (option.label.toString().match(inputValue) || []).length > 0;
   }
 
+  isUploading() {
+    return (this.state.progress < 100 && this.state.progress > 0)
+  }
+
   render() {
-    const { currentProject } = this.state;
+    const { currentProject, progress } = this.state;
 
     return (
       <div>
@@ -911,25 +920,41 @@ export default class Project extends Component {
             {!this.state.readonly && (
 
             <div>
-              <button onClick={this.saveProject} class="btn btn-primary" hidden={!this.state.newproject}>
-                提交
-              </button>
+              {!this.isUploading()
+              ? <div>
+                <button onClick={this.saveProject} class="btn btn-primary" hidden={!this.state.newproject}>
+                  提交
+                </button>
 
-              <button hidden={this.state.newproject}
-                type="submit"
-                className="btn btn-primary"
-                onClick={this.updateProject}
-              >
-                保存
-              </button>
+                <button hidden={this.state.newproject}
+                  type="submit"
+                  className="btn btn-primary"
+                  onClick={this.updateProject}
+                >
+                  保存
+                </button>
 
-              <button
-                type="submit"
-                className="btn btn-primary ml-2"
-                onClick={() => (!this.state.dirty || window.confirm("您确定要取消吗 ?")) && window.close()}
-              >
-                取消
-              </button>
+                <button
+                  type="submit"
+                  className="btn btn-primary ml-2"
+                  onClick={() => (!this.state.dirty || window.confirm("您确定要取消吗 ?")) && window.close()}
+                >
+                  取消
+                </button>
+              </div>
+
+              : <div className="progress">
+               <div
+                 className="progress-bar progress-bar-info progress-bar-striped"
+                 role="progressbar"
+                 aria-valuenow={progress}
+                 aria-valuemin="0"
+                 aria-valuemax="100"
+                 style={{ width: progress + "%" }}
+               >
+                 {progress}%
+               </div>
+             </div>}
 
               {(!currentProject.xr) && <div class="form-group input-group">
 

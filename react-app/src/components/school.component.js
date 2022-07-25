@@ -115,6 +115,8 @@ export default class School extends Component {
       pastedPhotoType: null,
 
       dirty: false,
+
+      progress: 0,
     };
 
     this.surveyRef = createRef();
@@ -697,7 +699,11 @@ export default class School extends Component {
         this.state.currentSchool.docFiles[i].name);
     }
     data.append('docCategory', this.state.currentSchool.docCategory);
-    SchoolDataService.uploadDocuments(this.state.currentSchool.id, data)
+    SchoolDataService.uploadDocuments(this.state.currentSchool.id, data, (event) => {
+      this.setState({
+        progress: Math.round((100 * event.loaded) / event.total),
+      });
+    })
     .then(response => {
       this.setState(prevState => ({
         message: prevState.message + " 学校信息附件成功上传!"
@@ -825,8 +831,12 @@ export default class School extends Component {
     );
   }
 
+  isUploading() {
+    return (this.state.progress < 100 && this.state.progress > 0)
+  }
+
   render() {
-    const { currentSchool } = this.state;
+    const { currentSchool, progress } = this.state;
 
     return (
       <div>
@@ -1347,27 +1357,43 @@ export default class School extends Component {
 
             <div>
 
-            <button onClick={this.saveSchool} class="btn btn-primary" hidden={!this.state.newschool}>
-              提交
-            </button>
+            {!this.isUploading()
+            ? <div>
+              <button onClick={this.saveSchool} class="btn btn-primary" hidden={!this.state.newschool}>
+                提交
+              </button>
 
-            <button hidden={this.state.newschool}
-              type="submit"
-              className="btn btn-primary"
-              onClick={this.updateSchool}
-            >
-              保存
-            </button>
+              <button hidden={this.state.newschool}
+                type="submit"
+                className="btn btn-primary"
+                onClick={this.updateSchool}
+              >
+                保存
+              </button>
 
-            <button
-              type="submit"
-              className="btn btn-primary ml-2"
-              onClick={() => ((!this.state.dirty && !this.surveyRef.current) ||
-                            window.confirm("您确定要取消吗 ?")) &&
-                window.close()}
-            >
-              取消
-            </button>
+              <button
+                type="submit"
+                className="btn btn-primary ml-2"
+                onClick={() => ((!this.state.dirty && !this.surveyRef.current) ||
+                  window.confirm("您确定要取消吗 ?")) &&
+                  window.close()}
+              >
+                取消
+              </button>
+            </div>
+
+            : <div className="progress">
+             <div
+               className="progress-bar progress-bar-info progress-bar-striped"
+               role="progressbar"
+               aria-valuenow={progress}
+               aria-valuemin="0"
+               aria-valuemax="100"
+               style={{ width: progress + "%" }}
+             >
+               {progress}%
+             </div>
+            </div>}
 
             <div class="w-100"></div>
 
