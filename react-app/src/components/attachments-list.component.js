@@ -214,10 +214,18 @@ const AttachmentsList = (props) => {
         const url = window.URL.createObjectURL(new Blob([response.data], { type: mimetype }));
         const link = document.createElement('a');
         link.href = url;
+/**
         if (!previewOnly)
           link.setAttribute('download',
             originalname //'file.file' response.headers["Content-Disposition"].split("filename=")[1]
           ); //or any other extension
+*/
+        if (!previewOnly)
+          link.setAttribute('download', originalname);
+        else {
+          link.target = '_blank';
+        }
+
         document.body.appendChild(link);
         link.click();
         link.remove();
