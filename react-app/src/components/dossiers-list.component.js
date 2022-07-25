@@ -233,7 +233,7 @@ const DossiersList = (props) => {
         link.remove();
 	  })
 	  .catch((e) => {
-	  alert(e);
+	    alert(e);
         console.log(e);
       });
   }
