@@ -785,11 +785,15 @@ export default class Register extends Component {
               </div>)}
 
               <div class="form-group col-sm-4"
-                hidden={!(
-                  (this.state.readonly && this.state.schoolId) ||
-                  (!this.state.readonly && (this.state.newuser ||
-                  (AuthService.getCurrentUser() && AuthService.getCurrentUser().roles.includes("ROLE_ADMIN"))))
-                )}
+                hidden={
+                  (this.state.roles && this.state.roles.includes("volunteer")) ||
+                  (this.state.roles && this.state.roles.includes("admin")) ||
+                  !(
+                    (this.state.readonly && this.state.schoolId) ||
+                    (!this.state.readonly && (this.state.newuser ||
+                      (AuthService.getCurrentUser() && AuthService.getCurrentUser().roles.includes("ROLE_ADMIN"))))
+                  )
+                }
               >
                 <label htmlFor="schoolId">所属学校
                 </label>
