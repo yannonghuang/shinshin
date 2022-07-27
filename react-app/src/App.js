@@ -165,14 +165,10 @@ class App extends Component {
                   target="_blank">新增学校
                 </a>
 {/*
-                <a class="dropdown-item" href={"/addSurvey"}>新增调查表</a>
-*/}
                 <div class="dropdown-divider" hidden={!AuthService.isLogin()}></div>
                 <a class="dropdown-item" href={"/documents"} hidden={!AuthService.isLogin()}>学校文档</a>
                 <a class="dropdown-item" href={"/comments"} hidden={!AuthService.isLogin()}>留言</a>
                 <a class="dropdown-item" href={"/logs"} hidden={!AuthService.isLogin()}>修改记录</a>
-{/*
-                <a class="dropdown-item" href={"/surveys"}>调查表列表</a>
 */}
               </div>
             </li>)}

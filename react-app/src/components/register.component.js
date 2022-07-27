@@ -639,6 +639,10 @@ export default class Register extends Component {
     }
   }
 
+  customFilter(option, inputValue) {
+    return (option.label.toString().match(inputValue) || []).length > 0;
+  }
+
   render() {
     return (
       <div>
@@ -803,6 +807,7 @@ export default class Register extends Component {
                   id="schoolId"
                   value={this.display(this.state.schoolId)}
                   name="schoolId"
+                  filterOption={this.customFilter}
                   options={this.state.schools}
                   />)
                 : (<Link
