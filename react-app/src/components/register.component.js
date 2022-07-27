@@ -667,7 +667,7 @@ export default class Register extends Component {
               <div className="row">
 
               <div class="form-group col-sm-4" hidden={this.state.contactOnly}>
-                <label htmlFor="username">用户名<span hidden={this.state.contactOnly} class="required">*</span>
+                <label htmlFor="username">用户名<span class="required">*</span>
                 </label>
                 <Input
                   readonly={!this.state.newuser?"":false}
@@ -681,7 +681,7 @@ export default class Register extends Component {
               </div>
 
               <div class="form-group col-sm-4">
-                <label htmlFor="chineseName">姓名<span hidden={this.state.contactOnly} class="required">*</span>
+                <label htmlFor="chineseName">姓名<span class="required">*</span>
                 </label>
                 <Input
                   readonly={this.state.readonly?"":false}
@@ -695,8 +695,8 @@ export default class Register extends Component {
                 />
               </div>
 
-              <div class="form-group col-sm-4">
-                <label htmlFor="phone">手机号<span hidden={this.state.contactOnly} class="required">*</span>
+              <div class="form-group col-sm-4" hidden={this.state.contactOnly} >
+                <label htmlFor="phone">手机号<span class="required">*</span>
                 </label>
                 <Input
                   readonly={this.state.readonly?"":false}
@@ -708,10 +708,21 @@ export default class Register extends Component {
                   validations={[required]}
                 />
               </div>
+              <div class="form-group col-sm-4" hidden={!this.state.contactOnly} >
+                <label htmlFor="phone">手机号
+                </label>
+                <Input
+                  readonly={this.state.readonly?"":false}
+                  type="text"
+                  class="form-control"
+                  name="phone"
+                  value={this.state.phone}
+                  onChange={this.onChangePhone}
+                />
+              </div>
 
-
-              <div class="form-group col-sm-4" >
-                <label htmlFor="email">电子邮箱<span hidden={this.state.contactOnly} class="required">*</span>
+              <div class="form-group col-sm-4" hidden={this.state.contactOnly} >
+                <label htmlFor="email">电子邮箱<span class="required">*</span>
                 </label>
                 <Input
                   readonly={!this.state.contactOnly && !this.state.newuser ? "" : false}
@@ -723,9 +734,21 @@ export default class Register extends Component {
                   validations={[required, email]}
                 />
               </div>
+              <div class="form-group col-sm-4" hidden={!this.state.contactOnly} >
+                <label htmlFor="email">电子邮箱
+                </label>
+                <Input
+                  readonly={!this.state.contactOnly && !this.state.newuser ? "" : false}
+                  type="text"
+                  class="form-control"
+                  name="email"
+                  value={this.state.email}
+                  onChange={this.onChangeEmail}
+                />
+              </div>
 
               <div class="form-group col-sm-4" hidden={this.state.contactOnly || !this.state.newuser}>
-                <label htmlFor="password">密码<span hidden={this.state.contactOnly} class="required">*</span>
+                <label htmlFor="password">密码<span class="required">*</span>
                 </label>
                 <Input
                   readonly={this.state.readonly?"":false}
