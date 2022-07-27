@@ -1132,7 +1132,7 @@ export default class Survey extends Component {
 
     return (
       <div>
-        {(this.state.submitted /*&& this.state.newsurvey*/) ? (
+        {(this.state.submitted && !this.isUploading() /*&& this.state.newsurvey*/) ? (
           <div>
             <p>{this.state.message}</p>
             <a href="javascript:window.close();">

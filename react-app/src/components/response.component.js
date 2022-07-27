@@ -702,7 +702,7 @@ export default class Response extends Component {
 
           <div class="w-100"></div>
 
-          {!this.state.readonly && (<div>
+          {!this.state.readonly && !this.isUploading() && (<div>
             { this.state.newresponse? (
               <button
                 type="submit"
@@ -728,12 +728,15 @@ export default class Response extends Component {
             >
               取消
             </button>
+
+            <div class="w-100"></div>
+            <div className="alert-danger mt-2">
+              <p><h6>{this.state.message}</h6></p>
+            </div>
+
           </div>)}
 
-          <div class="w-100"></div>
-          <div className="alert-danger mt-2">
-            <p><h6>{this.state.message}</h6></p>
-          </div>
+
         </div>)
       )}
       </div>

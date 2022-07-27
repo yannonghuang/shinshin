@@ -617,7 +617,7 @@ export default class Project extends Component {
         this.state.currentProject.docFiles[i].name);
     }
     data.append('docCategory', this.state.currentProject.docCategory);
-    await ProjectDataService.uploadDossiers(this.state.currentProject.id, data, (event) => {
+    ProjectDataService.uploadDossiers(this.state.currentProject.id, data, (event) => {
       this.setState({
         progress: Math.round((100 * event.loaded) / event.total),
       });
@@ -747,7 +747,7 @@ export default class Project extends Component {
 
     return (
       <div>
-        {(this.state.submitted /*&& this.state.newproject*/) ? (
+        {(this.state.submitted && !this.isUploading() /*&& this.state.newproject*/) ? (
           <div>
             <p>{this.state.message}</p>
             <a href="javascript:window.close();">

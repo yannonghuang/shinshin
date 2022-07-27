@@ -840,7 +840,7 @@ export default class School extends Component {
 
     return (
       <div>
-        {(this.state.submitted /*&& this.state.newschool*/) ? (
+        {(this.state.submitted && !this.isUploading() /*&& this.state.newschool*/) ? (
           <div>
             <p>{this.state.message}</p>
             <a href="javascript:window.close();">
