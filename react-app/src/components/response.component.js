@@ -88,6 +88,12 @@ export default class Response extends Component {
       this.getResponse(this.props.match.params.id, readonly);
   }
 
+  refreshOnReturn() {
+    window.onblur = () => {window.onfocus = () => {
+      window.location.reload(true);
+    }};
+  }
+
   async setUpdateStatus() {
     const UPDATE_THRESHOLD = 10; // number of days
     const REFRESH_RATE = 3; // number of seconds
@@ -105,7 +111,8 @@ export default class Response extends Component {
 
         if (!updatedRecently)
           //this.refresher = window.setTimeout(this.props.history.go(0), REFRESH_RATE * 1000);
-          setTimeout(function() {window.location.reload()}, REFRESH_RATE * 1000);
+          //setTimeout(function() {window.location.reload()}, REFRESH_RATE * 1000);
+          this.refreshOnReturn();
 
       } catch (e) {
         console.log(e.message);
