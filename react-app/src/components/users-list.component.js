@@ -9,7 +9,9 @@ import { useTable, useSortBy } from "react-table";
 import AuthService from "../services/auth.service";
 
 const UsersList = (props) => {
-  window.onblur = () => {window.onfocus = () => {refreshList()}};
+  const refreshOnReturn = () => {
+    window.onblur = () => {window.onfocus = () => {refreshList()}}
+  };
 
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
@@ -521,6 +523,7 @@ const UsersList = (props) => {
           </button>
 */}
           {schoolId && (<a target="_blank"
+            onClick={refreshOnReturn}
             href={"/addU?schoolId=" + schoolId} class="btn btn-primary ">
               新建联络人
           </a>)}
