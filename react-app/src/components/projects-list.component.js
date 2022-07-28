@@ -317,6 +317,11 @@ const ProjectsList = (props) => {
         disableSortBy: true,
       },
       {
+        Header: "项目费用",
+        accessor: "budget",
+        disableSortBy: true,
+      },
+      {
         Header: "学校编号",
         accessor: "school.code",
         Cell: (props) => {
@@ -370,11 +375,6 @@ const ProjectsList = (props) => {
       {
         Header: "学校类型",
         accessor: 'school.category',
-        disableSortBy: true,
-      },
-      {
-        Header: "项目费用",
-        accessor: "budget",
         disableSortBy: true,
       },
       {
