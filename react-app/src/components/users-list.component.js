@@ -9,6 +9,8 @@ import { useTable, useSortBy } from "react-table";
 import AuthService from "../services/auth.service";
 
 const UsersList = (props) => {
+  window.onblur = () => {window.onfocus = () => {refreshList()}};
+
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);

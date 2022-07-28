@@ -176,6 +176,12 @@ export default class School extends Component {
 
   }
 
+  refreshOnReturn() {
+    window.onblur = () => {window.onfocus = () => {
+      window.location.reload(true);
+    }};
+  }
+
   convert(users) {
     const result = [];
     if (users) {
@@ -952,7 +958,11 @@ export default class School extends Component {
                   {AuthService.getCurrentUser().schoolId &&
                     <a target="_blank" href={"/surveys/" + currentSchool.id} class="btn btn-primary mb-4">更新信息</a>}
                   {!AuthService.getCurrentUser().schoolId &&
-                    <a target="_blank" href={"/schools/" + currentSchool.id} class="btn btn-primary mb-4">编辑</a>}
+                    <a target="_blank" onClick={this.refreshOnReturn}
+                      href={"/schools/" + currentSchool.id} class="btn btn-primary mb-4"
+                    >
+                      编辑
+                    </a>}
                 </div>
                 )}
 
