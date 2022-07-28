@@ -68,7 +68,7 @@ export default class Survey extends Component {
       currentSurvey: {
         id: null,
         schoolId: null,
-        docFiles: [],
+        docFiles: null,
         docCategory: "",
 
         status: "待填",
@@ -706,7 +706,7 @@ export default class Survey extends Component {
       teachersCount: 0,
       classesCount: 0,
       gradesCount: 0,
-      docFiles: [],
+      docFiles: null,
       docCategory: "",
 
       stage: "待填",
@@ -938,7 +938,6 @@ export default class Survey extends Component {
 
       ...dataSchool} = this.state.currentSurvey;
 
-
     const dataSurvey = this.state.embedded
       ? dataSurveyMinusSchool
       : this.state.currentSurvey;
@@ -1124,7 +1123,8 @@ export default class Survey extends Component {
   }
 
   isUploading() {
-    return (this.state.progress < 100 && this.state.progress > 0)
+    if (!this.state.currentSurvey.docFiles) return false;
+    return (this.state.progress < 100);
   }
 
   render() {

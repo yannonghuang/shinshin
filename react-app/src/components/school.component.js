@@ -60,7 +60,7 @@ export default class School extends Component {
 
         photo: null,
         file: null, // for photo
-        docFiles: [],
+        docFiles: null,
         docCategory: "",
 
         startAt: null,
@@ -485,7 +485,7 @@ export default class School extends Component {
       teachersCount: 0,
       classesCount: 0,
       gradesCount: 0,
-      docFiles: [],
+      docFiles: null,
       docCategory: "",
 
       stage: "待填",
@@ -838,7 +838,8 @@ export default class School extends Component {
   }
 
   isUploading() {
-    return (this.state.progress < 100 && this.state.progress > 0)
+    if (!this.state.currentSchool.docFiles) return false;
+    return (this.state.progress < 100);
   }
 
   render() {
