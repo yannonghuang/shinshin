@@ -145,6 +145,7 @@ export default class Survey extends Component {
       dirty: false,
 
       progress: 0,
+      doneLoading: false,
     };
 
   }
@@ -1029,7 +1030,8 @@ export default class Survey extends Component {
     .then(response => {
       this.setState(prevState => ({
         message: prevState.message + " 学校信息附件成功上传!",
-        submitted: true
+        submitted: true,
+        doneLoading: true,
       }));
 
       console.log(response.data);
@@ -1124,7 +1126,7 @@ export default class Survey extends Component {
 
   isUploading() {
     if (!this.state.currentSurvey.docFiles) return false;
-    return (this.state.progress < 100);
+    return this.state.submitted && !this.state.doneLoading;
   }
 
   render() {
