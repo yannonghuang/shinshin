@@ -701,7 +701,7 @@ export default class Register extends Component {
                 />
               </div>
 
-
+{/*
               <div class="form-group col-sm-4" hidden={AuthService.getCurrentUser()} >
                 <label htmlFor="phone">手机号<span class="required">*</span>
                 </label>
@@ -715,7 +715,8 @@ export default class Register extends Component {
                   validations={[required]}
                 />
               </div>
-              <div class="form-group col-sm-4" hidden={!AuthService.getCurrentUser()}>
+*/}
+              <div class="form-group col-sm-4" >
                 <label htmlFor="phone">手机号
                 </label>
                 <Input
