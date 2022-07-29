@@ -459,6 +459,8 @@ export default class Register extends Component {
   }
 
   validatePhone() {
+    if (AuthService.getCurrentUser()) return true; // bypass cell number validation if current user is a shinshin user
+
     if (!this.state.phone) {
       this.setState({
         message: "必须填写手机号",
@@ -466,6 +468,7 @@ export default class Register extends Component {
       });
       return false;
     }
+
     return true;
   }
 
@@ -606,7 +609,9 @@ export default class Register extends Component {
   emailVerification() {
     if (this.state.email) {
       var token = jwt.sign({ email: this.state.email }, "config.secret", {
-        expiresIn: 900 // 15 minutes
+        expiresIn: AuthService.getCurrentUser()
+                    ? 60 * 60 * 24 * 7 // one week
+                    : 60 * 15 // 15 minutes
       });
 
       //const url = window.location.host;
@@ -615,8 +620,9 @@ export default class Register extends Component {
             to: this.state.email,
             username: (this.state.chineseName ? this.state.chineseName : this.state.username)
                 + '(登录名: ' + this.state.username + ')',
-            link: url + "/login?token=" + token
+            link: url + "/login?token=" + token,
             //link: "http://localhost:8081/login?token=" + token
+            validity: AuthService.getCurrentUser() ? "一周" : "15分钟"
       };
 
 //      emailjs.send("icloud_2021_12_27","template_vye2wfs", templateParams)
@@ -695,8 +701,8 @@ export default class Register extends Component {
                 />
               </div>
 
-{/*}
-              <div class="form-group col-sm-4" hidden={this.state.contactOnly} >
+
+              <div class="form-group col-sm-4" hidden={AuthService.getCurrentUser()} >
                 <label htmlFor="phone">手机号<span class="required">*</span>
                 </label>
                 <Input
@@ -709,9 +715,8 @@ export default class Register extends Component {
                   validations={[required]}
                 />
               </div>
-*/}
-              <div class="form-group col-sm-4" >
-                <label htmlFor="phone">手机号<span class="required">*</span>
+              <div class="form-group col-sm-4" hidden={!AuthService.getCurrentUser()}>
+                <label htmlFor="phone">手机号
                 </label>
                 <Input
                   readonly={this.state.readonly?"":false}
