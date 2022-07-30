@@ -717,7 +717,7 @@ export default class Register extends Component {
               </div>
 */}
               <div class="form-group col-sm-4" >
-                <label htmlFor="phone">手机号
+                <label htmlFor="phone">手机号<span hidden={AuthService.getCurrentUser()} class="required">*</span>
                 </label>
                 <Input
                   readonly={this.state.readonly?"":false}
