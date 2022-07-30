@@ -647,7 +647,7 @@ const SchoolsList = (props) => {
         },
       },
       {
-        Header: "省/自治区/直辖市",
+        Header: "地区",
         accessor: "region",
       },
 
