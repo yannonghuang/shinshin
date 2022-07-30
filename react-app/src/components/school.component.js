@@ -847,7 +847,7 @@ export default class School extends Component {
   }
 
   isUploading() {
-    return (this.state.progress < 100 && this.state.progress > 0)
+    return (this.state.progress < 100 && this.state.progress > 0);
   }
 
   render() {
@@ -1376,6 +1376,41 @@ export default class School extends Component {
 
             <div>
 
+
+
+{/*
+            <form ref="formToSubmit" action="http://localhost:8080/api/documents-upload" method="POST" enctype="multipart/form-data">
+*/}
+
+
+            <input type="file" name="multi-files"
+              multiple
+              id="input-multi-files"
+              class="inputfile form-control-file border"
+              onChange={this.onChangeDocFiles}
+            />
+            <label for="input-multi-files">请选择上传文件</label>
+
+{/*
+            <button id="input-multi-files-custom-button" onClick={() => this.docFilesRef.current.click()}>
+              请选择上传文件 。。。
+            </button>
+*/}
+            <select
+              className="form-control input-group-append mb-3"
+              name="docCategory" id="docCategory"
+              placeholder=""
+              value={currentSchool.docCategory}
+              onChange={e => this.onChangeGenerics(e)}
+            >
+              <option value="">附件类别</option>
+              {this.state.docCategories.map((option) => (
+                <option value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+
             {!this.isUploading()
             ? <div>
               <button onClick={this.saveSchool} class="btn btn-primary" hidden={!this.state.newschool}>
@@ -1399,6 +1434,23 @@ export default class School extends Component {
               >
                 取消
               </button>
+
+              <div class="w-100"></div>
+
+              {this.state.message && (
+              <div class="form-group mt-2">
+                <div
+                  className={
+                  this.state.submitted
+                    ? "alert alert-success"
+                    : "alert alert-danger"
+                  }
+                  role="alert"
+                >
+                  {this.state.message}
+                </div>
+              </div>
+              )}
             </div>
 
             : <div className="progress">
@@ -1414,40 +1466,7 @@ export default class School extends Component {
              </div>
             </div>}
 
-            <div class="w-100"></div>
 
-{/*
-            <form ref="formToSubmit" action="http://localhost:8080/api/documents-upload" method="POST" enctype="multipart/form-data">
-*/}
-
-
-            <input type="file" name="multi-files"
-              multiple
-              id="input-multi-files"
-              class="inputfile form-control-file border"
-              onChange={this.onChangeDocFiles}
-            />
-            <label for="input-multi-files">请选择上传文件</label>
-
-{/*
-            <button id="input-multi-files-custom-button" onClick={() => this.docFilesRef.current.click()}>
-              请选择上传文件 。。。
-            </button>
-*/}
-            <select
-              className="form-control input-group-append"
-              name="docCategory" id="docCategory"
-              placeholder=""
-              value={currentSchool.docCategory}
-              onChange={e => this.onChangeGenerics(e)}
-            >
-              <option value="">附件类别</option>
-              {this.state.docCategories.map((option) => (
-                <option value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
 
             </div>
 
@@ -1455,8 +1474,7 @@ export default class School extends Component {
 
             <div class="w-100"></div>
 
-
-            {!this.state.newschool && (<Tabs>
+            {!this.state.newschool && (<Tabs className='mt-2'>
               <TabList>
                 <Tab>更多信息 <i class="fas fa-hand-point-right"></i></Tab>
                 <Tab>学校详情</Tab>
@@ -1527,21 +1545,6 @@ export default class School extends Component {
                 />
               </TabPanel>) : null}
             </Tabs>)}
-
-            {this.state.message && (
-              <div class="form-group mt-2">
-                <div
-                  className={
-                  this.state.submitted
-                    ? "alert alert-success"
-                    : "alert alert-danger"
-                  }
-                  role="alert"
-                >
-                  {this.state.message}
-                </div>
-              </div>
-              )}
 
           </div>
         )}

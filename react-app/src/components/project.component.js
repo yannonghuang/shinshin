@@ -936,41 +936,6 @@ export default class Project extends Component {
             {!this.state.readonly && (
 
             <div>
-              {!this.isUploading()
-              ? <div>
-                <button onClick={this.saveProject} class="btn btn-primary" hidden={!this.state.newproject}>
-                  提交
-                </button>
-
-                <button hidden={this.state.newproject}
-                  type="submit"
-                  className="btn btn-primary"
-                  onClick={this.updateProject}
-                >
-                  保存
-                </button>
-
-                <button
-                  type="submit"
-                  className="btn btn-primary ml-2"
-                  onClick={() => (!this.state.dirty || window.confirm("您确定要取消吗 ?")) && window.close()}
-                >
-                  取消
-                </button>
-              </div>
-
-              : <div className="progress">
-               <div
-                 className="progress-bar progress-bar-info progress-bar-striped"
-                 role="progressbar"
-                 aria-valuenow={progress}
-                 aria-valuemin="0"
-                 aria-valuemax="100"
-                 style={{ width: progress + "%" }}
-               >
-                 {progress}%
-               </div>
-             </div>}
 
               {(!currentProject.xr) && <div class="form-group input-group">
 
@@ -998,12 +963,66 @@ export default class Project extends Component {
 
               </div>}
 
+              {!this.isUploading()
+              ? <div>
+                <button onClick={this.saveProject} class="btn btn-primary" hidden={!this.state.newproject}>
+                  提交
+                </button>
+
+                <button hidden={this.state.newproject}
+                  type="submit"
+                  className="btn btn-primary"
+                  onClick={this.updateProject}
+                >
+                  保存
+                </button>
+
+                <button
+                  type="submit"
+                  className="btn btn-primary ml-2"
+                  onClick={() => (!this.state.dirty || window.confirm("您确定要取消吗 ?")) && window.close()}
+                >
+                  取消
+                </button>
+
+                <div class="w-100"></div>
+
+                {this.state.message && (
+                <div class="form-group mt-2">
+                <div
+                  className={
+                  this.state.submitted
+                    ? "alert alert-success"
+                    : "alert alert-danger"
+                  }
+                  role="alert"
+                >
+                  {this.state.message}
+                </div>
+                </div>
+                )}
+
+              </div>
+
+              : <div className="progress">
+               <div
+                 className="progress-bar progress-bar-info progress-bar-striped"
+                 role="progressbar"
+                 aria-valuenow={progress}
+                 aria-valuemin="0"
+                 aria-valuemax="100"
+                 style={{ width: progress + "%" }}
+               >
+                 {progress}%
+               </div>
+             </div>}
+
             </div>)}
 
             <div class="w-100"></div>
 
             {(!currentProject.xr && !this.state.newproject) &&
-            <Tabs>
+            <Tabs className='mt-3'>
               <TabList>
                 <Tab>更多信息 <i class="fas fa-hand-point-right"></i></Tab>
                 <Tab>项目文档</Tab>
@@ -1018,23 +1037,6 @@ export default class Project extends Component {
                 />
               </TabPanel>
             </Tabs>}
-
-            <div class="w-100"></div>
-
-            {this.state.message && (
-              <div class="form-group mt-2">
-                <div
-                  className={
-                  this.state.submitted
-                    ? "alert alert-success"
-                    : "alert alert-danger"
-                  }
-                  role="alert"
-                >
-                  {this.state.message}
-                </div>
-              </div>
-              )}
 
           </div>
         ) }
