@@ -754,7 +754,7 @@ export default class Project extends Component {
   }
 
   isUploading() {
-    return (this.state.progress < 100 && this.state.progress > 0)
+    return (this.state.progress > 0);
   }
 
 
