@@ -68,7 +68,7 @@ export default class Survey extends Component {
       currentSurvey: {
         id: null,
         schoolId: null,
-        docFiles: null,
+        docFiles: [],
         docCategory: "",
 
         status: "待填",
@@ -146,6 +146,7 @@ export default class Survey extends Component {
 
       progress: 0,
       doneLoading: false,
+      dataError: false,
     };
 
   }
@@ -707,7 +708,7 @@ export default class Survey extends Component {
       teachersCount: 0,
       classesCount: 0,
       gradesCount: 0,
-      docFiles: null,
+      docFiles: [],
       docCategory: "",
 
       stage: "待填",
@@ -733,11 +734,11 @@ export default class Survey extends Component {
           },
 
           message: "学校信息成功提交!",
-          submitted: true
+          //submitted: true
         }));
 
-        if (this.state.currentSurvey.docFiles) // docs
-          this.uploadDocuments();
+        //if (this.state.currentSurvey.docFiles) // docs
+        this.uploadDocuments();
 
         console.log(response.data);
       })
@@ -750,7 +751,8 @@ export default class Survey extends Component {
           e.toString();
 
         this.setState({
-          message: "学校信息保存失败! " + resMessage
+          message: "学校信息保存失败! " + resMessage,
+          dataError: true
         });
         console.log(e);
       });
@@ -843,7 +845,7 @@ export default class Survey extends Component {
 
       this.setState({
         message: "学校信息成功修改!",
-        submitted: true
+        //submitted: true
       });
 
       console.log(response.data);
@@ -856,13 +858,14 @@ export default class Survey extends Component {
         e.toString();
 
       this.setState({
-        message: "学校信息没有修改：" + resMessage
+        message: "学校信息没有修改：" + resMessage,
+        dataError: true
       });
       console.log(e);
     }
 
-    if (this.state.currentSurvey.docFiles) // docs
-      this.uploadDocuments();
+    //if (this.state.currentSurvey.docFiles) // docs
+    this.uploadDocuments();
   }
 
 
@@ -962,7 +965,7 @@ export default class Survey extends Component {
 */
               this.setState({
                 message: r.data.length > 0 ? "学校信息成功修改!" : "学校信息没有修改",
-                submitted: true
+                //submitted: true
               });
             })
             .catch(e => {
@@ -985,7 +988,7 @@ export default class Survey extends Component {
 
         this.setState({
           message: "学校信息成功修改!",
-          submitted: true
+          //submitted: true
         });
 */
       })
@@ -1003,21 +1006,22 @@ export default class Survey extends Component {
         console.log(e);
       });
 
-    if (this.state.currentSurvey.docFiles) // docs
-      this.uploadDocuments();
+    //if (this.state.currentSurvey.docFiles) // docs
+    this.uploadDocuments();
   }
 
   uploadDocuments() {
-    if (!this.state.currentSurvey.docCategory) {
+    if ((this.state.currentSurvey.docFiles) && !this.state.currentSurvey.docCategory) {
       this.setState(prevState => ({
         message: prevState.message + " 学校信息附件没有上传，请选择文档类型！",
-        submitted: prevState.submitted || false
+        //submitted: prevState.submitted || false
       }));
       return;
     }
 
     var data = new FormData();
-    for (var i = 0; i < this.state.currentSurvey.docFiles.length; i++) {
+    for (var i = 0; i < (this.state.currentSurvey.docFiles
+                    ? this.state.currentSurvey.docFiles.length : 0); i++) {
       data.append('multi-files', this.state.currentSurvey.docFiles[i],
         this.state.currentSurvey.docFiles[i].name);
     }
@@ -1029,8 +1033,8 @@ export default class Survey extends Component {
     })
     .then(response => {
       this.setState(prevState => ({
-        message: prevState.message + " 学校信息附件成功上传!",
-        submitted: true,
+        message: prevState.message + (this.state.currentSurvey.docFiles ? " 学校信息附件成功上传!" : ""),
+        submitted: !this.state.dataError || (this.state.currentSurvey.docFiles),
         doneLoading: true,
       }));
 
@@ -1124,9 +1128,13 @@ export default class Survey extends Component {
     );
   }
 
-  isUploading() {
+  SAVE_isUploading() {
     if (!this.state.currentSurvey.docFiles) return false;
     return this.state.submitted && !this.state.doneLoading;
+  }
+
+  isUploading() {
+    return (this.state.progress < 100 && this.state.progress > 0)
   }
 
   render() {
@@ -1134,7 +1142,7 @@ export default class Survey extends Component {
 
     return (
       <div>
-        {(this.state.submitted && !this.isUploading() /*&& this.state.newsurvey*/) ? (
+        {(this.state.submitted /*&& this.state.newsurvey*/) ? (
           <div>
             <p>{this.state.message}</p>
             <a href="javascript:window.close();">

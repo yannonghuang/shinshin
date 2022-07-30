@@ -60,7 +60,7 @@ export default class School extends Component {
 
         photo: null,
         file: null, // for photo
-        docFiles: null,
+        docFiles: [],
         docCategory: "",
 
         startAt: null,
@@ -486,7 +486,7 @@ export default class School extends Component {
       teachersCount: 0,
       classesCount: 0,
       gradesCount: 0,
-      docFiles: null,
+      docFiles: [],
       docCategory: "",
 
       stage: "待填",
@@ -533,8 +533,8 @@ export default class School extends Component {
           if (this.state.currentSchool.file || this.state.pastedPhotoType) { // photo, followed by docs
             this.updatePhoto();
           } else {
-            if (this.state.currentSchool.docFiles) // docs
-              this.uploadDocuments();
+            //if (this.state.currentSchool.docFiles) // docs
+            this.uploadDocuments();
           }
 
            this.setState(prevState => ({
@@ -543,7 +543,7 @@ export default class School extends Component {
                id: response.data.id,
              },
              message: "学校信息成功提交!",
-             submitted: true
+             //submitted: true
            }));
         })
         .catch(err => {
@@ -622,14 +622,14 @@ export default class School extends Component {
         .then (r => {
           this.setState({
             message: "学校信息成功修改!",
-            submitted: true
+            //submitted: true
           });
 
           if (this.state.currentSchool.file || this.state.pastedPhotoType) { // photo, followed by docs
             this.updatePhoto();
           } else {
-            if (this.state.currentSchool.docFiles) // docs
-              this.uploadDocuments();
+            //if (this.state.currentSchool.docFiles) // docs
+            this.uploadDocuments();
           }
 
         })
@@ -643,7 +643,7 @@ export default class School extends Component {
 
           this.setState(prevState => ({
             message: prevState.message + resMessage,
-            submitted: false
+            //submitted: false
           }));
         });
 /**
@@ -665,7 +665,7 @@ export default class School extends Component {
 
         this.setState(prevState => ({
           message: prevState.message + resMessage,
-          submitted: false
+          //submitted: false
         }));
         console.log(e);
       });
@@ -683,9 +683,9 @@ export default class School extends Component {
     }
     SchoolDataService.updatePhoto(this.state.currentSchool.id, data)
     .then(response => {
-      if (this.state.currentSchool.docFiles) { // docs
-        this.uploadDocuments();
-      }
+      //if (this.state.currentSchool.docFiles) { // docs
+      this.uploadDocuments();
+
       console.log(response.data);
     });
 /**
@@ -696,12 +696,13 @@ export default class School extends Component {
   }
 
   uploadDocuments() {
-    if (!this.state.currentSchool.docCategory) {
+    if (this.state.currentSchool.docFiles && !this.state.currentSchool.docCategory) {
       throw new Error('学校信息附件没有上传，请选择文档类型!');
     }
 
     var data = new FormData();
-    for (var i = 0; i < this.state.currentSchool.docFiles.length; i++) {
+    for (var i = 0; i < (this.state.currentSchool.docFiles
+                        ? this.state.currentSchool.docFiles.length : 0); i++) {
       data.append('multi-files', this.state.currentSchool.docFiles[i],
         this.state.currentSchool.docFiles[i].name);
     }
@@ -713,8 +714,9 @@ export default class School extends Component {
     })
     .then(response => {
       this.setState(prevState => ({
-        message: prevState.message + " 学校信息附件成功上传!",
+        message: prevState.message + (this.state.currentSchool.docFiles ? " 学校信息附件成功上传!" : ""),
         doneLoading: true,
+        submitted: true
       }));
 
       console.log(response.data);
@@ -839,9 +841,13 @@ export default class School extends Component {
     );
   }
 
-  isUploading() {
+  SAVE_isUploading() {
     if (!this.state.currentSchool.docFiles) return false;
     return this.state.submitted && !this.state.doneLoading;
+  }
+
+  isUploading() {
+    return (this.state.progress < 100 && this.state.progress > 0)
   }
 
   render() {
@@ -849,7 +855,7 @@ export default class School extends Component {
 
     return (
       <div>
-        {(this.state.submitted && !this.isUploading() /*&& this.state.newschool*/) ? (
+        {(this.state.submitted /*&& this.state.newschool*/) ? (
           <div>
             <p>{this.state.message}</p>
             <a href="javascript:window.close();">

@@ -61,7 +61,7 @@ export default class Project extends Component {
         startAt: new Date().getFullYear(), //null,
         xr: window.location.pathname.includes('XR'),
 
-        docFiles: null, //[],
+        docFiles: [], //[],
         docCategory: ""
       },
       currentUser: null,
@@ -396,7 +396,7 @@ export default class Project extends Component {
       photo: null,
       file: null,
       status: "申请",
-      docFiles: null, //[],
+      docFiles: [], //[],
       docCategory: "",
       description: "",
       startAt: new Date().getFullYear(), //null
@@ -424,14 +424,14 @@ export default class Project extends Component {
             ...prevState.currentProject,
             id: response.data.id,
           },
-          submitted: true
+          //submitted: true
         }));
 
         if (this.state.currentProject.file) { // photo, followed by docs
           this.updatePhoto();
         } else {
-          if (this.state.currentProject.docFiles) // docs
-            this.uploadDossiers();
+          //if (this.state.currentProject.docFiles) // docs
+          this.uploadDossiers();
         }
 
         this.setState({
@@ -486,12 +486,12 @@ export default class Project extends Component {
       if (this.state.currentProject.file)
         await this.updatePhoto();
 
-      if (this.state.currentProject.docFiles) // docs
-        await this.uploadDossiers();
+      //if (this.state.currentProject.docFiles) // docs
+      this.uploadDossiers();
 
       this.setState({
         message: "项目信息成功提交!",
-        submitted: true
+        //submitted: true
       });
 
     } catch (e) {
@@ -531,12 +531,12 @@ export default class Project extends Component {
       if (this.state.currentProject.file)
         await this.updatePhoto();
 
-      if (this.state.currentProject.docFiles) // docs
-        await this.uploadDossiers();
+      //if (this.state.currentProject.docFiles) // docs
+      this.uploadDossiers();
 
       this.setState({
         message: "项目信息成功修改!",
-        submitted: true
+        //submitted: true
       });
 
     } catch (e) {
@@ -576,13 +576,13 @@ export default class Project extends Component {
         if (this.state.currentProject.file) { // photo, followed by docs
           this.updatePhoto();
         } else {
-          if (this.state.currentProject.docFiles) // docs
-            this.uploadDossiers();
+          //if (this.state.currentProject.docFiles) // docs
+          this.uploadDossiers();
         }
 
         this.setState({
           message: "项目信息成功修改!",
-          submitted: true
+          //submitted: true
         });
 
         console.log(response.data);
@@ -607,13 +607,14 @@ export default class Project extends Component {
     await ProjectDataService.updatePhoto(this.state.currentProject.id, data);
   }
 
-  async uploadDossiers() {
-    if (!this.state.currentProject.docCategory) {
+  uploadDossiers() {
+    if (this.state.currentProject.docFiles && !this.state.currentProject.docCategory) {
       throw new Error('项目信息附件没有上传，请选择文档类型!');
     }
 
     var data = new FormData();
-    for (var i = 0; i < this.state.currentProject.docFiles.length; i++) {
+    for (var i = 0; i < (this.state.currentProject.docFiles
+                        ? this.state.currentProject.docFiles.length : 0); i++) {
       data.append('multi-files', this.state.currentProject.docFiles[i],
         this.state.currentProject.docFiles[i].name);
     }
@@ -625,8 +626,9 @@ export default class Project extends Component {
     })
     .then(response => {
       this.setState(prevState => ({
-        message: prevState.message + " 项目信息附件成功上传!",
+        message: prevState.message + (this.state.currentProject.docFiles ? " 项目信息附件成功上传!" : ""),
         doneLoading: true,
+        submitted: true
       }));
       console.log(response.data);
     });
@@ -746,17 +748,22 @@ export default class Project extends Component {
     return (option.label.toString().match(inputValue) || []).length > 0;
   }
 
-  isUploading() {
+  SAVE_isUploading() {
     if (!this.state.currentProject.docFiles) return false;
     return this.state.submitted && !this.state.doneLoading;
   }
+
+  isUploading() {
+    return (this.state.progress < 100 && this.state.progress > 0)
+  }
+
 
   render() {
     const { currentProject, progress } = this.state;
 
     return (
       <div>
-        {(this.state.submitted && !this.isUploading() /*&& this.state.newproject*/) ? (
+        {(this.state.submitted /*&& this.state.newproject*/) ? (
           <div>
             <p>{this.state.message}</p>
             <a href="javascript:window.close();">
