@@ -757,6 +757,11 @@ export default class Project extends Component {
     return (this.state.progress > 0);
   }
 
+  refreshOnReturn() {
+    window.onblur = () => {window.onfocus = () => {
+      window.location.reload(true);
+    }};
+  }
 
   render() {
     const { currentProject, progress } = this.state;
@@ -804,7 +809,11 @@ export default class Project extends Component {
                 {this.state.readonly && AuthService.getCurrentUser() &&
                  !AuthService.getCurrentUser().schoolId && (
                 <div class="box">
-                  <a target="_blank" href={"/projects/" + currentProject.id} class="btn btn-primary mb-4">编辑</a>
+                  <a target="_blank" onClick={this.refreshOnReturn}
+                    href={"/projects/" + currentProject.id} class="btn btn-primary mb-4"
+                  >
+                    编辑
+                  </a>
                 </div>
                 )}
 
