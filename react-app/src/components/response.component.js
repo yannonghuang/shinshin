@@ -422,7 +422,6 @@ export default class Response extends Component {
     })
     .then(response => {
       console.log(response.data);
-
 //      if (attFiles[0]) {
       //this.reload();
         this.setState(prevState => ({
@@ -662,7 +661,7 @@ export default class Response extends Component {
                 </button>
 
                 <div className="alert-danger"
-                  style={{ position: "absolute", right: "-10px", top: "50px" }}
+                  style={{ position: "absolute", right: "-60px", top: "50px" }}
                 >
                   <p><h6>{this.state.message}</h6></p>
                 </div>
