@@ -965,7 +965,11 @@ export default class School extends Component {
                   {!AuthService.getCurrentUser().schoolId &&
                     <a href={"/logs/school/" + currentSchool.id} class="btn btn-primary">修改记录</a>}
                   {AuthService.getCurrentUser().schoolId &&
-                    <a target="_blank" href={"/surveys/" + currentSchool.id} class="btn btn-primary mb-4">更新信息</a>}
+                    <a target="_blank" onClick={this.refreshOnReturn}
+                      href={"/surveys/" + currentSchool.id} class="btn btn-primary mb-4"
+                    >
+                      更新信息
+                    </a>}
                   {!AuthService.getCurrentUser().schoolId &&
                     <a target="_blank" onClick={this.refreshOnReturn}
                       href={"/schools/" + currentSchool.id} class="btn btn-primary mb-4"
