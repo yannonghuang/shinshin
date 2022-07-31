@@ -62,14 +62,15 @@ class ProjectDataService {
     });
   }
 
-  uploadDossiers(id, data) {
+  uploadDossiers(id, data, onUploadProgress) {
     const user = JSON.parse(localStorage.getItem('user'));
     return http.post(`/dossiers-upload/${id}`, data, {
         headers: {
             'content-type': 'multipart/form-data',
             'x-access-token':  (user && user.accessToken) ? user.accessToken : null
             //authHeader()
-        }
+        },
+        onUploadProgress
     });
   }
 

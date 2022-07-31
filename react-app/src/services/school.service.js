@@ -93,14 +93,15 @@ class SchoolDataService {
     });
   }
 
-  uploadDocuments(id, data) {
+  uploadDocuments(id, data, onUploadProgress) {
     const user = JSON.parse(localStorage.getItem('user'));
     return http.post(`/documents-upload/${id}`, data, {
         headers: {
             'content-type': 'multipart/form-data',
             'x-access-token':  (user && user.accessToken) ? user.accessToken : null
             //authHeader()
-        }
+        },
+        onUploadProgress
     });
   }
 
