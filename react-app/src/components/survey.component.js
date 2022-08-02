@@ -20,35 +20,7 @@ import YearPicker from 'react-single-year-picker';
 export default class Survey extends Component {
   constructor(props) {
     super(props);
-/**
-    this.onChangeName = this.onChangeName.bind(this);
-    this.onChangeCode = this.onChangeCode.bind(this);
-    this.onChangeDescription = this.onChangeDescription.bind(this);
-    this.onChangePrincipal = this.onChangePrincipal.bind(this);
-    this.onChangeAddress = this.onChangeAddress.bind(this);
-    this.onChangePhone = this.onChangePhone.bind(this);
-    this.onChangeEmail = this.onChangeEmail.bind(this);
-    this.onChangeStudentsCount = this.onChangeStudentsCount.bind(this);
-    this.onChangeTeachersCount = this.onChangeTeachersCount.bind(this);
-    this.onChangeRegion = this.onChangeRegion.bind(this);
-    this.onChangeDocCategory = this.onChangeDocCategory.bind(this);
 
-
-    this.onChangePrincipal = this.onChangePrincipal.bind(this);
-    this.onChangePrincipalCell = this.onChangePrincipalCell.bind(this);
-    this.onChangePrincipalWechat = this.onChangePrincipalWechat.bind(this);
-    this.onChangeSchoolBoardRegisteredName = this.onChangeSchoolBoardRegisteredName.bind(this);
-    this.onChangeSchoolBoard = this.onChangeSchoolBoard.bind(this);
-
-    this.onChangeContact = this.onChangeContact.bind(this);
-    this.onChangeContactCell = this.onChangeContactCell.bind(this);
-    this.onChangeContactWechat = this.onChangeContactWechat.bind(this);
-
-    this.onChangeStage = this.onChangeStage.bind(this);
-    this.onChangeStatus = this.onChangeStatus.bind(this);
-    this.onChangeRequest = this.onChangeRequest.bind(this);
-    this.onChangeCategory = this.onChangeCategory.bind(this);
-*/
     this.onChangeGenerics = this.onChangeGenerics.bind(this);
 
     this.getSurvey = this.getSurvey.bind(this);
@@ -467,6 +439,7 @@ export default class Survey extends Component {
           },
 
           message: this.state.dirty ? "学校信息成功提交!" : "学校信息没有修改",
+          dataError: false
           //submitted: true
         }));
 
@@ -578,6 +551,7 @@ export default class Survey extends Component {
 
       this.setState({
         message: this.state.dirty ? "学校信息成功修改!" : "学校信息没有修改",
+        dataError: false
         //submitted: true
       });
 
@@ -601,17 +575,8 @@ export default class Survey extends Component {
     this.uploadDocuments();
   }
 
-
-  SAVE_updateSurvey() {
-
 /**
-    const {
-      id,
-      schoolId,
-      docFiles,
-      docCategory,
-      ...dataSchool} = this.state.currentSurvey;
-*/
+  SAVE_updateSurvey() {
 
     const {
       status,
@@ -692,10 +657,7 @@ export default class Survey extends Component {
             this.state.currentSurvey.schoolId,
             dataSchool)
             .then(r => {
-/**
-              if (this.state.currentSurvey.docFiles) // docs
-                this.uploadDocuments();
-*/
+
               this.setState({
                 message: r.data.length > 0 ? "学校信息成功修改!" : "学校信息没有修改",
                 //submitted: true
@@ -715,15 +677,7 @@ export default class Survey extends Component {
               console.log(e);
             });
         }
-/**
-        if (this.state.currentSurvey.docFiles) // docs
-          this.uploadDocuments();
 
-        this.setState({
-          message: "学校信息成功修改!",
-          //submitted: true
-        });
-*/
       })
       .catch(e => {
         const resMessage =
@@ -742,6 +696,8 @@ export default class Survey extends Component {
     //if (this.state.currentSurvey.docFiles) // docs
     this.uploadDocuments();
   }
+*/
+
 
   uploadDocuments() {
     if ((this.state.currentSurvey.docFiles) && !this.state.currentSurvey.docCategory) {
@@ -867,7 +823,7 @@ export default class Survey extends Component {
   }
 
   isUploading() {
-    return (this.state.progress > 0);
+    return this.state.currentSurvey.docFiles && (this.state.progress > 0);
   }
 
   render() {
@@ -881,12 +837,7 @@ export default class Survey extends Component {
             <a href="javascript:window.close();">
               <button class="btn btn-primary">关闭</button>
             </a>
-{/*}
-            <h4>学校信息成功提交!</h4>
-            <button class="btn btn-success" onClick={this.newSurvey}>
-              Add
-            </button>
-*/}
+
           </div>
         ) : (
           <div class="row">
