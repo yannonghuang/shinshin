@@ -466,7 +466,7 @@ export default class Survey extends Component {
             id: response.data.id,
           },
 
-          message: this.state.dirty ? "学校信息成功提交!" : "",
+          message: this.state.dirty ? "学校信息成功提交!" : "学校信息没有修改",
           //submitted: true
         }));
 
@@ -577,7 +577,7 @@ export default class Survey extends Component {
       );
 
       this.setState({
-        message: this.state.dirty ? "学校信息成功修改!" : "",
+        message: this.state.dirty ? "学校信息成功修改!" : "学校信息没有修改",
         //submitted: true
       });
 

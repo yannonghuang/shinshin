@@ -435,7 +435,7 @@ export default class Project extends Component {
         }
 
         this.setState({
-          message: this.state.dirty ? "项目信息成功提交!" : ""
+          message: this.state.dirty ? "项目信息成功提交!" : "项目信息没有修改"
         });
 
         console.log(response.data);
@@ -490,7 +490,7 @@ export default class Project extends Component {
       this.uploadDossiers();
 
       this.setState({
-        message: this.state.dirty ? "项目信息成功提交!" : "",
+        message: this.state.dirty ? "项目信息成功提交!" : "项目信息没有修改",
         //submitted: true
       });
 
@@ -535,7 +535,7 @@ export default class Project extends Component {
       this.uploadDossiers();
 
       this.setState({
-        message: this.state.dirty ? "项目信息成功修改!" : "",
+        message: this.state.dirty ? "项目信息成功修改!" : "项目信息没有修改",
         //submitted: true
       });
 
@@ -581,7 +581,7 @@ export default class Project extends Component {
         }
 
         this.setState({
-          message: this.state.dirty ? "项目信息成功修改!" : "",
+          message: this.state.dirty ? "项目信息成功修改!" : "项目信息没有修改",
           //submitted: true
         });
 

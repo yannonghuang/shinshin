@@ -542,7 +542,7 @@ export default class School extends Component {
                ...prevState.currentSchool,
                id: response.data.id,
              },
-             message: this.state.dirty ? "学校信息成功提交!" : "",
+             message: this.state.dirty ? "学校信息成功提交!" : "学校信息没有修改",
              //submitted: true
            }));
         })
@@ -612,7 +612,7 @@ export default class School extends Component {
           dataSurvey)
         .then (r => {
           this.setState({
-            message: this.state.dirty ? "学校信息成功修改!" : "",
+            message: this.state.dirty ? "学校信息成功修改!" : "学校信息没有修改",
             //submitted: true
           });
 
