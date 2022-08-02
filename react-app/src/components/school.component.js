@@ -558,15 +558,6 @@ export default class School extends Component {
             message: "学校信息保存失败! " + resMessage
           });
         })
-
-/**
-        if (this.state.currentSchool.file || this.state.pastedPhotoType) { // photo, followed by docs
-          this.updatePhoto();
-        } else {
-          if (this.state.currentSchool.docFiles) // docs
-            this.uploadDocuments();
-        }
-*/
         console.log(response.data);
       })
       .catch(e => {
@@ -646,14 +637,6 @@ export default class School extends Component {
             //submitted: false
           }));
         });
-/**
-        if (this.state.currentSchool.file || this.state.pastedPhotoType) { // photo, followed by docs
-          this.updatePhoto();
-        } else {
-          if (this.state.currentSchool.docFiles) // docs
-            this.uploadDocuments();
-        }
-*/
       })
       .catch(e => {
         const resMessage =
@@ -688,11 +671,6 @@ export default class School extends Component {
 
       console.log(response.data);
     });
-/**
-    .catch(e => {
-      console.log(e);
-    });
-*/
   }
 
   uploadDocuments() {
@@ -718,14 +696,8 @@ export default class School extends Component {
         doneLoading: true,
         submitted: true
       }));
-
       console.log(response.data);
     });
-/**
-    .catch(e => {
-      console.log(e);
-    });
-*/
   }
 
   deleteSchool() {
@@ -767,6 +739,7 @@ export default class School extends Component {
     }));
   }
 
+/**
   SAVE_onChangeDocFiles(e) {
     e.preventDefault();
     var docFiles = e.target.files;
@@ -792,6 +765,7 @@ export default class School extends Component {
     fileButton.innerHTML = msg;
 
   }
+*/
 
   onChangeDocFiles(e) {
     e.preventDefault();
@@ -841,10 +815,12 @@ export default class School extends Component {
     );
   }
 
+/*
   SAVE_isUploading() {
     if (!this.state.currentSchool.docFiles) return false;
     return this.state.submitted && !this.state.doneLoading;
   }
+*/
 
   isUploading() {
     return (this.state.progress > 0);
@@ -861,13 +837,6 @@ export default class School extends Component {
             <a href="javascript:window.close();">
               <button class="btn btn-primary">关闭</button>
             </a>
-{/*}
-            <a href={"/schoolsView/" + currentSchool.id} class="btn btn-primary" >关闭</a>
-            <h4>学校信息成功提交!</h4>
-            <button class="btn btn-success" onClick={this.newSchool}>
-              Add
-            </button>
-*/}
           </div>
         ) : (
           <div class="row">
@@ -898,19 +867,6 @@ export default class School extends Component {
                 />
                 </div>
 
-{/*
-                <div class="form-group" hidden={this.state.readonly && !currentSchool.xr} >
-                  <label htmlFor="xr">向荣支持</label>
-                  <input
-                    type="checkbox"
-                    hidden={this.state.readonly}
-                    class="form-control"
-                    name="xr"
-                    checked={currentSchool.xr}
-                    onChange={this.onChangeGenerics}
-                  />
-                </div>
-*/}
                 <div class="form-group">
                 <label htmlFor="name">欣欣学校名称</label>
                 <textarea
@@ -924,7 +880,6 @@ export default class School extends Component {
                 name="name"
                 />
                 </div>
-
 
                 <div class="form-group">
                 <label htmlFor="schoolBoardRegisteredName">教育局注册校名</label>
@@ -1380,13 +1335,6 @@ export default class School extends Component {
 
             <div>
 
-
-
-{/*
-            <form ref="formToSubmit" action="http://localhost:8080/api/documents-upload" method="POST" enctype="multipart/form-data">
-*/}
-
-
             <input type="file" name="multi-files"
               multiple
               id="input-multi-files"
@@ -1395,11 +1343,6 @@ export default class School extends Component {
             />
             <label for="input-multi-files">请选择上传文件</label>
 
-{/*
-            <button id="input-multi-files-custom-button" onClick={() => this.docFilesRef.current.click()}>
-              请选择上传文件 。。。
-            </button>
-*/}
             <select
               className="form-control input-group-append mb-3"
               name="docCategory" id="docCategory"
@@ -1458,23 +1401,19 @@ export default class School extends Component {
             </div>
 
             : <div className="progress">
-             <div
-               className="progress-bar progress-bar-info progress-bar-striped"
-               role="progressbar"
-               aria-valuenow={progress}
-               aria-valuemin="0"
-               aria-valuemax="100"
-               style={{ width: progress + "%" }}
-             >
-               {progress}%
-             </div>
+                <div
+                  className="progress-bar progress-bar-info progress-bar-striped"
+                  role="progressbar"
+                  aria-valuenow={progress}
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  style={{ width: progress + "%" }}
+                >
+                  {progress}%
+               </div>
             </div>}
 
-
-
-            </div>
-
-            )}
+            </div>)}
 
             <div class="w-100"></div>
 
