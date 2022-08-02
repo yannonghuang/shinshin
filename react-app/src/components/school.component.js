@@ -1456,7 +1456,7 @@ export default class School extends Component {
               <TabPanel>
                 <DocumentsList
                   schoolId = {currentSchool.id}
-                  docCategory = {'!照片'}
+                  docCategory = {'!学校照片'}
                   embedded = {true}
                   readonly = {this.state.readonly &&
                     ((AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId) ||
@@ -1467,7 +1467,7 @@ export default class School extends Component {
               <TabPanel>
                 <DocumentsList
                   schoolId = {currentSchool.id}
-                  docCategory = {'照片'}
+                  docCategory = {'学校照片'}
                   embedded = {true}
                   readonly = {this.state.readonly &&
                     ((AuthService.getCurrentUser() && !AuthService.getCurrentUser().schoolId) ||
