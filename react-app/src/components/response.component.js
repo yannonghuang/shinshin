@@ -469,7 +469,7 @@ export default class Response extends Component {
       this.uploadAttachments(attFiles);
       this.setState({
         //currentResponse: response.data,
-        message: "项目申请成功修改!"
+        message: this.state.dirty ? "项目申请成功修改!" : ""
       });
     })
     .catch(e => {
@@ -505,7 +505,7 @@ export default class Response extends Component {
           ...prevState.currentResponse,
           id: response.data.id
         },
-        message: "项目申请成功提交!",
+        message: this.state.dirty ? "项目申请成功提交!" : "",
         newresponse: false
       }));
 
