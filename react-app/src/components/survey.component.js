@@ -724,6 +724,7 @@ export default class Survey extends Component {
       this.setState(prevState => ({
         message: prevState.message + (this.state.currentSurvey.docFiles ? " 学校信息附件成功上传!" : ""),
         submitted: !this.state.dataError || (this.state.currentSurvey.docFiles),
+        progress: 0,
         doneLoading: true,
       }));
 
