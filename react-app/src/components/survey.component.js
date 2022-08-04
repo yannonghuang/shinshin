@@ -40,7 +40,7 @@ export default class Survey extends Component {
       currentSurvey: {
         id: null,
         schoolId: null,
-        docFiles: [],
+        docFiles: null,
         docCategory: "",
 
         status: "待填",
@@ -413,7 +413,7 @@ export default class Survey extends Component {
       teachersCount: 0,
       classesCount: 0,
       gradesCount: 0,
-      docFiles: [],
+      docFiles: null,
       docCategory: "",
 
       stage: "待填",
@@ -700,7 +700,8 @@ export default class Survey extends Component {
 
 
   uploadDocuments() {
-    if ((this.state.currentSurvey.docFiles) && !this.state.currentSurvey.docCategory) {
+    if ((this.state.currentSurvey.docFiles) && (this.state.currentSurvey.docFiles.length > 1) &&
+        !this.state.currentSurvey.docCategory) {
       this.setState(prevState => ({
         message: prevState.message + " 学校信息附件没有上传，请选择文档类型！",
         //submitted: prevState.submitted || false

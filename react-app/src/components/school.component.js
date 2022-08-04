@@ -60,7 +60,7 @@ export default class School extends Component {
 
         photo: null,
         file: null, // for photo
-        docFiles: [],
+        docFiles: null,
         docCategory: "",
 
         startAt: null,
@@ -486,7 +486,7 @@ export default class School extends Component {
       teachersCount: 0,
       classesCount: 0,
       gradesCount: 0,
-      docFiles: [],
+      docFiles: null,
       docCategory: "",
 
       stage: "待填",
@@ -674,7 +674,8 @@ export default class School extends Component {
   }
 
   uploadDocuments() {
-    if (this.state.currentSchool.docFiles && !this.state.currentSchool.docCategory) {
+    if (this.state.currentSchool.docFiles && (this.state.currentSchool.docFiles.length > 1) &&
+        !this.state.currentSchool.docCategory) {
       throw new Error('学校信息附件没有上传，请选择文档类型!');
     }
 

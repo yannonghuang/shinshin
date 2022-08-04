@@ -61,7 +61,7 @@ export default class Project extends Component {
         startAt: new Date().getFullYear(), //null,
         xr: window.location.pathname.includes('XR'),
 
-        docFiles: [], //[],
+        docFiles: null, //[],
         docCategory: ""
       },
       currentUser: null,
@@ -396,7 +396,7 @@ export default class Project extends Component {
       photo: null,
       file: null,
       status: "申请",
-      docFiles: [], //[],
+      docFiles: null, //[],
       docCategory: "",
       description: "",
       startAt: new Date().getFullYear(), //null
@@ -608,7 +608,8 @@ export default class Project extends Component {
   }
 
   uploadDossiers() {
-    if (this.state.currentProject.docFiles && !this.state.currentProject.docCategory) {
+    if (this.state.currentProject.docFiles && (this.state.currentProject.docFiles.length > 1) &&
+        !this.state.currentProject.docCategory) {
       throw new Error('项目信息附件没有上传，请选择文档类型!');
     }
 
