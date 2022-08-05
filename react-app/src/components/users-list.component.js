@@ -553,18 +553,6 @@ const UsersList = (props) => {
           </div>
         </div>
 
-        <div className="input-group mb-4">
-          <div hidden={isMobile}>
-            <button
-              className="btn btn-primary"
-              type="button"
-              onClick={retrieveExportUsers}
-            >
-              导出
-            </button>
-          </div>
-        </div>
-
         <div className="row mb-4">
 {/*
           <button
@@ -577,9 +565,20 @@ const UsersList = (props) => {
 */}
           {schoolId && (<a target="_blank"
             onClick={refreshOnReturn}
-            href={"/addU?schoolId=" + schoolId} class="btn btn-primary ">
+            href={"/addU?schoolId=" + schoolId} class="btn btn-primary mr-2">
               新建联络人
           </a>)}
+
+          <div hidden={isMobile}>
+            <button
+              className="btn btn-primary"
+              type="button"
+              onClick={retrieveExportUsers}
+            >
+              导出
+            </button>
+          </div>
+
         </div>
       </div>
 
