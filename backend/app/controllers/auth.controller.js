@@ -147,6 +147,7 @@ exports.findAll2 = async (req, res) => {
   const size = req.body.size;
   const schoolId = sid ? sid : req.body.schoolId;
   const orderby = req.body.orderby;
+  const exportFlag = req.body.exportFlag;
 
 var orderbyObject = null;
   if (orderby) {
@@ -191,6 +192,7 @@ var orderbyObject = null;
                     {
                         model: Role,
                         attributes: ['name'],
+                        through: {attributes: []},
                         required: false,
                     },
                     {
@@ -201,14 +203,29 @@ var orderbyObject = null;
   ];
 
   const { limit, offset } = getPagination(page, size);
+  let limits = {};
+  if (!exportFlag) {
+    limits = {
+      offset: offset,
+      limit: limit
+    }
+  }
 
   User.findAll({
   where: condition,
-  limit: limit,
-  offset: offset,
+  ...limits,
+  //limit: limit,
+  //offset: offset,
   subQuery: false,
   attributes: [
-        'id', 'username', 'email', 'chineseName', 'phone', 'wechat', 'title', 'contactOnly', 'emailVerified',
+        'id', 'username', 'email', 'chineseName', 'phone', 'wechat', 'title',
+
+        [db.Sequelize.literal(`if(contactOnly = 1, "否", "是")`), "contactOnly"],
+        //'contactOnly',
+
+        [db.Sequelize.literal(`if(emailVerified = 1, "是", "否")`), "emailVerified"],
+        //'emailVerified',
+
         [db.Sequelize.fn('date_format', db.Sequelize.col("users.startAt"), '%Y-%m-%d'), "startAt"],
         [db.Sequelize.fn('date_format', db.Sequelize.col("users.createdAt"), '%Y-%m-%d'), "createdAt"],
         [db.Sequelize.fn('date_format', db.Sequelize.col("lastLogin"), '%Y-%m-%d'), "lastLogin"],

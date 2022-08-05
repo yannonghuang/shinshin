@@ -6,7 +6,10 @@ import Pagination from "@material-ui/lab/Pagination";
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useTable, useSortBy } from "react-table";
 
+import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
+
 import AuthService from "../services/auth.service";
+import ProjectDataService from "../services/project.service";
 
 const UsersList = (props) => {
   const refreshOnReturn = () => {
@@ -14,6 +17,9 @@ const UsersList = (props) => {
   };
 
   const [users, setUsers] = useState([]);
+
+  const [exportUsers, setExportUsers] = useState([]);
+
   const [currentUser, setCurrentUser] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
 
@@ -76,7 +82,7 @@ const UsersList = (props) => {
     setSearchEmailVerified(searchEmailVerified);
   };
 
-  const getRequestParams = (/*searchUsername, searchRole, searchSchoolCode, page, pageSize, schoolId, orderby*/) => {
+  const getRequestParams = (exportFlag = false) => {
     let params = {};
 
     if (searchUsername) {
@@ -117,6 +123,10 @@ const UsersList = (props) => {
 
     if (orderby) {
       params["orderby"] = orderby;
+    }
+
+    if (exportFlag) {
+      params["exportFlag"] = exportFlag;
     }
 
     return params;
@@ -174,7 +184,7 @@ const UsersList = (props) => {
   useEffect(getRoles, []);
 
   const retrieveUsers = () => {
-    const params = getRequestParams(/*searchUsername, searchRole, searchSchoolCode, page, pageSize, schoolId, orderby*/);
+    const params = getRequestParams(false);
 
     UserDataService.getAll2(params)
       .then((response) => {
@@ -188,6 +198,34 @@ const UsersList = (props) => {
         if (schoolId && users[0]) setSchoolTitle(users[0].school.name + "(" + users[0].school.code + ")");
 
         console.log(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const retrieveExportUsers = () => {
+    const params = getRequestParams(true);
+
+    UserDataService.getAll2(params)
+      .then((response) => {
+        const { users, totalPages, totalItems } = response.data;
+
+        setExportUsers(users);
+        console.log(response.data);
+
+        const csv = ProjectDataService.exportCSV(users, columns);
+        const url = window.URL.createObjectURL(new Blob([csv]));
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download',
+                'user.csv'
+        );
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
       })
       .catch((e) => {
         console.log(e);
@@ -336,6 +374,7 @@ const UsersList = (props) => {
         Header: "注册用户",
         accessor: 'contactOnly',
         disableSortBy: true,
+        /**
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -344,11 +383,13 @@ const UsersList = (props) => {
             </div>
           );
         },
+        */
       },
       {
         Header: "登录过?",
         accessor: 'emailVerified',
         disableSortBy: true,
+        /**
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -357,6 +398,7 @@ const UsersList = (props) => {
             </div>
           );
         },
+        */
       },
       {
         Header: "操作",
@@ -509,7 +551,18 @@ const UsersList = (props) => {
               清空
             </button>
           </div>
+        </div>
 
+        <div className="input-group mb-4">
+          <div hidden={isMobile}>
+            <button
+              className="btn btn-primary"
+              type="button"
+              onClick={retrieveExportUsers}
+            >
+              导出
+            </button>
+          </div>
         </div>
 
         <div className="row mb-4">
