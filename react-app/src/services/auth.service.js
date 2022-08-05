@@ -150,6 +150,10 @@ class AuthService {
   getUserTitles() {
     return axios.get(API_URL + "userTitles");
   }
+
+  getVolunteerDepartments() {
+    return axios.get(API_URL + "volunteerDepartments");
+  }
 }
 
 export default new AuthService();

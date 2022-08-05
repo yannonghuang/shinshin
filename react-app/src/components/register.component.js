@@ -98,6 +98,7 @@ export default class Register extends Component {
       contactOnly: false,
 
       titles: [],
+      departments: [],
       schools: [],
       rolesFull: [],
       successful: false,
@@ -123,7 +124,7 @@ export default class Register extends Component {
     this.getRoles();
     this.getSchools();
     this.getTitles();
-
+    this.getDepartments();
   }
 
 
@@ -151,7 +152,7 @@ export default class Register extends Component {
       .then(response => {
         console.log(response.data);
         this.setState({
-          message: "联络人信息成功更新!",
+          message: this.state.dirty ? "联络人信息成功更新!" : "联络人信息没有更改",
           successful: true
         });
       })
@@ -206,7 +207,7 @@ export default class Register extends Component {
       .then(response => {
         console.log(response.data);
         this.setState({
-          message: "用户信息成功更新!",
+          message: this.state.dirty ? "用户信息成功更新!" : "用户信息没有更改",
           successful: true
         });
       })
@@ -320,6 +321,19 @@ export default class Register extends Component {
       .then(response => {
         this.setState({
           titles: response.data
+        });
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  getDepartments() {
+    AuthService.getVolunteerDepartments()
+      .then(response => {
+        this.setState({
+          departments: response.data
         });
         console.log(response);
       })
@@ -793,6 +807,22 @@ export default class Register extends Component {
                 >
                   <option value="">{this.state.readonly ? '' : '请选择' }</option>
                   {this.state.titles.map((option) => (
+                    <option value={option}>{option}</option>
+                  ))}
+                </select>
+              </div>
+              <div class="form-group col-sm-4" hidden={this.state.schoolId}>
+                <label htmlFor="title">义工用户职位（所属部门）</label>
+                <select required
+                  onChange={this.onChangeTitle.bind(this)}
+                  disabled={this.state.readonly ? "disabled" : false}
+                  class="form-control"
+                  id="title"
+                  value={this.state.title}
+                  name="title"
+                >
+                  <option value="">{this.state.readonly ? '' : '请选择' }</option>
+                  {this.state.departments.map((option) => (
                     <option value={option}>{option}</option>
                   ))}
                 </select>

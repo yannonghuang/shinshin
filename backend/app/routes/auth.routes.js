@@ -24,6 +24,10 @@ module.exports = function(app) {
     controller.getUserTitles
   );
 
+  app.get("/api/auth/volunteerDepartments",
+    controller.getVolunteerDepartments
+  );
+
   app.post("/api/auth/signin", controller.signin);
 
   app.post("/api/auth/reset", controller.reset);

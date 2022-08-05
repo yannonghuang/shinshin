@@ -6,6 +6,7 @@ const Role = db.role;
 const ROLES = db.ROLES;
 const Op = db.Sequelize.Op;
 const USER_TITLES = db.USER_TITLES;
+const VOLUNTEER_DEPARTMENTS = db.VOLUNTEER_DEPARTMENTS;
 
 const { authJwt } = require("../middleware");
 
@@ -550,4 +551,8 @@ exports.findByEmail = (req, res) => {
 // return user title list
 exports.getUserTitles = (req, res) => {
   res.send(USER_TITLES);
+}
+
+exports.getVolunteerDepartments = (req, res) => {
+  res.send(VOLUNTEER_DEPARTMENTS);
 }
