@@ -141,6 +141,7 @@ exports.findAll2 = async (req, res) => {
   const username = req.body.username;
   const email = req.body.email;
   const role = req.body.role;
+  const title = req.body.title;
   const schoolCode = req.body.schoolCode;
   const contactOnly = req.body.contactOnly;
   const emailVerified = req.body.emailVerified;
@@ -175,6 +176,7 @@ var orderbyObject = null;
             email ? { email: { [Op.like]: `%${email}%` }} : null,
             schoolId ? { schoolId: { [Op.eq]: `${schoolId}` }} : null,
             role ? {'$roles.name$': { [Op.eq]: `${role}` }} : null,
+            title ? { title: { [Op.eq]: `${title}` }} : null,
             //schoolCode ? {'$school.code$': { [Op.like]: `%${schoolCode}%` }} : null,
             schoolCode ? { '$school.code$': { [Op.eq]: `${schoolCode}` } } : null,
             contactOnly === undefined

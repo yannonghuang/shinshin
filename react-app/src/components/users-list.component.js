@@ -38,6 +38,10 @@ const UsersList = (props) => {
                                                {name: "admin", label: "管理员"},
                                              ]);
 
+  const [titlesFull, setTitlesFull] = useState([]);
+
+  const [departmentsFull, setDepartmentsFull] = useState([]);
+
   const pageSizes = [20, 30, 50];
 
   const [orderby, setOrderby] = useState([]);
@@ -50,6 +54,12 @@ const UsersList = (props) => {
   const onChangeSearchRole = (e) => {
     const searchRole = e.target.value;
     setSearchRole(searchRole);
+  };
+
+  const [searchTitle, setSearchTitle] = useState("");
+  const onChangeSearchTitle = (e) => {
+    const searchTitle = e.target.value;
+    setSearchTitle(searchTitle);
   };
 
   const [searchUsername, setSearchUsername] = useState("");
@@ -97,6 +107,10 @@ const UsersList = (props) => {
       params["role"] = searchRole;
     }
 
+    if (searchTitle) {
+      params["title"] = searchTitle;
+    }
+
     if (searchSchoolCode) {
       params["schoolCode"] = searchSchoolCode;
     }
@@ -137,6 +151,7 @@ const UsersList = (props) => {
     setSearchEmail("");
     setSearchSchoolCode("");
     setSearchRole("");
+    setSearchTitle("");
     setSearchContactOnly("");
     setSearchEmailVerified("");
     setOrderby([]);
@@ -183,6 +198,32 @@ const UsersList = (props) => {
   }
 
   useEffect(getRoles, []);
+
+  const getTitles = () => {
+    AuthService.getUserTitles()
+      .then(response => {
+        setTitlesFull(response.data);
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  useEffect(getTitles, []);
+
+  const getDepartments = () => {
+    AuthService.getVolunteerDepartments()
+      .then(response => {
+        setDepartmentsFull(response.data);
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  useEffect(getDepartments, []);
 
   const retrieveUsers = () => {
     const params = getRequestParams(false);
@@ -233,7 +274,7 @@ const UsersList = (props) => {
       });
   };
 
-  useEffect(retrieveUsers, [page, pageSize, orderby, searchRole, searchUsername, searchEmail, searchSchoolCode,
+  useEffect(retrieveUsers, [page, pageSize, orderby, searchRole, searchTitle, searchUsername, searchEmail, searchSchoolCode,
     searchContactOnly, searchEmailVerified]);
 
   const refreshList = () => {
@@ -310,7 +351,7 @@ const UsersList = (props) => {
         disableSortBy: true,
       },
       {
-        Header: "职务",
+        Header: "职务/部门",
         accessor: "title",
         disableSortBy: true,
       },
@@ -491,13 +532,32 @@ const UsersList = (props) => {
             ))}
           </select>
 
-          {!schoolId && (<input
+          <select
+            className="form-control col-sm-3 ml-2"
+            value={searchTitle}
+            onChange={onChangeSearchTitle}
+          >
+            <option value="">职务/部门</option>
+            {titlesFull.map((option) => (
+              <option value={option}>
+                {option}
+              </option>
+            ))}
+            <option disabled>──────────</option>
+            {departmentsFull.map((option) => (
+              <option value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+
+          <input
             type="text"
             className="form-control col-sm-2 ml-2"
             placeholder="学校编号"
             value={searchSchoolCode}
             onChange={onChangeSearchSchoolCode}
-          />)}
+          />
 
           <input
             type="text"
@@ -508,7 +568,7 @@ const UsersList = (props) => {
           />
         </div>
 
-        <div className="row mb-3" hidden={schoolId}>
+        <div className="row mb-3">
           <input
             type="text"
             className="form-control col-sm-3"
