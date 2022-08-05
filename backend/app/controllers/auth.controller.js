@@ -191,7 +191,15 @@ var orderbyObject = null;
   const include = [
                     {
                         model: Role,
-                        attributes: ['name'],
+                        attributes: [
+                          [db.Sequelize.literal(`
+                              if(roles.name = "volunteer", "欣欣义工",
+                              if(roles.name = "admin", "管理员",
+                              if(roles.name = "user", "学校用户",
+                            "")))`),
+                          "name"],
+                          //'name'
+                        ],
                         through: {attributes: []},
                         required: false,
                     },

@@ -156,7 +156,8 @@ const UsersList = (props) => {
     let r = "";
     if (usersRef.current[rowIdx].roles) {
       for (var i = 0; i < usersRef.current[rowIdx].roles.length; i++) {
-        r = r + ", " + getRoleLabel(usersRef.current[rowIdx].roles[i].name);
+        r = r + ", " + usersRef.current[rowIdx].roles[i].name;
+        //r = r + ", " + getRoleLabel(usersRef.current[rowIdx].roles[i].name);
       }
     }
     return r.substring(r.indexOf(',') + 2);
@@ -315,8 +316,9 @@ const UsersList = (props) => {
       },
       {
         Header: "角色",
-        accessor: 'roles',
+        accessor: 'roles.name',
         disableSortBy: true,
+
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
@@ -325,6 +327,7 @@ const UsersList = (props) => {
             </div>
           );
         },
+
       },
       {
         Header: "学校编号",
