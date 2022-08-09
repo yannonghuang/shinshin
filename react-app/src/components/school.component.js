@@ -945,7 +945,7 @@ export default class School extends Component {
                 <div>
                 <div class="side"><label htmlFor="startAt">建校年份</label></div>
                 <div class="side">
-                {!this.state.readonly &&
+                {!this.state.readonly && AuthService.isAdmin() &&
                 (<YearPicker
                 yearArray={['2019', '2020']}
                 value={currentSchool.startAt}
@@ -971,7 +971,7 @@ export default class School extends Component {
                 <div class="form-group col-sm-4">
                 <label htmlFor="donor">捐款人</label>
                 <input
-                readonly={this.state.readonly?"":false}
+                readonly={(this.state.readonly || !AuthService.isAdmin()) ? "" : false}
                 type="text"
                 class="form-control"
                 id="donor"
