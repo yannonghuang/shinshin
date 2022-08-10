@@ -16,10 +16,10 @@ const getPagination = (page, size) => {
 
 const propagateUpdates = async (req) => {
   const formId = req.params.id;
-  const {title, startAt} = req.body;
+  const {title, startAt, pCategoryId} = req.body;
 
   try {
-    await Response.update({title: title, startAt: startAt}, {where: { formId: formId }});
+    await Response.update({title: title, startAt: startAt, pCategoryId: pCategoryId}, {where: { formId: formId }});
     const responseIds = await Response.findAll({
       attributes: ['id'],
       where: { formId: formId }
@@ -30,7 +30,7 @@ const propagateUpdates = async (req) => {
 
     if (rIds.length === 0) return;
 
-    await Project.update({name: title, startAt: startAt}, {
+    await Project.update({name: title, startAt: startAt, pCategoryId: pCategoryId}, {
       where: {
         responseId: {[Op.or]: rIds}
       }
