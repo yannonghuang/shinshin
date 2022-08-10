@@ -39,6 +39,14 @@ const ProjectsByCategoriesList = (props) => {
   const getRequestParams = () => {
     let params = {};
 
+    if (page) {
+      params["page"] = page - 1;
+    }
+
+    if (pageSize) {
+      params["size"] = pageSize;
+    }
+
     if (pCategoryId) {
       params["pCategoryId"] = pCategoryId;
     }
@@ -88,6 +96,10 @@ const ProjectsByCategoriesList = (props) => {
         accessor: "startAt",
       },
       {
+        Header: "标题",
+        accessor: "name",
+      },
+      {
         Header: "学校项目数",
         accessor: "count",
         Cell: (props) => {
@@ -97,7 +109,8 @@ const ProjectsByCategoriesList = (props) => {
 
               <Link
                 to={"/projectsByCategoryByStartAt/" + projectsRef.current[rowIdx].pCategoryId +
-                    "/" + projectsRef.current[rowIdx].startAt}
+                    "/" + projectsRef.current[rowIdx].startAt +
+                    "/" + projectsRef.current[rowIdx].name}
               >
                 {projectsRef.current[rowIdx].count}
               </Link>
@@ -183,8 +196,7 @@ const ProjectsByCategoriesList = (props) => {
                     {/* Add a sort direction indicator */}
                     <span>
                       {/*column.isSorted*/ (column.id === 'school.region' || column.id === 'school.code' ||
-                      column.id === 'school.name' || column.id === 'status'
-                      || column.id === 'name' )
+                      column.id === 'school.name' || column.id === 'status')
                       ? column.isSortedDesc
                         ? ' 🔽'
                         : ' 🔼'

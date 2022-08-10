@@ -319,7 +319,7 @@ exports.findAllByCategories = async (req, res) => {
 
   const { limit, offset } = getPagination(page, size);
 
-  var attributes = ['pCategoryId',
+  var attributes = ['pCategoryId', 'name',
     [db.Sequelize.fn("year", db.Sequelize.col("projects.startAt")), "startAt"],
     [db.Sequelize.fn("COUNT", db.Sequelize.col("*")), "count"]
   ];
@@ -331,14 +331,14 @@ exports.findAllByCategories = async (req, res) => {
       offset: offset,
       attributes: attributes,
 
-      group: ['pCategoryId', 'startAt'],
-      order: ['pCategoryId', 'startAt']
+      group: ['pCategoryId', 'startAt', 'name'],
+      order: ['pCategoryId', 'startAt', 'name']
     });
 
     let countTest = await Project.count({
       where: condition,
-      group: ['pCategoryId', 'startAt'],
-      order: ['pCategoryId', 'startAt']
+      group: ['pCategoryId', 'startAt', 'name'],
+      order: ['pCategoryId', 'startAt', 'name']
     });
 
     let count = (countTest instanceof Array) ? countTest.length : countTest;

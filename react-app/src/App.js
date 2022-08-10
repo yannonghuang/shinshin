@@ -387,7 +387,7 @@ class App extends Component {
 
             <Route exact path={["/projects", "/projects/school/:schoolId",
                     "/projectsXR", "/projectsXR/school/:schoolId",
-                    "/projectsByCategoryByStartAt/:pCategoryId/:startAt"]}
+                    "/projectsByCategoryByStartAt/:pCategoryId/:startAt/:name"]}
                 component={ProjectsList} >
                 <AccessControlService ComposedClass={ProjectsList} />
             </Route>

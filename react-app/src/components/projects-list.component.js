@@ -21,13 +21,14 @@ const ProjectsList = (props) => {
   const [currentUser, setCurrentUser] = useState(localStorage.getItem('user'));
 
   const [currentIndex, setCurrentIndex] = useState(-1);
-  const [searchName, setSearchName] = useState("");
+
   const [searchCode, setSearchCode] = useState("");
   const [searchRegion, setSearchRegion] = useState("");
   const [searchStartAt, setSearchStartAt] = useState(props.match? props.match.params.startAt : props.startAt);
 
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
   const [pCategoryId, setPCategoryId] = useState(props.match? props.match.params.pCategoryId : props.pCategoryId);
+  const [searchName, setSearchName] = useState(props.match? props.match.params.name : props.name);
 
   const [schoolDisplay, setSchoolDisplay] = useState(null);
 
@@ -158,6 +159,9 @@ const ProjectsList = (props) => {
 
   useEffect(getRegions, [orderby]);
 
+  const [categories, setCategories] = useState(ProjectDataService.PROJECT_CATEGORIES);
+
+/**
   const [categories, setCategories] = useState([]);
 
   const getCategories = () => {
@@ -172,6 +176,7 @@ const ProjectsList = (props) => {
   }
 
   useEffect(getCategories, []);
+*/
 
   const retrieveProjects = () => {
     const params = getRequestParams(/*searchName, page, pageSize, orderby,
@@ -505,7 +510,10 @@ const ProjectsList = (props) => {
         <h4>
           {schoolId && !embedded && (<a href={'/schoolsView/' + schoolId}>{schoolDisplay + '-'}</a>)}
           {xr && '向荣支持'}学校项目列表 (总数：{totalItems}) {pCategoryId &&
-            '[项目类型：' + categories[pCategoryId - 1] + ', 年份：' + searchStartAt + ']'}
+            '[项目类型：' + categories[pCategoryId] +
+            '; 年份：' + searchStartAt +
+            '; 标题：' + searchName +
+            ']'}
         </h4>
         <div className="row mb-3 ">
 
