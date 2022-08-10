@@ -22,6 +22,9 @@ module.exports = (sequelize, Sequelize) => {
     form_id: {
       type: Sequelize.INTEGER
     },
+    pCategoryId: {
+      type: Sequelize.INTEGER
+    },
   });
 
   return Form;

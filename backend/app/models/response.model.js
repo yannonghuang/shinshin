@@ -13,6 +13,9 @@ module.exports = (sequelize, Sequelize) => {
     result_id: {
       type: Sequelize.INTEGER
     },
+    pCategoryId: {
+      type: Sequelize.INTEGER
+    },
   });
 
   return Response;

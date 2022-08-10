@@ -1,5 +1,6 @@
 //import React, { Component } from "react";
 import FormDataService from "../services/form.service";
+import ProjectDataService from "../services/project.service";
 
 import $ from "jquery"; //Load jquery
 import React, { Component, createRef } from "react"; //For react component
@@ -20,6 +21,7 @@ export default class Form extends Component {
     this.onChangeDescription = this.onChangeDescription.bind(this);
     this.onChangeDeadline = this.onChangeDeadline.bind(this);
     this.onChangeStartAt = this.onChangeStartAt.bind(this);
+    this.onChangePCategoryId = this.onChangePCategoryId.bind(this);
     this.getForm = this.getForm.bind(this);
     this.onChangePublished = this.onChangePublished.bind(this);
     this.updateForm = this.updateForm.bind(this);
@@ -36,11 +38,14 @@ export default class Form extends Component {
         fdata: null,
         deadline: null,
         startAt: null,
+        pCategoryId: null,
       },
       message: "",
       newsform: true,
       readonly: true,      
-      submitted: false
+      submitted: false,
+
+      pCategories: ProjectDataService.PROJECT_CATEGORIES,
     };
 
     this.fb = createRef();
@@ -74,7 +79,7 @@ export default class Form extends Component {
   };
 
 
-  componentDidMount() {
+  async componentDidMount() {
     const readonly = window.location.pathname.includes('View')
     const newform = window.location.pathname.includes('add');
     this.setState({newform: newform});
@@ -86,6 +91,20 @@ export default class Form extends Component {
       //if (!readonly)
         //this.fBuilder = $(this.fb.current).formBuilder(this.oldFormOptions);
       this.getForm(this.props.match.params.id, readonly);
+    }
+
+  }
+
+  getPCategories = async () => {
+    try {
+      let response = await ProjectDataService.getCategories();
+      await this.setState({
+        pCategories: response.data
+      });
+      console.log(response);
+
+    } catch(e) {
+      console.log(e);
     }
   }
 
@@ -109,6 +128,19 @@ export default class Form extends Component {
         currentForm: {
           ...prevState.currentForm,
           title: title
+        }
+      };
+    });
+  }
+
+  onChangePCategoryId(e) {
+    const pCategoryId = e.target.selectedIndex; //e.target.value;
+
+    this.setState(function(prevState) {
+      return {
+        currentForm: {
+          ...prevState.currentForm,
+          pCategoryId: pCategoryId
         }
       };
     });
@@ -217,7 +249,8 @@ export default class Form extends Component {
       deadline: this.state.currentForm.deadline,
       published: this.state.currentForm.published,
       startAt: this.state.currentForm.startAt ? (this.state.currentForm.startAt + '-02-01') : null,
-      fdata: this.fBuilder.actions.getData() /* formData */
+      fdata: this.fBuilder.actions.getData(), /* formData */
+      pCategoryId: this.state.currentForm.pCategoryId,
     };
 
     FormDataService.create(data)
@@ -246,6 +279,7 @@ export default class Form extends Component {
         deadline: null,
         startAt: null,
         published: false,
+        pCategoryId: null,
       },
       submitted: false
     }));
@@ -318,6 +352,24 @@ export default class Form extends Component {
                   value={currentForm.deadline}
                   onChange={this.onChangeDeadline}
                 />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="pCategoryId">项目类别</label>
+                <select
+                disabled={this.state.readonly?"disabled":false}
+                class="form-control"
+                id="pCategoryId"
+                required
+                value={this.state.pCategories[currentForm.pCategoryId]}
+                onChange={this.onChangePCategoryId}
+                name="pCategoryId"
+                >
+
+                {this.state.pCategories.map((option) => (
+                  <option value={option}>{option}</option>
+                ))}
+                </select>
               </div>
 
               <div className="form-group">

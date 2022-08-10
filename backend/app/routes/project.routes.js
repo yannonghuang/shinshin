@@ -25,9 +25,19 @@ module.exports = function(app) {
     projects.getRegions
   );
 
+  app.get("/api/projects/categories",
+    [authJwt.verifyToken],
+    projects.getProjectCategories
+  );
+
   app.post("/api/projects/all",
     //[authJwt.verifyToken],
     projects.findAll2
+  );
+
+  app.post("/api/projects/allByCategories",
+    //[authJwt.verifyToken],
+    projects.findAllByCategories
   );
 
   app.get("/api/projects/published",

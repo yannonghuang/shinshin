@@ -24,8 +24,10 @@ import RegionsList from "./components/regions-list.component";
 import CommentsList from "./components/comments-list.component";
 import LogsList from "./components/logs-list.component";
 
+import ProjectDataService from "./services/project.service";
 import Project from "./components/project.component";
 import ProjectsList from "./components/projects-list.component";
+import ProjectsByCategoriesList from "./components/projects-categories-list.component";
 import DossiersList from "./components/dossiers-list.component";
 
 //import AddForm from "./components/add-form.component";
@@ -65,6 +67,7 @@ class App extends Component {
       showModeratorBoard: false,
       showAdminBoard: false,
 
+      pCategories: ProjectDataService.PROJECT_CATEGORIES,
     };
   }
 
@@ -77,6 +80,7 @@ class App extends Component {
         showAdminBoard: user.roles.includes("ROLE_ADMIN"),
       });
     }
+
   }
 
   componentWillReceiveProps = (nextProps)=> {
@@ -107,6 +111,32 @@ class App extends Component {
     if (this.props.location.pathname.match(/addU/)) return true;
 
     return false;
+  }
+
+  getPCategories = async () => {
+    try {
+      let response = await ProjectDataService.getCategories();
+
+      await this.setState({
+        pCategories: response.data
+      });
+      console.log(response);
+
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
+  renderProjectsByCategories() {
+    return (
+      <div>
+        {this.state.pCategories.map((option, index) => (
+          <a class="dropdown-item" href={"/projects/category/" + index }>
+            {option}
+          </a>
+        ))}
+      </div>
+    )
   }
 
   render() {
@@ -179,7 +209,12 @@ class App extends Component {
                 项目
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href={"/projects"}>项目列表</a>
+                <a class="dropdown-item" href={"/projects"}>学校项目列表</a>
+                <div class="dropdown-divider"></div>
+
+                {this.renderProjectsByCategories()}
+
+                <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href={"/addP"}
                   hidden={!AuthService.isLogin() || !AuthService.isAdmin()}
                   target="_blank">新增项目
@@ -350,9 +385,15 @@ class App extends Component {
                 <AccessControlService ComposedClass={LogsList} />
             </Route>
 
-            <Route exact path={["/projects", "/projects/school/:schoolId", "/projectsXR", "/projectsXR/school/:schoolId"]}
+            <Route exact path={["/projects", "/projects/school/:schoolId",
+                    "/projectsXR", "/projectsXR/school/:schoolId",
+                    "/projectsByCategoryByStartAt/:pCategoryId/:startAt"]}
                 component={ProjectsList} >
                 <AccessControlService ComposedClass={ProjectsList} />
+            </Route>
+            <Route exact path={["/projects/category/:pCategoryId"]}
+                component={ProjectsByCategoriesList} >
+                <AccessControlService ComposedClass={ProjectsByCategoriesList} />
             </Route>
             <Route path={["/projectsView/:id", "/projects/:id", "/addP", "/projectsViewXR/:id", "/projectsXR/:id", "/addPXR"]}
                 component={Project} >

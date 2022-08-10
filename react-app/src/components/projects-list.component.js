@@ -24,9 +24,11 @@ const ProjectsList = (props) => {
   const [searchName, setSearchName] = useState("");
   const [searchCode, setSearchCode] = useState("");
   const [searchRegion, setSearchRegion] = useState("");
-  const [searchStartAt, setSearchStartAt] = useState("");
+  const [searchStartAt, setSearchStartAt] = useState(props.match? props.match.params.startAt : props.startAt);
 
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
+  const [pCategoryId, setPCategoryId] = useState(props.match? props.match.params.pCategoryId : props.pCategoryId);
+
   const [schoolDisplay, setSchoolDisplay] = useState(null);
 
   const [embedded, setEmbedded] = useState(props.embedded ? props.embedded : false);
@@ -133,6 +135,10 @@ const ProjectsList = (props) => {
       params["exportFlag"] = exportFlag;
     }
 
+    if (pCategoryId) {
+      params["pCategoryId"] = pCategoryId;
+    }
+
     return params;
   };
 
@@ -151,6 +157,21 @@ const ProjectsList = (props) => {
   }
 
   useEffect(getRegions, [orderby]);
+
+  const [categories, setCategories] = useState([]);
+
+  const getCategories = () => {
+    ProjectDataService.getCategories()
+      .then(response => {
+        setCategories(response.data);
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  useEffect(getCategories, []);
 
   const retrieveProjects = () => {
     const params = getRequestParams(/*searchName, page, pageSize, orderby,
@@ -483,7 +504,8 @@ const ProjectsList = (props) => {
       <div className="col-sm-9">
         <h4>
           {schoolId && !embedded && (<a href={'/schoolsView/' + schoolId}>{schoolDisplay + '-'}</a>)}
-          {xr && '向荣支持'}项目列表(总数：{totalItems})
+          {xr && '向荣支持'}学校项目列表 (总数：{totalItems}) {pCategoryId &&
+            '[项目类型：' + categories[pCategoryId - 1] + ', 年份：' + searchStartAt + ']'}
         </h4>
         <div className="row mb-3 ">
 

@@ -6,6 +6,7 @@ const Op = db.Sequelize.Op;
 const REGIONS = db.REGIONS;
 const School = db.schools;
 const PROJECT_STATUSES = db.PROJECT_STATUSES;
+const PROJECT_CATEGORIES = db.PROJECT_CATEGORIES;
 
 const { authJwt } = require("../middleware");
 
@@ -52,6 +53,7 @@ exports.create = (req, res) => {
     description: req.body.description,
     startAt: req.body.startAt,
     xr: xr,
+    pCategoryId: req.body.pCategoryId,
   };
 
   // Save Project in the database
@@ -177,6 +179,7 @@ exports.SAVE_SQL_findAll2 = (req, res) => {
 
 };
 
+
 exports.findAll2 = async (req, res) => {
   const sid = await authJwt.getSchoolId(req);
 
@@ -189,6 +192,8 @@ exports.findAll2 = async (req, res) => {
   const code = req.body.code;
   const exportFlag = req.body.exportFlag;
   const region = req.body.region;
+  const pCategoryId = req.body.pCategoryId;
+
   /*
     ? req.body.region.startsWith('湖南湘西')
       ? req.body.region.substring(0, 4)
@@ -217,6 +222,7 @@ exports.findAll2 = async (req, res) => {
         [Op.and]: [
             name ? { name: { [Op.like]: `%${name}%` } } : null,
             schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null,
+            pCategoryId ? { pCategoryId: { [Op.eq]: `${pCategoryId}` } } : null,
             code ? { '$school.code$': { [Op.eq]: `${code}` } } : null,
             //region ? { '$school.region$': { [Op.like]: `%${region}%` } } : null,
             region ? { '$school.region$': { [Op.eq]: `${region}` } } : null,
@@ -299,6 +305,54 @@ exports.findAll2 = async (req, res) => {
         err.message || "Some error occurred while retrieving responses."
       });
     });
+};
+
+exports.findAllByCategories = async (req, res) => {
+  const pCategoryId = req.body.pCategoryId;
+  const page = req.body.page;
+  const size = req.body.size;
+
+  var condition = {
+        [Op.and]: [
+            pCategoryId ? { pCategoryId: { [Op.eq]: `${pCategoryId}` } } : null,
+        ]};
+
+  const { limit, offset } = getPagination(page, size);
+
+  var attributes = ['pCategoryId',
+    [db.Sequelize.fn("year", db.Sequelize.col("projects.startAt")), "startAt"],
+    [db.Sequelize.fn("COUNT", db.Sequelize.col("*")), "count"]
+  ];
+
+  try {
+    let data = await Project.findAll({
+      where: condition,
+      limit: limit,
+      offset: offset,
+      attributes: attributes,
+
+      group: ['pCategoryId', 'startAt'],
+      order: ['pCategoryId', 'startAt']
+    });
+
+    let countTest = await Project.count({
+      where: condition,
+      group: ['pCategoryId', 'startAt'],
+      order: ['pCategoryId', 'startAt']
+    });
+
+    let count = (countTest instanceof Array) ? countTest.length : countTest;
+
+    const response = getPagingData(count, data, page, limit);
+
+    res.send(response);
+  } catch(err) {
+    console.log(err);
+    res.status(500).send({
+      message:
+      err.message || "Some error occurred while retrieving responses."
+    });
+  }
 };
 
 exports.SAVE_SAVE_findAll2 = (req, res) => {
@@ -411,6 +465,7 @@ exports.findOne = (req, res) => {
 
   Project.findByPk(id, {
       attributes: ['id', 'name', 'budget', 'status', 'description', 'xr',
+                    'pCategoryId',
                     [db.Sequelize.fn("year", db.Sequelize.col("projects.startAt")), "startAt"],
                   ],
 
@@ -534,5 +589,10 @@ exports.deleteAll = (req, res) => {
 // return project status list
 exports.getStatuses = (req, res) => {
   res.send(PROJECT_STATUSES);
+}
+
+// return project status list
+exports.getProjectCategories = (req, res) => {
+  res.send(PROJECT_CATEGORIES);
 }
 

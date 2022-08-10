@@ -7,6 +7,7 @@ import SchoolDataService from "../services/school.service";
 import SurveyDataService from "../services/survey.service";
 import AuthService from "./../services/auth.service";
 //import TheCollapsible from './collapsible-attachments-list.component';
+import ProjectDataService from "../services/project.service";
 
 import $ from "jquery"; //Load jquery
 import React, { Component, createRef } from "react"; //For react component
@@ -36,6 +37,7 @@ export default class Response extends Component {
     this.submitResponse = this.submitResponse.bind(this);
     this.reload = this.reload.bind(this);
     this.hasFiles = this.hasFiles.bind(this);
+    this.onChangePCategoryId = this.onChangePCategoryId.bind(this);
 
     this.state = {
       currentResponse: {
@@ -45,6 +47,7 @@ export default class Response extends Component {
         formId: null,
         schoolId: null,
         //attFiles: [],
+        pCategoryId: null,
       },
 
       currentUser: null,
@@ -61,6 +64,8 @@ export default class Response extends Component {
       updatedAt: null,
 
       dirty: true,
+
+      pCategories: ProjectDataService.PROJECT_CATEGORIES,
     };
 
     this.fb = createRef();
@@ -404,6 +409,19 @@ export default class Response extends Component {
     });
   }
 
+  onChangePCategoryId(e) {
+    const pCategoryId = e.target.selectedIndex; //e.target.value;
+
+    this.setState(function(prevState) {
+      return {
+        currentResponse: {
+          ...prevState.currentResponse,
+          pCategoryId: pCategoryId
+        }
+      };
+    });
+  }
+
   uploadAttachments(attFiles) {
     var data = new FormData();
     var descriptions = [];
@@ -491,6 +509,7 @@ export default class Response extends Component {
       schoolId: this.state.currentResponse.schoolId,
       fdata: this.fRender.userData,
       userId: this.state.currentUser.id,
+      pCategoryId: this.state.currentResponse.pCategoryId,
     };
 
     ResponseDataService.create(
@@ -590,6 +609,24 @@ export default class Response extends Component {
                   onChange={this.onChangeTitle}
                 />
             </div>
+
+                <div className="form-group ">
+                  <label htmlFor="pCategoryId">项目类别</label>
+                  <select
+                    disabled={"true"}
+                    class="form-control"
+                    id="pCategoryId"
+                    required
+                    value={this.state.pCategories[currentResponse.pCategoryId]}
+                    onChange={this.onChangePCategoryId}
+                    name="pCategoryId"
+                  >
+
+                    {this.state.pCategories.map((option, index) => (
+                    <option value={option}>{option}</option>
+                    ))}
+                  </select>
+                </div>
 
             <div class="form-group">
               <label htmlFor="schoolId">所属学校</label>

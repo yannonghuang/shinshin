@@ -43,6 +43,7 @@ export default class Project extends Component {
     this.onDrop = this.onDrop.bind(this);
     this.onChangeDocFiles = this.onChangeDocFiles.bind(this);
     this.onChangeDocCategory = this.onChangeDocCategory.bind(this);
+    this.onChangePCategoryId = this.onChangePCategoryId.bind(this);
 
     this.saveProject = this.saveProject.bind(this);
     this.newProject = this.newProject.bind(this);
@@ -62,7 +63,8 @@ export default class Project extends Component {
         xr: window.location.pathname.includes('XR'),
 
         docFiles: null, //[],
-        docCategory: ""
+        docCategory: "",
+        pCategoryId: null
       },
       currentUser: null,
       schools: [],
@@ -77,6 +79,8 @@ export default class Project extends Component {
       dirty: false,
       progress: 0,
       doneLoading: false,
+
+      pCategories: ProjectDataService.PROJECT_CATEGORIES,
     };
   }
 
@@ -220,6 +224,19 @@ export default class Project extends Component {
           schoolId: schoolId
         },
         dirty: true
+      };
+    });
+  }
+
+  onChangePCategoryId(e) {
+    const pCategoryId = e.target.selectedIndex; //e.target.value;
+
+    this.setState(function(prevState) {
+      return {
+        currentProject: {
+          ...prevState.currentProject,
+          pCategoryId: pCategoryId
+        }
       };
     });
   }
@@ -400,10 +417,11 @@ export default class Project extends Component {
       docCategory: "",
       description: "",
       startAt: new Date().getFullYear(), //null
-      },
+      pCategoryId: null
+    },
 
-      submitted: false
-    }));
+    submitted: false
+  }));
 
   }
 
@@ -471,6 +489,7 @@ export default class Project extends Component {
       description: this.state.currentProject.description,
       startAt: this.state.currentProject.startAt ? (this.state.currentProject.startAt + '-02-01') : null,
       xr: this.state.currentProject.xr,
+      pCategoryId: this.state.currentProject.pCategoryId,
     };
 
     try {
@@ -523,6 +542,7 @@ export default class Project extends Component {
       responseId: this.state.currentProject.responseId,
       description: this.state.currentProject.description,
       startAt: this.state.currentProject.startAt ? (this.state.currentProject.startAt + '-02-01') : null,
+      pCategoryId: this.state.currentProject.pCategoryId,
     };
 
     try {
@@ -837,6 +857,23 @@ export default class Project extends Component {
 
                 <div class="w-100"></div>
 
+                <div className="form-group col-sm-12">
+                  <label htmlFor="pCategoryId">项目类别</label>
+                  <select
+                    disabled={this.state.readonly?"disabled":false}
+                    class="form-control"
+                    id="pCategoryId"
+                    required
+                    value={this.state.pCategories[currentProject.pCategoryId]}
+                    onChange={this.onChangePCategoryId}
+                    name="pCategoryId"
+                  >
+
+                    {this.state.pCategories.map((option, index) => (
+                    <option value={option}>{option}</option>
+                    ))}
+                  </select>
+                </div>
 
                 <div class="col-sm-8">
                   <label htmlFor="schoolId">学校</label>

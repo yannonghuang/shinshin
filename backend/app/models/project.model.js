@@ -21,6 +21,9 @@ module.exports = (sequelize, Sequelize) => {
     xr: {
       type: Sequelize.BOOLEAN
     },
+    pCategoryId: {
+      type: Sequelize.INTEGER
+    },
   });
 
   return Project;

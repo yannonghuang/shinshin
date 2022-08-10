@@ -237,6 +237,7 @@ exports.create = (req, res) => {
     startAt: req.body.startAt,
     published: req.body.published ? req.body.published : false,
     fdata: req.body.fdata,
+    pCategoryId: req.body.pCategoryId,
   };
 
   // Save Form in the database
@@ -407,7 +408,8 @@ exports.findOne = (req, res) => {
       [db.Sequelize.fn('date_format', db.Sequelize.col("deadline"), '%Y-%m-%d'), "deadline"],
       "startAt", //[db.Sequelize.fn('YEAR', db.Sequelize.col('form.startAt')), "startAt"],
       //[db.Sequelize.fn('date_format', db.Sequelize.col("startAt"), '%Y-%m-%d'), "startAt"],
-      "published"
+      "published",
+      "pCategoryId"
   ]
   })
     .then(data => {

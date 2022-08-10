@@ -7,6 +7,9 @@ class ProjectDataService {
     return http.post("/projects/all", data/*, { headers: authHeader() }*/);
   }
 
+  getAllByCategories(data) {
+    return http.post("/projects/allByCategories", data/*, { headers: authHeader() }*/);
+  }
 
   getAll(params) {
     return http.get("/projects", { params }, { headers: authHeader() });
@@ -28,6 +31,10 @@ class ProjectDataService {
 
   getRegions() {
     return http.get("/projects/regions", { headers: authHeader() });
+  }
+
+  getCategories() {
+    return http.get("/projects/categories", { headers: authHeader() });
   }
 
   getStatuses() {
@@ -232,6 +239,20 @@ class ProjectDataService {
     return (newHeader + newBody);
   }
 
+  PROJECT_CATEGORIES = [
+  "TeachersTraing(师资培训)",
+  "E-Learning(电子教学)",
+  "Literacy Programs(图书计划)",
+  "University Outreach(大学生实践)",
+  "Construction(建校计划)",
+  "Facility Improvement(设施改善)",
+  "Principal Training(校长培训)",
+  "2016扬帆合作项目",
+  "Student Activity (学生活动)",
+  "General Program (通用项目)",
+  "Model Rural Schools (欣美乡村学校)",
+  "美化校园项目"
+  ];
 }
 
 export default new ProjectDataService();

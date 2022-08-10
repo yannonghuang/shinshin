@@ -52,6 +52,7 @@ exports.create = async (req, res) => {
     schoolId: req.body.schoolId,
     userId: req.body.userId,
     startAt: startAt,
+    pCategoryId: req.body.pCategoryId,
   };
 
   try {
@@ -64,7 +65,8 @@ exports.create = async (req, res) => {
       schoolId: data.schoolId,
       responseId: data.id,
       startAt: startAt,
-      status: '申请'
+      status: '申请',
+      pCategoryId: req.body.pCategoryId,
     };
 
     // Save Project in the database
