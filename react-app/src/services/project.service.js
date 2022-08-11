@@ -239,7 +239,8 @@ class ProjectDataService {
     return (newHeader + newBody);
   }
 
-  PROJECT_CATEGORIES = [
+  SAVE_PROJECT_CATEGORIES = [
+  "未选",
   "TeachersTraing(师资培训)",
   "E-Learning(电子教学)",
   "Literacy Programs(图书计划)",
@@ -253,6 +254,29 @@ class ProjectDataService {
   "Model Rural Schools (欣美乡村学校)",
   "美化校园项目"
   ];
+
+  PROJECT_CATEGORIES = [
+    "未选",
+    "新建校",
+    "设施改善",
+    "欣美乡村学校",
+    "信息化教学设备",
+    "图书项目",
+    "在线培训",
+    "暑期教师培训",
+    "校长培训",
+    "阅读教育",
+    "项目式学习-美化校园",
+    "乡土教育",
+    "读书月活动",
+    "美术园活动",
+    "编程活动",
+    "小心愿活动",
+    "其它",
+  ];
+
 }
+
+
 
 export default new ProjectDataService();

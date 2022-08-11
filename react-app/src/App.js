@@ -130,11 +130,10 @@ class App extends Component {
   renderProjectsByCategories() {
     return (
       <div>
-        {this.state.pCategories.map((option, index) => (
-          <a class="dropdown-item" href={"/projects/category/" + index }>
-            {option}
-          </a>
-        ))}
+        {this.state.pCategories.map((option, index) => {
+          if (index > 0)
+            return <a class="dropdown-item" href={"/projects/category/" + index }>{option}</a>
+        })}
       </div>
     )
   }
