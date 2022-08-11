@@ -1,6 +1,8 @@
 const dbConfig = require("../config/db.config.js");
 
 const Sequelize = require("sequelize");
+const { QueryTypes } = require('sequelize');
+
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   dialect: dbConfig.dialect,
@@ -18,6 +20,7 @@ const db = {};
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
+db.QueryTypes = QueryTypes;
 
 db.surveys = require("./survey.model.js")(sequelize, Sequelize);
 db.logs = require("./log.model.js")(sequelize, Sequelize);

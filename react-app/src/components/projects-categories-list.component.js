@@ -106,8 +106,8 @@ const ProjectsByCategoriesList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
-
               <Link
+                target = '_blank'
                 to={"/projectsByCategoryByStartAt/" + projectsRef.current[rowIdx].pCategoryId +
                     "/" + projectsRef.current[rowIdx].startAt +
                     "/" + projectsRef.current[rowIdx].name}
@@ -115,6 +115,29 @@ const ProjectsByCategoriesList = (props) => {
                 {projectsRef.current[rowIdx].count}
               </Link>
 
+            </div>
+          );
+        },
+      },
+      {
+        Header: "申请表",
+        accessor: "formId",
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div hidden={!projectsRef.current[rowIdx].formId}>
+              <Link
+                target = '_blank'
+                to={"/formsView/" + projectsRef.current[rowIdx].formId}
+              >
+                <i className="fas fa-eye action mr-2"></i>
+              </Link>
+              {AuthService.isAdmin() && <Link
+                target = '_blank'
+                to={"/forms/" + projectsRef.current[rowIdx].formId}
+              >
+                <i className="far fa-edit action mr-2"></i>
+              </Link>}
             </div>
           );
         },

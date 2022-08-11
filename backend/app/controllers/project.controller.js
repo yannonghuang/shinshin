@@ -319,6 +319,62 @@ exports.findAllByCategories = async (req, res) => {
 
   const { limit, offset } = getPagination(page, size);
 
+  var include = [
+                    {
+                      model: Response,
+                      attributes: ['id', 'title'],
+                      required: false,
+                    },
+                ];
+
+  try {
+
+    let data = await db.sequelize.query(`
+    SELECT projects.pCategoryId, projects.name, year(projects.startAt) AS startAt, response.formId AS formId, COUNT(*) AS count
+    FROM projects AS projects LEFT OUTER JOIN responses AS response ON projects.responseId = response.id
+    WHERE (projects.pCategoryId = ${pCategoryId})
+    GROUP BY pCategoryId, startAt, name, response.formId
+    ORDER BY pCategoryId, startAt, name, response.formId
+    LIMIT ${offset}, ${limit}
+    `, {
+       nest: true,
+       type: db.QueryTypes.SELECT
+    });
+
+    let countTest = await Project.count({
+      where: condition,
+      include: include,
+      distinct: true,
+      group: db.Sequelize.literal(`projects.pCategoryId, projects.startAt, projects.name, response.formId`),
+    });
+
+    let count = (countTest instanceof Array) ? countTest.length : countTest;
+
+    const response = getPagingData(count, data, page, limit);
+
+    res.send(response);
+  } catch(err) {
+    console.log(err);
+    res.status(500).send({
+      message:
+      err.message || "Some error occurred while retrieving responses."
+    });
+  }
+};
+
+/**
+exports.findAllByCategories = async (req, res) => {
+  const pCategoryId = req.body.pCategoryId;
+  const page = req.body.page;
+  const size = req.body.size;
+
+  var condition = {
+        [Op.and]: [
+            pCategoryId ? { pCategoryId: { [Op.eq]: `${pCategoryId}` } } : null,
+        ]};
+
+  const { limit, offset } = getPagination(page, size);
+
   var attributes = ['pCategoryId', 'name',
     [db.Sequelize.fn("year", db.Sequelize.col("projects.startAt")), "startAt"],
     [db.Sequelize.fn("COUNT", db.Sequelize.col("*")), "count"]
@@ -354,6 +410,7 @@ exports.findAllByCategories = async (req, res) => {
     });
   }
 };
+*/
 
 exports.SAVE_SAVE_findAll2 = (req, res) => {
   const name = req.body.name;
