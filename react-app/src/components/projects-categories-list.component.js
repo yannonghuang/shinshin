@@ -81,9 +81,8 @@ const ProjectsByCategoriesList = (props) => {
       params["size"] = pageSize;
     }
 
-    if (pCategoryId !== null)
+    if ((pCategoryId || pCategoryId === 0) && pCategoryId !== categories.length)
       params["pCategoryId"] = pCategoryId;
-
 
     if (searchName) {
       params["name"] = searchName;
@@ -312,7 +311,9 @@ const ProjectsByCategoriesList = (props) => {
             {option}
             </option>
             ))}
-            <option value="">全部</option>
+            <option value=''>
+            全部
+            </option>
           </select>
 
 {/*
