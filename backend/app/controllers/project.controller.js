@@ -17,14 +17,14 @@ const getPagination = (page, size) => {
   return { limit, offset };
 };
 
-const getPagingData = (count, data, page, limit) => {
+const getPagingData = (count, data, page, limit, schoolProjectsCount) => {
   //const { count: totalItems, rows: projects } = data;
   const projects = data;
   const totalItems = count;
   const currentPage = page ? +page : 0;
   const totalPages = Math.ceil(totalItems / limit);
 
-  return { totalItems, projects, totalPages, currentPage };
+  return { totalItems, projects, totalPages, currentPage, schoolProjectsCount };
 };
 
 // return region list
@@ -233,9 +233,11 @@ exports.findAll2 = async (req, res) => {
               : xr === 'true'*/
                 ? { xr: { [Op.eq]: `1` }}
                 : {[Op.or] : [{ xr: null }, { xr: { [Op.eq]: `0` }}]},
-            formId
-                ? { '$response.formId$': { [Op.eq]: `${formId}` } }
-                : { '$response.formId$': null },
+            formId === undefined
+              ? null
+              : formId === 'null'
+                ? { '$response.formId$': null }
+                : { '$response.formId$': { [Op.eq]: `${formId}` } },
         ]};
 
   var include = [
@@ -367,9 +369,18 @@ exports.findAllByCategories = async (req, res) => {
       group: db.Sequelize.literal(`projects.pCategoryId, projects.startAt, projects.name, response.formId`),
     });
 
-    let count = (countTest instanceof Array) ? countTest.length : countTest;
+    let count = 0;
+    let schoolProjectsCount = 0;
+    if (countTest instanceof Array) {
+      count = countTest.length;
+      for (var i = 0; i < countTest.length; i++)
+        schoolProjectsCount += countTest[i].count;
+    } else {
+      count = countTest;
+      schoolProjectsCount = countTest;
+    }
 
-    const response = getPagingData(count, data, page, limit);
+    const response = getPagingData(count, data, page, limit, schoolProjectsCount);
 
     res.send(response);
   } catch(err) {

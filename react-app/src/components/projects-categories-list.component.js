@@ -32,6 +32,7 @@ const ProjectsByCategoriesList = (props) => {
   const [pageSize, setPageSize] = useState(30);
 
   const [totalItems, setTotalItems] = useState(0);
+  const [schoolProjectsCount, setSchoolProjectsCount] = useState(0);
 
   const pageSizes = [20, 30, 50];
 
@@ -163,11 +164,12 @@ const ProjectsByCategoriesList = (props) => {
 
     ProjectDataService.getAllByCategories(params)
       .then((response) => {
-        const { projects, totalPages, totalItems } = response.data;
+        const { projects, totalPages, totalItems, schoolProjectsCount } = response.data;
 
         setProjects(projects);
         setCount(totalPages);
         setTotalItems(totalItems);
+        setSchoolProjectsCount(schoolProjectsCount);
 
         console.log(response.data);
       })
@@ -285,7 +287,7 @@ const ProjectsByCategoriesList = (props) => {
       <div className="col-sm-9">
         <h4>
           项目列表 {((pCategoryId || pCategoryId === 0) && (pCategoryId !== categories.length)) &&
-          '(项目类型：' + categories[pCategoryId] + ')'}(项目总数：{totalItems})
+          '(项目类型：' + categories[pCategoryId] + ')'}(项目总数：{totalItems}；学校项目总数：{schoolProjectsCount})
         </h4>
 
         <div className="row mb-3 ">

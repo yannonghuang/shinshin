@@ -64,8 +64,8 @@ const ProjectsList = (props) => {
     if (pCategoryId === 'null')
       setPCategoryId(null);
 
-    if (formId === 'null')
-      setFormId(null);
+    //if (formId === 'null')
+      //setFormId(null);
   }
 
   useEffect(init, []);
