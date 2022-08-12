@@ -45,6 +45,13 @@ const ProjectsByCategoriesList = (props) => {
     setSearchApplied(searchApplied);
   };
 
+  const init = () => {
+    if (!pCategoryId || (pCategoryId === 'null'))
+      setPCategoryAll();
+  }
+
+  useEffect(init, []);
+
   const onChangeSearchName = (e) => {
     const searchName = e.target.value;
     setSearchName(searchName);
@@ -52,7 +59,7 @@ const ProjectsByCategoriesList = (props) => {
 
   const onChangeSearchPCategory = (e) => {
     const searchPCategory = e.target.selectedIndex;
-    setPCategoryId(searchPCategory === categories.length ? null : searchPCategory);
+    setPCategoryId(/*searchPCategory === categories.length ? null : */searchPCategory);
   };
 
   const onChangeSearchStartAt = (e) => {
@@ -64,11 +71,17 @@ const ProjectsByCategoriesList = (props) => {
   const onClearSearch = (e) => {
     setSearchName("");
     setSearchStartAt("");
-    setPCategoryId(0);
     setSearchApplied("");
     setExportProjects([]);
+
+    setPCategoryAll();
   };
 
+  const setPCategoryAll = () => {
+    const select = document.getElementById('category-select');
+    select.value = 'all';
+    setPCategoryId(categories.length);
+  }
 
   const getRequestParams = (exportFlag = false) => {
     let params = {};
@@ -81,7 +94,7 @@ const ProjectsByCategoriesList = (props) => {
       params["size"] = pageSize;
     }
 
-    if ((pCategoryId || pCategoryId === 0) && pCategoryId !== categories.length)
+    if ((pCategoryId || pCategoryId === 0) && (pCategoryId !== categories.length))
       params["pCategoryId"] = pCategoryId;
 
     if (searchName) {
@@ -271,7 +284,8 @@ const ProjectsByCategoriesList = (props) => {
     <div className="list row">
       <div className="col-sm-9">
         <h4>
-          项目列表 {(pCategoryId || pCategoryId === 0) && '(项目类型：' + categories[pCategoryId] + ')'}(项目总数：{totalItems})
+          项目列表 {((pCategoryId || pCategoryId === 0) && (pCategoryId !== categories.length)) &&
+          '(项目类型：' + categories[pCategoryId] + ')'}(项目总数：{totalItems})
         </h4>
 
         <div className="row mb-3 ">
@@ -305,13 +319,14 @@ const ProjectsByCategoriesList = (props) => {
             placeholder="...."
             value={categories[pCategoryId]}
             onChange={onChangeSearchPCategory}
+            id="category-select"
           >
             {categories.map((option) => (
             <option value={option}>
             {option}
             </option>
             ))}
-            <option value=''>
+            <option value='all'>
             全部
             </option>
           </select>
