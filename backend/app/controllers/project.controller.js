@@ -311,9 +311,14 @@ exports.findAllByCategories = async (req, res) => {
   const pCategoryId = req.body.pCategoryId;
   const page = req.body.page;
   const size = req.body.size;
+  const name = req.body.name;
+  const startAt = req.body.startAt;
+  const exportFlag = req.body.exportFlag;
 
   var condition = {
         [Op.and]: [
+            name ? { name: { [Op.like]: `%${name}%` } } : null,
+            startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('projects.startAt')), `${startAt}`) } } : null,
             pCategoryId ? { pCategoryId: { [Op.eq]: `${pCategoryId}` } } : null,
         ]};
 
@@ -328,18 +333,20 @@ exports.findAllByCategories = async (req, res) => {
                 ];
 
   try {
-
-    let data = await db.sequelize.query(`
-    SELECT projects.pCategoryId, projects.name, year(projects.startAt) AS startAt, response.formId AS formId, COUNT(*) AS count
-    FROM projects AS projects LEFT OUTER JOIN responses AS response ON projects.responseId = response.id
-    WHERE (projects.pCategoryId = ${pCategoryId})
-    GROUP BY pCategoryId, startAt, name, response.formId
-    ORDER BY pCategoryId, startAt, name, response.formId
-    LIMIT ${offset}, ${limit}
-    `, {
-       nest: true,
-       type: db.QueryTypes.SELECT
-    });
+    let data = await db.sequelize.query(
+      `SELECT projects.pCategoryId, projects.name, year(projects.startAt) AS startAt, response.formId AS formId, COUNT(*) AS count
+        FROM projects AS projects LEFT OUTER JOIN responses AS response ON projects.responseId = response.id ` +
+      (pCategoryId || name || startAt ? `WHERE True ` : ``) +
+      (pCategoryId ? `AND (projects.pCategoryId = ${pCategoryId}) ` : ``) +
+      (name ? `AND (projects.name like '%${name}%') ` : ``) +
+      (startAt ? `AND (year(projects.startAt) = ${startAt}) ` : ``) +
+      `GROUP BY pCategoryId, startAt, name, response.formId
+        ORDER BY pCategoryId, startAt, name, response.formId ` +
+      (!exportFlag ? `LIMIT ${offset}, ${limit} ` : ``), {
+         nest: true,
+         type: db.QueryTypes.SELECT
+      }
+    );
 
     let countTest = await Project.count({
       where: condition,

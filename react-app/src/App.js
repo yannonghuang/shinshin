@@ -209,16 +209,18 @@ class App extends Component {
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href={"/projects"}>学校项目列表</a>
+                <a class="dropdown-item" href={"/addP"}
+                  hidden={!AuthService.isLogin() || !AuthService.isAdmin()}
+                  target="_blank">新增学校项目
+                </a>
                 <div class="dropdown-divider"></div>
+
+                <a class="dropdown-item" href={"/projects/allCategories" }>项目列表</a>
 
                 {this.renderProjectsByCategories()}
 
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href={"/addP"}
-                  hidden={!AuthService.isLogin() || !AuthService.isAdmin()}
-                  target="_blank">新增项目
-                </a>
-                <div class="dropdown-divider"></div>
+
                 <a class="dropdown-item" href={"/projectsXR"}>向荣支持项目列表</a>
                 <a class="dropdown-item" href={"/addPXR"}
                   hidden={!AuthService.isLogin() || !AuthService.isAdmin()}
@@ -390,7 +392,7 @@ class App extends Component {
                 component={ProjectsList} >
                 <AccessControlService ComposedClass={ProjectsList} />
             </Route>
-            <Route exact path={["/projects/category/:pCategoryId"]}
+            <Route exact path={["/projects/category/:pCategoryId", "/projects/allCategories"]}
                 component={ProjectsByCategoriesList} >
                 <AccessControlService ComposedClass={ProjectsByCategoriesList} />
             </Route>

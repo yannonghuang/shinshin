@@ -15,6 +15,7 @@ import AuthService from "./../services/auth.service";
 
 const ProjectsByCategoriesList = (props) => {
   const [projects, setProjects] = useState([]);
+  const [exportProjects, setExportProjects] = useState([]);
 
   const [currentProject, setCurrentProject] = useState(null);
 
@@ -35,8 +36,34 @@ const ProjectsByCategoriesList = (props) => {
   const pageSizes = [20, 30, 50];
 
   const [categories, setCategories] = useState(ProjectDataService.PROJECT_CATEGORIES);
+  const [searchStartAt, setSearchStartAt] = useState(props.match? props.match.params.startAt : props.startAt);
+  const [searchName, setSearchName] = useState(props.match? props.match.params.name : props.name);
 
-  const getRequestParams = () => {
+  const onChangeSearchName = (e) => {
+    const searchName = e.target.value;
+    setSearchName(searchName);
+  };
+
+  const onChangeSearchPCategory = (e) => {
+    const searchPCategory = e.target.selectedIndex;
+    setPCategoryId(searchPCategory === 0 ? null : searchPCategory);
+  };
+
+  const onChangeSearchStartAt = (e) => {
+    const searchStartAt = e; // e.target.value;
+    setSearchStartAt(searchStartAt);
+  };
+
+
+  const onClearSearch = (e) => {
+    setSearchName("");
+    setSearchStartAt("");
+    setPCategoryId(0);
+    setExportProjects([]);
+  };
+
+
+  const getRequestParams = (exportFlag = false) => {
     let params = {};
 
     if (page) {
@@ -49,6 +76,19 @@ const ProjectsByCategoriesList = (props) => {
 
     if (pCategoryId) {
       params["pCategoryId"] = pCategoryId;
+    }
+
+    if (searchName) {
+      params["name"] = searchName;
+    }
+
+    if (searchStartAt) {
+      params["startAt"] = searchStartAt;
+    }
+
+
+    if (exportFlag) {
+      params["exportFlag"] = exportFlag;
     }
 
     return params;
@@ -69,6 +109,33 @@ const ProjectsByCategoriesList = (props) => {
   useEffect(getCategories, []);
 */
 
+  const retrieveExportProjects = () => {
+    const params = getRequestParams(true);
+
+    ProjectDataService.getAllByCategories(params)
+      .then((response) => {
+        const { projects, totalPages, totalItems } = response.data;
+        setExportProjects(projects);
+        console.log(response.data);
+
+        const csv = ProjectDataService.exportCSV(projects, columns);
+        const url = window.URL.createObjectURL(new Blob([csv]));
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download',
+                'project.csv'
+        );
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   const retrieveProjects = () => {
     const params = getRequestParams();
 
@@ -87,7 +154,7 @@ const ProjectsByCategoriesList = (props) => {
       });
   };
 
-  useEffect(retrieveProjects, [page, pageSize]);
+  useEffect(retrieveProjects, [page, pageSize, searchName, searchStartAt, pCategoryId]);
 
   const columns = useMemo(
     () => [
@@ -175,8 +242,89 @@ const ProjectsByCategoriesList = (props) => {
     <div className="list row">
       <div className="col-sm-9">
         <h4>
-          {'项目类型：' + categories[pCategoryId] }(项目总数：{totalItems})
+          项目列表 {pCategoryId && '(项目类型：' + categories[pCategoryId] + ')'}(项目总数：{totalItems})
         </h4>
+
+        <div className="row mb-3 ">
+
+          <input
+            type="text"
+            className="form-control col-sm-4 ml-2"
+            placeholder="项目名称"
+            value={searchName}
+            onChange={onChangeSearchName}
+          />
+
+          <input
+            type="text"
+            readonly=""
+            className="form-control col-sm-2 ml-2"
+            placeholder="年份"
+            value={searchStartAt}
+          />
+          <YearPicker
+            yearArray={['2019', '2020']}
+            value={searchStartAt}
+            onSelect={onChangeSearchStartAt}
+            hideInput={true}
+            minRange={1995}
+            maxRange={2022}
+          />
+
+          <select
+            className="form-control col-sm-4 ml-2"
+            placeholder="...."
+            value={categories[pCategoryId]}
+            onChange={onChangeSearchPCategory}
+          >
+            {categories.map((option) => (
+            <option value={option}>
+            {option}
+            </option>
+            ))}
+          </select>
+
+{/*
+          <select
+            className="form-control col-sm-2 ml-2"
+            placeholder="...."
+            value={searchPCategoryId}
+            onChange={onChangeSearchPCategoryId}
+          >
+            <option value="">项目类型/option>
+            {categories.map((option) => (
+            <option value={option}>
+            {option}
+            </option>
+            ))}
+          </select>
+*/}
+          <div>
+            <button
+              className="btn btn-primary ml-2"
+              type="button"
+              onClick={onClearSearch}
+            >
+              清空
+            </button>
+          </div>
+
+        </div>
+
+        <div className="input-group mb-4">
+
+          <div hidden={isMobile}>
+            <button
+              className="btn btn-primary ml-2"
+              type="button"
+              onClick={retrieveExportProjects}
+            >
+              导出
+            </button>
+          </div>
+        </div>
+
+
       </div>
 
       <div className="mt-3 col-sm-3">

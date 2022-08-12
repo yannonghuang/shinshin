@@ -239,7 +239,7 @@ class ProjectDataService {
     return (newHeader + newBody);
   }
 
-  SAVE_PROJECT_CATEGORIES = [
+  OLD_PROJECT_CATEGORIES = [
   "未选",
   "TeachersTraing(师资培训)",
   "E-Learning(电子教学)",
@@ -256,7 +256,7 @@ class ProjectDataService {
   ];
 
   PROJECT_CATEGORIES = [
-    "未选",
+    "项目类型",
     "新建校",
     "设施改善",
     "欣美乡村学校",
