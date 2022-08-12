@@ -193,6 +193,7 @@ exports.findAll2 = async (req, res) => {
   const exportFlag = req.body.exportFlag;
   const region = req.body.region;
   const pCategoryId = req.body.pCategoryId;
+  const formId = req.body.formId;
 
   /*
     ? req.body.region.startsWith('湖南湘西')
@@ -232,6 +233,9 @@ exports.findAll2 = async (req, res) => {
               : xr === 'true'*/
                 ? { xr: { [Op.eq]: `1` }}
                 : {[Op.or] : [{ xr: null }, { xr: { [Op.eq]: `0` }}]},
+            formId
+                ? { '$response.formId$': { [Op.eq]: `${formId}` } }
+                : { '$response.formId$': null },
         ]};
 
   var include = [
@@ -242,7 +246,7 @@ exports.findAll2 = async (req, res) => {
                     },
                     {
                       model: Response,
-                      attributes: ['id', 'title'],
+                      attributes: ['id', 'title', 'formId'],
                       required: false,
                     },
                 ];
@@ -314,12 +318,19 @@ exports.findAllByCategories = async (req, res) => {
   const name = req.body.name;
   const startAt = req.body.startAt;
   const exportFlag = req.body.exportFlag;
+  const applied = req.body.applied;
 
   var condition = {
         [Op.and]: [
             name ? { name: { [Op.like]: `%${name}%` } } : null,
             startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('projects.startAt')), `${startAt}`) } } : null,
-            pCategoryId ? { pCategoryId: { [Op.eq]: `${pCategoryId}` } } : null,
+            (pCategoryId || pCategoryId === 0) ? { pCategoryId: { [Op.eq]: `${pCategoryId}` } } : null,
+            {[Op.or] : [{ xr: null }, { xr: { [Op.eq]: `0` }}]},
+            applied === undefined
+              ? null
+              : applied === 'true'
+                ? {[Op.not] : [{'$response.formId$': null}]}
+                : {[Op.or] : [{ responseId: null }, {'$response.formId$': null}]},
         ]};
 
   const { limit, offset } = getPagination(page, size);
@@ -327,7 +338,7 @@ exports.findAllByCategories = async (req, res) => {
   var include = [
                     {
                       model: Response,
-                      attributes: ['id', 'title'],
+                      attributes: ['id', 'title', 'formId'],
                       required: false,
                     },
                 ];
@@ -336,10 +347,11 @@ exports.findAllByCategories = async (req, res) => {
     let data = await db.sequelize.query(
       `SELECT projects.pCategoryId, projects.name, year(projects.startAt) AS startAt, response.formId AS formId, COUNT(*) AS count
         FROM projects AS projects LEFT OUTER JOIN responses AS response ON projects.responseId = response.id ` +
-      (pCategoryId || name || startAt ? `WHERE True ` : ``) +
-      (pCategoryId ? `AND (projects.pCategoryId = ${pCategoryId}) ` : ``) +
+        `WHERE (projects.xr IS NULL OR projects.xr = 0) ` +
+      ((pCategoryId || pCategoryId === 0) ? `AND (projects.pCategoryId = ${pCategoryId}) ` : ``) +
       (name ? `AND (projects.name like '%${name}%') ` : ``) +
-      (startAt ? `AND (year(projects.startAt) = ${startAt}) ` : ``) +
+      (startAt ? `AND (YEAR(projects.startAt) = ${startAt}) ` : ``) +
+      ((applied === undefined) ? `` : ((applied === 'true') ? `AND (response.formId is not null) ` : `AND (response.formId is null) `)) +
       `GROUP BY pCategoryId, startAt, name, response.formId
         ORDER BY pCategoryId, startAt, name, response.formId ` +
       (!exportFlag ? `LIMIT ${offset}, ${limit} ` : ``), {

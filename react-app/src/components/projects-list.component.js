@@ -26,6 +26,7 @@ const ProjectsList = (props) => {
   const [searchRegion, setSearchRegion] = useState("");
   const [searchStartAt, setSearchStartAt] = useState(props.match? props.match.params.startAt : props.startAt);
 
+  const [formId, setFormId] = useState(props.match? props.match.params.formId : props.formId);
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
   const [pCategoryId, setPCategoryId] = useState(props.match? props.match.params.pCategoryId : props.pCategoryId);
   const [searchName, setSearchName] = useState(props.match? props.match.params.name : props.name);
@@ -58,6 +59,16 @@ const ProjectsList = (props) => {
   const [xr, setXR] = useState(window.location.pathname.includes('XR')
     ? window.location.pathname.includes('XR')
     : props.xr);
+
+  const init = () => {
+    if (pCategoryId === 'null')
+      setPCategoryId(null);
+
+    if (formId === 'null')
+      setFormId(null);
+  }
+
+  useEffect(init, []);
 
   const onChangeSearchName = (e) => {
     const searchName = e.target.value;
@@ -128,6 +139,10 @@ const ProjectsList = (props) => {
 
     if (schoolId) {
       params["schoolId"] = schoolId;
+    }
+
+    if (formId) {
+      params["formId"] = formId;
     }
 
     params["xr"] = xr;
@@ -513,6 +528,7 @@ const ProjectsList = (props) => {
             '[项目类型：' + categories[pCategoryId] +
             '; 年份：' + searchStartAt +
             '; 标题：' + searchName +
+            '; 申请表：' + (formId ? '有' : '无') +
             ']'}
         </h4>
         <div className="row mb-3 ">

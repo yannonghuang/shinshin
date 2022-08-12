@@ -131,7 +131,7 @@ class App extends Component {
     return (
       <div>
         {this.state.pCategories.map((option, index) => {
-          if (index > 0)
+          //if (index > 0)
             return <a class="dropdown-item" href={"/projects/category/" + index }>{option}</a>
         })}
       </div>
@@ -215,7 +215,7 @@ class App extends Component {
                 </a>
                 <div class="dropdown-divider"></div>
 
-                <a class="dropdown-item" href={"/projects/allCategories" }>项目列表</a>
+                <a class="dropdown-item" href={"/projects/allCategories" }>总项目列表</a>
 
                 {this.renderProjectsByCategories()}
 
@@ -388,7 +388,7 @@ class App extends Component {
 
             <Route exact path={["/projects", "/projects/school/:schoolId",
                     "/projectsXR", "/projectsXR/school/:schoolId",
-                    "/projectsByCategoryByStartAt/:pCategoryId/:startAt/:name"]}
+                    "/projectsByCategoryByStartAt/:pCategoryId/:startAt/:name/:formId"]}
                 component={ProjectsList} >
                 <AccessControlService ComposedClass={ProjectsList} />
             </Route>

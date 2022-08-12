@@ -256,7 +256,7 @@ class ProjectDataService {
   ];
 
   PROJECT_CATEGORIES = [
-    "项目类型",
+    "未分类",
     "新建校",
     "设施改善",
     "欣美乡村学校",

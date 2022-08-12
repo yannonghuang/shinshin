@@ -39,6 +39,12 @@ const ProjectsByCategoriesList = (props) => {
   const [searchStartAt, setSearchStartAt] = useState(props.match? props.match.params.startAt : props.startAt);
   const [searchName, setSearchName] = useState(props.match? props.match.params.name : props.name);
 
+  const [searchApplied, setSearchApplied] = useState(null);
+  const onChangeSearchApplied = (e) => {
+    const searchApplied = e.target.value;
+    setSearchApplied(searchApplied);
+  };
+
   const onChangeSearchName = (e) => {
     const searchName = e.target.value;
     setSearchName(searchName);
@@ -46,7 +52,7 @@ const ProjectsByCategoriesList = (props) => {
 
   const onChangeSearchPCategory = (e) => {
     const searchPCategory = e.target.selectedIndex;
-    setPCategoryId(searchPCategory === 0 ? null : searchPCategory);
+    setPCategoryId(searchPCategory === categories.length ? null : searchPCategory);
   };
 
   const onChangeSearchStartAt = (e) => {
@@ -59,6 +65,7 @@ const ProjectsByCategoriesList = (props) => {
     setSearchName("");
     setSearchStartAt("");
     setPCategoryId(0);
+    setSearchApplied("");
     setExportProjects([]);
   };
 
@@ -74,9 +81,9 @@ const ProjectsByCategoriesList = (props) => {
       params["size"] = pageSize;
     }
 
-    if (pCategoryId) {
+    if (pCategoryId !== null)
       params["pCategoryId"] = pCategoryId;
-    }
+
 
     if (searchName) {
       params["name"] = searchName;
@@ -86,6 +93,9 @@ const ProjectsByCategoriesList = (props) => {
       params["startAt"] = searchStartAt;
     }
 
+    if (searchApplied) {
+      params["applied"] = searchApplied;
+    }
 
     if (exportFlag) {
       params["exportFlag"] = exportFlag;
@@ -154,10 +164,28 @@ const ProjectsByCategoriesList = (props) => {
       });
   };
 
-  useEffect(retrieveProjects, [page, pageSize, searchName, searchStartAt, pCategoryId]);
+  const search = () => {
+    setPage(1);
+    retrieveProjects();
+  };
+
+  useEffect(search, [pageSize, searchName, searchStartAt, pCategoryId, searchApplied]);
+  useEffect(retrieveProjects, [page]);
 
   const columns = useMemo(
     () => [
+      {
+        Header: "项目类型",
+        accessor: "pCategoryId",
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+                {categories[projectsRef.current[rowIdx].pCategoryId]}
+            </div>
+          );
+        },
+      },
       {
         Header: "项目年份",
         accessor: "startAt",
@@ -177,7 +205,9 @@ const ProjectsByCategoriesList = (props) => {
                 target = '_blank'
                 to={"/projectsByCategoryByStartAt/" + projectsRef.current[rowIdx].pCategoryId +
                     "/" + projectsRef.current[rowIdx].startAt +
-                    "/" + projectsRef.current[rowIdx].name}
+                    "/" + projectsRef.current[rowIdx].name +
+                    "/" + projectsRef.current[rowIdx].formId
+                    }
               >
                 {projectsRef.current[rowIdx].count}
               </Link>
@@ -242,7 +272,7 @@ const ProjectsByCategoriesList = (props) => {
     <div className="list row">
       <div className="col-sm-9">
         <h4>
-          项目列表 {pCategoryId && '(项目类型：' + categories[pCategoryId] + ')'}(项目总数：{totalItems})
+          项目列表 {(pCategoryId || pCategoryId === 0) && '(项目类型：' + categories[pCategoryId] + ')'}(项目总数：{totalItems})
         </h4>
 
         <div className="row mb-3 ">
@@ -258,7 +288,7 @@ const ProjectsByCategoriesList = (props) => {
           <input
             type="text"
             readonly=""
-            className="form-control col-sm-2 ml-2"
+            className="form-control col-sm-1 ml-2"
             placeholder="年份"
             value={searchStartAt}
           />
@@ -272,7 +302,7 @@ const ProjectsByCategoriesList = (props) => {
           />
 
           <select
-            className="form-control col-sm-4 ml-2"
+            className="form-control col-sm-3 ml-2"
             placeholder="...."
             value={categories[pCategoryId]}
             onChange={onChangeSearchPCategory}
@@ -282,6 +312,7 @@ const ProjectsByCategoriesList = (props) => {
             {option}
             </option>
             ))}
+            <option value="">全部</option>
           </select>
 
 {/*
@@ -299,6 +330,21 @@ const ProjectsByCategoriesList = (props) => {
             ))}
           </select>
 */}
+
+          <select
+            className="form-control col-sm-2 ml-2"
+            value={searchApplied}
+            onChange={onChangeSearchApplied}
+          >
+            <option value="">申请表?</option>
+              <option value={true}>
+                {'有'}
+              </option>
+              <option value={false}>
+                {'无'}
+              </option>
+          </select>
+
           <div>
             <button
               className="btn btn-primary ml-2"
