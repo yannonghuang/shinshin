@@ -22,6 +22,7 @@ const peg = async (req, formId) => {
           pCategoryId ? { pCategoryId: { [Op.eq]: `${pCategoryId}` } } : null,
           title ? { name: { [Op.like]: `%${title}%` } } : null,
           startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('projects.startAt')), `${startAt}`) } } : null,
+          {[Op.not] : [{responseId: null}]}
         ]};
 
   try {
