@@ -54,6 +54,10 @@ const ProjectsByCategoriesList = (props) => {
 
   useEffect(init, []);
 
+  const refreshOnReturn = () => {
+    window.onblur = () => {window.onfocus = () => {retrieveProjects()}}
+  };
+
   const onChangeSearchName = (e) => {
     const searchName = e.target.value;
     setSearchName(searchName);
@@ -279,6 +283,7 @@ const ProjectsByCategoriesList = (props) => {
               </Link>
               {AuthService.isAdmin() && <Link
                 target = '_blank'
+                onClick={refreshOnReturn}
                 to={"/forms/" + projectsRef.current[rowIdx].formId}
               >
                 <i className="far fa-edit action mr-2"></i>
@@ -286,10 +291,12 @@ const ProjectsByCategoriesList = (props) => {
             </div>
 
             <div hidden={projectsRef.current[rowIdx].formId}>
-              <a href="#" onClick={() =>
-                createVForm(projectsRef.current[rowIdx].pCategoryId,
+              <a href="#" onClick={() => {
+                    refreshOnReturn();
+                    createVForm(projectsRef.current[rowIdx].pCategoryId,
                             projectsRef.current[rowIdx].startAt,
-                            projectsRef.current[rowIdx].name)
+                            projectsRef.current[rowIdx].name);
+                  }
                 }
               >
                 <i className="fas fa-plus action mr-2"></i>

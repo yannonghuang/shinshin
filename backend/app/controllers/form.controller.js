@@ -29,8 +29,6 @@ const peg = async (req, formId) => {
       where: condition //{name: title, startAt: startAt, pCategoryId: pCategoryId}
     });
 
-console.log(projs)
-
     if (projs.length === 0) return;
 
     for (var i = 0; i < projs.length; i++) {
