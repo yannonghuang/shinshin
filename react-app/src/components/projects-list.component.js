@@ -524,11 +524,13 @@ const ProjectsList = (props) => {
       <div className="col-sm-9">
         <h4>
           {schoolId && !embedded && (<a href={'/schoolsView/' + schoolId}>{schoolDisplay + '-'}</a>)}
-          {xr && '向荣支持'}学校项目列表 (总数：{totalItems}) {pCategoryId &&
+          {xr && '向荣支持'}学校项目列表 (总数：{totalItems}) {(pCategoryId || pCategoryId === 0) &&
             '[项目类型：' + categories[pCategoryId] +
             '; 年份：' + searchStartAt +
             '; 标题：' + searchName +
-            '; 申请表：' + (formId ? '有' : '无') +
+            ((formId === undefined || formId === 'undefined')
+              ? ''
+              : ('; 申请表：' + ((formId && formId !== 'null') ? '有' : '无'))) +
             ']'}
         </h4>
         <div className="row mb-3 ">
