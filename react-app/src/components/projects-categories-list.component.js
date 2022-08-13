@@ -24,6 +24,8 @@ const ProjectsByCategoriesList = (props) => {
 
   const [pCategoryId, setPCategoryId] = useState(props.match? props.match.params.pCategoryId : props.pCategoryId);
 
+  const [canonical, setCanonical] = useState(window.location.pathname.includes('Canonical'));
+
 
   const projectsRef = useRef();
   projectsRef.current = projects;
@@ -117,6 +119,10 @@ const ProjectsByCategoriesList = (props) => {
 
     if (exportFlag) {
       params["exportFlag"] = exportFlag;
+    }
+
+    if (canonical) {
+      params["canonical"] = canonical;
     }
 
     return params;
@@ -310,6 +316,9 @@ const ProjectsByCategoriesList = (props) => {
     []
   );
 
+  var hiddenColumns = (canonical)
+    ? ['formId']
+    : [];
 
   const {
     getTableProps,
@@ -322,6 +331,9 @@ const ProjectsByCategoriesList = (props) => {
   } = useTable({
     columns,
     data: projects,
+    initialState: {
+      hiddenColumns: hiddenColumns,
+    },
   });
 
   const handlePageChange = (event, value) => {
@@ -339,7 +351,8 @@ const ProjectsByCategoriesList = (props) => {
     <div className="list row">
       <div className="col-sm-9">
         <h4>
-          项目列表 {((pCategoryId || pCategoryId === 0) && (pCategoryId !== categories.length)) &&
+          项目列表 {!canonical && '-系统迁移'}
+          {((pCategoryId || pCategoryId === 0) && (pCategoryId !== categories.length)) &&
           '(项目类型：' + categories[pCategoryId] + ')'}(项目总数：{totalItems}；学校项目总数：{schoolProjectsCount})
         </h4>
 
@@ -402,7 +415,7 @@ const ProjectsByCategoriesList = (props) => {
           </select>
 */}
 
-          <select
+          <select hidden={canonical}
             className="form-control col-sm-2 ml-2"
             value={searchApplied}
             onChange={onChangeSearchApplied}

@@ -215,7 +215,8 @@ class App extends Component {
                 </a>
                 <div class="dropdown-divider"></div>
 
-                <a class="dropdown-item" href={"/projects/allCategories" }>总项目列表</a>
+                <a class="dropdown-item" href={"/projects/allCategoriesCanonical" }>总项目列表</a>
+                <a class="dropdown-item" href={"/projects/allCategories" }>总项目列表(系统迁移)</a>
 
                 {this.renderProjectsByCategories()}
 
@@ -392,7 +393,8 @@ class App extends Component {
                 component={ProjectsList} >
                 <AccessControlService ComposedClass={ProjectsList} />
             </Route>
-            <Route exact path={["/projects/category/:pCategoryId", "/projects/allCategories"]}
+            <Route exact path={["/projects/category/:pCategoryId", "/projects/allCategories",
+                            "/projects/allCategoriesCanonical"]}
                 component={ProjectsByCategoriesList} >
                 <AccessControlService ComposedClass={ProjectsByCategoriesList} />
             </Route>

@@ -233,7 +233,7 @@ exports.findAll2 = async (req, res) => {
               : xr === 'true'*/
                 ? { xr: { [Op.eq]: `1` }}
                 : {[Op.or] : [{ xr: null }, { xr: { [Op.eq]: `0` }}]},
-            formId === undefined
+            (formId === undefined || formId === 'undefined')
               ? null
               : formId === 'null'
                 ? { '$response.formId$': null }
@@ -321,6 +321,7 @@ exports.findAllByCategories = async (req, res) => {
   const startAt = req.body.startAt;
   const exportFlag = req.body.exportFlag;
   const applied = req.body.applied;
+  const canonical = req.body.canonical;
 
   var condition = {
         [Op.and]: [
@@ -347,15 +348,19 @@ exports.findAllByCategories = async (req, res) => {
 
   try {
     let data = await db.sequelize.query(
-      `SELECT projects.pCategoryId, projects.name, year(projects.startAt) AS startAt, response.formId AS formId, COUNT(*) AS count
-        FROM projects AS projects LEFT OUTER JOIN responses AS response ON projects.responseId = response.id ` +
-        `WHERE (projects.xr IS NULL OR projects.xr = 0) ` +
-      ((pCategoryId || pCategoryId === 0) ? `AND (projects.pCategoryId = ${pCategoryId}) ` : ``) +
-      (name ? `AND (projects.name like '%${name}%') ` : ``) +
-      (startAt ? `AND (YEAR(projects.startAt) = ${startAt}) ` : ``) +
-      ((applied === undefined) ? `` : ((applied === 'true') ? `AND (response.formId is not null) ` : `AND (response.formId is null) `)) +
-      `GROUP BY pCategoryId, startAt, name, response.formId
-        ORDER BY pCategoryId, startAt, name, response.formId ` +
+      `SELECT projects.pCategoryId, projects.name, year(projects.startAt) AS startAt ` +
+        (canonical ? `` : `, response.formId AS formId`) +
+        `, COUNT(*) AS count ` +
+      `FROM projects AS projects LEFT OUTER JOIN responses AS response ON projects.responseId = response.id ` +
+      `WHERE (projects.xr IS NULL OR projects.xr = 0) ` +
+        ((pCategoryId || pCategoryId === 0) ? `AND (projects.pCategoryId = ${pCategoryId}) ` : ``) +
+        (name ? `AND (projects.name like '%${name}%') ` : ``) +
+        (startAt ? `AND (YEAR(projects.startAt) = ${startAt}) ` : ``) +
+        ((applied === undefined) ? `` : ((applied === 'true') ? `AND (response.formId is not null) ` : `AND (response.formId is null) `)) +
+      `GROUP BY pCategoryId, startAt, name ` +
+        (canonical ? `` : `, response.formId `) +
+      `ORDER BY pCategoryId, startAt, name ` +
+        (canonical ? `` : `, response.formId `) +
       (!exportFlag ? `LIMIT ${offset}, ${limit} ` : ``), {
          nest: true,
          type: db.QueryTypes.SELECT
@@ -366,7 +371,8 @@ exports.findAllByCategories = async (req, res) => {
       where: condition,
       include: include,
       distinct: true,
-      group: db.Sequelize.literal(`projects.pCategoryId, projects.startAt, projects.name, response.formId`),
+      group: db.Sequelize.literal(`projects.pCategoryId, projects.startAt, projects.name ` +
+        (canonical ? `` : `, response.formId`)),
     });
 
     let count = 0;
