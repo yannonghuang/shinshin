@@ -15,6 +15,11 @@ module.exports = function(app) {
     forms.create
   );
 
+  app.post("/api/formsV/",
+    [authJwt.verifyToken],
+    forms.createV
+  );
+
   app.get("/api/forms/",
     [authJwt.verifyToken],
     forms.findAll

@@ -12,6 +12,7 @@ import YearPicker from 'react-single-year-picker';
 import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
 
 import AuthService from "./../services/auth.service";
+import FormDataService from "../services/form.service";
 
 const ProjectsByCategoriesList = (props) => {
   const [projects, setProjects] = useState([]);
@@ -186,6 +187,38 @@ const ProjectsByCategoriesList = (props) => {
   useEffect(search, [pageSize, searchName, searchStartAt, pCategoryId, searchApplied]);
   useEffect(retrieveProjects, [page]);
 
+
+  const createVForm = (pCategoryId, startAt, name) => {
+
+    var data = {
+      title: name,
+      description: '虚拟表格。。。',
+      //deadline: this.state.currentForm.deadline,
+      //published: this.state.currentForm.published,
+      startAt: startAt,
+      //fdata: this.fBuilder.actions.getData(),
+      pCategoryId: pCategoryId,
+    };
+
+    FormDataService.createV(data)
+	  .then(response => {
+        console.log(response.data);
+
+        const formId = response.data.id;
+        const url = '/forms/' + formId;
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+	  })
+	  .catch((e) => {
+	    alert(e);
+        console.log(e);
+      });
+  }
+
   const columns = useMemo(
     () => [
       {
@@ -236,6 +269,7 @@ const ProjectsByCategoriesList = (props) => {
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
+          <div>
             <div hidden={!projectsRef.current[rowIdx].formId}>
               <Link
                 target = '_blank'
@@ -250,6 +284,18 @@ const ProjectsByCategoriesList = (props) => {
                 <i className="far fa-edit action mr-2"></i>
               </Link>}
             </div>
+
+            <div hidden={projectsRef.current[rowIdx].formId}>
+              <a href="#" onClick={() =>
+                createVForm(projectsRef.current[rowIdx].pCategoryId,
+                            projectsRef.current[rowIdx].startAt,
+                            projectsRef.current[rowIdx].name)
+                }
+              >
+                <i className="fas fa-plus action mr-2"></i>
+              </a>
+            </div>
+          </div>
           );
         },
       },

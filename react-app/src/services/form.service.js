@@ -32,6 +32,10 @@ class FormDataService {
     return http.post("/forms", data, { headers: authHeader() });
   }
 
+  createV(data) {
+    return http.post("/formsV", data, { headers: authHeader() });
+  }
+
   update(id, data) {
     return http.put(`/forms/${id}`, data, { headers: authHeader() });
   }

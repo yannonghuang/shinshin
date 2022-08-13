@@ -14,6 +14,35 @@ const getPagination = (page, size) => {
   return { limit, offset };
 };
 
+const peg = async (req, formId) => {
+  const {title, startAt, pCategoryId} = req.body;
+
+  const condition = {
+        [Op.and]: [
+          pCategoryId ? { pCategoryId: { [Op.eq]: `${pCategoryId}` } } : null,
+          title ? { name: { [Op.like]: `%${title}%` } } : null,
+          startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('projects.startAt')), `${startAt}`) } } : null,
+        ]};
+
+  try {
+    let projs = await Project.findAll({
+      where: condition //{name: title, startAt: startAt, pCategoryId: pCategoryId}
+    });
+
+console.log(projs)
+
+    if (projs.length === 0) return;
+
+    for (var i = 0; i < projs.length; i++) {
+      let resp = await Response.create({title: title, startAt: startAt, pCategoryId: pCategoryId, formId: formId});
+      projs[i].update({responseId: resp.id});
+    }
+
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const propagateUpdates = async (req) => {
   const formId = req.params.id;
   const {title, startAt, pCategoryId} = req.body;
@@ -243,6 +272,42 @@ exports.create = (req, res) => {
   // Save Form in the database
   Form.create(form)
     .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the Form."
+      });
+    });
+};
+
+
+// Create and Save a new Virtual Form
+exports.createV = (req, res) => {
+  // Validate request
+  if (!req.body.title) {
+    res.status(400).send({
+      message: "Content can not be empty!"
+    });
+    return;
+  }
+
+  // Create a Form
+  const form = {
+    title: req.body.title,
+    description: req.body.description,
+    deadline: req.body.deadline,
+    startAt: req.body.startAt + '-02-01',
+    published: req.body.published ? req.body.published : false,
+    fdata: req.body.fdata,
+    pCategoryId: req.body.pCategoryId,
+  };
+
+  // Save Form in the database
+  Form.create(form)
+    .then(data => {
+      peg(req, data.id);
       res.send(data);
     })
     .catch(err => {
