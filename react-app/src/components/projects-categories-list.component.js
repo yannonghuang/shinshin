@@ -56,8 +56,23 @@ const ProjectsByCategoriesList = (props) => {
 
   useEffect(init, []);
 
+  const saveSearchStates = () => {
+
+    localStorage.setItem('SearchStates', {searchName, searchStartAt, searchApplied, pCategoryId});
+  }
+
+  const restoreSearchStates = () => {
+
+    //const {searchName, searchStartAt, searchApplied, pCategoryId} = localStorage.getItem('SearchStates');
+    setSearchName(document.getElementById('searchName').value);
+    setPCategoryId(document.getElementById('pCategoryId').selectedIndex);
+    setSearchStartAt(document.getElementById('searchStartAt').value);
+    setSearchApplied(document.getElementById('searchApplied').value)
+  }
+
   const refreshOnReturn = () => {
-    window.onblur = () => {window.onfocus = () => {retrieveProjects()}}
+    //saveSearchStates();
+    window.onblur = () => {window.onfocus = () => {restoreSearchStates(); /*retrieveProjects()*/}}
   };
 
   const onChangeSearchName = (e) => {
@@ -66,8 +81,8 @@ const ProjectsByCategoriesList = (props) => {
   };
 
   const onChangeSearchPCategory = (e) => {
-    const searchPCategory = e.target.selectedIndex;
-    setPCategoryId(/*searchPCategory === categories.length ? null : */searchPCategory);
+    const searchPCategoryId = e.target.selectedIndex;
+    setPCategoryId(searchPCategoryId);
   };
 
   const onChangeSearchStartAt = (e) => {
@@ -86,7 +101,7 @@ const ProjectsByCategoriesList = (props) => {
   };
 
   const setPCategoryAll = () => {
-    const select = document.getElementById('category-select');
+    const select = document.getElementById('pCategoryId');
     select.value = 'all';
     setPCategoryId(categories.length);
   }
@@ -364,6 +379,7 @@ const ProjectsByCategoriesList = (props) => {
             placeholder="项目名称"
             value={searchName}
             onChange={onChangeSearchName}
+            id="searchName"
           />
 
           <input
@@ -372,6 +388,7 @@ const ProjectsByCategoriesList = (props) => {
             className="form-control col-sm-1 ml-2"
             placeholder="年份"
             value={searchStartAt}
+            id="searchStartAt"
           />
           <YearPicker
             yearArray={['2019', '2020']}
@@ -387,7 +404,7 @@ const ProjectsByCategoriesList = (props) => {
             placeholder="...."
             value={categories[pCategoryId]}
             onChange={onChangeSearchPCategory}
-            id="category-select"
+            id="pCategoryId"
           >
             {categories.map((option) => (
             <option value={option}>
@@ -419,6 +436,7 @@ const ProjectsByCategoriesList = (props) => {
             className="form-control col-sm-2 ml-2"
             value={searchApplied}
             onChange={onChangeSearchApplied}
+            id="searchApplied"
           >
             <option value="">申请表?</option>
               <option value={true}>
