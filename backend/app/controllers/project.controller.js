@@ -357,9 +357,9 @@ exports.findAllByCategories = async (req, res) => {
         (name ? `AND (projects.name like '%${name}%') ` : ``) +
         (startAt ? `AND (YEAR(projects.startAt) = ${startAt}) ` : ``) +
         ((applied === undefined) ? `` : ((applied === 'true') ? `AND (response.formId is not null) ` : `AND (response.formId is null) `)) +
-      `GROUP BY pCategoryId, startAt, name ` +
+      `GROUP BY projects.pCategoryId, projects.startAt, projects.name ` +
         (canonical ? `` : `, response.formId `) +
-      `ORDER BY pCategoryId, startAt, name ` +
+      `ORDER BY projects.pCategoryId, projects.startAt, projects.name ` +
         (canonical ? `` : `, response.formId `) +
       (!exportFlag ? `LIMIT ${offset}, ${limit} ` : ``), {
          nest: true,
