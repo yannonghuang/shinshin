@@ -217,9 +217,9 @@ class App extends Component {
 
                 <a class="dropdown-item" href={"/projects/allCategoriesCanonical" }>总项目列表</a>
 
-
+{/*
                 <a class="dropdown-item" href={"/projects/allCategories" }>总项目列表(系统迁移)</a>
-
+*/}
 
                 {this.renderProjectsByCategories()}
 
