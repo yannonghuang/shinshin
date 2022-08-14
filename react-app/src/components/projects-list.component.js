@@ -228,7 +228,7 @@ const ProjectsList = (props) => {
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download',
-                'schoolProject.csv'
+                'school_projects_export.csv'
         );
         document.body.appendChild(link);
         link.click();

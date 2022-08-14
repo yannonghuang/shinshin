@@ -143,18 +143,25 @@ class ProjectDataService {
     }
   }
 
-  exportCSV = (obj, mapper) => {
+  exportCSV = (obj, mapper, translator = null) => {
 
     const render = (item) => {
       if (item === true) return '是';
       if (item === false) return '否';
 
-      return (item
+      return ((item || item === 0)
         ? typeof item === 'string'
           ? item.replace(/(\r\n|\n|\r)/gm, "").replace(/,/gm, "，") // As ',' is used as a delimited, use chinese comma '，' in texts
           : item
         : ''
       );
+    }
+
+    const translate = (header, dataIndex) => {
+      if (!translator || !translator.header || !translator.dictionary ||
+        translator.header !== header) return dataIndex;
+
+      return translator.dictionary[dataIndex];
     }
 
     const flatten = (obj, path = '', newline = true) => {
@@ -220,7 +227,7 @@ class ProjectDataService {
         result = result + (header
                             ? mapper[index[i].mapper].Header
                             //: column[index[i].data]
-                            : render(column[index[i].data])
+                            : translate(mapper[index[i].mapper].Header, render(column[index[i].data]))
                           ) + ',';
 
       result = result.substring(0, result.lastIndexOf(',')) + '\n';
