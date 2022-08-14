@@ -297,7 +297,7 @@ exports.createV = (req, res) => {
     title: req.body.title,
     description: req.body.description,
     deadline: req.body.deadline,
-    startAt: req.body.startAt + '-02-01',
+    startAt: req.body.startAt + '-01-10',
     published: req.body.published ? req.body.published : false,
     fdata: req.body.fdata,
     pCategoryId: req.body.pCategoryId,

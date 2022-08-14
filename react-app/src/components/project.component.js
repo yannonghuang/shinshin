@@ -487,7 +487,7 @@ export default class Project extends Component {
       responseId: this.state.currentProject.responseId,
       status: this.state.currentProject.status,
       description: this.state.currentProject.description,
-      startAt: this.state.currentProject.startAt ? (this.state.currentProject.startAt + '-02-01') : null,
+      startAt: this.state.currentProject.startAt ? (this.state.currentProject.startAt + '-01-10') : null,
       xr: this.state.currentProject.xr,
       pCategoryId: this.state.currentProject.pCategoryId,
     };
@@ -541,7 +541,7 @@ export default class Project extends Component {
       schoolId: this.state.currentProject.schoolId,
       responseId: this.state.currentProject.responseId,
       description: this.state.currentProject.description,
-      startAt: this.state.currentProject.startAt ? (this.state.currentProject.startAt + '-02-01') : null,
+      startAt: this.state.currentProject.startAt ? (this.state.currentProject.startAt + '-01-10') : null,
       pCategoryId: this.state.currentProject.pCategoryId,
     };
 

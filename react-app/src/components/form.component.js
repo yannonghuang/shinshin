@@ -221,7 +221,7 @@ export default class Form extends Component {
     this.setState(prevState => ({
       currentForm: {
         ...prevState.currentForm,
-        startAt: prevState.currentForm.startAt ? (prevState.currentForm.startAt + '-02-01') : null,
+        startAt: prevState.currentForm.startAt ? (prevState.currentForm.startAt + '-01-10') : null,
         fdata: this.fBuilder.actions.getData()
       }
     }));
@@ -248,7 +248,7 @@ export default class Form extends Component {
       description: this.state.currentForm.description,
       deadline: this.state.currentForm.deadline,
       published: this.state.currentForm.published,
-      startAt: this.state.currentForm.startAt ? (this.state.currentForm.startAt + '-02-01') : null,
+      startAt: this.state.currentForm.startAt ? (this.state.currentForm.startAt + '-01-10') : null,
       fdata: this.fBuilder.actions.getData(), /* formData */
       pCategoryId: this.state.currentForm.pCategoryId,
     };
