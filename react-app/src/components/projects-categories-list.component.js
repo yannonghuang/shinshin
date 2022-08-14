@@ -56,14 +56,7 @@ const ProjectsByCategoriesList = (props) => {
 
   useEffect(init, []);
 
-  const saveSearchStates = () => {
-
-    localStorage.setItem('SearchStates', {searchName, searchStartAt, searchApplied, pCategoryId});
-  }
-
   const restoreSearchStates = () => {
-
-    //const {searchName, searchStartAt, searchApplied, pCategoryId} = localStorage.getItem('SearchStates');
     setSearchName(document.getElementById('searchName').value);
     setPCategoryId(document.getElementById('pCategoryId').selectedIndex);
     setSearchStartAt(document.getElementById('searchStartAt').value);
@@ -71,7 +64,6 @@ const ProjectsByCategoriesList = (props) => {
   }
 
   const refreshOnReturn = () => {
-    //saveSearchStates();
     window.onblur = () => {window.onfocus = () => {restoreSearchStates(); /*retrieveProjects()*/}}
   };
 
