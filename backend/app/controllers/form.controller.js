@@ -346,7 +346,7 @@ exports.findAll2 = async(req, res) => {
   const page = req.body.page;
   const size = req.body.size;
   const orderby = req.body.orderby;
-  const published = (sid || !hasAdminRole) ? 'true' : req.body.published;
+  const published = (sid/* || !hasAdminRole */) ? 'true' : req.body.published;
 
   var orderbyObject = null;
   if (orderby) {
