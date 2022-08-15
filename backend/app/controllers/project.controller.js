@@ -357,9 +357,9 @@ exports.findAllByCategories = async (req, res) => {
         (name ? `AND (projects.name like '%${name}%') ` : ``) +
         (startAt ? `AND (YEAR(projects.startAt) = ${startAt}) ` : ``) +
         ((applied === undefined) ? `` : ((applied === 'true') ? `AND (response.formId is not null) ` : `AND (response.formId is null) `)) +
-      `GROUP BY projects.pCategoryId, projects.startAt, projects.name ` +
+      `GROUP BY projects.pCategoryId, year(projects.startAt), projects.name ` +
         (canonical ? `` : `, response.formId `) +
-      `ORDER BY projects.pCategoryId, projects.startAt, projects.name ` +
+      `ORDER BY projects.pCategoryId, year(projects.startAt), projects.name ` +
         (canonical ? `` : `, response.formId `) +
       (!exportFlag ? `LIMIT ${offset}, ${limit} ` : ``), {
          nest: true,
@@ -371,7 +371,7 @@ exports.findAllByCategories = async (req, res) => {
       where: condition,
       include: include,
       distinct: true,
-      group: db.Sequelize.literal(`projects.pCategoryId, projects.startAt, projects.name ` +
+      group: db.Sequelize.literal(`projects.pCategoryId, year(projects.startAt), projects.name ` +
         (canonical ? `` : `, response.formId`)),
     });
 
