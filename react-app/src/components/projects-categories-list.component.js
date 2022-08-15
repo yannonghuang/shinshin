@@ -90,6 +90,8 @@ const ProjectsByCategoriesList = (props) => {
     setExportProjects([]);
 
     setPCategoryAll();
+
+    setPage(1);
   };
 
   const setPCategoryAll = () => {

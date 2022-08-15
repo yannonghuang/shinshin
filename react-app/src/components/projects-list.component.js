@@ -102,6 +102,8 @@ const ProjectsList = (props) => {
     setSearchStartAt("");
     setOrderby([]);
     setExportProjects([]);
+
+    setPage(1);
   };
 
 

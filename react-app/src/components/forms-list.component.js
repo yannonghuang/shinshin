@@ -86,6 +86,8 @@ const FormsList = (props) => {
     setSearchStartAt("");
     setSearchPublished("");
     setOrderby([]);
+
+    setPage(1);
   };
 
   const retrieveForms = () => {
@@ -106,11 +108,14 @@ const FormsList = (props) => {
       });
   };
 
-  useEffect(retrieveForms, [page, pageSize, orderby, searchTitle, searchStartAt, searchPublished]);
-
   const refreshList = () => {
+    setPage(1);
     retrieveForms();
   };
+
+  useEffect(refreshList, [pageSize, orderby, searchTitle, searchStartAt, searchPublished]);
+  useEffect(retrieveForms, [page]);
+
 
   const removeAllForms = () => {
     FormDataService.deleteAll()

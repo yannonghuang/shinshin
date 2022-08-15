@@ -235,7 +235,14 @@ const ResponsesList = (props) => {
       });
   };
 
-  useEffect(retrieveResponses, [page, pageSize, orderby, searchTitle, searchCode, searchStartAt]);
+  const refreshList = () => {
+    setPage(1);
+    retrieveResponses();
+  };
+
+  useEffect(refreshList, [pageSize, orderby, searchTitle, searchCode, searchStartAt]);
+  useEffect(retrieveResponses, [page]);
+  useEffect(retrieveResponses, [page]);
 
   const getSchoolDisplay = () => {
     SchoolDataService.get(schoolId)
@@ -248,10 +255,6 @@ const ResponsesList = (props) => {
   }
 
   useEffect(getSchoolDisplay, [schoolId]);
-
-  const refreshList = () => {
-    retrieveResponses();
-  };
 
   const removeAllResponses = () => {
     ResponseDataService.deleteAll()

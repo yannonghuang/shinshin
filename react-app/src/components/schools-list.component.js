@@ -123,6 +123,8 @@ const SchoolsList = (props) => {
     
     setOrderby([]);
     setExportSchools([]);
+
+    setPage(1);
   };
 
   const getRequestParams = (/*searchName, page, pageSize, orderby,
