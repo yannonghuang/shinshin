@@ -365,6 +365,31 @@ export default class Register extends Component {
   }
 
   onChangeTitle(e) {
+    let selectedOptions = Array.from(
+      e.target.selectedOptions,
+      (option) => option.value
+    );
+
+    let value = "";
+    if (selectedOptions) {
+      for (var i = 0; i < selectedOptions.length; i++) {
+        value += selectedOptions[i] + ",";
+      }
+      value = value.slice(0, -1);
+    }
+    this.setState({
+      title: value,
+      dirty: true
+    });
+  }
+
+  displayTitle(title) {
+    if (!title) return [];
+
+    return title.split(',');
+  }
+
+  SAVE_onChangeTitle(e) {
     this.setState({
       title: e.target.value,
       dirty: true
@@ -802,7 +827,7 @@ export default class Register extends Component {
                   disabled={this.state.readonly ? "disabled" : false}
                   class="form-control"
                   id="title"
-                  value={this.state.title}
+                  value={this.displayTitle(this.state.title)}
                   name="title"
                 >
                   <option value="">{this.state.readonly ? '' : '请选择' }</option>
@@ -811,15 +836,16 @@ export default class Register extends Component {
                   ))}
                 </select>
               </div>
-              <div class="form-group col-sm-4" hidden={this.state.schoolId}>
+              <div class="form-group col-sm-4" title={'可多选：按Command(Mac系统)或Ctrl(windows系统)键'} hidden={this.state.schoolId}>
                 <label htmlFor="title">义工用户职位（所属部门）</label>
                 <select required
                   onChange={this.onChangeTitle.bind(this)}
                   disabled={this.state.readonly ? "disabled" : false}
                   class="form-control"
                   id="title"
-                  value={this.state.title}
+                  value={this.displayTitle(this.state.title)}
                   name="title"
+                  multiple
                 >
                   <option value="">{this.state.readonly ? '' : '请选择' }</option>
                   {this.state.departments.map((option) => (

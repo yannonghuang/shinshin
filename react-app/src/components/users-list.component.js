@@ -13,7 +13,7 @@ import ProjectDataService from "../services/project.service";
 
 const UsersList = (props) => {
   const refreshOnReturn = () => {
-    window.onblur = () => {window.onfocus = () => {refreshList()}}
+    window.onblur = () => {window.onfocus = () => {search()}}
   };
 
   const [users, setUsers] = useState([]);
@@ -274,18 +274,21 @@ const UsersList = (props) => {
       });
   };
 
-  useEffect(retrieveUsers, [page, pageSize, orderby, searchRole, searchTitle, searchUsername, searchEmail, searchSchoolCode,
-    searchContactOnly, searchEmailVerified]);
-
-  const refreshList = () => {
+  const search = () => {
+    setPage(1);
     retrieveUsers();
   };
+
+  useEffect(retrieveUsers, [page]);
+  useEffect(search, [pageSize, orderby, searchRole, searchTitle, searchUsername, searchEmail, searchSchoolCode,
+    searchContactOnly, searchEmailVerified]);
+
 
   const removeAllUsers = () => {
     UserDataService.deleteAll()
       .then((response) => {
         console.log(response.data);
-        refreshList();
+        search();
       })
       .catch((e) => {
         console.log(e);
@@ -491,11 +494,6 @@ const UsersList = (props) => {
     },
   },
   useSortBy);
-
-  const search = () => {
-    setPage(1);
-    retrieveUsers();
-  };
 
   const handlePageChange = (event, value) => {
     setPage(value);

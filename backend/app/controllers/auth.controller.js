@@ -176,7 +176,7 @@ var orderbyObject = null;
             email ? { email: { [Op.like]: `%${email}%` }} : null,
             schoolId ? { schoolId: { [Op.eq]: `${schoolId}` }} : null,
             role ? {'$roles.name$': { [Op.eq]: `${role}` }} : null,
-            title ? { title: { [Op.eq]: `${title}` }} : null,
+            title ? { title: { [Op.like]: `%${title}%` }} : null,
             //schoolCode ? {'$school.code$': { [Op.like]: `%${schoolCode}%` }} : null,
             schoolCode ? { '$school.code$': { [Op.eq]: `${schoolCode}` } } : null,
             contactOnly === undefined
