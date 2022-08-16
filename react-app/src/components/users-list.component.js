@@ -12,8 +12,18 @@ import AuthService from "../services/auth.service";
 import ProjectDataService from "../services/project.service";
 
 const UsersList = (props) => {
+
+  const restoreSearchStates = () => {
+    setSearchUsername(document.getElementById("searchUsername").value);
+    setSearchSchoolCode(document.getElementById("searchSchoolCode").value);
+    setSearchContactOnly(document.getElementById("searchContactOnly").value);
+    setSearchEmailVerified(document.getElementById("searchEmailVerified").value);
+    setSearchRole(document.getElementById("searchRole").value);
+    setSearchTitle(document.getElementById("searchTitle").value);
+  }
+
   const refreshOnReturn = () => {
-    window.onblur = () => {window.onfocus = () => {search()}}
+    window.onblur = () => {window.onfocus = () => {/*restoreSearchStates(); */search()}}
   };
 
   const [users, setUsers] = useState([]);
@@ -461,7 +471,7 @@ const UsersList = (props) => {
                 <i className="fas fa-eye action mr-2"></i>
               </Link>
 
-              <span onClick={() => openUser(rowIdx)}>
+              <span onClick={() => {refreshOnReturn(); openUser(rowIdx)}}>
                 <i className="far fa-edit action mr-2"></i>
               </span>
 
@@ -521,6 +531,7 @@ const UsersList = (props) => {
             className="form-control col-sm-2"
             value={searchRole}
             onChange={onChangeSearchRole}
+            id="searchRole"
           >
             <option value="">角色</option>
             {rolesFull.map((option) => (
@@ -534,6 +545,7 @@ const UsersList = (props) => {
             className="form-control col-sm-3 ml-2"
             value={searchTitle}
             onChange={onChangeSearchTitle}
+            id="searchTitle"
           >
             <option value="">职务/部门</option>
             {titlesFull.map((option) => (
@@ -555,6 +567,7 @@ const UsersList = (props) => {
             placeholder="学校编号"
             value={searchSchoolCode}
             onChange={onChangeSearchSchoolCode}
+            id="searchSchoolCode"
           />
 
           <input
@@ -573,12 +586,14 @@ const UsersList = (props) => {
             placeholder="用户名/中文名"
             value={searchUsername}
             onChange={onChangeSearchUsername}
+            id="searchUsername"
           />
 
           <select
             className="form-control col-sm-2 ml-2"
             value={searchContactOnly}
             onChange={onChangeSearchContactOnly}
+            id="searchContactOnly"
           >
             <option value="">用户类型</option>
               <option value={false}>
@@ -593,6 +608,7 @@ const UsersList = (props) => {
             className="form-control col-sm-2 ml-2"
             value={searchEmailVerified}
             onChange={onChangeSearchEmailVerified}
+            id="searchEmailVerified"
           >
             <option value="">登录过?</option>
               <option value={true}>
