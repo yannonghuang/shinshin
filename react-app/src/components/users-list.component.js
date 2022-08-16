@@ -23,7 +23,7 @@ const UsersList = (props) => {
   }
 
   const refreshOnReturn = () => {
-    window.onblur = () => {window.onfocus = () => {/*restoreSearchStates(); */search()}}
+    window.onblur = () => {window.onfocus = () => {restoreSearchStates(); /*search()*/}}
   };
 
   const [users, setUsers] = useState([]);
