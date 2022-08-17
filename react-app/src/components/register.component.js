@@ -650,7 +650,7 @@ export default class Register extends Component {
       var token = jwt.sign({ email: this.state.email }, "config.secret", {
         expiresIn: AuthService.getCurrentUser()
                     ? 60 * 60 * 24 * 7 // one week
-                    : 60 * 15 // 15 minutes
+                    : 60 * 120 // 2小时
       });
 
       //const url = window.location.host;
@@ -661,7 +661,7 @@ export default class Register extends Component {
                 + '(登录名: ' + this.state.username + ')',
             link: url + "/login?token=" + token,
             //link: "http://localhost:8081/login?token=" + token
-            validity: AuthService.getCurrentUser() ? "一周" : "15分钟"
+            validity: AuthService.getCurrentUser() ? "一周" : "2小时"
       };
 
 //      emailjs.send("icloud_2021_12_27","template_vye2wfs", templateParams)

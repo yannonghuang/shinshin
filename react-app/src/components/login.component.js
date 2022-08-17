@@ -153,7 +153,7 @@ export default class Login extends Component {
     });
 
     var token = jwt.sign({ email: user.email }, "config.secret", {
-      expiresIn: 900 // 15 minutes
+      expiresIn: 60 * 120 // 120 minutes
     });
 
     //const url = window.location.host;
@@ -163,7 +163,8 @@ export default class Login extends Component {
       to: user.email,
       username: (user.chineseName ? user.chineseName : user.username)
         + '(登录名: ' + user.username + ')',
-      link: url + "/" + (isReset ? "reset" : "login") + "?token=" + token
+      link: url + "/" + (isReset ? "reset" : "login") + "?token=" + token,
+      validity: "2小时"
     };
 
     let template = isReset ? 'template_password_reset' : 'template_email_check';
@@ -173,7 +174,7 @@ export default class Login extends Component {
     .then((result) => {
       console.log(result.text);
       this.setState({
-        message: message, //"邮件已发至您的邮箱，请在15分钟内完成密码重置。。。",
+        message: message, //"邮件已发至您的邮箱，请在2小时内完成密码重置。。。",
         loading: false
       });
       }, (error) => {
@@ -192,7 +193,7 @@ export default class Login extends Component {
       AuthService.findByEmail(this.state.email)
       .then(r => {
         this.sendEmail(r.data,
-          "邮件已发至您的邮箱，请在15分钟内完成密码重置。。。",
+          "邮件已发至您的邮箱，请在2小时内完成密码重置。。。",
           true);
       })
       .catch(e => {
@@ -231,7 +232,7 @@ export default class Login extends Component {
         .then((result) => {
           console.log(result.text);
           this.setState({
-            message: "邮件已发至您的邮箱，请在15分钟内完成密码重置。。。"
+            message: "邮件已发至您的邮箱，请在2小时内完成密码重置。。。"
           });
         }, (error) => {
           console.log(error.text);
@@ -296,7 +297,7 @@ export default class Login extends Component {
 
           if (error.response.data.notEmailVerified) {
             this.sendEmail(error.response.data,
-              "您尚未确认邮箱地址。确认邮件已发至您的邮箱，请在15分钟内完成确认回执 。。。",
+              "您尚未确认邮箱地址。确认邮件已发至您的邮箱，请在2小时内完成确认回执 。。。",
               false);
           } else {
             alert('登录失败，请确认用户名/密码正确');
