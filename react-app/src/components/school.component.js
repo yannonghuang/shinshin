@@ -1071,7 +1071,7 @@ export default class School extends Component {
                 <div class="select-container form-group col-sm-3">
                 <label htmlFor="region">省/自治区/直辖市</label>
                 <select
-                disabled={this.state.readonly?"disabled":false}
+                disabled={this.state.readonly || !AuthService.isAdmin() ? "disabled" : false}
                 class="form-control"
                 id="region"
                 required
