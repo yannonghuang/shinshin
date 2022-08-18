@@ -70,6 +70,24 @@ const ProjectsList = (props) => {
 
   useEffect(init, []);
 
+  const restoreSearchStates = () => {
+    setSearchName(document.getElementById('searchName').value);
+    setSearchStartAt(document.getElementById('searchStartAt').value);
+    setSearchCode(document.getElementById('searchCode').value);
+    setSearchRegion(document.getElementById('searchRegion').value);
+  }
+
+  const refreshOnReturn = () => {
+    window.onblur = () => {window.onfocus = () => {
+
+        if (pCategoryId || searchStartAt || searchName)
+          retrieveProjects();
+        else
+          restoreSearchStates();
+      }
+    }
+  };
+
   const onChangeSearchName = (e) => {
     const searchName = e.target.value;
     setSearchName(searchName);
@@ -438,6 +456,7 @@ const ProjectsList = (props) => {
               {!readonly &&
               ((!xr && AuthService.isVolunteer()) || (xr && AuthService.isAdmin())) &&
               (<Link
+                onClick={refreshOnReturn}
                 target = '_blank' // {embedded ? '_self' : '_blank'}
                 to={"/projects" + (xr ? 'XR' : '') + "/" + projectsRef.current[rowIdx].id}
               >
@@ -543,6 +562,7 @@ const ProjectsList = (props) => {
             placeholder="项目名称"
             value={searchName}
             onChange={onChangeSearchName}
+            id="searchName"
           />
 
           <input
@@ -551,6 +571,7 @@ const ProjectsList = (props) => {
             className="form-control col-sm-2 ml-2"
             placeholder="年份"
             value={searchStartAt}
+            id="searchStartAt"
           />
           <YearPicker
             yearArray={['2019', '2020']}
@@ -567,6 +588,7 @@ const ProjectsList = (props) => {
             placeholder="学校编号"
             value={searchCode}
             onChange={onChangeSearchCode}
+            id="searchCode"
           />)}
 
           {!embedded && (<select
@@ -574,6 +596,7 @@ const ProjectsList = (props) => {
             placeholder="...."
             value={searchRegion}
             onChange={onChangeSearchRegion}
+            id="searchRegion"
           >
             <option value="">省/自治区</option>
             {regions.map((option) => (
