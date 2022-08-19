@@ -64,7 +64,7 @@ const ProjectsByCategoriesList = (props) => {
   }
 
   const refreshOnReturn = () => {
-    window.onblur = () => {window.onfocus = () => {restoreSearchStates(); /*retrieveProjects()*/}}
+    window.onblur = () => {window.onfocus = () => {/*restoreSearchStates(); */retrieveProjects(true)}}
   };
 
   const onChangeSearchName = (e) => {
@@ -100,7 +100,14 @@ const ProjectsByCategoriesList = (props) => {
     setPCategoryId(categories.length);
   }
 
-  const getRequestParams = (exportFlag = false) => {
+  const getRequestParams = (exportFlag = false, refresh = false) => {
+    if (refresh) {
+      let params = JSON.parse(localStorage.getItem('REQUEST_PARAMS'));
+      if (params) {
+        return params;
+      }
+    }
+
     let params = {};
 
     if (page) {
@@ -133,6 +140,9 @@ const ProjectsByCategoriesList = (props) => {
     if (canonical) {
       params["canonical"] = canonical;
     }
+
+    if (!exportFlag)
+      localStorage.setItem('REQUEST_PARAMS', JSON.stringify(params));
 
     return params;
   };
@@ -179,8 +189,8 @@ const ProjectsByCategoriesList = (props) => {
       });
   };
 
-  const retrieveProjects = () => {
-    const params = getRequestParams();
+  const retrieveProjects = (refresh = false) => {
+    const params = getRequestParams(false, refresh);
 
     ProjectDataService.getAllByCategories(params)
       .then((response) => {

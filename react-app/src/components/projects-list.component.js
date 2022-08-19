@@ -70,20 +70,9 @@ const ProjectsList = (props) => {
 
   useEffect(init, []);
 
-  const restoreSearchStates = () => {
-    setSearchName(document.getElementById('searchName').value);
-    setSearchStartAt(document.getElementById('searchStartAt').value);
-    //setSearchCode(document.getElementById('searchCode').value);
-    setSearchRegion(document.getElementById('searchRegion').value);
-  }
-
   const refreshOnReturn = () => {
     window.onblur = () => {window.onfocus = () => {
-
-        if (pCategoryId || searchStartAt || searchName)
-          retrieveProjects();
-        else
-          restoreSearchStates();
+        retrieveProjects(true);
       }
     }
   };
@@ -126,7 +115,15 @@ const ProjectsList = (props) => {
 
 
   const getRequestParams = (/*searchName, page, pageSize, orderby,
-    searchCode, searchRegion, searchStartAt, schoolId, */exportFlag) => {
+    searchCode, searchRegion, searchStartAt, schoolId, */exportFlag, refresh = false) => {
+
+    if (refresh) {
+      let params = JSON.parse(localStorage.getItem('REQUEST_PARAMS'));
+      if (params) {
+        return params;
+      }
+    }
+
     let params = {};
 
     if (searchName) {
@@ -175,6 +172,9 @@ const ProjectsList = (props) => {
       params["pCategoryId"] = pCategoryId;
     }
 
+    if (!exportFlag)
+      localStorage.setItem('REQUEST_PARAMS', JSON.stringify(params));
+
     return params;
   };
 
@@ -213,9 +213,9 @@ const ProjectsList = (props) => {
   useEffect(getCategories, []);
 */
 
-  const retrieveProjects = () => {
+  const retrieveProjects = (refresh = false) => {
     const params = getRequestParams(/*searchName, page, pageSize, orderby,
-        searchCode, searchRegion, searchStartAt, schoolId, */false);
+        searchCode, searchRegion, searchStartAt, schoolId, */false, refresh);
 
     ProjectDataService.getAll2(params)
       .then((response) => {
