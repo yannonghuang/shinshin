@@ -199,7 +199,7 @@ const ResponsesList = (props) => {
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download',
-                'response.csv'
+                'responses.csv'
         );
         document.body.appendChild(link);
         link.click();
