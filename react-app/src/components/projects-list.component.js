@@ -73,7 +73,7 @@ const ProjectsList = (props) => {
   const restoreSearchStates = () => {
     setSearchName(document.getElementById('searchName').value);
     setSearchStartAt(document.getElementById('searchStartAt').value);
-    setSearchCode(document.getElementById('searchCode').value);
+    //setSearchCode(document.getElementById('searchCode').value);
     setSearchRegion(document.getElementById('searchRegion').value);
   }
 
