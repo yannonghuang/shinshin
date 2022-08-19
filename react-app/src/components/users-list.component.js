@@ -13,17 +13,8 @@ import ProjectDataService from "../services/project.service";
 
 const UsersList = (props) => {
 
-  const restoreSearchStates = () => {
-    setSearchUsername(document.getElementById("searchUsername").value);
-    setSearchSchoolCode(document.getElementById("searchSchoolCode").value);
-    setSearchContactOnly(document.getElementById("searchContactOnly").value);
-    setSearchEmailVerified(document.getElementById("searchEmailVerified").value);
-    setSearchRole(document.getElementById("searchRole").value);
-    setSearchTitle(document.getElementById("searchTitle").value);
-  }
-
   const refreshOnReturn = () => {
-    window.onblur = () => {window.onfocus = () => {restoreSearchStates(); /*search()*/}}
+    window.onblur = () => {window.onfocus = () => {retrieveUsers(true)}}
   };
 
   const [users, setUsers] = useState([]);
@@ -102,7 +93,14 @@ const UsersList = (props) => {
     setSearchEmailVerified(searchEmailVerified);
   };
 
-  const getRequestParams = (exportFlag = false) => {
+  const getRequestParams = (exportFlag = false, refresh = false) => {
+    if (refresh) {
+      let params = JSON.parse(localStorage.getItem('REQUEST_PARAMS'));
+      if (params) {
+        return params;
+      }
+    }
+
     let params = {};
 
     if (searchUsername) {
@@ -152,6 +150,9 @@ const UsersList = (props) => {
     if (exportFlag) {
       params["exportFlag"] = exportFlag;
     }
+
+    if (!exportFlag)
+      localStorage.setItem('REQUEST_PARAMS', JSON.stringify(params));
 
     return params;
   };
@@ -235,8 +236,8 @@ const UsersList = (props) => {
 
   useEffect(getDepartments, []);
 
-  const retrieveUsers = () => {
-    const params = getRequestParams(false);
+  const retrieveUsers = (refresh = false) => {
+    const params = getRequestParams(false, refresh);
 
     UserDataService.getAll2(params)
       .then((response) => {

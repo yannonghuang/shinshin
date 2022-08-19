@@ -56,15 +56,8 @@ const ProjectsByCategoriesList = (props) => {
 
   useEffect(init, []);
 
-  const restoreSearchStates = () => {
-    setSearchName(document.getElementById('searchName').value);
-    setPCategoryId(document.getElementById('pCategoryId').selectedIndex);
-    setSearchStartAt(document.getElementById('searchStartAt').value);
-    setSearchApplied(document.getElementById('searchApplied').value)
-  }
-
   const refreshOnReturn = () => {
-    window.onblur = () => {window.onfocus = () => {/*restoreSearchStates(); */retrieveProjects(true)}}
+    window.onblur = () => {window.onfocus = () => {retrieveProjects(true)}}
   };
 
   const onChangeSearchName = (e) => {

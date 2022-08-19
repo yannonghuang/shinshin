@@ -114,8 +114,7 @@ const ProjectsList = (props) => {
   };
 
 
-  const getRequestParams = (/*searchName, page, pageSize, orderby,
-    searchCode, searchRegion, searchStartAt, schoolId, */exportFlag, refresh = false) => {
+  const getRequestParams = (exportFlag, refresh = false) => {
 
     if (refresh) {
       let params = JSON.parse(localStorage.getItem('REQUEST_PARAMS'));
