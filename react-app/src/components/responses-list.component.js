@@ -192,7 +192,12 @@ const ResponsesList = (props) => {
 
         const fColumns = getFDataColumns(responses);
 
-        const csv = ProjectDataService.exportCSV(flatten(responses), [...columns, ... exportColumns, ...fColumns]);
+        const csv = ProjectDataService.exportCSV(flatten(responses), [...columns, ... exportColumns, ...fColumns], {
+          header: '项目年份',
+          translate: (dataIndex) => {
+            return (!dataIndex || dataIndex.length < 4) ? dataIndex : dataIndex.substring(0, 4)
+          }
+        });
 
         const url = window.URL.createObjectURL(new Blob([csv]));
 
@@ -594,7 +599,7 @@ const ResponsesList = (props) => {
           </button>
 */}
           {formId && (<button
-            className="btn btn-primary ml-2"
+            className="btn btn-primary"
             type="button"
             onClick={retrieveExportResponses}
           >

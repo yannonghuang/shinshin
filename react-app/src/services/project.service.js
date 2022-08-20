@@ -157,11 +157,20 @@ class ProjectDataService {
       );
     }
 
-    const translate = (header, dataIndex) => {
+/**
+    const SAVE_translate = (header, dataIndex) => {
       if (!translator || !translator.header || !translator.dictionary ||
         translator.header !== header) return dataIndex;
 
       return translator.dictionary[dataIndex];
+    }
+*/
+
+    const translate = (header, dataIndex) => {
+      if (!translator || !translator.header || !translator.translate ||
+        translator.header !== header) return dataIndex;
+
+      return translator.translate(dataIndex);
     }
 
     const flatten = (obj, path = '', newline = true) => {

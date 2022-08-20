@@ -164,7 +164,12 @@ const ProjectsByCategoriesList = (props) => {
         setExportProjects(projects);
         console.log(response.data);
 
-        const csv = ProjectDataService.exportCSV(projects, columns, {header: '项目类型', dictionary: categories});
+        const csv = ProjectDataService.exportCSV(projects, columns, {
+          header: '项目类型',
+          translate: (dataIndex) => {return categories[dataIndex]}
+        });
+        //const csv = ProjectDataService.exportCSV(projects, columns, {header: '项目类型', dictionary: categories});
+
         const url = window.URL.createObjectURL(new Blob([csv]));
 
         const link = document.createElement('a');
