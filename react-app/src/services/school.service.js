@@ -34,7 +34,7 @@ class SchoolDataService {
   }
 
   getCountsByRegion() {
-    return http.get("/schools/countsByRegion", { headers: authHeader() });
+    return http.get("/schools/countsByRegion"/*, { headers: authHeader() }*/);
   }
 
 

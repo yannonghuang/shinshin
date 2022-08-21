@@ -45,8 +45,9 @@ export const chinaMapConfig = (configData) => {
       text: [`最大值：${max}`, 0],
       textStyle: {
         color: "#000"
-      }
+      },
       // calculable: true
+      top: "30%" // 距离顶部距离
     },
     toolbox: {
       // 工具导航

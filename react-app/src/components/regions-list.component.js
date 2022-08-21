@@ -13,6 +13,9 @@ import { geoJson } from "./geojson.js";
 const RegionsList = (props) => {
 
   const [regions, setRegions] = useState([]);
+
+  const [distribution, setDistribution] = useState(window.location.pathname.includes('regionsDistribution'));
+
   const [mapData, setMapData] = useState([]);
   const [mapDataMax, setMapDataMax] = useState(0);
   const [schoolsTotal, setSchoolsTotal] = useState(0);
@@ -53,6 +56,7 @@ const RegionsList = (props) => {
 
   const [regionsFull, setRegionsFull] = useState([]);
 
+/**
   const RegionsFull = [
     "黑龙江省",
     "吉林省",
@@ -81,6 +85,7 @@ const RegionsList = (props) => {
     "新疆维吾尔族自治区",
     "西藏自治区",
   ];
+*/
 
   const getRegionsFull = async () => {
     if (!regionsFull || regionsFull.length === 0) {
@@ -242,9 +247,10 @@ const RegionsList = (props) => {
     mapInstance.on('click', async (params) => {
       if (params.name) {
         let r = await getRegion(params.name);
-        props.history.push("/schools/region/" + r);
+        if (r)
+          props.history.push("/schools/region/" + r);
         //props.history.push("/schools/region/" + params.data.region);
-        }
+      }
     });
 
   };
@@ -266,9 +272,9 @@ const RegionsList = (props) => {
 
 
   return (<div>
-    <div style={{ width: "100%", height: "99vh" }} ref={ref}></div>
+    <div hidden={!distribution} style={{ width: "100%", height: "99vh" }} ref={ref}></div>
 
-    <div className="list row">
+    <div hidden={distribution} className="list row">
       <div className="col-sm-8">
         <h4>地区列表(总数：{schoolsTotal})</h4>
 {/*

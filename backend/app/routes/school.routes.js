@@ -26,7 +26,7 @@ module.exports = function(app) {
   );
 
   app.get("/api/schools/countsByRegion",
-    [authJwt.verifyToken],
+    //[authJwt.verifyToken],
     schools.findCountsByRegion
   );
 

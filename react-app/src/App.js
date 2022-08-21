@@ -188,6 +188,7 @@ class App extends Component {
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href={"/schools"}>学校列表</a>
+                <a class="dropdown-item" href={"/regionsDistribution"}>学校分布</a>
                 <a class="dropdown-item" href={"/regions"} hidden={!AuthService.isLogin()}>地区列表</a>
                 <a class="dropdown-item" href={"/addS"}
                   hidden={!AuthService.isLogin() || !AuthService.isAdmin()}
@@ -362,7 +363,7 @@ class App extends Component {
 */}
 
 
-            <Route exact path={["/regions"]} component={RegionsList} >
+            <Route exact path={["/regions", "/regionsDistribution"]} component={RegionsList} >
                 <AccessControlService ComposedClass={RegionsList} />
             </Route>
             <Route exact path={["/schools", "/schools/region/:region"]} >
