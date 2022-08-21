@@ -6,8 +6,15 @@ import Pagination from "@material-ui/lab/Pagination";
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useTable, useSortBy } from "react-table";
 
+import * as echarts from 'echarts';
+import { chinaMapConfig } from "./config";
+import { geoJson } from "./geojson.js";
+
 const RegionsList = (props) => {
+
   const [regions, setRegions] = useState([]);
+  const [mapData, setMapData] = useState([]);
+  const [mapDataMax, setMapDataMax] = useState(0);
 
   const [currentRegion, setCurrentRegion] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
@@ -43,11 +50,92 @@ const RegionsList = (props) => {
     return params;
   };
 
-  const retrieveRegions = () => {
+  const [regionsFull, setRegionsFull] = useState([]);
+
+  const RegionsFull = [
+    "黑龙江省",
+    "吉林省",
+    "辽宁省",
+    "陕西省",
+    "青海省",
+    "甘肃省",
+    "湖南省",
+    "湖南省湘西州",
+    "湖北省",
+    "四川省",
+    "贵州省",
+    "山东省",
+    "山西省",
+    "江西省",
+    "江苏省",
+    "安徽省",
+    "河南省",
+    "云南省",
+    "福建省",
+    "海南省",
+    "重庆市",
+    "广西壮族自治区",
+    "内蒙古自治区",
+    "宁夏回族自治区",
+    "新疆维吾尔族自治区",
+    "西藏自治区",
+  ];
+
+  const getRegionsFull = async () => {
+    if (!regionsFull || regionsFull.length === 0) {
+      try {
+        let response = await SchoolDataService.getRegions()
+
+        setRegionsFull(response.data);
+        console.log(response);
+      } catch(e) {
+        console.log(e);
+      };
+    }
+    return regionsFull;
+  }
+
+  //useEffect(getRegionsFull, []);
+
+  const getRegion = async (shortName) => {
+
+    if (shortName === '湘西') return "湖南省湘西州";
+
+    let regionsFull = await getRegionsFull();
+    for (var i = 0; i < regionsFull.length; i++)
+      if (regionsFull[i].includes(shortName))
+        return regionsFull[i];
+
+    return null;
+  }
+
+  const buildMapData = (schools) => {
+    if (!schools) return;
+
+    let mData = [];
+    let mMax = 0;
+    for (var i = 0; i < schools.length; i++) {
+      let rName = '';
+      if (schools[i].region.startsWith('内蒙古')) rName = '内蒙古';
+      else if (schools[i].region.startsWith('黑龙江')) rName = '黑龙江';
+      else if (schools[i].region.includes('湘西')) rName = '湘西';
+      else rName = schools[i].region.substring(0, 2);
+
+      mData.push({name: rName, value: schools[i].schoolsCount});
+      //mData.push({name: rName, value: schools[i].schoolsCount, region: schools[i].region});
+
+      if(schools[i].schoolsCount > mMax) mMax = schools[i].schoolsCount;
+    }
+
+    setMapData(mData);
+    setMapDataMax(mMax);
+  }
+
+  const retrieveRegions =  () => {
     const params = getRequestParams(page, pageSize);
 
     SchoolDataService.getCountsByRegion(params)
-      .then((response) => {
+      .then(async (response) => {
 
         const { schools, totalPages } = response.data;
 
@@ -55,6 +143,9 @@ const RegionsList = (props) => {
         setCount(totalPages);
 
         console.log(response.data);
+
+        await getRegionsFull();
+        buildMapData(schools);
       })
       .catch((e) => {
 
@@ -62,18 +153,11 @@ const RegionsList = (props) => {
       });
   };
 
-  useEffect(retrieveRegions, [page, pageSize]);
+  useEffect(retrieveRegions, []);
 
   const refreshList = () => {
     retrieveRegions();
   };
-
-  const openRegion = (rowIndex) => {
-    const region = regionsRef.current[rowIndex].region;
-
-    props.history.push("/schools/" + region);
-  };
-
 
   const columns = useMemo(
     () => [
@@ -135,12 +219,53 @@ const RegionsList = (props) => {
   };
 
 
+  const ref = useRef(null);
+  let mapInstance = null;
 
-  return (
+  const renderMap = () => {
+    const renderedMapInstance = echarts.getInstanceByDom(ref.current);
+    if (renderedMapInstance) {
+      mapInstance = renderedMapInstance;
+    } else {
+      mapInstance = echarts.init(ref.current);
+    }
+    mapInstance.setOption(
+      chinaMapConfig({ data: mapData, max: mapDataMax, min: 0 })
+    );
+
+    mapInstance.on('click', async (params) => {
+      if (params.name) {
+        let r = await getRegion(params.name);
+        props.history.push("/schools/region/" + r);
+        //props.history.push("/schools/region/" + params.data.region);
+        }
+    });
+
+  };
+
+  useEffect(() => {
+    echarts.registerMap("china", { geoJSON: geoJson });
+    renderMap();
+  }, [mapDataMax, mapData]);
+
+/**
+  useEffect(() => {
+    window.onresize = function () {
+      mapInstance.resize();
+    };
+    return () => {
+      mapInstance && mapInstance.dispose();
+    };
+  }, []);
+*/
+
+  return (<div>
+    <div style={{ width: "100%", height: "99vh" }} ref={ref}></div>
+
     <div className="list row">
       <div className="col-sm-8">
         <h4>地区列表</h4>
-{/*}
+{/*
         <div className="input-group mb-3">
           <input
             type="text"
@@ -230,9 +355,8 @@ const RegionsList = (props) => {
         </table>
       </div>
 
-
     </div>
-  );
+  </div>);
 };
 
 export default RegionsList;

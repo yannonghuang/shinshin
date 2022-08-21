@@ -12,6 +12,7 @@
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
+    "echarts": "^5.3.3",
     "emailjs-com": "^3.2.0",
     "formBuilder": "^3.7.3",
     "jquery": "^3.6.0",
