@@ -254,7 +254,7 @@ const RegionsList = (props) => {
     renderMap();
   }, [mapDataMax, mapData, schoolsTotal]);
 
-/**
+
   useEffect(() => {
     window.onresize = function () {
       mapInstance.resize();
@@ -263,7 +263,7 @@ const RegionsList = (props) => {
       mapInstance && mapInstance.dispose();
     };
   }, []);
-*/
+
 
   return (<div>
     <div style={{ width: "100%", height: "99vh" }} ref={ref}></div>

@@ -85,8 +85,8 @@ export const chinaMapConfig = (configData) => {
       map: "china",
       zoom: 1.2, // 当前视角的缩放比例
       scaleLimit: {
-        max: 1.2,
-        min: 1.2 // 设置默认缩放效果
+        max: 2,
+        min: 1 // 设置默认缩放效果
       },
       top: "10%" // 距离顶部距离
 
