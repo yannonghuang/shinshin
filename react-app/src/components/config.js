@@ -69,7 +69,13 @@ export const chinaMapConfig = (configData) => {
         position: [1, 100], // 相对的百分比
         fontSize: 12,
         offset: [2, 0],
-        align: "left"
+        align: "center",
+        formatter: function (params) {
+          let { data = {} } = params;
+          let { value = 0 } = data;
+          if (!params.name || !value) return;
+          return `${params.name}-${value}`;
+        }
       },
       itemStyle: {
         areaColor: "#fff" // 地图图形颜色
