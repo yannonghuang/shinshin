@@ -1,13 +1,13 @@
 export const chinaMapConfig = (configData) => {
-  const { data, max, min } = configData;
+  const { data, max, min, total } = configData;
 
   return {
     title: {
       // 标题组件
-      text: "欣欣学校分布图",
+      text: "欣欣学校分布图(总数：" + total + ")",
       // subtext: '数据来源于 xx平台',
       // sublink: 'http://www.census.gov/popest/data/datasets.html',
-      left: "right",
+      left: "center",
       textStyle: {
         color: "#000"
       }

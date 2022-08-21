@@ -15,6 +15,7 @@ const RegionsList = (props) => {
   const [regions, setRegions] = useState([]);
   const [mapData, setMapData] = useState([]);
   const [mapDataMax, setMapDataMax] = useState(0);
+  const [schoolsTotal, setSchoolsTotal] = useState(0);
 
   const [currentRegion, setCurrentRegion] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
@@ -102,9 +103,9 @@ const RegionsList = (props) => {
     if (shortName === '湘西') return "湖南省湘西州";
 
     let regionsFull = await getRegionsFull();
-    for (var i = 0; i < RegionsFull.length; i++)
-      if (RegionsFull[i].includes(shortName))
-        return RegionsFull[i];
+    for (var i = 0; i < regionsFull.length; i++)
+      if (regionsFull[i].includes(shortName))
+        return regionsFull[i];
 
     return null;
   }
@@ -114,6 +115,7 @@ const RegionsList = (props) => {
 
     let mData = [];
     let mMax = 0;
+    let schoolsTotal = 0;
     for (var i = 0; i < schools.length; i++) {
       let rName = '';
       if (schools[i].region.startsWith('内蒙古')) rName = '内蒙古';
@@ -125,10 +127,13 @@ const RegionsList = (props) => {
       //mData.push({name: rName, value: schools[i].schoolsCount, region: schools[i].region});
 
       if(schools[i].schoolsCount > mMax) mMax = schools[i].schoolsCount;
+
+      schoolsTotal += schools[i].schoolsCount;
     }
 
     setMapData(mData);
     setMapDataMax(mMax);
+    setSchoolsTotal(schoolsTotal);
   }
 
   const retrieveRegions =  () => {
@@ -229,8 +234,9 @@ const RegionsList = (props) => {
     } else {
       mapInstance = echarts.init(ref.current);
     }
+
     mapInstance.setOption(
-      chinaMapConfig({ data: mapData, max: mapDataMax, min: 0 })
+      chinaMapConfig({ data: mapData, max: mapDataMax, min: 0, total: schoolsTotal })
     );
 
     mapInstance.on('click', async (params) => {
@@ -246,7 +252,7 @@ const RegionsList = (props) => {
   useEffect(() => {
     echarts.registerMap("china", { geoJSON: geoJson });
     renderMap();
-  }, [mapDataMax, mapData]);
+  }, [mapDataMax, mapData, schoolsTotal]);
 
 /**
   useEffect(() => {
@@ -264,7 +270,7 @@ const RegionsList = (props) => {
 
     <div className="list row">
       <div className="col-sm-8">
-        <h4>地区列表</h4>
+        <h4>地区列表(总数：{schoolsTotal})</h4>
 {/*
         <div className="input-group mb-3">
           <input
