@@ -102,9 +102,9 @@ const RegionsList = (props) => {
     if (shortName === '湘西') return "湖南省湘西州";
 
     let regionsFull = await getRegionsFull();
-    for (var i = 0; i < regionsFull.length; i++)
-      if (regionsFull[i].includes(shortName))
-        return regionsFull[i];
+    for (var i = 0; i < RegionsFull.length; i++)
+      if (RegionsFull[i].includes(shortName))
+        return RegionsFull[i];
 
     return null;
   }
