@@ -188,8 +188,8 @@ class App extends Component {
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href={"/schools"}>学校列表</a>
-                <a class="dropdown-item" href={"/regionsDistribution"}>学校分布</a>
                 <a class="dropdown-item" href={"/regions"} hidden={!AuthService.isLogin()}>地区列表</a>
+                <a class="dropdown-item" href={"/regionsDistribution"}>学校分布</a>
                 <a class="dropdown-item" href={"/addS"}
                   hidden={!AuthService.isLogin() || !AuthService.isAdmin()}
                   target="_blank">新增学校
