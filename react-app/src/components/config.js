@@ -1,3 +1,5 @@
+import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
+
 export const chinaMapConfig = (configData) => {
   const { data, max, min, total } = configData;
 
@@ -28,7 +30,7 @@ export const chinaMapConfig = (configData) => {
     visualMap: {
       // 视觉映射组件
       type: "continuous",
-      left: "right",
+      left: "left",
       min: 0,
       max: max,
       inRange: {
@@ -44,10 +46,11 @@ export const chinaMapConfig = (configData) => {
       },
       text: [`最大值：${max}`, 0],
       textStyle: {
-        color: "#000"
+        color: "#000",
+        fontSize: isMobile ? 9 : 12,
       },
       // calculable: true
-      top: "30%" // 距离顶部距离
+      top: isMobile ? "30%" : "50%" // 距离顶部距离
     },
     toolbox: {
       // 工具导航
@@ -57,7 +60,7 @@ export const chinaMapConfig = (configData) => {
       feature: {
         // dataView: { readOnly: false },
         restore: {},
-        saveAsImage: {}
+        saveAsImage: isMobile ? null : {}
       }
     },
     dataset: {
@@ -68,14 +71,14 @@ export const chinaMapConfig = (configData) => {
       label: {
         show: true, //显示省市名称
         position: [1, 100], // 相对的百分比
-        fontSize: 12,
+        fontSize: isMobile ? 9 : 12,
         offset: [2, 0],
         align: "center",
         formatter: function (params) {
           let { data = {} } = params;
           let { value = 0 } = data;
-          if (!params.name || !value) return;
-          return `${params.name}-${value}`;
+          if (!params.name || !value) return isMobile ? '' : null;
+          return isMobile ? `${value}` : `${params.name}-${value}`;
         }
       },
       itemStyle: {
