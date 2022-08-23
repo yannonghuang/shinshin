@@ -139,7 +139,13 @@ const ProjectsList = (props) => {
 
     if (orderby) {
       params["orderby"] = orderby;
-    }
+    } else
+      params["orderby"] = [
+        {
+          id: 'startAt',
+          desc: true
+        }
+      ];
 
     if (searchCode) {
       params["code"] = searchCode;
