@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import SchoolDataService from "../services/school.service";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import Pagination from "@material-ui/lab/Pagination";
 
@@ -12,7 +12,6 @@ import { chinaMapConfig } from "./config";
 import { geoJson } from "./geojson.js";
 
 const RegionsList = (props) => {
-  const history = useHistory();
 
   const [regions, setRegions] = useState([]);
 
@@ -207,20 +206,21 @@ const RegionsList = (props) => {
     }
 */
 
-    if (!mapInstance) mapInstance = echarts.init(ref.current);
+    if (!mapInstance) {
+      mapInstance = echarts.init(ref.current);
+
+      mapInstance.on('click', (params) => {
+        if (params.name) {
+          let r = getRegion(params.name);
+          if (r)
+            window.location.href = "/schools/region/" + r;
+        }
+      });
+    }
 
     mapInstance.setOption(
       chinaMapConfig({ data: mapData, max: mapDataMax, min: 0, total: schoolsTotal })
     );
-
-    mapInstance.on('click', (params) => {
-      if (params.name) {
-        let r = getRegion(params.name);
-        if (r)
-          window.location.href = "/schools/region/" + r;
-          //history.push("/schools/region/" + r);
-      }
-    });
 
   };
 
