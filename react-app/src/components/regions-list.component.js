@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import SchoolDataService from "../services/school.service";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+
 import Pagination from "@material-ui/lab/Pagination";
 
 import { useState, useEffect, useMemo, useRef } from "react";
@@ -11,6 +12,7 @@ import { chinaMapConfig } from "./config";
 import { geoJson } from "./geojson.js";
 
 const RegionsList = (props) => {
+  const history = useHistory();
 
   const [regions, setRegions] = useState([]);
 
@@ -56,58 +58,23 @@ const RegionsList = (props) => {
 
   const [regionsFull, setRegionsFull] = useState([]);
 
-/**
-  const RegionsFull = [
-    "黑龙江省",
-    "吉林省",
-    "辽宁省",
-    "陕西省",
-    "青海省",
-    "甘肃省",
-    "湖南省",
-    "湖南省湘西州",
-    "湖北省",
-    "四川省",
-    "贵州省",
-    "山东省",
-    "山西省",
-    "江西省",
-    "江苏省",
-    "安徽省",
-    "河南省",
-    "云南省",
-    "福建省",
-    "海南省",
-    "重庆市",
-    "广西壮族自治区",
-    "内蒙古自治区",
-    "宁夏回族自治区",
-    "新疆维吾尔族自治区",
-    "西藏自治区",
-  ];
-*/
-
-  const getRegionsFull = async () => {
-    if (!regionsFull || regionsFull.length === 0) {
-      try {
-        let response = await SchoolDataService.getRegions()
-
+  const getRegionsFull = () => {
+    SchoolDataService.getRegions()
+      .then(response => {
         setRegionsFull(response.data);
         console.log(response);
-      } catch(e) {
+      })
+      .catch(e => {
         console.log(e);
-      };
-    }
-    return regionsFull;
+      });
   }
 
-  //useEffect(getRegionsFull, []);
+  useEffect(getRegionsFull, []);
 
-  const getRegion = async (shortName) => {
+  const getRegion = (shortName) => {
 
     if (shortName === '湘西') return "湖南省湘西州";
 
-    let regionsFull = await getRegionsFull();
     for (var i = 0; i < regionsFull.length; i++)
       if (regionsFull[i].includes(shortName))
         return regionsFull[i];
@@ -115,25 +82,24 @@ const RegionsList = (props) => {
     return null;
   }
 
-  const buildMapData = (schools) => {
-    if (!schools) return;
+  const buildMapData = (regions) => {
+    if (!regions) return;
 
     let mData = [];
     let mMax = 0;
     let schoolsTotal = 0;
-    for (var i = 0; i < schools.length; i++) {
+    for (var i = 0; i < regions.length; i++) {
       let rName = '';
-      if (schools[i].region.startsWith('内蒙古')) rName = '内蒙古';
-      else if (schools[i].region.startsWith('黑龙江')) rName = '黑龙江';
-      else if (schools[i].region.includes('湘西')) rName = '湘西';
-      else rName = schools[i].region.substring(0, 2);
+      if (regions[i].region.startsWith('内蒙古')) rName = '内蒙古';
+      else if (regions[i].region.startsWith('黑龙江')) rName = '黑龙江';
+      else if (regions[i].region.includes('湘西')) rName = '湘西';
+      else rName = regions[i].region.substring(0, 2);
 
-      mData.push({name: rName, value: schools[i].schoolsCount});
-      //mData.push({name: rName, value: schools[i].schoolsCount, region: schools[i].region});
+      mData.push({name: rName, value: regions[i].schoolsCount});
 
-      if(schools[i].schoolsCount > mMax) mMax = schools[i].schoolsCount;
+      if (regions[i].schoolsCount > mMax) mMax = regions[i].schoolsCount;
 
-      schoolsTotal += schools[i].schoolsCount;
+      schoolsTotal += regions[i].schoolsCount;
     }
 
     setMapData(mData);
@@ -145,7 +111,7 @@ const RegionsList = (props) => {
     const params = getRequestParams(page, pageSize);
 
     SchoolDataService.getCountsByRegion(params)
-      .then(async (response) => {
+      .then(response => {
 
         const { schools, totalPages } = response.data;
 
@@ -154,7 +120,6 @@ const RegionsList = (props) => {
 
         console.log(response.data);
 
-        await getRegionsFull();
         buildMapData(schools);
       })
       .catch((e) => {
@@ -233,23 +198,27 @@ const RegionsList = (props) => {
   let mapInstance = null;
 
   const renderMap = () => {
+/**
     const renderedMapInstance = echarts.getInstanceByDom(ref.current);
     if (renderedMapInstance) {
       mapInstance = renderedMapInstance;
     } else {
       mapInstance = echarts.init(ref.current);
     }
+*/
+
+    if (!mapInstance) mapInstance = echarts.init(ref.current);
 
     mapInstance.setOption(
       chinaMapConfig({ data: mapData, max: mapDataMax, min: 0, total: schoolsTotal })
     );
 
-    mapInstance.on('click', async (params) => {
+    mapInstance.on('click', (params) => {
       if (params.name) {
-        let r = await getRegion(params.name);
+        let r = getRegion(params.name);
         if (r)
-          props.history.push("/schools/region/" + r);
-        //props.history.push("/schools/region/" + params.data.region);
+          window.location.href = "/schools/region/" + r;
+          //history.push("/schools/region/" + r);
       }
     });
 
@@ -258,7 +227,7 @@ const RegionsList = (props) => {
   useEffect(() => {
     echarts.registerMap("china", { geoJSON: geoJson });
     renderMap();
-  }, [mapDataMax, mapData, schoolsTotal]);
+  }, [mapDataMax, mapData, schoolsTotal, regionsFull]);
 
 
   useEffect(() => {

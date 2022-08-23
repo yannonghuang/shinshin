@@ -137,9 +137,9 @@ const ProjectsList = (props) => {
       params["size"] = pageSize;
     }
 
-    if (orderby) {
+    if (orderby && orderby[0])
       params["orderby"] = orderby;
-    } else
+     else
       params["orderby"] = [
         {
           id: 'startAt',
