@@ -640,6 +640,7 @@ const SchoolsList = (props) => {
           return (
             <div>
               <Link
+                target="_blank"
                 to={"/schoolsView/" + schoolsRef.current[rowIdx].id}
               >
                 {schoolsRef.current[rowIdx].code}
