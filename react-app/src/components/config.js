@@ -59,7 +59,7 @@ export const chinaMapConfig = (configData) => {
       top: "top",
       feature: {
         // dataView: { readOnly: false },
-        restore: {},
+        //restore: {},
         saveAsImage: isMobile ? null : {}
       }
     },
