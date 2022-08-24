@@ -16,6 +16,7 @@ const RegionsList = (props) => {
   const [regions, setRegions] = useState([]);
 
   const [distribution, setDistribution] = useState(window.location.pathname.includes('regionsDist'));
+  const [navigation, setNavigation] = useState(window.location.pathname.includes('DistNav'));
 
   const [mapData, setMapData] = useState([]);
   const [mapDataMax, setMapDataMax] = useState(0);
@@ -213,7 +214,8 @@ const RegionsList = (props) => {
         if (params.name) {
           let r = getRegion(params.name);
           if (r)
-            window.location.href = "/schools/region/" + r;
+            window.open("/schools/region/" + r, navigation ? '_blank' : '_self'); // _blank for new window, _self for current window
+            //window.location.href = "/schools/region/" + r;
         }
       });
     }
@@ -245,7 +247,7 @@ const RegionsList = (props) => {
 
 {/*
 <div>
-<iframe hidden={distribution} src="https://spmsonline.org/regionsDistribution" title="欣欣学校分布" width="100%" height="800" ></iframe>
+<iframe hidden={distribution} src="http://localhost:8081/regionsDistribution" title="欣欣学校分布" width="100%" height="800" ></iframe>
 */}
 
     <div hidden={distribution} className="list row">
