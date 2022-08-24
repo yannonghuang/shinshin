@@ -13,7 +13,8 @@ const EXEMPTED_URLS = [
     "/projects",
     "/projects/school",
     "/projectsView",
-    "/regionsDistribution"
+    "/regionsDistribution",
+    "regionsDistNav"
   ];
 
 const AutoLogoutTimer = (props: any) => {
