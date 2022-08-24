@@ -243,31 +243,15 @@ const RegionsList = (props) => {
   return (<div>
     <div hidden={!distribution} style={{ width: "100%", height: "99vh" }} ref={ref}></div>
 
+{/*
+<div>
+<iframe hidden={distribution} src="http://localhost:8081/regionsDistribution" title="欣欣学校分布" width="100%" height="800" ></iframe>
+*/}
+
     <div hidden={distribution} className="list row">
       <div className="col-sm-8">
         <h4>地区列表(总数：{schoolsTotal})</h4>
-{/*
-        <div className="input-group mb-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Search by originalname"
-            value={searchOriginalname}
-            onChange={onChangeSearchOriginalname}
-          />
-          <div className="input-group-append">
-            <button
-              className="btn btn-outline-secondary"
-              type="button"
-              onClick={findByOriginalname}
-            >
-              Search
-            </button>
-          </div>
-        </div>
-*/}
       </div>
-
 
       <div className="col-sm-12 list">
 {/*}
@@ -337,6 +321,11 @@ const RegionsList = (props) => {
       </div>
 
     </div>
+
+{/*
+</div>
+*/}
+
   </div>);
 };
 
