@@ -245,7 +245,7 @@ const RegionsList = (props) => {
 
 {/*
 <div>
-<iframe hidden={distribution} src="http://localhost:8081/regionsDistribution" title="欣欣学校分布" width="100%" height="800" ></iframe>
+<iframe hidden={distribution} src="https://spmsonline.org/regionsDistribution" title="欣欣学校分布" width="100%" height="800" ></iframe>
 */}
 
     <div hidden={distribution} className="list row">
