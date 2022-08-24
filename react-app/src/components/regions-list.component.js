@@ -15,7 +15,7 @@ const RegionsList = (props) => {
 
   const [regions, setRegions] = useState([]);
 
-  const [distribution, setDistribution] = useState(window.location.pathname.includes('regionsDistribution'));
+  const [distribution, setDistribution] = useState(window.location.pathname.includes('regionsDist'));
 
   const [mapData, setMapData] = useState([]);
   const [mapDataMax, setMapDataMax] = useState(0);
