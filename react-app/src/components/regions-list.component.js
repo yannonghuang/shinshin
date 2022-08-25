@@ -214,8 +214,7 @@ const RegionsList = (props) => {
         if (params.name) {
           let r = getRegion(params.name);
           if (r)
-            window.open("/schools/region/" + r, '_blank');
-            //window.open("/schools/region/" + r, 'School List for ' + r);
+            window.open("/schools/region/" + r, 'School List for ' + r);
             //window.open("/schools/region/" + r, navigation ? '_blank' : '_self'); // _blank for new window, _self for current window
             //window.location.href = "/schools/region/" + r;
         }
