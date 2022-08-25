@@ -214,7 +214,7 @@ const RegionsList = (props) => {
         if (params.name) {
           let r = getRegion(params.name);
           if (r)
-            window.open("/schools/region/" + r, 'School List');
+            window.open("/schools/region/" + r, 'School List for ' + r);
             //window.open("/schools/region/" + r, navigation ? '_blank' : '_self'); // _blank for new window, _self for current window
             //window.location.href = "/schools/region/" + r;
         }
@@ -244,13 +244,13 @@ const RegionsList = (props) => {
 
 
   return (<div>
-<div>
+
     <div hidden={!distribution} style={{ width: "100%", height: "99vh" }} ref={ref}></div>
 
 
-
+{/*
 <iframe hidden={!distribution} src="http://localhost:8081/regionsDistribution" title="欣欣学校分布" width="100%" height="800" ></iframe>
-</div>
+*/}
 
     <div hidden={distribution} className="list row">
       <div className="col-sm-8">
