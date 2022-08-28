@@ -1311,7 +1311,7 @@ export default class School extends Component {
 
                 <div class="w-100"></div>
 
-
+{/*
                 {AuthService.isVolunteer() && <div class="form-group col-sm-12">
                 <label htmlFor="notes">内部注释</label>
                 <textarea
@@ -1325,6 +1325,7 @@ export default class School extends Component {
                 name="notes"
                 />
                 </div>}
+*/}
 
               </div>
             </div>
