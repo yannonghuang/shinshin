@@ -33,7 +33,7 @@ const peg = async (req, formId) => {
     if (projs.length === 0) return;
 
     for (var i = 0; i < projs.length; i++) {
-      let resp = await Response.create({title: title, startAt: startAt, pCategoryId: pCategoryId, formId: formId});
+      let resp = await Response.create({title: title, startAt: startAt, pCategoryId: pCategoryId, formId: formId}); // schoolId: projs[i].schoolId
       projs[i].update({responseId: resp.id});
     }
 
