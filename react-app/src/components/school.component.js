@@ -117,7 +117,7 @@ export default class School extends Component {
       dirty: false,
 
       progress: 0,
-      doneLoading: false,
+      hasErrors: false,
     };
 
     this.surveyRef = createRef();
@@ -544,6 +544,7 @@ export default class School extends Component {
              },
              message: this.state.dirty ? "学校信息成功提交!" : "学校信息没有修改",
              //submitted: true
+             hasErrors: false,
            }));
         })
         .catch(err => {
@@ -555,7 +556,8 @@ export default class School extends Component {
             err.toString();
 
           this.setState({
-            message: "学校信息保存失败! " + resMessage
+            message: "学校信息保存失败! " + resMessage,
+            hasErrors: true,
           });
         })
         console.log(response.data);
@@ -569,7 +571,8 @@ export default class School extends Component {
           e.toString();
 
         this.setState({
-          message: "学校信息保存失败! " + resMessage
+          message: "学校信息保存失败! " + resMessage,
+          hasErrors: true,
         });
         console.log(e);
       });
@@ -614,6 +617,7 @@ export default class School extends Component {
           this.setState({
             message: this.state.dirty ? "学校信息成功修改!" : "学校信息没有修改",
             //submitted: true
+            hasErrors: false,
           });
 
           if (this.state.currentSchool.file || this.state.pastedPhotoType) { // photo, followed by docs
@@ -635,6 +639,7 @@ export default class School extends Component {
           this.setState(prevState => ({
             message: prevState.message + resMessage,
             //submitted: false
+            hasErrors: true,
           }));
         });
       })
@@ -649,6 +654,7 @@ export default class School extends Component {
         this.setState(prevState => ({
           message: prevState.message + resMessage,
           //submitted: false
+          hasErrors: true,
         }));
         console.log(e);
       });
@@ -694,8 +700,8 @@ export default class School extends Component {
     .then(response => {
       this.setState(prevState => ({
         message: prevState.message + (this.state.currentSchool.docFiles ? " 学校信息附件成功上传!" : ""),
-        doneLoading: true,
-        submitted: true
+        submitted: true,
+        hasErrors: false,
       }));
       console.log(response.data);
     });
@@ -793,6 +799,7 @@ export default class School extends Component {
     label.innerHTML = msg;
   }
 
+/**
   renderUpdates() {
     return (
             <div>
@@ -814,12 +821,6 @@ export default class School extends Component {
             <p>{this.state.message}</p>
             </div>
     );
-  }
-
-/*
-  SAVE_isUploading() {
-    if (!this.state.currentSchool.docFiles) return false;
-    return this.state.submitted && !this.state.doneLoading;
   }
 */
 
@@ -1386,7 +1387,7 @@ export default class School extends Component {
 
               <div class="w-100"></div>
 
-              {this.state.message && (
+              {this.state.hasErrors && this.state.message && (
               <div class="form-group mt-2">
                 <div
                   className={

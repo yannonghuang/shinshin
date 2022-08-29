@@ -78,7 +78,7 @@ export default class Project extends Component {
 
       dirty: false,
       progress: 0,
-      doneLoading: false,
+      hasErrors: false,
 
       pCategories: ProjectDataService.PROJECT_CATEGORIES,
     };
@@ -425,6 +425,7 @@ export default class Project extends Component {
 
   }
 
+/**
   SAVE_saveProject() {
     var data = {
       name: this.state.currentProject.name,
@@ -453,7 +454,8 @@ export default class Project extends Component {
         }
 
         this.setState({
-          message: this.state.dirty ? "项目信息成功提交!" : "项目信息没有修改"
+          message: this.state.dirty ? "项目信息成功提交!" : "项目信息没有修改",
+          hasErrors: false,
         });
 
         console.log(response.data);
@@ -465,6 +467,8 @@ export default class Project extends Component {
       //$('input[name="projectId"]').attr('value', this.state.currentProject.id );
       //this.refs.formToSubmit.submit();
   }
+*/
+
 
   validateSchool() {
 
@@ -511,6 +515,7 @@ export default class Project extends Component {
       this.setState({
         message: this.state.dirty ? "项目信息成功提交!" : "项目信息没有修改",
         //submitted: true
+        hasErrors: false,
       });
 
     } catch (e) {
@@ -522,7 +527,8 @@ export default class Project extends Component {
         e.toString();
 
         this.setState({
-          message: "项目信息提交失败：" + resMessage
+          message: "项目信息提交失败：" + resMessage,
+          hasErrors: true,
         });
 
       console.log(e);
@@ -557,6 +563,7 @@ export default class Project extends Component {
       this.setState({
         message: this.state.dirty ? "项目信息成功修改!" : "项目信息没有修改",
         //submitted: true
+        hasErrors: false,
       });
 
     } catch (e) {
@@ -568,13 +575,15 @@ export default class Project extends Component {
         e.toString();
 
         this.setState({
-          message: "项目信息修改失败：" + resMessage
+          message: "项目信息修改失败：" + resMessage,
+          hasErrors: true,
         });
 
         console.log(e);
     }
   }
 
+/**
   SAVE_updateProject() {
     var data = {
       name: this.state.currentProject.name,
@@ -603,6 +612,7 @@ export default class Project extends Component {
         this.setState({
           message: this.state.dirty ? "项目信息成功修改!" : "项目信息没有修改",
           //submitted: true
+          hasErrors: false,
         });
 
         console.log(response.data);
@@ -611,14 +621,8 @@ export default class Project extends Component {
         console.log(e);
       });
 
-/**
-      if (this.state.currentProject.file) {
-        this.updatePhoto();
-      } else {
-        this.uploadDossiers();
-      }
-*/
   }
+*/
 
 
   async updatePhoto() {
@@ -648,8 +652,8 @@ export default class Project extends Component {
     .then(response => {
       this.setState(prevState => ({
         message: prevState.message + (this.state.currentProject.docFiles ? " 项目信息附件成功上传!" : ""),
-        doneLoading: true,
-        submitted: true
+        submitted: true,
+        hasErrors: false,
       }));
       console.log(response.data);
     });
@@ -769,10 +773,12 @@ export default class Project extends Component {
     return (option.label.toString().match(inputValue) || []).length > 0;
   }
 
+/**
   SAVE_isUploading() {
     if (!this.state.currentProject.docFiles) return false;
     return this.state.submitted && !this.state.doneLoading;
   }
+*/
 
   isUploading() {
     return (this.state.progress > 0);
@@ -1034,7 +1040,7 @@ export default class Project extends Component {
 
                 <div class="w-100"></div>
 
-                {this.state.message && (
+                {this.state.hasErrors && this.state.message && (
                 <div class="form-group mt-2">
                 <div
                   className={
