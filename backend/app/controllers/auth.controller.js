@@ -145,6 +145,7 @@ exports.findAll2 = async (req, res) => {
   const schoolCode = req.body.schoolCode;
   const contactOnly = req.body.contactOnly;
   const emailVerified = req.body.emailVerified;
+  const startAt = req.body.startAt;
   const page = req.body.page;
   const size = req.body.size;
   const schoolId = sid ? sid : req.body.schoolId;
@@ -189,6 +190,8 @@ var orderbyObject = null;
               : emailVerified === 'true'
                 ? { emailVerified: { [Op.eq]: `1` }}
                 : { emailVerified: null },
+
+            startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('users.startAt')), `${startAt}`) } } : null,
         ]};
 
   const include = [
@@ -238,6 +241,14 @@ var orderbyObject = null;
         //'emailVerified',
 
         [db.Sequelize.fn('date_format', db.Sequelize.col("users.startAt"), '%Y-%m-%d'), "startAt"],
+
+/**
+        [db.Sequelize.literal(`
+          if(users.startAt is null, date_format(users.createdAt, '%Y-%m-%d'), date_format(users.startAt, '%Y-%m-%d')
+          )`),
+        "startAt"],
+*/
+
         [db.Sequelize.fn('date_format', db.Sequelize.col("users.createdAt"), '%Y-%m-%d'), "createdAt"],
         [db.Sequelize.fn('date_format', db.Sequelize.col("lastLogin"), '%Y-%m-%d'), "lastLogin"],
   ],
@@ -315,6 +326,8 @@ exports.signup = (req, res) => {
     title: req.body.title,
   })
     .then(user => {
+      user.update({startAt: user.createdAt});
+
       if (req.body.roles) {
         Role.findAll({
           where: {
@@ -385,6 +398,8 @@ exports.createContactOnly = (req, res) => {
   // Save User to Database
   User.create(req.body)
     .then(user => {
+      user.update({startAt: user.createdAt});
+
       if (req.body.roles) {
 
         Role.findAll({

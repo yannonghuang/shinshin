@@ -11,6 +11,8 @@ import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detec
 import AuthService from "../services/auth.service";
 import ProjectDataService from "../services/project.service";
 
+import YearPicker from 'react-single-year-picker';
+
 const UsersList = (props) => {
 
   const refreshOnReturn = () => {
@@ -93,6 +95,13 @@ const UsersList = (props) => {
     setSearchEmailVerified(searchEmailVerified);
   };
 
+  const [searchStartAt, setSearchStartAt] = useState("");
+  const onChangeSearchStartAt = (e) => {
+    const searchStartAt = e; //e.target.value;
+    setSearchStartAt(searchStartAt);
+  };
+
+
   const getRequestParams = (exportFlag = false, refresh = false) => {
     if (refresh) {
       let params = JSON.parse(localStorage.getItem('REQUEST_PARAMS'));
@@ -131,6 +140,10 @@ const UsersList = (props) => {
       params["emailVerified"] = searchEmailVerified;
     }
 
+    if (searchStartAt) {
+      params["startAt"] = searchStartAt;
+    }
+
     if (page) {
       params["page"] = page - 1;
     }
@@ -166,6 +179,7 @@ const UsersList = (props) => {
     setSearchContactOnly("");
     setSearchEmailVerified("");
     setOrderby([]);
+    setSearchStartAt("");
   };
 
   const getRoleLabel = (name) => {
@@ -292,7 +306,7 @@ const UsersList = (props) => {
 
   useEffect(retrieveUsers, [page]);
   useEffect(search, [pageSize, orderby, searchRole, searchTitle, searchUsername, searchEmail, searchSchoolCode,
-    searchContactOnly, searchEmailVerified]);
+    searchContactOnly, searchEmailVerified, searchStartAt]);
 
 
   const removeAllUsers = () => {
@@ -346,7 +360,7 @@ const UsersList = (props) => {
 */
       {
         Header: "创建时间",
-        accessor: "createdAt",
+        accessor: "startAt",
       },
 
       {
@@ -472,13 +486,13 @@ const UsersList = (props) => {
                 <i className="fas fa-eye action mr-2"></i>
               </Link>
 
-              <span onClick={() => {refreshOnReturn(); openUser(rowIdx)}}>
+              {AuthService.isAdmin() && <span onClick={() => {refreshOnReturn(); openUser(rowIdx)}}>
                 <i className="far fa-edit action mr-2"></i>
-              </span>
+              </span>}
 
-              <span onClick={() => window.confirm("您确定要删除吗 ?") && deleteUser(rowIdx)}>
+              {AuthService.isAdmin() && <span onClick={() => window.confirm("您确定要删除吗 ?") && deleteUser(rowIdx)}>
                 <i className="fas fa-trash action"></i>
-              </span>
+              </span>}
             </div>
           );
         },
@@ -502,6 +516,12 @@ const UsersList = (props) => {
     manualSortBy: true,
     initialState: {
       hiddenColumns: hiddenColumns,
+      sortBy: [
+        {
+          id: 'startAt',
+          desc: false
+        }
+      ]
     },
   },
   useSortBy);
@@ -620,6 +640,22 @@ const UsersList = (props) => {
               </option>
           </select>
 
+          <input
+            type="text"
+            readonly=""
+            className="form-control col-sm-2 ml-2"
+            placeholder="创建年份"
+            value={searchStartAt}
+          />
+          <YearPicker
+            yearArray={['2019', '2020']}
+            value={searchStartAt}
+            onSelect={onChangeSearchStartAt}
+            hideInput={true}
+            minRange={1995}
+            maxRange={2022}
+          />
+
           <div>
             <button
               className="btn btn-primary ml-2"
@@ -699,7 +735,7 @@ const UsersList = (props) => {
                     {column.render('Header')}
                     {/* Add a sort direction indicator */}
                       <span>
-                        {/*column.isSorted*/ (column.id === 'lastLogin' || column.id === 'createdAt')
+                        {/*column.isSorted*/ (column.id === 'lastLogin' || column.id === 'startAt')
                         ? column.isSortedDesc
                           ? ' 🔽'
                           : ' 🔼'

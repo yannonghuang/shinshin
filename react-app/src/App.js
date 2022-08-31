@@ -177,7 +177,7 @@ class App extends Component {
 
           <div class="collapse navbar-collapse navbar-nav mr-auto" id="navbarSupportedContent">
 
-            {AuthService.isAdmin() && (
+            {AuthService.isVolunteer() && (
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -185,7 +185,9 @@ class App extends Component {
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href={"/users"}>用户列表</a>
-                <a class="dropdown-item" href={"/addU"} target="_blank">创建用户</a>
+                {AuthService.isAdmin() &&
+                  <a class="dropdown-item" href={"/addU"} target="_blank">创建用户</a>
+                }
               </div>
             </li>)}
 
