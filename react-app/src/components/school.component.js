@@ -147,7 +147,7 @@ export default class School extends Component {
   }
 
   init() {
-    document.onpaste = async (pasteEvent) => {
+    document.getElementById('schoolPhoto').onpaste = async (pasteEvent) => {
       pasteEvent.preventDefault();
 
       var items = pasteEvent.clipboardData.items;
