@@ -147,7 +147,7 @@ export default class School extends Component {
   }
 
   init() {
-    document.getElementById('schoolPhoto').onpaste = async (pasteEvent) => {
+    document.getElementById('schoolPhotoDiv').onpaste = async (pasteEvent) => {
       pasteEvent.preventDefault();
 
       var items = pasteEvent.clipboardData.items;
@@ -846,7 +846,7 @@ export default class School extends Component {
               <div class="row">
                 <h4>学校基本信息</h4>
 
-                <div contenteditable="true" onDragOver={this.onDrag} onDrop={this.onDrop}>
+                <div contenteditable="true" onDragOver={this.onDrag} onDrop={this.onDrop} id="schoolPhotoDiv" >
                   {this.state.readonly ? "" :
                     <p contenteditable="false">编辑学校照片（拖拽照片文件或复制粘贴图标）</p>
                   }
