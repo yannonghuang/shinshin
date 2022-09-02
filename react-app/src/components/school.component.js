@@ -637,7 +637,8 @@ export default class School extends Component {
             err.toString();
 
           this.setState(prevState => ({
-            message: prevState.message + resMessage,
+            message: "学校信息修改失败：" + resMessage,
+            //message: prevState.message + resMessage,
             //submitted: false
             hasErrors: true,
           }));
@@ -652,7 +653,8 @@ export default class School extends Component {
           e.toString();
 
         this.setState(prevState => ({
-          message: prevState.message + resMessage,
+          message: "学校信息修改失败：" + resMessage,
+          //message: prevState.message + resMessage,
           //submitted: false
           hasErrors: true,
         }));

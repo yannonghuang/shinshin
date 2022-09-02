@@ -565,7 +565,7 @@ export default class Survey extends Component {
         e.toString();
 
       this.setState({
-        message: "学校信息没有修改：" + resMessage,
+        message: "学校信息修改失败：" + resMessage,
         dataError: true
       });
       console.log(e);
