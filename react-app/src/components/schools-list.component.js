@@ -953,7 +953,7 @@ const SchoolsList = (props) => {
           </select>
 
           <select
-            className="form-control col-sm-2 ml-2"
+            className="form-control col-sm-3 ml-2"
             placeholder="...."
             value={searchStatus}
             onChange={onChangeSearchStatus}
