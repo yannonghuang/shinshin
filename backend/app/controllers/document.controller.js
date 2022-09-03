@@ -84,7 +84,7 @@ exports.findAll2 = (req, res) => {
   const size = req.body.size;
   const schoolId = req.body.schoolId;
   var docCategory = req.body.docCategory;
-
+  const orderby = req.body.orderby;
 
   //const { page, size, originalname } = req.query;
   var condition = {
@@ -98,28 +98,41 @@ exports.findAll2 = (req, res) => {
               : null
         ]};
 
+  var orderbyObject = null;
+  if (orderby) {
+    orderbyObject = [];
+    for (var i = 0; i < orderby.length; i++) {
+      var s = orderby[i].id.split(".");
+      if (s.length == 1) orderbyObject.push([s[0], (orderby[i].desc ? "desc" : "asc")]);
+      if (s.length == 2) {
+        var m = Document;
+        orderbyObject.push([m, s[1], (orderby[i].desc ? "desc" : "asc")]);
+      }
+    }
+  }
+
   const { limit, offset } = getPagination(page, size);
 
   Document.findAndCountAll({
-   where: condition,
-   limit: limit,
-   offset: offset,
-   attributes: ['id', 'originalname', 'docCategory', 'schoolId', 'mimetype',
-               'createdAt' //[db.Sequelize.fn('date_format', db.Sequelize.col("createdAt"), '%Y-%m-%d'), "createdAt"],
+  where: condition,
+  limit: limit,
+  offset: offset,
+  attributes: ['id', 'originalname', 'docCategory', 'schoolId', 'mimetype',
+              'createdAt' //[db.Sequelize.fn('date_format', db.Sequelize.col("createdAt"), '%Y-%m-%d'), "createdAt"],
 
-   ],
-
+  ],
+  order: orderbyObject
+  })
+   .then(data => {
+     const document = getPagingData(data, page, limit);
+     res.send(document);
    })
-    .then(data => {
-      const document = getPagingData(data, page, limit);
-      res.send(document);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving documents."
-      });
-    });
+   .catch(err => {
+     res.status(500).send({
+       message:
+         err.message || "Some error occurred while retrieving documents."
+     });
+   });
 };
 
 // find all published Document,

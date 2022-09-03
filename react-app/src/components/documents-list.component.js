@@ -36,6 +36,8 @@ const DocumentsList = (props) => {
     setSearchOriginalname(searchOriginalname);
   };
 
+  const [orderby, setOrderby] = useState([]);
+
   const getRequestParams = (/*searchOriginalname, page, pageSize, schoolId, docCategory*/) => {
     let params = {};
 
@@ -59,6 +61,16 @@ const DocumentsList = (props) => {
       params["docCategory"] = docCategory;
     }
 
+    if (orderby && orderby[0])
+      params["orderby"] = orderby;
+     else
+      params["orderby"] = [
+        {
+          id: 'createdAt',
+          desc: true
+        }
+      ];
+
     return params;
   };
 
@@ -80,7 +92,14 @@ const DocumentsList = (props) => {
       });
   };
 
-  useEffect(retrieveDocuments, [page, pageSize]);
+  const search = () => {
+    setPage(1);
+    retrieveDocuments();
+  };
+
+  useEffect(search, [pageSize, orderby, searchOriginalname]);
+  useEffect(retrieveDocuments, [page]);
+
 
   const refreshList = () => {
     retrieveDocuments();
@@ -222,16 +241,18 @@ const DocumentsList = (props) => {
     headerGroups,
     rows,
     prepareRow,
+    state: {sortBy},
   } = useTable({
     columns,
     data: documents,
     disableSortRemove: true,
+    manualSortBy: true,
     initialState: {
       hiddenColumns: hiddenColumns,
       sortBy: [
         {
           id: 'createdAt',
-          desc: false
+          desc: true
         }
       ]
     },
@@ -276,6 +297,11 @@ const DocumentsList = (props) => {
         console.log(e);
       });
   }
+
+  useEffect(() => {
+    if (sortBy && sortBy[0])
+      setOrderby(sortBy);
+  }, [sortBy]);
 
   return (
     <div className="list row">
