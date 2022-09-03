@@ -799,7 +799,7 @@ const SchoolsList = (props) => {
   );
 
   var hiddenColumns = (isMobile)
-    ? ['donor', 'xr', 'responsesCount', 'projectsCount', 'lastVisit', 'name', 'latestProjectYear']
+    ? ['donor', 'xr', 'responsesCount', 'projectsCount', 'lastVisit', 'region', 'latestProjectYear', 'stage', 'status', 'request', 'startAt']
     : [];
 
   const {
