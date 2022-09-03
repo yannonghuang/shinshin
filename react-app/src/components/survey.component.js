@@ -565,7 +565,7 @@ export default class Survey extends Component {
         e.toString();
 
       this.setState({
-        message: "学校信息修改失败：" + resMessage,
+        message: "学校信息没有修改：" + resMessage,
         dataError: true
       });
       console.log(e);
@@ -751,12 +751,12 @@ export default class Survey extends Component {
     e.preventDefault();
     var docFiles = e.target.files;
     this.setState(prevState => ({
-          currentSurvey: {
-            ...prevState.currentSurvey,
-            docFiles: docFiles
-          },
-          dirty: true
-        }));
+      currentSurvey: {
+        ...prevState.currentSurvey,
+        docFiles: docFiles
+      },
+//      dirty: true
+    }));
 
 	var label = e.target.nextElementSibling;
 

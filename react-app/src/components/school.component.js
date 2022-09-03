@@ -542,7 +542,7 @@ export default class School extends Component {
                ...prevState.currentSchool,
                id: response.data.id,
              },
-             message: this.state.dirty ? "学校信息成功提交!" : "学校信息没有修改",
+             message: this.state.dirty ? "学校信息成功提交!" : "学校信息没有修改!",
              //submitted: true
              hasErrors: false,
            }));
@@ -615,7 +615,7 @@ export default class School extends Component {
           dataSurvey)
         .then (r => {
           this.setState({
-            message: this.state.dirty ? "学校信息成功修改!" : "学校信息没有修改",
+            message: this.state.dirty ? "学校信息成功修改!" : "学校信息没有修改!",
             //submitted: true
             hasErrors: false,
           });
@@ -780,12 +780,12 @@ export default class School extends Component {
     e.preventDefault();
     var docFiles = e.target.files;
     this.setState(prevState => ({
-          currentSchool: {
-            ...prevState.currentSchool,
-            docFiles: docFiles
-          },
-          dirty: true
-        }));
+      currentSchool: {
+        ...prevState.currentSchool,
+        docFiles: docFiles
+      },
+//      dirty: true
+    }));
 
 	var label = e.target.nextElementSibling;
 
