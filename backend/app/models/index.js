@@ -197,6 +197,15 @@ db.SCHOOL_CATEGORIES = [
   "初中",
 ];
 
+db.SCHOOL_IMPORTANT_FIELDS = [
+  "principal",
+  "contact",
+  "studentsCount",
+  "teachersCount",
+  "classesCount",
+  "gradesCount",
+];
+
 /**
 db.REGIONS = [
 "山东",

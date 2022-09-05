@@ -14,6 +14,7 @@ const SCHOOL_STATUSES_SS = db.SCHOOL_STATUSES_SS;
 const SCHOOL_REQUESTS = db.SCHOOL_REQUESTS;
 const SCHOOL_REQUESTS_SS = db.SCHOOL_REQUESTS_SS;
 const SCHOOL_CATEGORIES = db.SCHOOL_CATEGORIES;
+const SCHOOL_IMPORTANT_FIELDS = db.SCHOOL_IMPORTANT_FIELDS;
 
 const { authJwt } = require("../middleware");
 const fs = require('fs');
@@ -56,7 +57,7 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
         //(!oldObj || !oldObj[key] || (oldv != newv))
         ((newv && (!oldObj || !oldObj[key])) || (oldv != newv))
         ) {
-      if ((key !== 'contactId' && key !== 'principalId'))
+      if (SCHOOL_IMPORTANT_FIELDS.includes(key) && (key !== 'contactId' && key !== 'principalId'))
         updates.push({field: key, oldv: oldv, newv: newv, schoolId, userId});
       if (oldObj) oldObj.set(key, newObj[key]);
     }
