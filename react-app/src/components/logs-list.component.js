@@ -490,7 +490,7 @@ const LogsList = (props) => {
 
 
           <select
-            className="form-control col-sm-2 ml-3"
+            className="form-control col-sm-4 ml-3"
             placeholder="字段名称"
             value={searchField}
             onChange={onChangeSearchField}
@@ -498,7 +498,7 @@ const LogsList = (props) => {
             <option value="">字段名称</option>
             {importantFields.map((option) => (
             <option value={option.name}>
-            {option.label}
+            {option.label + '-' + option.name}
             </option>
             ))}
           </select>
