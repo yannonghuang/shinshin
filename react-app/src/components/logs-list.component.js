@@ -410,7 +410,7 @@ const LogsList = (props) => {
             type="text"
             readonly=""
             className="form-control col-sm-2 ml-3"
-            placeholder="自...年份后修改"
+            placeholder="修改年份"
             value={searchCreatedAt}
           />
           <YearPicker
@@ -449,7 +449,7 @@ const LogsList = (props) => {
             </option>
             ))}
           </select>
-
+{/*
           <input
             type="text"
             className="form-control col-sm-2 ml-2"
@@ -457,6 +457,7 @@ const LogsList = (props) => {
             value={searchText}
             onChange={onChangeSearchText}
           />
+*/}
 
           <div>
             <button

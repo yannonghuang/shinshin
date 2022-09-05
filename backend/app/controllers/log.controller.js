@@ -92,7 +92,7 @@ exports.findAll2 = (req, res) => {
             field ? { field: { [Op.eq]: `${field}` } } : null,
             {field: {[Op.or]: importantFields}},
             createdAt
-              ? db.Sequelize.literal(`YEAR(logs.createdAt) >= ${createdAt}`)
+              ? db.Sequelize.literal(`YEAR(logs.createdAt) = ${createdAt}`)
               //? { createdAt: { [Op.eq]: `${createdAt}` } }
               : null
         ]};
