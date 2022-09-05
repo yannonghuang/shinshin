@@ -60,6 +60,11 @@ module.exports = function(app) {
     schools.getSchoolCategories
   );
 
+  app.get("/api/schools/importantFields",
+    //[authJwt.verifyToken],
+    schools.getSchoolImportantFields
+  );
+
   app.post("/api/schools/all",
     //[authJwt.verifyToken],
     schools.findAll2

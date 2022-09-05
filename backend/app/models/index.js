@@ -198,12 +198,12 @@ db.SCHOOL_CATEGORIES = [
 ];
 
 db.SCHOOL_IMPORTANT_FIELDS = [
-  "principal",
-  "contact",
-  "studentsCount",
-  "teachersCount",
-  "classesCount",
-  "gradesCount",
+  {name: "principal", label: "校长"},
+  {name: "contact", label: "联络人"},
+  {name: "studentsCount", label: "学生人数"},
+  {name: "teachersCount", label: "教师人数"},
+  {name: "classesCount", label: "总班级数"},
+  {name: "gradesCount", label: "总年级数"},
 ];
 
 /**

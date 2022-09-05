@@ -36,6 +36,13 @@ const getPagingData = (count, data, page, limit) => {
   return { totalItems, schools, totalPages, currentPage };
 };
 
+const isImportant = (key) => {
+  for (var i = 0; i < SCHOOL_IMPORTANT_FIELDS.length; i++)
+    if (SCHOOL_IMPORTANT_FIELDS[i].name === key) return true;
+
+  return false;
+}
+
 const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
   const isSchoolUser = await authJwt.getSchoolId(req);
   var goodUpdate = false;
@@ -57,7 +64,7 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
         //(!oldObj || !oldObj[key] || (oldv != newv))
         ((newv && (!oldObj || !oldObj[key])) || (oldv != newv))
         ) {
-      if (SCHOOL_IMPORTANT_FIELDS.includes(key) && (key !== 'contactId' && key !== 'principalId'))
+      if (isImportant(key) && (key !== 'contactId' && key !== 'principalId'))
         updates.push({field: key, oldv: oldv, newv: newv, schoolId, userId});
       if (oldObj) oldObj.set(key, newObj[key]);
     }
@@ -150,6 +157,11 @@ exports.getSchoolRequests_ss = (req, res) => {
 // return School categories
 exports.getSchoolCategories = (req, res) => {
   res.send(SCHOOL_CATEGORIES);
+}
+
+// return School important fields
+exports.getSchoolImportantFields = (req, res) => {
+  res.send(SCHOOL_IMPORTANT_FIELDS);
 }
 
 // Create and Save a new School

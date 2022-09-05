@@ -2,9 +2,11 @@ const db = require("../models");
 const Log = db.logs;
 const Op = db.Sequelize.Op;
 const User = db.user;
+const School = db.schools;
+const SCHOOL_IMPORTANT_FIELDS = db.SCHOOL_IMPORTANT_FIELDS;
 
 const getPagination = (page, size) => {
-  const limit = size ? +size : 3;
+  const limit = size ? +size : 30;
   const offset = page ? page * limit : 0;
 
   return { limit, offset };
@@ -52,6 +54,9 @@ exports.findAll2 = (req, res) => {
   const text = req.body.text;
   const userId = req.body.userId;
   const schoolId = req.body.schoolId;
+  const field = req.body.field;
+  const createdAt = req.body.createdAt;
+
   const orderby = req.body.orderby;
 
   const page = req.body.page;
@@ -66,11 +71,16 @@ exports.findAll2 = (req, res) => {
       if (s.length == 1) orderbyObject.push([s[0], (orderby[i].desc ? "desc" : "asc")]);
       if (s.length == 2) {
         var m = null;
-        if (s[0] == 'user') m = User;
+        if (s[0] === 'user') m = User;
+        if (s[0] === 'school') m = School;
         orderbyObject.push([m, s[1], (orderby[i].desc ? "desc" : "asc")]);
       }
     }
   };
+
+  var importantFields = [];
+  for (var i = 0; i < SCHOOL_IMPORTANT_FIELDS.length; i++)
+    importantFields.push(SCHOOL_IMPORTANT_FIELDS[i].name);
 
   var condition = {
         [Op.and]: [
@@ -78,7 +88,13 @@ exports.findAll2 = (req, res) => {
               ?  {[Op.or]: [{ newv: { [Op.like]: `%${text}%` } }, { oldv: { [Op.like]: `%${text}%` } }]}
               : null,
             userId ? { userId: { [Op.eq]: `${userId}` } } : null,
-            schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null
+            schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null,
+            field ? { field: { [Op.eq]: `${field}` } } : null,
+            {field: {[Op.or]: importantFields}},
+            createdAt
+              ? db.Sequelize.literal(`YEAR(logs.createdAt) >= ${createdAt}`)
+              //? { createdAt: { [Op.eq]: `${createdAt}` } }
+              : null
         ]};
 
   const { limit, offset } = getPagination(page, size);
@@ -91,6 +107,11 @@ exports.findAll2 = (req, res) => {
     {
       model: User,
       attributes: ['id', 'username', 'chineseName'],
+      required: false,
+    },
+    {
+      model: School,
+      attributes: ['id', 'code'],
       required: false,
     },
   ],

@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import Select from 'react-select';
+
 import LogDataService from "../services/log.service";
 import AuthService from "../services/auth.service";
 import SchoolDataService from "../services/school.service";
@@ -8,6 +10,8 @@ import Pagination from "@material-ui/lab/Pagination";
 
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useTable, useFlexLayout, useBlockLayout, useResizeColumns, useSortBy } from "react-table";
+
+import YearPicker from 'react-single-year-picker';
 
 const LogsList = (props) => {
   const [logs, setLogs] = useState([]);
@@ -19,16 +23,62 @@ const LogsList = (props) => {
   const [school, setSchool] = useState(null);
   const [userId, setUserId] = useState(AuthService.getCurrentUser() ? AuthService.getCurrentUser().id : null);
 
+  const [searchCreatedAt, setSearchCreatedAt] = useState("");
+
+  const [totalItems, setTotalItems] = useState(0);
+
   const [orderby, setOrderby] = useState([]);
+
+  const [searchField, setSearchField] = useState("");
+  const [importantFields, setImportantFields] = useState([]);
+
+  const getImportantFields = () => {
+    SchoolDataService.getImportantFields()
+      .then(response => {
+        setImportantFields(response.data);
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  useEffect(getImportantFields, []);
+
+  const [schools, setSchools] = useState([]);
+
+  const convert = (schools) => {
+    const result = [];
+    if (schools) {
+    for (var i = 0; i < schools.length; i++) {
+      result.push({value: schools[i].id,
+        label: schools[i].code + "-" + schools[i].name + "-" + schools[i].region});
+    }
+    return result;
+    }
+  }
+
+  const getSchools = () => {
+    SchoolDataService.getAllSimple()
+      .then(response => {
+        setSchools(convert(response.data));
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  useEffect(getSchools, []);
 
   const logsRef = useRef();
   logsRef.current = logs;
 
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(30);
 
-  const pageSizes = [5, 10, 20];
+  const pageSizes = [20, 30, 50];
 
   const onChangeText = (e) => {
     const text = e.target.value;
@@ -38,6 +88,45 @@ const LogsList = (props) => {
   const onChangeSearchText = (e) => {
     const searchText = e.target.value;
     setSearchText(searchText);
+  };
+
+  const onChangeSearchField = event => {
+    const selected = [...event.target.selectedOptions].map(opt => opt.value);
+    setSearchField(selected);
+  }
+
+  const onChangeSearchCreatedAt = (e) => {
+    const searchCreatedAt = e; //e.target.value;
+    setSearchCreatedAt(searchCreatedAt);
+  };
+
+  const onChangeSchoolId = (e) => {
+    setSchoolId(e.value) //.target.value
+  }
+
+  const display = (schoolId) => {
+    if (schools) {
+      for (var i = 0; i < schools.length; i++) {
+        if (schools[i].value == schoolId)
+          return schools[i];
+      }
+      return [];
+    }
+  }
+
+  const customFilter = (option, inputValue) => {
+    return (option.label.toString().match(inputValue) || []).length > 0;
+  }
+
+  const onClearSearch = (e) => {
+    setSearchText("");
+    setSearchField("");
+    setSchoolId(null);
+    setSearchCreatedAt("");
+
+    setOrderby([]);
+
+    setPage(1);
   };
 
   const getRequestParams = (/*searchText, page, pageSize, schoolId, orderby*/) => {
@@ -59,6 +148,14 @@ const LogsList = (props) => {
       params["schoolId"] = schoolId;
     }
 
+    if (searchField) {
+      params["field"] = searchField;
+    }
+
+    if (searchCreatedAt) {
+      params["createdAt"] = searchCreatedAt;
+    }
+
     if (orderby) {
       params["orderby"] = orderby;
     }
@@ -71,10 +168,11 @@ const LogsList = (props) => {
 
     LogDataService.getAll2(params)
       .then((response) => {
-        const { logs, totalPages } = response.data;
+        const { logs, totalPages, totalItems } = response.data;
 
         setLogs(logs);
         setCount(totalPages);
+        setTotalItems(totalItems);
 
         console.log(response.data);
       })
@@ -83,7 +181,16 @@ const LogsList = (props) => {
       });
   };
 
-  useEffect(retrieveLogs, [page, pageSize, orderby, searchText]);
+
+  const search = () => {
+    setPage(1);
+    retrieveLogs();
+  };
+
+  useEffect(search, [pageSize, orderby, searchText, searchField, searchCreatedAt, schoolId]);
+
+  useEffect(retrieveLogs, [page]);
+
 
   const refreshList = () => {
     retrieveLogs();
@@ -91,6 +198,11 @@ const LogsList = (props) => {
   };
 
   const retrieveSchool = () => {
+    if (!schoolId) {
+      setSchool(null);
+      return;
+    }
+
     SchoolDataService.get(schoolId)
       .then((response) => {
         setSchool(response.data);
@@ -120,6 +232,7 @@ const LogsList = (props) => {
         console.log(e);
       });
   }
+
 
   const removeAllLogs = () => {
     LogDataService.deleteAll()
@@ -165,6 +278,25 @@ const LogsList = (props) => {
         },
       },
       {
+        Header: "学校",
+        accessor: 'school.code',
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+
+              <Link
+                to={"/schoolsView/" + logsRef.current[rowIdx].schoolId}
+                className="badge badge-success"
+              >
+                {logsRef.current[rowIdx].school.code}
+              </Link>
+
+            </div>
+          );
+        },
+      },
+      {
         Header: "修改人",
         accessor: 'user.chineseName',
         Cell: (props) => {
@@ -193,10 +325,12 @@ const LogsList = (props) => {
       {
         Header: "老值",
         accessor: "oldv",
+        disableSortBy: true,
       },
       {
         Header: "新值",
         accessor: "newv",
+        disableSortBy: true,
       },
       {
         Header: "删除",
@@ -219,6 +353,9 @@ const LogsList = (props) => {
     []
   );
 
+  const hiddenColumns = schoolId
+    ? 'school.code'
+    : [];
 
   const {
     getTableProps,
@@ -233,6 +370,7 @@ const LogsList = (props) => {
     disableSortRemove: true,
     manualSortBy: true,
     initialState: {
+      //hiddenColumns: hiddenColumns,
       sortBy: [
         {
           id: 'createdAt',
@@ -243,11 +381,6 @@ const LogsList = (props) => {
   },
   useFlexLayout,
   useSortBy);
-
-  const search = () => {
-    setPage(1);
-    retrieveLogs();
-  };
 
   const handlePageChange = (event, value) => {
     setPage(value);
@@ -263,27 +396,82 @@ const LogsList = (props) => {
       setOrderby(sortBy);
   }, [sortBy]);
 
-  return (
-    <div className="list">
 
+  return (
+    <div className="list row">
+      <div className="col-sm-9">
       <h4>
         {school ? school.name + '-' : ''}
-        学校信息修改记录
+        学校信息修改记录(总数：{totalItems})
       </h4>
 
-      <div className="row">
-
-        <div className="col-sm-6 input-group">
+        <div className="row">
           <input
             type="text"
-            className="form-control"
+            readonly=""
+            className="form-control col-sm-2 ml-3"
+            placeholder="自...年份后修改"
+            value={searchCreatedAt}
+          />
+          <YearPicker
+            yearArray={['2019', '2020']}
+            value={searchCreatedAt}
+            onSelect={onChangeSearchCreatedAt}
+            hideInput={true}
+            minRange={1995}
+            maxRange={2030}
+          />
+
+          <Select onChange={onChangeSchoolId}
+            placeholder="学校"
+            className="col-sm-6"
+            id="schoolId"
+            value={display(schoolId)}
+            name="schoolId"
+            filterOption={customFilter}
+            options={schools}
+          />
+
+        </div>
+
+        <div className="row">
+
+          <select
+            className="form-control col-sm-2 ml-3"
+            placeholder="字段名称"
+            value={searchField}
+            onChange={onChangeSearchField}
+          >
+            <option value="">字段名称</option>
+            {importantFields.map((option) => (
+            <option value={option.name}>
+            {option.label}
+            </option>
+            ))}
+          </select>
+
+          <input
+            type="text"
+            className="form-control col-sm-2 ml-2"
             placeholder="新值或老值查询"
             value={searchText}
             onChange={onChangeSearchText}
           />
-        </div>
 
-        <div className="col-sm-6">
+          <div>
+            <button
+              className="btn btn-primary ml-2 mb-3"
+              type="button"
+              onClick={onClearSearch}
+            >
+              清空
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+        <div className="col-sm-3">
           {"每页显示行数: "}
           <select onChange={handlePageSizeChange} value={pageSize}>
             {pageSizes.map((size) => (
@@ -304,7 +492,7 @@ const LogsList = (props) => {
             onChange={handlePageChange}
           />
         </div>
-      </div>
+
 
       <div class="w-100"></div>
 
@@ -332,7 +520,7 @@ const LogsList = (props) => {
                   {/* Add a sort direction indicator */}
                   <span>
                     {/*column.isSorted*/ (column.id === 'createdAt' || column.id === 'user.chineseName' ||
-                    column.id === 'field' || column.id === 'newv' || column.id === 'oldv')
+                    column.id === 'field' || column.id === 'school.code')
                      ? column.isSortedDesc
                        ? ' 🔽'
                        : ' 🔼'

@@ -62,6 +62,11 @@ class SchoolDataService {
     return http.get("/schools/categories"/*, { headers: authHeader() }*/);
   }
 
+  getImportantFields() {
+    return http.get("/schools/importantFields"/*, { headers: authHeader() }*/);
+  }
+
+
   get(id) {
     return http.get(`/schools/${id}`/*, { headers: authHeader() }*/);
   }
