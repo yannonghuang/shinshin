@@ -24,6 +24,7 @@ const LogsList = (props) => {
   const [userId, setUserId] = useState(AuthService.getCurrentUser() ? AuthService.getCurrentUser().id : null);
 
   const [searchCreatedAt, setSearchCreatedAt] = useState("");
+  const [searchRegion, setSearchRegion] = useState("");
 
   const [totalItems, setTotalItems] = useState(0);
 
@@ -71,6 +72,21 @@ const LogsList = (props) => {
 
   useEffect(getSchools, []);
 
+  const [regions, setRegions] = useState([]);
+
+  const getRegions = () => {
+    SchoolDataService.getRegions()
+      .then(response => {
+        setRegions(response.data);
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  useEffect(getRegions, []);
+
   const logsRef = useRef();
   logsRef.current = logs;
 
@@ -104,6 +120,11 @@ const LogsList = (props) => {
     setSchoolId(e.value) //.target.value
   }
 
+  const onChangeSearchRegion = (e) => {
+    const searchRegion = e.target.value;
+    setSearchRegion(searchRegion);
+  }
+
   const display = (schoolId) => {
     if (schools) {
       for (var i = 0; i < schools.length; i++) {
@@ -123,6 +144,7 @@ const LogsList = (props) => {
     setSearchField("");
     setSchoolId(null);
     setSearchCreatedAt("");
+    setSearchRegion("");
 
     setOrderby([]);
 
@@ -156,6 +178,10 @@ const LogsList = (props) => {
       params["createdAt"] = searchCreatedAt;
     }
 
+    if (searchRegion) {
+      params["region"] = searchRegion;
+    }
+
     if (orderby) {
       params["orderby"] = orderby;
     }
@@ -187,7 +213,7 @@ const LogsList = (props) => {
     retrieveLogs();
   };
 
-  useEffect(search, [pageSize, orderby, searchText, searchField, searchCreatedAt, schoolId]);
+  useEffect(search, [pageSize, orderby, searchText, searchField, searchCreatedAt, schoolId, searchRegion]);
 
   useEffect(retrieveLogs, [page]);
 
@@ -295,6 +321,10 @@ const LogsList = (props) => {
             </div>
           );
         },
+      },
+      {
+        Header: "地区",
+        accessor: 'school.region'
       },
       {
         Header: "修改人",
@@ -422,19 +452,6 @@ const LogsList = (props) => {
             maxRange={2030}
           />
 
-          <Select onChange={onChangeSchoolId}
-            placeholder="学校"
-            className="col-sm-6"
-            id="schoolId"
-            value={display(schoolId)}
-            name="schoolId"
-            filterOption={customFilter}
-            options={schools}
-          />
-
-        </div>
-
-        <div className="row">
 
           <select
             className="form-control col-sm-2 ml-3"
@@ -449,6 +466,12 @@ const LogsList = (props) => {
             </option>
             ))}
           </select>
+
+        </div>
+
+        <div className="row">
+
+
 {/*
           <input
             type="text"
@@ -458,6 +481,30 @@ const LogsList = (props) => {
             onChange={onChangeSearchText}
           />
 */}
+
+          <select
+            className="form-control col-sm-2 ml-3"
+            placeholder="...."
+            value={searchRegion}
+            onChange={onChangeSearchRegion}
+          >
+            <option value="">地区</option>
+            {regions.map((option) => (
+            <option value={option}>
+            {option}
+            </option>
+            ))}
+          </select>
+
+          <Select onChange={onChangeSchoolId}
+            placeholder="学校"
+            className="col-sm-6"
+            id="schoolId"
+            value={display(schoolId)}
+            name="schoolId"
+            filterOption={customFilter}
+            options={schools}
+          />
 
           <div>
             <button
@@ -521,7 +568,7 @@ const LogsList = (props) => {
                   {/* Add a sort direction indicator */}
                   <span>
                     {/*column.isSorted*/ (column.id === 'createdAt' || column.id === 'user.chineseName' ||
-                    column.id === 'field' || column.id === 'school.code')
+                    column.id === 'field' || column.id === 'school.code' || column.id === 'school.region')
                      ? column.isSortedDesc
                        ? ' 🔽'
                        : ' 🔼'

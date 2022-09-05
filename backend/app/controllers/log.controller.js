@@ -56,6 +56,7 @@ exports.findAll2 = (req, res) => {
   const schoolId = req.body.schoolId;
   const field = req.body.field;
   const createdAt = req.body.createdAt;
+  const region = req.body.region;
 
   const orderby = req.body.orderby;
 
@@ -94,7 +95,8 @@ exports.findAll2 = (req, res) => {
             createdAt
               ? db.Sequelize.literal(`YEAR(logs.createdAt) = ${createdAt}`)
               //? { createdAt: { [Op.eq]: `${createdAt}` } }
-              : null
+              : null,
+            region ? { '$school.region$': { [Op.eq]: `${region}` } } : null,
         ]};
 
   const { limit, offset } = getPagination(page, size);
@@ -111,7 +113,7 @@ exports.findAll2 = (req, res) => {
     },
     {
       model: School,
-      attributes: ['id', 'code'],
+      attributes: ['id', 'code', 'region'],
       required: false,
     },
   ],
