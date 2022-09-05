@@ -64,6 +64,8 @@ exports.findAll2 = (req, res) => {
   const size = req.body.size;
   //const { page, size, originalname } = req.query;
 
+  const exportFlag = req.body.exportFlag;
+
   var orderbyObject = null;
   if (orderby) {
     orderbyObject = [];
@@ -97,14 +99,23 @@ exports.findAll2 = (req, res) => {
               //? { createdAt: { [Op.eq]: `${createdAt}` } }
               : null,
             region ? { '$school.region$': { [Op.eq]: `${region}` } } : null,
+            {[Op.not] : [{ userId: null }]}
         ]};
 
   const { limit, offset } = getPagination(page, size);
+  let limits = {};
+  if (!exportFlag) {
+    limits = {
+      offset: offset,
+      limit: limit
+    }
+  }
 
   Log.findAndCountAll({
   where: condition,
-  limit: limit,
-  offset: offset,
+  ...limits,
+  //limit: limit,
+  //offset: offset,
   include: [
     {
       model: User,

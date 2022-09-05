@@ -4,6 +4,7 @@ import Select from 'react-select';
 import LogDataService from "../services/log.service";
 import AuthService from "../services/auth.service";
 import SchoolDataService from "../services/school.service";
+import ProjectDataService from "../services/project.service";
 
 import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
@@ -11,10 +12,14 @@ import Pagination from "@material-ui/lab/Pagination";
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useTable, useFlexLayout, useBlockLayout, useResizeColumns, useSortBy } from "react-table";
 
+import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
+
 import YearPicker from 'react-single-year-picker';
 
 const LogsList = (props) => {
   const [logs, setLogs] = useState([]);
+  const [exportLogs, setExportLogs] = useState([]);
+
   const [currentLog, setCurrentLog] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [text, setText] = useState("");
@@ -151,7 +156,7 @@ const LogsList = (props) => {
     setPage(1);
   };
 
-  const getRequestParams = (/*searchText, page, pageSize, schoolId, orderby*/) => {
+  const getRequestParams = (/*searchText, page, pageSize, schoolId, orderby*/exportFlag = false) => {
     let params = {};
 
     if (searchText) {
@@ -186,6 +191,10 @@ const LogsList = (props) => {
       params["orderby"] = orderby;
     }
 
+    if (exportFlag) {
+      params["exportFlag"] = exportFlag;
+    }
+
     return params;
   };
 
@@ -217,6 +226,33 @@ const LogsList = (props) => {
 
   useEffect(retrieveLogs, [page]);
 
+  const retrieveExportLogs = () => {
+    const params = getRequestParams(true);
+
+    LogDataService.getAll2(params)
+      .then((response) => {
+        const { logs, totalPages, totalItems } = response.data;
+
+        setExportLogs(logs);
+        console.log(response.data);
+
+        const csv = ProjectDataService.exportCSV(logs, columns);
+        const url = window.URL.createObjectURL(new Blob([csv]));
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download',
+                'school_change_logs.csv'
+        );
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const refreshList = () => {
     retrieveLogs();
@@ -508,15 +544,27 @@ const LogsList = (props) => {
 
           <div>
             <button
-              className="btn btn-primary ml-2 mb-3"
+              className="btn btn-primary ml-2 mb-2"
               type="button"
               onClick={onClearSearch}
             >
               清空
             </button>
           </div>
-
         </div>
+
+        <div className="row mb-4 ml-1">
+          <div hidden={isMobile}>
+            <button
+              className="btn btn-primary"
+              type="button"
+              onClick={retrieveExportLogs}
+            >
+              导出
+            </button>
+          </div>
+        </div>
+
       </div>
 
         <div className="col-sm-3">
