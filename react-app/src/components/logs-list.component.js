@@ -236,7 +236,14 @@ const LogsList = (props) => {
         setExportLogs(logs);
         console.log(response.data);
 
-        const csv = ProjectDataService.exportCSV(logs, columns);
+        //const csv = ProjectDataService.exportCSV(logs, columns);
+
+        const csv = ProjectDataService.exportCSV(logs, columns, {
+          header: '时间',
+          translate: (dataIndex) => {return new Date(dataIndex).toLocaleDateString('zh-cn',
+            { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+        });
+
         const url = window.URL.createObjectURL(new Blob([csv]));
 
         const link = document.createElement('a');

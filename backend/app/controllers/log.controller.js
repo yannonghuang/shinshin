@@ -118,13 +118,13 @@ exports.findAll2 = (req, res) => {
   //offset: offset,
   include: [
     {
-      model: User,
-      attributes: ['id', 'username', 'chineseName'],
+      model: School,
+      attributes: ['id', 'code', 'region'],
       required: false,
     },
     {
-      model: School,
-      attributes: ['id', 'code', 'region'],
+      model: User,
+      attributes: ['id', 'username', 'chineseName'],
       required: false,
     },
   ],

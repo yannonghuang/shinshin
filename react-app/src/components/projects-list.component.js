@@ -637,7 +637,7 @@ const ProjectsList = (props) => {
 */}
           <div hidden={!currentUser || isMobile}>
             <button
-              className="btn btn-primary ml-2"
+              className="btn btn-primary"
               type="button"
               onClick={retrieveExportProjects}
             >
