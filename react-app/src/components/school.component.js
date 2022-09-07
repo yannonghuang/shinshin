@@ -674,6 +674,10 @@ export default class School extends Component {
     }
     SchoolDataService.updatePhoto(this.state.currentSchool.id, data)
     .then(response => {
+      this.setState(prevState => ({
+        message: prevState.message + '学校照片成功修改！',
+      }));
+
       //if (this.state.currentSchool.docFiles) { // docs
       this.uploadDocuments();
 
