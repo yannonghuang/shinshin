@@ -126,7 +126,8 @@ export default class School extends Component {
   async componentDidMount() {
     const newschool = window.location.pathname.includes('add');
     this.setState({newschool: newschool});
-    this.setState({readonly: window.location.pathname.includes('View')});
+    const readonly = window.location.pathname.includes('View');
+    this.setState({readonly: readonly}, () => {this.init(readonly)});
 
     const schoolId = this.props.match? this.props.match.params.id : this.props.id;
     if (!newschool) {
@@ -143,10 +144,12 @@ export default class School extends Component {
     this.getStages();
     this.getUsers(schoolId);
 
-    this.init();
+    //this.init();
   }
 
-  init() {
+  init(readonly) {
+    if (readonly) return;
+
     document.getElementById('schoolPhotoDiv').onpaste = async (pasteEvent) => {
       pasteEvent.preventDefault();
 
@@ -852,7 +855,7 @@ export default class School extends Component {
               <div class="row">
                 <h4>学校基本信息</h4>
 
-                <div contenteditable="true"
+                <div /*contenteditable="true"*/
                   onDragOver={!this.state.readonly && this.onDrag}
                   onDrop={!this.state.readonly && this.onDrop}
                   id="schoolPhotoDiv"
