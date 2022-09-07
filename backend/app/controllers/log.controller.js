@@ -99,7 +99,8 @@ exports.findAll2 = (req, res) => {
               //? { createdAt: { [Op.eq]: `${createdAt}` } }
               : null,
             region ? { '$school.region$': { [Op.eq]: `${region}` } } : null,
-            {[Op.not] : [{ userId: null }]}
+            {[Op.not] : [{ userId: null }]},
+            {[Op.not] : [{ schoolId: null }]}
         ]};
 
   const { limit, offset } = getPagination(page, size);
@@ -118,13 +119,13 @@ exports.findAll2 = (req, res) => {
   //offset: offset,
   include: [
     {
-      model: School,
-      attributes: ['id', 'code', 'region'],
+      model: User,
+      attributes: ['id', 'username', 'chineseName'],
       required: false,
     },
     {
-      model: User,
-      attributes: ['id', 'username', 'chineseName'],
+      model: School,
+      attributes: ['id', 'code', 'region'],
       required: false,
     },
   ],

@@ -354,12 +354,12 @@ const LogsList = (props) => {
           return (
             <div>
 
-              <Link
+              {logsRef.current[rowIdx].school && <Link
                 to={"/schoolsView/" + logsRef.current[rowIdx].schoolId}
                 className="badge badge-success"
               >
                 {logsRef.current[rowIdx].school.code}
-              </Link>
+              </Link>}
 
             </div>
           );

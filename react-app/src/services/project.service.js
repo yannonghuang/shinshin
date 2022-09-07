@@ -173,7 +173,16 @@ class ProjectDataService {
       return translator.translate(dataIndex);
     }
 
+    const EMPTY_OBJECTS = new Map();
+
     const flatten = (obj, path = '', newline = true) => {
+      if (obj === null) {
+        let empty = '';
+        if (EMPTY_OBJECTS.get(path))
+          for (var i = 0; i < EMPTY_OBJECTS.get(path) - 1; i++) empty += ',';
+        return {hh: '', header: empty, body: empty}
+      }
+
       if (!(obj instanceof Object)) {
         const p = path.substring(0, path.lastIndexOf('.')); // drop the last "."
         return {hh: '', header: p, body: render(obj)};
@@ -206,11 +215,16 @@ class ProjectDataService {
         });
         body = body.substring(0, body.lastIndexOf(',')); // drop last ','
         header = header.substring(0, header.lastIndexOf(',')); // drop last ','
+
+        if (!EMPTY_OBJECTS.get(path) || EMPTY_OBJECTS.get(path) < body.split(',').length)
+          EMPTY_OBJECTS.set(path, body.split(',').length);
+
         return {hh: '', header: header, body: body};
       }
     }
 
-    const csv = flatten(obj);
+    let csv = flatten(obj); // build EMPTY_OBJECTS
+    csv = flatten(obj);
 
     const header = csv.hh.trim().split(',');
 
@@ -292,7 +306,5 @@ class ProjectDataService {
   ];
 
 }
-
-
 
 export default new ProjectDataService();

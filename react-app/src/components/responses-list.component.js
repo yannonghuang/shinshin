@@ -547,7 +547,7 @@ const ResponsesList = (props) => {
           <input
             type="text"
             readonly=""
-            className="form-control col-sm-1 ml-2"
+            className="form-control col-sm-2 ml-3"
             placeholder="年份"
             value={searchStartAt}
             onChange={onChangeSearchInputStartAt}
