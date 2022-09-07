@@ -486,12 +486,12 @@ const UsersList = (props) => {
                 <i className="fas fa-eye action mr-2"></i>
               </Link>
 
-              {(AuthService.isAdmin() || (AuthService.isVolunteer() && usersRef.current[rowIdx].contactOnly === '否')) &&
+              {(AuthService.isAdmin() || (AuthService.isVolunteer() && schoolId)) &&
               <span onClick={() => {refreshOnReturn(); openUser(rowIdx)}}>
                 <i className="far fa-edit action mr-2"></i>
               </span>}
 
-              {(AuthService.isAdmin() || (AuthService.isVolunteer() && usersRef.current[rowIdx].contactOnly === '否')) &&
+              {(AuthService.isAdmin() || (AuthService.isVolunteer() && schoolId)) &&
               <span onClick={() => window.confirm("您确定要删除吗 ?") && deleteUser(rowIdx)}>
                 <i className="fas fa-trash action"></i>
               </span>}
