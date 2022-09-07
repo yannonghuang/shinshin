@@ -480,7 +480,7 @@ const ProjectsList = (props) => {
   );
 
   var hiddenColumnsMobile = (isMobile)
-    ? ['school.category', 'school.teachersCount', 'school.studentsCount', "school.name", 'description']
+    ? ['school.category', 'school.teachersCount', 'school.studentsCount', "school.name", 'response.title']
     : [];
 
   const schoolKnownColumns =
