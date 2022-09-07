@@ -797,6 +797,10 @@ exports.findOnePhoto = (req, res) => {
         let legacyPhoto = await getLegacyPhoto(id);
         if (legacyPhoto) {
           res.json({ success: true, data: {photo: legacyPhoto}});
+          School.update(
+            {photo: legacyPhoto},
+            {where: { id: id }}
+          );
         } else {
           res.status(404).send({
             message: `Cannot find School photo with id=${id}.`
