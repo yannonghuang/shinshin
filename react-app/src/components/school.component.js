@@ -848,7 +848,11 @@ export default class School extends Component {
               <div class="row">
                 <h4>学校基本信息</h4>
 
-                <div contenteditable="true" onDragOver={this.onDrag} onDrop={this.onDrop} id="schoolPhotoDiv" >
+                <div contenteditable="true"
+                  onDragOver={!this.state.readonly && this.onDrag}
+                  onDrop={!this.state.readonly && this.onDrop}
+                  id="schoolPhotoDiv"
+                >
                   {this.state.readonly ? "" :
                     <p contenteditable="false">编辑学校照片（拖拽照片文件或复制粘贴图标）</p>
                   }
