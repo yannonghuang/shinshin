@@ -51,7 +51,18 @@ const FormsList = (props) => {
     setSearchPublished(searchPublished);
   };
 
-  const getRequestParams = (/*searchTitle, page, pageSize, orderby*/) => {
+  const refreshOnReturn = () => {
+    window.onblur = () => {window.onfocus = () => {retrieveForms(true)}}
+  };
+
+  const getRequestParams = (refresh = false) => {
+    if (refresh) {
+      let params = JSON.parse(localStorage.getItem('REQUEST_PARAMS'));
+      if (params) {
+        return params;
+      }
+    }
+
     let params = {};
 
     if (searchTitle) {
@@ -82,6 +93,9 @@ const FormsList = (props) => {
         desc: true
       }];
 
+
+    localStorage.setItem('REQUEST_PARAMS', JSON.stringify(params));
+
     return params;
   };
 
@@ -94,8 +108,8 @@ const FormsList = (props) => {
     setPage(1);
   };
 
-  const retrieveForms = () => {
-    const params = getRequestParams(/*searchTitle, page, pageSize, orderby*/);
+  const retrieveForms = (refresh = false) => {
+    const params = getRequestParams(refresh);
 
     FormDataService.getAll2(params)
       .then((response) => {
@@ -258,6 +272,7 @@ const FormsList = (props) => {
           return (
             <div>
               {formsRef.current[rowIdx].published && <Link
+                onClick={refreshOnReturn}
                 target="_blank"
                 to={"/addR/" + formsRef.current[rowIdx].id}
                 className= {expired ? "disabled-link" : "badge badge-success mr-2"}
