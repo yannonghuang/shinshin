@@ -237,7 +237,9 @@ const ProjectsList = (props) => {
       });
   };
 
-  const retrieveExportProjects = () => {
+  const retrieveSimpleExportProjects = () => {retrieveExportProjects(false)}
+
+  const retrieveExportProjects = (detail = true) => {
     const params = getRequestParams(/*searchName, page, pageSize, orderby,
         searchCode, searchRegion, searchStartAt, schoolId, */true);
 
@@ -247,13 +249,16 @@ const ProjectsList = (props) => {
         setExportProjects(projects);
         console.log(response.data);
 
-        const csv = ProjectDataService.exportCSV(projects, columns);
+        //const csv = ProjectDataService.exportCSV(projects, columns);
+        const csv = ProjectDataService.exportCSV(projects,
+          //exportDetailColumns);
+          detail ? exportDetailColumns : exportColumns);
         const url = window.URL.createObjectURL(new Blob([csv]));
 
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download',
-                'school_projects_export.csv'
+          'school_projects_export' + (detail ? '_detail' : '') + '.csv'
         );
         document.body.appendChild(link);
         link.click();
@@ -331,6 +336,13 @@ const ProjectsList = (props) => {
       r = projectsRef.current[rowIdx].school.code + "/" + projectsRef.current[rowIdx].school.name;
     }
     return r;
+  }
+
+  const subtract = (columnSet1, columnSet2) => {
+    let result = [];
+    for (var i = 0; i < columnSet1.length; i++)
+      if (!columnSet2.includes(columnSet1[i].accessor)) result.push(columnSet1[i])
+    return result;
   }
 
   const columns = useMemo(
@@ -478,6 +490,11 @@ const ProjectsList = (props) => {
     ],
     []
   );
+
+  const exportDetailColumns = subtract(columns, ['response.title']);
+
+  const exportColumns = subtract(exportDetailColumns,
+    ['school.category', 'school.teachersCount', 'school.studentsCount', "school.region"]);
 
   var hiddenColumnsMobile = (isMobile)
     ? ['school.category', 'school.teachersCount', 'school.studentsCount', "school.name", 'response.title']
@@ -639,10 +656,19 @@ const ProjectsList = (props) => {
             <button
               className="btn btn-primary"
               type="button"
-              onClick={retrieveExportProjects}
+              onClick={retrieveSimpleExportProjects}
             >
               导出
             </button>
+
+            <button
+              className="btn btn-primary ml-2"
+              type="button"
+              onClick={retrieveExportProjects}
+            >
+              详细导出
+            </button>
+
           </div>
         </div>
       </div>
