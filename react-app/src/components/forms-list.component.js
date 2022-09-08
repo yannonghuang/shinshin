@@ -74,9 +74,13 @@ const FormsList = (props) => {
       params["published"] = searchPublished;
     }
 
-    if (orderby) {
+    if (orderby && orderby[0])
       params["orderby"] = orderby;
-    }
+    else
+      params["orderby"] = [{
+        id: 'deadline',
+        desc: true
+      }];
 
     return params;
   };
