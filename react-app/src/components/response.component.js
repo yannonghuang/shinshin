@@ -71,6 +71,8 @@ export default class Response extends Component {
     this.fb = createRef();
     this.fRender = null;
     //this.init();
+
+    this.fileInputLabels = new Map();
   }
 
   optionOnSave = {
@@ -309,7 +311,7 @@ export default class Response extends Component {
         if (inputs[i].type === "file" && inputs[i].files) {
           let filesN = inputs[i].files.length;
           for (var j = 0; j < filesN; j++) {
-            attFiles.push({description: this.getLabel(inputs[i].type, inputs[i].name),
+            attFiles.push({description: this.fileInputLabels.get('file' + i) + ': 文件' + j, //this.getLabel(inputs[i].type, inputs[i].name),
               file: inputs[i].files[j]});
           }
         }
@@ -327,6 +329,8 @@ export default class Response extends Component {
 
           var label = inputs[i].previousElementSibling;
           label.className = 'inputfileLabel';
+
+          this.fileInputLabels.set('file' + i, label.innerHTML);
 
           inputs[i].addEventListener( 'change', function( e ) {
             var docFiles = e.target.files;
