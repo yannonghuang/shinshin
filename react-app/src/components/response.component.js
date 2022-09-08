@@ -562,6 +562,10 @@ export default class Response extends Component {
     return (this.state.progress > 0);
   }
 
+  customFilter(option, inputValue) {
+    return (option.label.toString().match(inputValue) || []).length > 0;
+  }
+  
   render() {
     const { currentResponse, progress } = this.state;
 
@@ -638,6 +642,7 @@ export default class Response extends Component {
                 id="schoolId"
                 value={this.display(currentResponse.schoolId)}
                 name="schoolId"
+                filterOption={this.customFilter}
                 options={this.state.schools}
               />)
               : (<Link

@@ -251,7 +251,6 @@ const ProjectsList = (props) => {
 
         //const csv = ProjectDataService.exportCSV(projects, columns);
         const csv = ProjectDataService.exportCSV(projects,
-          //exportDetailColumns);
           detail ? exportDetailColumns : exportColumns);
         const url = window.URL.createObjectURL(new Blob([csv]));
 
