@@ -251,13 +251,17 @@ const ProjectsList = (props) => {
 
         //const csv = ProjectDataService.exportCSV(projects, columns);
         const csv = ProjectDataService.exportCSV(projects,
-          detail ? exportDetailColumns : exportColumns);
+          detail
+            ? exportDetailColumns
+            : schoolId
+              ? exportColumnsWithSchoolKnown
+              : exportColumns);
         const url = window.URL.createObjectURL(new Blob([csv]));
 
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download',
-          'school_projects_export' + (detail ? '_detail' : '') + '.csv'
+          'school_projects' + (detail ? '_detail' : '') + '.csv'
         );
         document.body.appendChild(link);
         link.click();
@@ -495,6 +499,9 @@ const ProjectsList = (props) => {
   const exportColumns = subtract(exportDetailColumns,
     ['school.category', 'school.teachersCount', 'school.studentsCount', "school.region"]);
 
+  const exportColumnsWithSchoolKnown = subtract(exportColumns,
+    ['school.code', 'school.name']);
+
   var hiddenColumnsMobile = (isMobile)
     ? ['school.category', 'school.teachersCount', 'school.studentsCount', "school.name", 'response.title']
     : [];
@@ -660,7 +667,7 @@ const ProjectsList = (props) => {
               导出
             </button>
 
-            <button
+            <button hidden={schoolId}
               className="btn btn-primary ml-2"
               type="button"
               onClick={retrieveExportProjects}

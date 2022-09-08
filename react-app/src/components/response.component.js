@@ -565,7 +565,7 @@ export default class Response extends Component {
   customFilter(option, inputValue) {
     return (option.label.toString().match(inputValue) || []).length > 0;
   }
-  
+
   render() {
     const { currentResponse, progress } = this.state;
 
