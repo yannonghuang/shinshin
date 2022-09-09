@@ -33,11 +33,15 @@ const multipleUpload = async (req, res) => {
           path: req.files[i].path,
           responseId: req.body.responseId
         };
+/*
         try {
-          var data = await Attachment.create(attachment);
+*/
+        var data = await Attachment.create(attachment);
+/*
         } catch (err) {
           console.log(err.message || "Some error occurred while creating the Attachment.");
         }
+*/
       }
     }
 
@@ -45,11 +49,15 @@ const multipleUpload = async (req, res) => {
 
   } catch (error) {
     console.log(error);
-
+/**
     if (error.code === "LIMIT_UNEXPECTED_FILE") {
       return res.send("Too many files to upload.");
     }
     return res.send(`Error when trying upload many files: ${error}`);
+*/
+    return res.status(500).send({
+      message: error.message || "Some error occurred while creating the Attachment."
+    });
   }
 };
 
@@ -79,11 +87,11 @@ const attachmentsUpload = async (req, res) => {
           responseId: req.params.id,
           description: descriptions[i]
         };
-        try {
-          var data = await Attachment.create(attachment);
-        } catch (err) {
+        //try {
+        var data = await Attachment.create(attachment);
+        /*} catch (err) {
           console.log(err.message || "Some error occurred while creating the Attachment.");
-        }
+        }*/
       }
     }
 
@@ -92,10 +100,17 @@ const attachmentsUpload = async (req, res) => {
   } catch (error) {
     console.log(error);
 
+    return res.status(500).send({
+      message: error.message || "Some error occurred while creating the Attachment."
+    });
+
+/**
     if (error.code === "LIMIT_UNEXPECTED_FILE") {
       return res.send("Too many files to upload.");
     }
     return res.send(`Error when trying upload many files: ${error}`);
+*/
+
   }
 };
 
@@ -126,11 +141,11 @@ const dossiersUpload = async (req, res) => {
           projectId: projectId,
           docCategory: req.body.docCategory
         };
-        try {
-          var data = await Dossier.create(dossier);
-        } catch (err) {
+        //try {
+        var data = await Dossier.create(dossier);
+        /*} catch (err) {
           console.log(err.message || "Some error occurred while creating the Document.");
-        }
+        }*/
       }
     }
 
@@ -138,11 +153,15 @@ const dossiersUpload = async (req, res) => {
 
   } catch (error) {
     console.log(error);
-
+    return res.status(500).send({
+      message: error.message || "Some error occurred while creating the Dossier."
+    });
+/**
     if (error.code === "LIMIT_UNEXPECTED_FILE") {
       return res.send("Too many files to upload.");
     }
     return res.send(`Error when trying upload many files: ${error}`);
+*/
   }
 };
 
@@ -174,11 +193,11 @@ const documentsUpload = async (req, res) => {
           schoolId: schoolId,
           docCategory: req.body.docCategory
         };
-        try {
-          var data = await Document.create(document);
-        } catch (err) {
+        //try {
+        var data = await Document.create(document);
+        /*} catch (err) {
           console.log(err.message || "Some error occurred while creating the Document.");
-        }
+        }*/
       }
     }
 
@@ -186,11 +205,16 @@ const documentsUpload = async (req, res) => {
 
   } catch (error) {
     console.log(error);
-
+    return res.status(500).send({
+      message: error.message || "Some error occurred while creating the Document."
+    });
+/*
     if (error.code === "LIMIT_UNEXPECTED_FILE") {
       return res.send("Too many files to upload.");
     }
     return res.send(`Error when trying upload many files: ${error}`);
+*/
+
   }
 };
 

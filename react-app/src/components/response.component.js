@@ -64,8 +64,8 @@ export default class Response extends Component {
       updatedAt: null,
 
       dirty: true,
-
       pCategories: ProjectDataService.PROJECT_CATEGORIES,
+      hasErrors: false,
     };
 
     this.fb = createRef();
@@ -446,16 +446,30 @@ export default class Response extends Component {
 //      if (attFiles[0]) {
       //this.reload();
         this.setState(prevState => ({
-          message: prevState.message + (attFiles[0] ? " 项目申请附件成功上传!" : ""),
+          message: this.state.dirty ? prevState.message : (attFiles[0] ? " 项目申请附件成功上传!" : ""),
           reload: !this.state.reload,
           submitted: true,
+          hasErrors: false,
         }))
 //      }
       //alert(this.state.message);
       this.clearFiles();
     })
-    .catch(e => {
-      console.log(e);
+    .catch(err => {
+      console.log(err);
+
+      const resMessage =
+        (err.response &&
+        err.response.data &&
+        err.response.data.message) ||
+        err.message ||
+        err.toString();
+
+      this.setState({
+        message: "项目申请修改或提交失败! " + resMessage,
+        hasErrors: true,
+      });
+
     });
   }
 
@@ -490,7 +504,8 @@ export default class Response extends Component {
       this.uploadAttachments(attFiles);
       this.setState({
         //currentResponse: response.data,
-        message: this.state.dirty ? "项目申请成功修改!" : "项目申请没有修改"
+        message: this.state.dirty ? "项目申请成功修改!" : "项目申请没有修改",
+        hasErrors: false,
       });
     })
     .catch(e => {
@@ -528,7 +543,8 @@ export default class Response extends Component {
           id: response.data.id
         },
         message: this.state.dirty ? "项目申请成功提交!" : "项目申请没有修改",
-        newresponse: false
+        newresponse: false,
+        hasErrors: false,
       }));
 
       this.uploadAttachments(attFiles);
@@ -705,11 +721,12 @@ export default class Response extends Component {
                   取消
                 </button>
 
-                <div className="alert-danger"
+                {this.state.hasErrors && <div className="alert-danger"
                   style={{ position: "absolute", right: "-60px", top: "50px" }}
                 >
                   <p><h6>{this.state.message}</h6></p>
-                </div>
+                </div>}
+
                </div>
 
              : <div className="progress">
@@ -781,9 +798,9 @@ export default class Response extends Component {
             </button>
 
             <div class="w-100"></div>
-            <div className="alert-danger mt-2">
+            {this.state.hasErrors && <div className="alert-danger mt-2">
               <p><h6>{this.state.message}</h6></p>
-            </div>
+            </div>}
 
           </div>)}
 
