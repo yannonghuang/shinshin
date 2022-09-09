@@ -330,6 +330,8 @@ export default class Response extends Component {
           var label = inputs[i].previousElementSibling;
           label.className = 'inputfileLabel';
 
+          label.innerHTML = label.innerText; // get rid of formatting
+
           this.fileInputLabels.set('file' + i, label.innerText);
 
           inputs[i].addEventListener( 'change', function( e ) {
