@@ -354,7 +354,6 @@ export default class Response extends Component {
 
   hasFiles() {
     var inputs = document.getElementsByTagName("input");
-    const attFiles = [];
     if (!inputs) return false;
 
     for (var i = 0; i < inputs.length; i++)

@@ -287,7 +287,7 @@ const FormsList = (props) => {
               </Link>
 
               {AuthService.isAdmin() &&
-                <span title="编辑" onClick={() => openForm(rowIdx)}>
+                <span title="编辑" onClick={() => {refreshOnReturn(); openForm(rowIdx)}}>
                   <i className="far fa-edit action mr-2"></i>
                 </span>
               }
