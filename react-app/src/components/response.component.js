@@ -11,7 +11,7 @@ import ProjectDataService from "../services/project.service";
 
 import $ from "jquery"; //Load jquery
 import React, { Component, createRef } from "react"; //For react component
-import ReactDOM from "react-dom";
+//import ReactDOM from "react-dom";
 import Select from 'react-select';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { Link } from "react-router-dom";
@@ -141,7 +141,7 @@ export default class Response extends Component {
   display(schoolId) {
     if (this.state.schools) {
       for (var i = 0; i < this.state.schools.length; i++) {
-        if (this.state.schools[i].value == schoolId)
+        if (this.state.schools[i].value === schoolId)
           return this.state.schools[i];
       }
       return [];
@@ -151,7 +151,7 @@ export default class Response extends Component {
   displayName(schoolId) {
     if (this.state.schools) {
       for (var i = 0; i < this.state.schools.length; i++) {
-        if (this.state.schools[i].value == schoolId)
+        if (this.state.schools[i].value === schoolId)
           return this.state.schools[i].label ? this.state.schools[i].label : '学校名';
       }
       return '';
@@ -311,7 +311,7 @@ export default class Response extends Component {
         if (inputs[i].type === "file" && inputs[i].files) {
           let filesN = inputs[i].files.length;
           for (var j = 0; j < filesN; j++) {
-            attFiles.push({description: this.fileInputLabels.get('file' + i) + ': 文件' + j, //this.getLabel(inputs[i].type, inputs[i].name),
+            attFiles.push({description: this.fileInputLabels.get('file' + i), //this.getLabel(inputs[i].type, inputs[i].name),
               file: inputs[i].files[j]});
           }
         }
@@ -330,7 +330,7 @@ export default class Response extends Component {
           var label = inputs[i].previousElementSibling;
           label.className = 'inputfileLabel';
 
-          this.fileInputLabels.set('file' + i, label.innerHTML);
+          this.fileInputLabels.set('file' + i, label.innerText);
 
           inputs[i].addEventListener( 'change', function( e ) {
             var docFiles = e.target.files;
@@ -339,11 +339,11 @@ export default class Response extends Component {
               : null;
             var msg = docFiles.length > 0
               ? '已选择' + docFiles.length + '个文件'
-              : label.innerHTML;
+              : label.innerText;
             for (var i = 0; i < docFiles.length; i++)
               msgFilesPicked += docFiles[i].name + '; ';
             label.title = msgFilesPicked;
-            label.innerHTML = msg;
+            label.innerText = msg;
           });
 
         }

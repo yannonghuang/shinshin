@@ -34,7 +34,7 @@ const multipleUpload = async (req, res) => {
           responseId: req.body.responseId
         };
         try {
-          var data = Attachment.create(attachment);
+          var data = await Attachment.create(attachment);
         } catch (err) {
           console.log(err.message || "Some error occurred while creating the Attachment.");
         }
@@ -80,7 +80,7 @@ const attachmentsUpload = async (req, res) => {
           description: descriptions[i]
         };
         try {
-          var data = Attachment.create(attachment);
+          var data = await Attachment.create(attachment);
         } catch (err) {
           console.log(err.message || "Some error occurred while creating the Attachment.");
         }
@@ -127,7 +127,7 @@ const dossiersUpload = async (req, res) => {
           docCategory: req.body.docCategory
         };
         try {
-          var data = Dossier.create(dossier);
+          var data = await Dossier.create(dossier);
         } catch (err) {
           console.log(err.message || "Some error occurred while creating the Document.");
         }
@@ -175,7 +175,7 @@ const documentsUpload = async (req, res) => {
           docCategory: req.body.docCategory
         };
         try {
-          var data = Document.create(document);
+          var data = await Document.create(document);
         } catch (err) {
           console.log(err.message || "Some error occurred while creating the Document.");
         }
