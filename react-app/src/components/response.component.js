@@ -479,7 +479,8 @@ export default class Response extends Component {
 
     if (!this.state.currentResponse.schoolId) {
       this.setState({
-        message: "请选择学校"
+        message: "请选择学校",
+        hasErrors: true,
       });
       return false;
     }
@@ -699,7 +700,7 @@ export default class Response extends Component {
                     style={{ position: "absolute", right: "10px" }}
                     type="submit"
                     className="btn btn-primary"
-                    onClick={this.submitResponse}
+                    onClick={() => {this.submitResponse()}}
                   >
                     提交
                   </button>
@@ -744,7 +745,7 @@ export default class Response extends Component {
                </div>
              </div>}
 
-            </div>)}
+           </div>)}
           </div>
 
 
