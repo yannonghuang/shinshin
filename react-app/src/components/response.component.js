@@ -700,7 +700,7 @@ export default class Response extends Component {
                     style={{ position: "absolute", right: "10px" }}
                     type="submit"
                     className="btn btn-primary"
-                    onClick={() => {this.submitResponse()}}
+                    onClick={this.submitResponse}
                   >
                     提交
                   </button>
@@ -778,7 +778,7 @@ export default class Response extends Component {
               <button
                 type="submit"
                 className="btn btn-primary"
-                onClick={this.submitResponse}
+                onClick={() => {window.scrollTo(0, 0); this.submitResponse()}}
               >
                 提交
               </button>
@@ -786,7 +786,7 @@ export default class Response extends Component {
               <button
                 type="submit"
                 className="btn btn-primary"
-                onClick={this.updateResponse}
+                onClick={() => {window.scrollTo(0, 0); this.updateResponse()}}
               >
                 保存
               </button>
