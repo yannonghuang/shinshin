@@ -48,6 +48,8 @@ export default class Response extends Component {
         schoolId: null,
         //attFiles: [],
         pCategoryId: null,
+        description: null,
+        deadline: null
       },
 
       currentUser: null,
@@ -201,7 +203,7 @@ export default class Response extends Component {
 
   getResponse(id, readonly) {
     ResponseDataService.get(id)
-      .then(response => {
+      .then(async (response) => {
         try {
           //const formData = JSON.stringify(response.data.fdata);
           var formData = response.data.fdata;
@@ -216,13 +218,17 @@ export default class Response extends Component {
           alert(e);
         }
 
-        const {startAt, ...otherParameters} = response.data;
+        const {startAt, formId, ...otherParameters} = response.data;
+
+        let form = await FormDataService.get(formId);
 
         this.setState({
           //currentResponse: response.data,
           currentResponse: {
             ...otherParameters,
-            startAt: (startAt ? (new Date(startAt)).getUTCFullYear() : '')
+            startAt: (startAt ? (new Date(startAt)).getUTCFullYear() : ''),
+            description: form.data.description,
+            deadline: form.data.deadline
           },
 
           hasFiles: this.hasFiles()
@@ -636,23 +642,45 @@ export default class Response extends Component {
                 />
             </div>
 
-                <div className="form-group ">
-                  <label htmlFor="pCategoryId">项目类别</label>
-                  <select
-                    disabled={"true"}
-                    class="form-control"
-                    id="pCategoryId"
-                    required
-                    value={this.state.pCategories[currentResponse.pCategoryId]}
-                    onChange={this.onChangePCategoryId}
-                    name="pCategoryId"
-                  >
+              <div className="form-group">
+                <label htmlFor="description">说明</label>
+                <textarea
+                  readonly={"true"}
+                  type="text"
+                  className="form-control"
+                  id="description"
+                  value={currentResponse.description}
+                />
+            </div>
 
-                    {this.state.pCategories.map((option, index) => (
-                    <option value={option}>{option}</option>
-                    ))}
-                  </select>
-                </div>
+            <div className="form-group">
+              <label htmlFor="deadline">截止日期</label>
+              <input
+                readonly={"true"}
+                type="date"
+                className="form-control"
+                id="deadline"
+                value={currentResponse.deadline}
+              />
+            </div>
+
+            <div className="form-group ">
+              <label htmlFor="pCategoryId">项目类别</label>
+              <select
+                disabled={"true"}
+                class="form-control"
+                id="pCategoryId"
+                required
+                value={this.state.pCategories[currentResponse.pCategoryId]}
+                onChange={this.onChangePCategoryId}
+                name="pCategoryId"
+              >
+
+                {this.state.pCategories.map((option, index) => (
+                <option value={option}>{option}</option>
+                ))}
+              </select>
+            </div>
 
             <div class="form-group">
               <label htmlFor="schoolId">所属学校</label>
