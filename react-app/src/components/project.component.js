@@ -237,7 +237,8 @@ export default class Project extends Component {
         currentProject: {
           ...prevState.currentProject,
           pCategoryId: pCategoryId
-        }
+        },
+        dirty: true
       };
     });
   }
