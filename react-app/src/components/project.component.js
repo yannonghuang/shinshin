@@ -229,7 +229,8 @@ export default class Project extends Component {
   }
 
   onChangePCategoryId(e) {
-    const pCategoryId = e.target.selectedIndex; //e.target.value;
+    //const pCategoryId = e.target.selectedIndex; //e.target.value;
+    const pCategoryId = ProjectDataService.PROJECT_CATEGORIES_ID[e.target.selectedIndex].id;
 
     this.setState(function(prevState) {
       return {

@@ -574,7 +574,7 @@ const ProjectsList = (props) => {
         <h4>
           {schoolId && !embedded && (<a href={'/schoolsView/' + schoolId}>{schoolDisplay + '-'}</a>)}
           {xr && '向荣支持'}学校项目列表 (总数：{totalItems}) {(pCategoryId || pCategoryId === 0) &&
-            '[项目类型：' + categories[pCategoryId] +
+            '[项目类型：' + ProjectDataService.getCategory(pCategoryId) +
             '; 年份：' + searchStartAt +
             '; 标题：' + searchName +
             ((formId === undefined || formId === 'undefined')

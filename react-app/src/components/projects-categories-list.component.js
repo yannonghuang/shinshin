@@ -66,7 +66,9 @@ const ProjectsByCategoriesList = (props) => {
   };
 
   const onChangeSearchPCategory = (e) => {
-    const searchPCategoryId = e.target.selectedIndex;
+    //const searchPCategoryId = e.target.selectedIndex;
+    const searchPCategoryId = ProjectDataService.PROJECT_CATEGORIES_ID[e.target.selectedIndex].id;
+
     setPCategoryId(searchPCategoryId);
   };
 
@@ -166,7 +168,7 @@ const ProjectsByCategoriesList = (props) => {
 
         const csv = ProjectDataService.exportCSV(projects, columns, {
           header: '项目类型',
-          translate: (dataIndex) => {return categories[dataIndex]}
+          translate: (dataIndex) => {return ProjectDataService.getCategory(dataIndex)}
         });
         //const csv = ProjectDataService.exportCSV(projects, columns, {header: '项目类型', dictionary: categories});
 
@@ -255,7 +257,7 @@ const ProjectsByCategoriesList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
-                {categories[projectsRef.current[rowIdx].pCategoryId]}
+                {ProjectDataService.getCategory(projectsRef.current[rowIdx].pCategoryId) /*categories[projectsRef.current[rowIdx].pCategoryId]*/}
             </div>
           );
         },
@@ -370,7 +372,7 @@ const ProjectsByCategoriesList = (props) => {
         <h4>
           项目列表 {!canonical && '-系统迁移'}
           {((pCategoryId || pCategoryId === 0) && (pCategoryId !== categories.length)) &&
-          '(项目类型：' + categories[pCategoryId] + ')'}(项目总数：{totalItems}；学校项目总数：{schoolProjectsCount})
+          '(项目类型：' + ProjectDataService.getCategory(pCategoryId) + ')'}(项目总数：{totalItems}；学校项目总数：{schoolProjectsCount})
         </h4>
 
         <div className="row mb-3 ">
@@ -404,7 +406,7 @@ const ProjectsByCategoriesList = (props) => {
           <select
             className="form-control col-sm-3 ml-2"
             placeholder="...."
-            value={categories[pCategoryId]}
+            value={ProjectDataService.getCategory(pCategoryId)}
             onChange={onChangeSearchPCategory}
             id="pCategoryId"
           >

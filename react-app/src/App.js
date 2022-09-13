@@ -140,7 +140,7 @@ class App extends Component {
       <div>
         {this.state.pCategories.map((option, index) => {
           if (index > 0)
-            return <a class="dropdown-item" href={"/projects/categoryCanonical/" + index }>{option}</a>
+            return <a class="dropdown-item" href={"/projects/categoryCanonical/" + ProjectDataService.PROJECT_CATEGORIES_ID[index].id }>{option}</a>
         })}
       </div>
     )

@@ -133,8 +133,10 @@ export default class Form extends Component {
     });
   }
 
+
   onChangePCategoryId(e) {
-    const pCategoryId = e.target.selectedIndex; //e.target.value;
+    //const pCategoryId = e.target.selectedIndex; //e.target.value;
+    const pCategoryId = ProjectDataService.PROJECT_CATEGORIES_ID[e.target.selectedIndex].id; //e.target.value;
 
     this.setState(function(prevState) {
       return {
@@ -361,7 +363,7 @@ export default class Form extends Component {
                 class="form-control"
                 id="pCategoryId"
                 required
-                value={this.state.pCategories[currentForm.pCategoryId]}
+                value={ProjectDataService.getCategory(currentForm.pCategoryId)}
                 onChange={this.onChangePCategoryId}
                 name="pCategoryId"
                 >
