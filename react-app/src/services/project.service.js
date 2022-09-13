@@ -288,6 +288,7 @@ class ProjectDataService {
     {id: 14, name: "编程活动"},
     {id: 15, name: "小心愿活动"},
     {id: 17, name: "欣乐成长"},
+    // additional categories go here...
     {id: 16, name: "其它"},
   ];
 
