@@ -798,9 +798,15 @@ const SchoolsList = (props) => {
     []
   );
 
-  var hiddenColumns = (isMobile)
+  var hiddenColumnsMobile = (isMobile)
     ? ['donor', 'xr', 'responsesCount', 'projectsCount', 'lastVisit', 'region', 'latestProjectYear', 'stage', 'status', 'request', 'startAt']
     : [];
+
+  var hiddenColumnsLogin = (!AuthService.isLogin())
+    ? ["stage", "status", "request", "donor"]
+    : [];
+
+  var hiddenColumns = [...hiddenColumnsMobile, ...hiddenColumnsLogin];
 
   const {
     getTableProps,

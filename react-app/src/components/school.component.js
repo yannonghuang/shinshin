@@ -982,7 +982,7 @@ export default class School extends Component {
                 />
                 </div>
 
-                <div class="form-group col-sm-4">
+                <div class="form-group col-sm-4" hidden={!AuthService.getCurrentUser()}>
                 <label htmlFor="donor">捐款人</label>
                 <input
                 readonly={(this.state.readonly || !AuthService.isAdmin()) ? "" : false}
@@ -1026,7 +1026,7 @@ export default class School extends Component {
                 <div class="w-100"></div>
 
 
-                <div class="select-container form-group col-sm-4">
+                <div class="select-container form-group col-sm-4" hidden={!AuthService.getCurrentUser()}>
                 <label htmlFor="stage">学校阶段</label>
                 <select
                 disabled={this.state.readonly?"disabled":false}
@@ -1044,7 +1044,7 @@ export default class School extends Component {
                 </select>
                 </div>
 
-                <div class="select-container form-group col-sm-4">
+                <div class="select-container form-group col-sm-4" hidden={!AuthService.getCurrentUser()}>
                 <label htmlFor="status">学校状态</label>
                 <select
                 disabled={this.state.readonly?"disabled":false}
@@ -1062,7 +1062,7 @@ export default class School extends Component {
                 </select>
                 </div>
 
-                <div class="select-container form-group col-sm-4">
+                <div class="select-container form-group col-sm-4" hidden={!AuthService.getCurrentUser()}>
                 <label htmlFor="request">学校需求</label>
                 <select
                 disabled={this.state.readonly?"disabled":false}
