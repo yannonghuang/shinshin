@@ -67,7 +67,9 @@ const ProjectsByCategoriesList = (props) => {
 
   const onChangeSearchPCategory = (e) => {
     //const searchPCategoryId = e.target.selectedIndex;
-    const searchPCategoryId = ProjectDataService.PROJECT_CATEGORIES_ID[e.target.selectedIndex].id;
+    const searchPCategoryId = e.target.selectedIndex < categories.length
+      ? ProjectDataService.PROJECT_CATEGORIES_ID[e.target.selectedIndex].id
+      : categories.length;
 
     setPCategoryId(searchPCategoryId);
   };
@@ -406,7 +408,7 @@ const ProjectsByCategoriesList = (props) => {
           <select
             className="form-control col-sm-3 ml-2"
             placeholder="...."
-            value={ProjectDataService.getCategory(pCategoryId)}
+            value={pCategoryId < categories.length ? ProjectDataService.getCategory(pCategoryId) : 'all' }
             onChange={onChangeSearchPCategory}
             id="pCategoryId"
           >
