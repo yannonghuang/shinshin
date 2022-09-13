@@ -871,7 +871,7 @@ export default class Project extends Component {
                     class="form-control"
                     id="pCategoryId"
                     required
-                    value={this.state.pCategories[currentProject.pCategoryId]}
+                    value={ProjectDataService.getCategory(currentProject.pCategoryId) /*this.state.pCategories[currentProject.pCategoryId]*/}
                     onChange={this.onChangePCategoryId}
                     name="pCategoryId"
                   >
