@@ -944,7 +944,7 @@ const SchoolsList = (props) => {
             maxRange={2022}
           />
 
-          <select
+          <select hidden={!AuthService.isLogin()}
             className="form-control col-sm-2 ml-2"
             placeholder="...."
             value={searchStage}
@@ -958,7 +958,7 @@ const SchoolsList = (props) => {
             ))}
           </select>
 
-          <select
+          <select hidden={!AuthService.isLogin()}
             className="form-control col-sm-3 ml-2"
             placeholder="...."
             value={searchStatus}
@@ -972,7 +972,7 @@ const SchoolsList = (props) => {
             ))}
           </select>
 
-          <select
+          <select hidden={!AuthService.isLogin()}
             className="form-control col-sm-2 ml-2"
             placeholder="...."
             value={searchRequest}
@@ -986,7 +986,7 @@ const SchoolsList = (props) => {
             ))}
           </select>
 
-          <input
+          <input hidden={!AuthService.isLogin()}
             type="text"
             className="form-control col-sm-2 ml-2"
             placeholder="捐款人"
