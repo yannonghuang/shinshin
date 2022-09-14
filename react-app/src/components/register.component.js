@@ -106,7 +106,6 @@ export default class Register extends Component {
       readonly: true,
 
       dirty: false,
-      convertingFromContactOnly: false,
     };
   }
 
@@ -198,8 +197,7 @@ export default class Register extends Component {
       phone: this.state.phone,
       wechat: this.state.wechat,
       startAt: this.state.startAt,
-      title: this.state.title,
-      contactOnly: this.state.contactOnly
+      title: this.state.title
     };
 
     AuthService.update(
@@ -717,7 +715,7 @@ export default class Register extends Component {
                 <label htmlFor="username">用户名<span class="required">*</span>
                 </label>
                 <Input
-                  readonly={(!this.state.newuser && !this.state.convertingFromContactOnly) ? "" : false}
+                  readonly={(!this.state.newuser) ? "" : false}
                   type="text"
                   class="form-control"
                   name="username"
@@ -984,16 +982,16 @@ export default class Register extends Component {
               取消
             </button>)}
 
-            {/*!this.state.readonly && this.state.contactOnly && (
+            {!this.state.readonly && this.state.contactOnly && (
               <button className="btn btn-primary ml-2"
                 onClick={e => {
-                    this.setState({contactOnly: false, convertingFromContactOnly: true})
+                    this.setState({contactOnly: false, newuser: true})
                   }
                 }
               >
-                转为注册用户
+                创建新用户
               </button>
-            )*/}
+            )}
 
             {this.state.message && (
               <div class="form-group">

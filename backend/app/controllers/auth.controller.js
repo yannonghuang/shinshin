@@ -518,7 +518,8 @@ exports.signout = (req, res) => {
 exports.reset = (req, res) => {
   User.findOne({
     where: {
-      email: req.body.email
+      email: req.body.email,
+      contactOnly: null
     }
   })
     .then(user => {
@@ -547,7 +548,8 @@ exports.reset = (req, res) => {
 exports.findByEmail = (req, res) => {
   User.findOne({
     where: {
-      email: req.body.email
+      email: req.body.email,
+      contactOnly: null
     }
   })
     .then(user => {
