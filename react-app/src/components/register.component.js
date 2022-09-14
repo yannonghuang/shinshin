@@ -984,16 +984,16 @@ export default class Register extends Component {
               取消
             </button>)}
 
-            {!this.state.readonly && this.state.contactOnly && (
+            {/*!this.state.readonly && this.state.contactOnly && (
               <button className="btn btn-primary ml-2"
-                onClick={e => { /*this.state.newuser ? this.handleRegister : this.updateUser*/
+                onClick={e => {
                     this.setState({contactOnly: false, convertingFromContactOnly: true})
                   }
                 }
               >
                 转为注册用户
               </button>
-            )}
+            )*/}
 
             {this.state.message && (
               <div class="form-group">
