@@ -341,6 +341,7 @@ export default class Response extends Component {
           this.fileInputLabels.set('file' + i, label.innerText);
 
           inputs[i].addEventListener( 'change', function( e ) {
+            var label = e.target.previousElementSibling;
             var docFiles = e.target.files;
             var msgFilesPicked = docFiles.length > 0
               ? '已选文件：'
