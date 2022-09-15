@@ -836,7 +836,10 @@ export default class Register extends Component {
                   ))}
                 </select>
               </div>
-              <div class="form-group col-sm-4" title={'可多选：按Command(Mac系统)或Ctrl(windows系统)键'} hidden={this.state.schoolId}>
+
+              <div class="form-group col-sm-4" title={'可多选：按Command(Mac系统)或Ctrl(windows系统)键'}
+                hidden={this.state.schoolId || !AuthService.getCurrentUser()}
+              >
                 <label htmlFor="title">义工用户职位（所属部门）</label>
                 <select required
                   onChange={this.onChangeTitle.bind(this)}
