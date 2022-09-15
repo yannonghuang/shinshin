@@ -2,6 +2,7 @@ const db = require("../models");
 const config = require("../config/auth.config");
 const User = db.user;
 const School = db.schools;
+const Survey = db.surveys;
 const Role = db.role;
 const ROLES = db.ROLES;
 const Op = db.Sequelize.Op;
@@ -30,6 +31,26 @@ const getPagingData = (count, data, page, limit) => {
   return { totalItems, users, totalPages, currentPage };
 };
 
+const updatePrincipal = async (user) => {
+  if (!user || user.title != '校长') return;
+
+  try {
+    await School.update({principalId: user.id, principal: user.chineseName}, {
+      where: {
+        id: user.schoolId
+      }
+    });
+
+    await Survey.update({principalId: user.id, principal: user.chineseName}, {
+      where: {
+        schoolId: user.schoolId
+      }
+    });
+
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 // Update a user by the id in the request
 exports.update = (req, res) => {
@@ -62,6 +83,8 @@ exports.update = (req, res) => {
           } else {
             res.send({message: "User was updated successfully."});
           }
+
+          updatePrincipal(user);
         });
       } else {
         console.log("Cannot update User with id=${id}. Maybe User was not found or req.body is empty!");
@@ -346,6 +369,8 @@ exports.signup = (req, res) => {
           res.send({ message: "User was registered successfully!" });
         });
       }
+
+      updatePrincipal(user);
     })
     .catch(err => {
       res.status(500).send({ message: '创建用户异常，密码是必填项。。。' + err.message });
@@ -378,6 +403,8 @@ exports.updateContactOnly = (req, res) => {
           } else {
             res.send({message: "User was updated successfully."});
           }
+
+          updatePrincipal(user);
         });
       } else {
         console.log("Cannot update User with id=${id}. Maybe User was not found or req.body is empty!");
@@ -419,6 +446,8 @@ exports.createContactOnly = (req, res) => {
           res.send({ message: "User was registered successfully!" });
         });
       }
+
+      updatePrincipal(user);
     })
     .catch(err => {
       res.status(500).send({ message: '创建用户异常，。。。' + err.message });
