@@ -31,7 +31,7 @@ const getPagingData = (count, data, page, limit) => {
   return { totalItems, users, totalPages, currentPage };
 };
 
-const updatePrincipal = async (user) => {
+const newPrincipal = async (user) => {
   if (!user || user.title != '校长') return;
 
   try {
@@ -44,6 +44,80 @@ const updatePrincipal = async (user) => {
     await Survey.update({principalId: user.id, principal: user.chineseName}, {
       where: {
         schoolId: user.schoolId
+      }
+    });
+
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+const updatePrincipalOrContact = async (user) => {
+
+  try {
+    await School.update({principal: user.chineseName}, {
+      where: {
+        id: user.schoolId,
+        principalId: user.id
+      }
+    });
+
+    await School.update({contact: user.chineseName}, {
+      where: {
+        id: user.schoolId,
+        contactId: user.id
+      }
+    });
+
+    await Survey.update({principal: user.chineseName}, {
+      where: {
+        schoolId: user.schoolId,
+        principalId: user.id
+      }
+    });
+
+    await Survey.update({contact: user.chineseName}, {
+      where: {
+        schoolId: user.schoolId,
+        contactId: user.id
+      }
+    });
+
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+
+const deletePrincipalOrContact = async (userId) => {
+
+  try {
+    let user = await User.findByPk(userId);
+    await School.update({principalId: null, principal: null}, {
+      where: {
+        id: user.schoolId,
+        principalId: user.id
+      }
+    });
+
+    await School.update({contactId: null, contact: null}, {
+      where: {
+        id: user.schoolId,
+        contactId: user.id
+      }
+    });
+
+    await Survey.update({principalId: null, principal: null}, {
+      where: {
+        schoolId: user.schoolId,
+        principalId: user.id
+      }
+    });
+
+    await Survey.update({contactId: null, contact: null}, {
+      where: {
+        schoolId: user.schoolId,
+        contactId: user.id
       }
     });
 
@@ -84,7 +158,7 @@ exports.update = (req, res) => {
             res.send({message: "User was updated successfully."});
           }
 
-          updatePrincipal(user);
+          updatePrincipalOrContact(user);
         });
       } else {
         console.log("Cannot update User with id=${id}. Maybe User was not found or req.body is empty!");
@@ -306,8 +380,10 @@ var orderbyObject = null;
 };
 
 // Delete a user with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
   const id = req.params.id;
+
+  await deletePrincipalOrContact(id);
 
   User.destroy({
     where: { id: id }
@@ -370,7 +446,7 @@ exports.signup = (req, res) => {
         });
       }
 
-      updatePrincipal(user);
+      newPrincipal(user);
     })
     .catch(err => {
       res.status(500).send({ message: '创建用户异常，密码是必填项。。。' + err.message });
@@ -404,7 +480,7 @@ exports.updateContactOnly = (req, res) => {
             res.send({message: "User was updated successfully."});
           }
 
-          updatePrincipal(user);
+          updatePrincipalOrContact(user);
         });
       } else {
         console.log("Cannot update User with id=${id}. Maybe User was not found or req.body is empty!");
@@ -447,7 +523,7 @@ exports.createContactOnly = (req, res) => {
         });
       }
 
-      updatePrincipal(user);
+      newPrincipal(user);
     })
     .catch(err => {
       res.status(500).send({ message: '创建用户异常，。。。' + err.message });
