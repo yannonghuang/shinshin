@@ -820,7 +820,7 @@ export default class Register extends Component {
                 />
               </div>
 
-              <div class="form-group col-sm-4" hidden={!this.state.schoolId}>
+              <div class="form-group col-sm-4" hidden={!this.state.schoolId && AuthService.getCurrentUser()}>
                 <label htmlFor="title">职务</label>
                 <select required
                   onChange={this.onChangeTitle.bind(this)}
