@@ -359,7 +359,7 @@ exports.findAllByCategories = async (req, res) => {
         ((applied === undefined) ? `` : ((applied === 'true') ? `AND (response.formId is not null) ` : `AND (response.formId is null) `)) +
       `GROUP BY projects.pCategoryId, year(projects.startAt), projects.name ` +
         (canonical ? `` : `, response.formId `) +
-      `ORDER BY projects.pCategoryId, year(projects.startAt), projects.name ` +
+      `ORDER BY year(projects.startAt) desc, projects.pCategoryId, projects.name ` +
         (canonical ? `` : `, response.formId `) +
       (!exportFlag ? `LIMIT ${offset}, ${limit} ` : ``), {
          nest: true,

@@ -253,6 +253,10 @@ const ProjectsByCategoriesList = (props) => {
   const columns = useMemo(
     () => [
       {
+        Header: "项目年份",
+        accessor: "startAt",
+      },
+      {
         Header: "项目类型",
         accessor: "pCategoryId",
         Cell: (props) => {
@@ -265,11 +269,7 @@ const ProjectsByCategoriesList = (props) => {
         },
       },
       {
-        Header: "项目年份",
-        accessor: "startAt",
-      },
-      {
-        Header: "标题",
+        Header: "项目名称",
         accessor: "name",
       },
       {
