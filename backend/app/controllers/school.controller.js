@@ -82,7 +82,7 @@ const updateAndLog = async (newObj, oldObj, schoolId, userId, t, req) => {
         //goodUpdate = true;
       }
     }
-    goodUpdate = mandatoryC >= 2;
+    goodUpdate = mandatoryC >= 0; //2; relax constraint
   }
 
   if (!goodUpdate) {
