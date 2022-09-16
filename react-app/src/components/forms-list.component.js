@@ -380,7 +380,7 @@ const FormsList = (props) => {
             onSelect={onChangeSearchStartAt}
             hideInput={true}
             minRange={1995}
-            maxRange={2022}
+            maxRange={2025}
           />
 
           <input
