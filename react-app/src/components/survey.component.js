@@ -1101,7 +1101,7 @@ export default class Survey extends Component {
                 </label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="studentsCount"
                 required
@@ -1116,7 +1116,7 @@ export default class Survey extends Component {
                 </label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="teachersCount"
                 required
@@ -1151,7 +1151,7 @@ export default class Survey extends Component {
                 </label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="classesCount"
                 required
@@ -1166,7 +1166,7 @@ export default class Survey extends Component {
                 </label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="gradesCount"
                 required
@@ -1249,7 +1249,7 @@ export default class Survey extends Component {
                 <label htmlFor="stayBehindCount">留守儿童人数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="stayBehindCount"
                 required
@@ -1263,7 +1263,7 @@ export default class Survey extends Component {
                 <label htmlFor="boarderCount">学生住宿人数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="boarderCount"
                 required
@@ -1277,7 +1277,7 @@ export default class Survey extends Component {
                 <label htmlFor="kClassesCount">学前班级数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="kClassesCount"
                 required
@@ -1291,7 +1291,7 @@ export default class Survey extends Component {
                 <label htmlFor="kStudentsCount">学前学生数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="kStudentsCount"
                 required
@@ -1305,7 +1305,7 @@ export default class Survey extends Component {
                 <label htmlFor="mStudentsCount">初中学生数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="mStudentsCount"
                 required
@@ -1321,7 +1321,7 @@ export default class Survey extends Component {
                 <label htmlFor="g1ClassesCount">一年级班级数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="g1ClassesCount"
                 required
@@ -1335,7 +1335,7 @@ export default class Survey extends Component {
                 <label htmlFor="g2ClassesCount">二年级班级数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="g2ClassesCount"
                 required
@@ -1349,7 +1349,7 @@ export default class Survey extends Component {
                 <label htmlFor="g3ClassesCount">三年级班级数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="g3ClassesCount"
                 required
@@ -1363,7 +1363,7 @@ export default class Survey extends Component {
                 <label htmlFor="g4ClassesCount">四年级班级数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="g4ClassesCount"
                 required
@@ -1377,7 +1377,7 @@ export default class Survey extends Component {
                 <label htmlFor="g5ClassesCount">五年级班级数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="g5ClassesCount"
                 required
@@ -1391,7 +1391,7 @@ export default class Survey extends Component {
                 <label htmlFor="g6ClassesCount">六年级班级数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="g6ClassesCount"
                 required
@@ -1408,7 +1408,7 @@ export default class Survey extends Component {
                 <label htmlFor="g1StudentsCount">一年级学生数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="g1StudentsCount"
                 required
@@ -1422,7 +1422,7 @@ export default class Survey extends Component {
                 <label htmlFor="g2StudentsCount">二年级学生数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="g2StudentsCount"
                 required
@@ -1436,7 +1436,7 @@ export default class Survey extends Component {
                 <label htmlFor="g3StudentsCount">三年级学生数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="g3StudentsCount"
                 required
@@ -1450,7 +1450,7 @@ export default class Survey extends Component {
                 <label htmlFor="g4StudentsCount">四年级学生数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="g4StudentsCount"
                 required
@@ -1464,7 +1464,7 @@ export default class Survey extends Component {
                 <label htmlFor="g5StudentsCount">五年级学生数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="g5StudentsCount"
                 required
@@ -1478,7 +1478,7 @@ export default class Survey extends Component {
                 <label htmlFor="g6StudentsCount">六年级学生数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="g6StudentsCount"
                 required
@@ -1520,7 +1520,7 @@ export default class Survey extends Component {
                 <label htmlFor="computerRoomCount">电脑室电脑数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="computerRoomCount"
                 required
@@ -1534,7 +1534,7 @@ export default class Survey extends Component {
                 <label htmlFor="computersCount">办公电脑数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="computersCount"
                 required
@@ -1548,7 +1548,7 @@ export default class Survey extends Component {
                 <label htmlFor="multimediaSystemsCount">多媒体一体机数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="multimediaSystemsCount"
                 required
@@ -1578,7 +1578,7 @@ export default class Survey extends Component {
                 <label htmlFor="bookCornersCount">图书角数量</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="bookCornersCount"
                 required
@@ -1592,7 +1592,7 @@ export default class Survey extends Component {
                 <label htmlFor="booksCount">图书册数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="booksCount"
                 required

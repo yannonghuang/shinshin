@@ -1194,7 +1194,7 @@ export default class School extends Component {
                 <label htmlFor="studentsCount">学生人数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="studentsCount"
                 required
@@ -1208,7 +1208,7 @@ export default class School extends Component {
                 <label htmlFor="teachersCount">教师人数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="teachersCount"
                 required
@@ -1242,7 +1242,7 @@ export default class School extends Component {
                 <label htmlFor="classesCount">总班级数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="classesCount"
                 required
@@ -1256,7 +1256,7 @@ export default class School extends Component {
                 <label htmlFor="gradesCount">总年级数</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number"
+                type="number" min="0"
                 class="form-control"
                 id="gradesCount"
                 required
