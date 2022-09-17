@@ -853,6 +853,7 @@ export default class Project extends Component {
                 <div class="form-group col-sm-12">
                 <label htmlFor="description">项目描述</label>
                 <textarea
+                rows="10"
                 readonly={this.state.readonly?"":false}
                 class="form-control"
                 id="description"
@@ -866,7 +867,7 @@ export default class Project extends Component {
                 <div class="w-100"></div>
 
                 <div className="form-group col-sm-12">
-                  <label htmlFor="pCategoryId">项目类别</label>
+                  <label htmlFor="pCategoryId">项目类型</label>
                   <select
                     disabled={this.state.readonly?"disabled":false}
                     class="form-control"

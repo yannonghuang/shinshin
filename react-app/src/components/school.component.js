@@ -1312,7 +1312,7 @@ export default class School extends Component {
                 <div class="form-group col-sm-12">
                 <label htmlFor="description">简介</label>
                 <textarea
-                rows="4"
+                rows="10"
                 readonly={this.state.readonly?"":false}
                 class="form-control"
                 id="description"

@@ -621,7 +621,7 @@ export default class Response extends Component {
         </div>)
         : (
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
             {this.state.readonly && (
               <div class="box">
                 <a target="_blank" href={"/responses/" + currentResponse.id} class="btn btn-primary mb-4">编辑</a>
@@ -629,7 +629,7 @@ export default class Response extends Component {
             )}
             </div>
 
-            <div class="col-sm-4">
+            <div class="col-sm-6">
             <h4>项目申请（{this.state.readonly?"浏览":"编辑"}）</h4>
             <form>
               <div className="form-group">
@@ -647,6 +647,7 @@ export default class Response extends Component {
               <div className="form-group">
                 <label htmlFor="description">说明</label>
                 <textarea
+                  rows="10"
                   readonly={"true"}
                   type="text"
                   className="form-control"
@@ -667,7 +668,7 @@ export default class Response extends Component {
             </div>
 
             <div className="form-group ">
-              <label htmlFor="pCategoryId">项目类别</label>
+              <label htmlFor="pCategoryId">项目类型</label>
               <select
                 disabled={"true"}
                 class="form-control"
@@ -721,7 +722,7 @@ export default class Response extends Component {
             </form>
           </div>
 
-          <div class="col-sm-4">
+          <div class="col-sm-3">
            {!this.state.readonly && (<div>
              {!this.isUploading()
              ? <div>
@@ -807,7 +808,7 @@ export default class Response extends Component {
             { this.state.newresponse? (
               <button
                 type="submit"
-                className="btn btn-primary"
+                className="btn btn-primary mt-2"
                 onClick={() => {window.scrollTo(0, 0); this.submitResponse()}}
               >
                 提交
@@ -815,7 +816,7 @@ export default class Response extends Component {
             ) : (
               <button
                 type="submit"
-                className="btn btn-primary"
+                className="btn btn-primary mt-2"
                 onClick={() => {window.scrollTo(0, 0); this.updateResponse()}}
               >
                 保存
@@ -824,7 +825,7 @@ export default class Response extends Component {
 
             <button
               type="submit"
-              className="btn btn-primary ml-2"
+              className="btn btn-primary ml-2 mt-2"
               onClick={() => (!this.state.dirty || window.confirm("您确定要取消吗 ?")) && window.close()}
             >
               取消

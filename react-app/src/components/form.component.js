@@ -338,6 +338,7 @@ export default class Form extends Component {
                 <label htmlFor="description">说明</label>
                 <textarea
                   readonly={(!this.state.newform && this.state.readonly) ? "" : false}
+                  rows="10"
                   className="form-control"
                   id="description"
                   value={currentForm.description}
@@ -357,7 +358,7 @@ export default class Form extends Component {
               </div>
 
               <div className="form-group">
-                <label htmlFor="pCategoryId">项目类别</label>
+                <label htmlFor="pCategoryId">项目类型</label>
                 <select
                 disabled={this.state.readonly?"disabled":false}
                 class="form-control"

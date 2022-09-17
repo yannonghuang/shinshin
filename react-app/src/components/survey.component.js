@@ -1229,6 +1229,7 @@ export default class Survey extends Component {
                 <div class="form-group col-md-12">
                 <label htmlFor="description">简介</label>
                 <textarea
+                rows="10"
                 readonly={this.state.readonly?"":false}
                 class="form-control"
                 id="description"
