@@ -361,18 +361,15 @@ exports.findAllByCategories = async (req, res) => {
       `GROUP BY projects.pCategoryId, year(projects.startAt), projects.name ` +
         (canonical ? `` : `, response.formId `) +
       (
-      !orderby
-        ? `ORDER BY year(projects.startAt) desc, projects.pCategoryId, projects.name `
+        orderby[0].id === 'startAt'
+        ? `ORDER BY year(projects.startAt) ` + (orderby[0].desc ? `desc` : `asc`) + `, projects.pCategoryId, projects.name `
         :
-          orderby[0].id === 'startAt'
-          ? `ORDER BY year(projects.startAt) ` + (orderby[0].desc ? `desc` : `asc`) + `, projects.pCategoryId, projects.name `
+          orderby[0].id === 'pCategoryId'
+          ? `ORDER BY projects.pCategoryId ` + (orderby[0].desc ? `desc` : `asc`) + `, year(projects.startAt) desc, projects.name `
           :
-            orderby[0].id === 'pCategoryId'
-            ? `ORDER BY projects.pCategoryId ` + (orderby[0].desc ? `desc` : `asc`) + `, year(projects.startAt) desc, projects.name `
-            :
-              orderby[0].id === 'name'
-              ? `ORDER BY projects.name ` + (orderby[0].desc ? `desc` : `asc`) + `, year(projects.startAt) desc, projects.pCategoryId `
-              : ``
+            orderby[0].id === 'name'
+            ? `ORDER BY projects.name ` + (orderby[0].desc ? `desc` : `asc`) + `, year(projects.startAt) desc, projects.pCategoryId `
+            : `ORDER BY year(projects.startAt) desc, projects.pCategoryId, projects.name `
       )
       +
       (canonical ? `` : `, response.formId `) +
