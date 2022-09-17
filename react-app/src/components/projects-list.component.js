@@ -102,6 +102,15 @@ const ProjectsList = (props) => {
     setSearchStartAt(searchStartAt);
   };
 
+  const onChangeSearchPCategory = (e) => {
+    //const searchPCategoryId = e.target.selectedIndex;
+    const searchPCategoryId = e.target.selectedIndex < categories.length
+      ? ProjectDataService.PROJECT_CATEGORIES_ID[e.target.selectedIndex].id
+      : categories.length;
+
+    setPCategoryId(searchPCategoryId);
+  };
+
   const onClearSearch = (e) => {
     setSearchName("");
     setSearchCode("");
@@ -110,9 +119,16 @@ const ProjectsList = (props) => {
     setOrderby([]);
     setExportProjects([]);
 
+    setPCategoryAll();
+
     setPage(1);
   };
 
+  const setPCategoryAll = () => {
+    const select = document.getElementById('pCategoryId');
+    select.value = 'all';
+    setPCategoryId(categories.length);
+  }
 
   const getRequestParams = (exportFlag, refresh = false) => {
 
@@ -173,9 +189,14 @@ const ProjectsList = (props) => {
       params["exportFlag"] = exportFlag;
     }
 
+/**
     if (pCategoryId) {
       params["pCategoryId"] = pCategoryId;
     }
+*/
+
+    if ((pCategoryId || pCategoryId === 0) && (pCategoryId !== categories.length))
+      params["pCategoryId"] = pCategoryId;
 
     if (!exportFlag)
       localStorage.setItem('REQUEST_PARAMS', JSON.stringify(params));
@@ -255,7 +276,13 @@ const ProjectsList = (props) => {
             ? exportDetailColumns
             : schoolId
               ? exportColumnsWithSchoolKnown
-              : exportColumns);
+              : exportColumns,
+          {
+            header: '项目类型',
+            translate: (dataIndex) => {return ProjectDataService.getCategory(dataIndex)}
+          }
+        );
+
         const url = window.URL.createObjectURL(new Blob([csv]));
 
         const link = document.createElement('a');
@@ -278,7 +305,7 @@ const ProjectsList = (props) => {
     retrieveProjects();
   };
 
-  useEffect(search, [pageSize, orderby, searchCode, searchName, searchStartAt, searchRegion]);
+  useEffect(search, [pageSize, orderby, searchCode, searchName, searchStartAt, searchRegion, pCategoryId]);
   useEffect(retrieveProjects, [page]);
 
   const refreshList = () => {
@@ -366,12 +393,24 @@ const ProjectsList = (props) => {
         }
       },
       {
-        Header: "项目状态",
-        accessor: "status",
+        Header: "项目类型",
+        accessor: "pCategoryId",
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+                {ProjectDataService.getCategory(projectsRef.current[rowIdx].pCategoryId)}
+            </div>
+          );
+        },
       },
       {
         Header: "项目名称",
         accessor: "name",
+      },
+      {
+        Header: "项目状态",
+        accessor: "status",
       },
       {
         Header: "项目申请",
@@ -573,25 +612,17 @@ const ProjectsList = (props) => {
       <div className="col-sm-9">
         <h4>
           {schoolId && !embedded && (<a href={'/schoolsView/' + schoolId}>{schoolDisplay + '-'}</a>)}
-          {xr && '向荣支持'}学校项目列表 (总数：{totalItems}) {(pCategoryId || pCategoryId === 0) &&
+          {xr && '向荣支持'}学校项目列表 (总数：{totalItems})
+            {/* (pCategoryId || pCategoryId === 0) &&
             '[项目类型：' + ProjectDataService.getCategory(pCategoryId) +
             '; 年份：' + searchStartAt +
             '; 标题：' + searchName +
             ((formId === undefined || formId === 'undefined')
               ? ''
               : ('; 申请表：' + ((formId && formId !== 'null') ? '有' : '无'))) +
-            ']'}
+            ']' */}
         </h4>
         <div className="row mb-3 ">
-
-          <input
-            type="text"
-            className="form-control col-sm-4 ml-2"
-            placeholder="项目名称"
-            value={searchName}
-            onChange={onChangeSearchName}
-            id="searchName"
-          />
 
           <input
             type="text"
@@ -608,6 +639,32 @@ const ProjectsList = (props) => {
             hideInput={true}
             minRange={1995}
             maxRange={2025}
+          />
+
+          <select
+            className="form-control col-sm-3 ml-2"
+            placeholder="...."
+            value={pCategoryId < categories.length ? ProjectDataService.getCategory(pCategoryId) : 'all' }
+            onChange={onChangeSearchPCategory}
+            id="pCategoryId"
+          >
+            {categories.map((option) => (
+            <option value={option}>
+            {option}
+            </option>
+            ))}
+            <option value='all'>
+            项目类型
+            </option>
+          </select>
+
+          <input
+            type="text"
+            className="form-control col-sm-4 ml-2"
+            placeholder="项目名称"
+            value={searchName}
+            onChange={onChangeSearchName}
+            id="searchName"
           />
 
           {!embedded && (<input

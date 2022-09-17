@@ -223,7 +223,7 @@ exports.findAll2 = async (req, res) => {
         [Op.and]: [
             name ? { name: { [Op.like]: `%${name}%` } } : null,
             schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null,
-            pCategoryId ? { pCategoryId: { [Op.eq]: `${pCategoryId}` } } : null,
+            (pCategoryId || pCategoryId === 0) ? { pCategoryId: { [Op.eq]: `${pCategoryId}` } } : null,
             code ? { '$school.code$': { [Op.eq]: `${code}` } } : null,
             //region ? { '$school.region$': { [Op.like]: `%${region}%` } } : null,
             region ? { '$school.region$': { [Op.eq]: `${region}` } } : null,
@@ -263,6 +263,7 @@ exports.findAll2 = async (req, res) => {
   }
 
   var attributes = ['id', 'name', 'budget', 'description',
+    'pCategoryId',
     exportFlag
     ? [db.Sequelize.fn("year", db.Sequelize.col("projects.startAt")), "startAt"]
     : 'startAt'
