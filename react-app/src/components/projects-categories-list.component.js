@@ -26,6 +26,7 @@ const ProjectsByCategoriesList = (props) => {
 
   const [canonical, setCanonical] = useState(window.location.pathname.includes('Canonical'));
 
+  const [orderby, setOrderby] = useState([]);
 
   const projectsRef = useRef();
   projectsRef.current = projects;
@@ -85,6 +86,7 @@ const ProjectsByCategoriesList = (props) => {
     setSearchStartAt("");
     setSearchApplied("");
     setExportProjects([]);
+    setOrderby([]);
 
     setPCategoryAll();
 
@@ -137,6 +139,14 @@ const ProjectsByCategoriesList = (props) => {
     if (canonical) {
       params["canonical"] = canonical;
     }
+
+    if (orderby && orderby[0])
+      params["orderby"] = orderby;
+    else
+      params["orderby"] = [{
+        id: 'startAt',
+        desc: true
+      }];
 
     if (!exportFlag)
       localStorage.setItem('REQUEST_PARAMS', JSON.stringify(params));
@@ -215,7 +225,7 @@ const ProjectsByCategoriesList = (props) => {
     retrieveProjects();
   };
 
-  useEffect(search, [pageSize, searchName, searchStartAt, pCategoryId, searchApplied]);
+  useEffect(search, [pageSize, searchName, searchStartAt, pCategoryId, searchApplied, orderby]);
   useEffect(retrieveProjects, [page]);
 
 
@@ -347,15 +357,24 @@ const ProjectsByCategoriesList = (props) => {
     headerGroups,
     rows,
     prepareRow,
-    state,
     state: {sortBy},
   } = useTable({
     columns,
     data: projects,
+    disableSortRemove: true,
+    manualSortBy: true,
     initialState: {
       hiddenColumns: hiddenColumns,
+      sortBy: [
+        {
+          id: 'startAt',
+          desc: true
+        }
+      ]
     },
-  });
+  },
+  useSortBy
+  );
 
   const handlePageChange = (event, value) => {
     setPage(value);
@@ -366,6 +385,10 @@ const ProjectsByCategoriesList = (props) => {
     setPage(1);
   };
 
+  useEffect(() => {
+    if (sortBy && sortBy[0])
+      setOrderby(sortBy);
+  }, [sortBy]);
 
 
   return (
@@ -378,15 +401,6 @@ const ProjectsByCategoriesList = (props) => {
         </h4>
 
         <div className="row mb-3 ">
-
-          <input
-            type="text"
-            className="form-control col-sm-4 ml-2"
-            placeholder="项目名称"
-            value={searchName}
-            onChange={onChangeSearchName}
-            id="searchName"
-          />
 
           <input
             type="text"
@@ -418,9 +432,18 @@ const ProjectsByCategoriesList = (props) => {
             </option>
             ))}
             <option value='all'>
-            全部
+            项目类型
             </option>
           </select>
+
+          <input
+            type="text"
+            className="form-control col-sm-4 ml-2"
+            placeholder="项目名称"
+            value={searchName}
+            onChange={onChangeSearchName}
+            id="searchName"
+          />
 
 {/*
           <select
@@ -516,12 +539,12 @@ const ProjectsByCategoriesList = (props) => {
                 {headerGroup.headers.map((column) => (
                   // Add the sorting props to control sorting. For this example
                   // we can add them into the header props
-                  <th {...column.getHeaderProps()}>
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                     {column.render('Header')}
                     {/* Add a sort direction indicator */}
                     <span>
-                      {/*column.isSorted*/ (column.id === 'school.region' || column.id === 'school.code' ||
-                      column.id === 'school.name' || column.id === 'status')
+                      {/*column.isSorted*/ (column.id === 'startAt' || column.id === 'pCategoryId' ||
+                      column.id === 'name')
                       ? column.isSortedDesc
                         ? ' 🔽'
                         : ' 🔼'

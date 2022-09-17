@@ -322,6 +322,7 @@ exports.findAllByCategories = async (req, res) => {
   const exportFlag = req.body.exportFlag;
   const applied = req.body.applied;
   const canonical = req.body.canonical;
+  const orderby = req.body.orderby;
 
   var condition = {
         [Op.and]: [
@@ -359,8 +360,22 @@ exports.findAllByCategories = async (req, res) => {
         ((applied === undefined) ? `` : ((applied === 'true') ? `AND (response.formId is not null) ` : `AND (response.formId is null) `)) +
       `GROUP BY projects.pCategoryId, year(projects.startAt), projects.name ` +
         (canonical ? `` : `, response.formId `) +
-      `ORDER BY year(projects.startAt) desc, projects.pCategoryId, projects.name ` +
-        (canonical ? `` : `, response.formId `) +
+      (
+      !orderby
+        ? `ORDER BY year(projects.startAt) desc, projects.pCategoryId, projects.name `
+        :
+          orderby[0].id === 'startAt'
+          ? `ORDER BY year(projects.startAt) ` + (orderby[0].desc ? `desc` : `asc`) + `, projects.pCategoryId, projects.name `
+          :
+            orderby[0].id === 'pCategoryId'
+            ? `ORDER BY projects.pCategoryId ` + (orderby[0].desc ? `desc` : `asc`) + `, year(projects.startAt) desc, projects.name `
+            :
+              orderby[0].id === 'name'
+              ? `ORDER BY projects.name ` + (orderby[0].desc ? `desc` : `asc`) + `, year(projects.startAt) desc, projects.pCategoryId `
+              : ``
+      )
+      +
+      (canonical ? `` : `, response.formId `) +
       (!exportFlag ? `LIMIT ${offset}, ${limit} ` : ``), {
          nest: true,
          type: db.QueryTypes.SELECT
