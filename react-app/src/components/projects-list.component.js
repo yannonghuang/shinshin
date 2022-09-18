@@ -777,7 +777,7 @@ const ProjectsList = (props) => {
                     <span>
                       {/*column.isSorted*/ (column.id === 'school.region' || column.id === 'school.code' ||
                       column.id === 'school.name' || column.id === 'startAt' || column.id === 'status'
-                      || column.id === 'name' )
+                      || column.id === 'name' || column.id === 'pCategoryId')
                       ? column.isSortedDesc
                         ? ' 🔽'
                         : ' 🔼'
