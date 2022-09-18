@@ -151,11 +151,23 @@ const ResponsesList = (props) => {
     return result;
   }
 
+  const getSelectedLabels = (selectedValues, values) => {
+    let result = [];
+
+    if (!selectedValues) return result;
+
+    for (var i = 0; i < values.length; i++)
+      if (selectedValues.includes(values[i].value))
+        result.push(values[i].label)
+
+    return result;
+  }
+
   const flattenUserData = (userData) => {
     if (!userData || userData.length === 0) return '';
     let result = userData[0];
     for (var i = 1; i < userData.length; i++) {
-      result = result + ', ' + userData[i];
+      result = result + '，' + userData[i];
     }
     return result;
   }
@@ -164,9 +176,12 @@ const ResponsesList = (props) => {
     if (!fdata || fdata.length === 0) return {};
     let result = {};
     for (var i = 0; i < fdata.length; i++) {
-      if (fdata[i].type === 'file') continue;
+      if (fdata[i].type === 'file' || fdata[i].type === 'paragraph' || fdata[i].type === 'header') continue;
 
-      result[fdata[i].label] = flattenUserData(fdata[i].userData);
+      if (fdata[i].type === 'radio-group' || fdata[i].type === 'checkbox-group' || fdata[i].type === 'select')
+        result[fdata[i].label] = flattenUserData(getSelectedLabels(fdata[i].userData, fdata[i].values));
+      else
+        result[fdata[i].label] = flattenUserData(fdata[i].userData);
     }
 
     return result;
