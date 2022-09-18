@@ -167,7 +167,7 @@ const ResponsesList = (props) => {
     if (!userData || userData.length === 0) return '';
     let result = userData[0];
     for (var i = 1; i < userData.length; i++) {
-      result = result + '，' + userData[i];
+      result = result + '；' + userData[i];
     }
     return result;
   }
