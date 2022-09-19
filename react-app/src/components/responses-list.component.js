@@ -154,7 +154,27 @@ const ResponsesList = (props) => {
 */
 
 
-  const getFDataColumns = (sampleFData) => {
+  const getFColumns = (fColumns, sampleFData) => {
+    if (!sampleFData) return [];
+
+    let result = fColumns;
+    Object.keys(sampleFData).forEach(key => {
+      let included = false;
+      for (var i = 0; i < fColumns.length; i++)
+        if (fColumns[i].Header === key) {
+          included = true;
+          break;
+        }
+
+      if (!included)
+        result.push({Header: key, accessor: key});
+    });
+
+    return result;
+  }
+
+/**
+  const SAVE_getFDataColumns = (sampleFData) => {
     if (!sampleFData) return [];
 
     let result = [];
@@ -164,6 +184,7 @@ const ResponsesList = (props) => {
 
     return result;
   }
+*/
 
   const getSelectedLabels = (selectedValues, values) => {
     let result = [];
@@ -205,14 +226,15 @@ const ResponsesList = (props) => {
 
   const flatten = (responses) => {
     if (!responses || responses.length == 0) return [];
-    let result = [];
-    let f = {};
+    let flattenedFData = [];
+    let fColumns = [];
     for (var i = 0; i < responses.length; i++) {
       const {fdata, ...others} = responses[i];
-      f = flattenFData(fdata);
-      result.push({...others, ...f});
+      let f = flattenFData(fdata);
+      flattenedFData.push({...others, ...f});
+      fColumns = getFColumns(fColumns, f);
     }
-    return {flattenedFData: result, sampleFData: f};
+    return {flattenedFData, fColumns};
   }
 
   const retrieveExportResponses = () => {
@@ -222,8 +244,7 @@ const ResponsesList = (props) => {
       .then((response) => {
         const { responses, totalPages, totalItems } = response.data;
 
-        const {flattenedFData, sampleFData} = flatten(responses);
-        const fColumns = getFDataColumns(sampleFData);
+        const {flattenedFData, fColumns} = flatten(responses);
 
         const csv = ProjectDataService.exportCSV(flattenedFData, [...columns, ...exportColumns, ...fColumns], {
           header: '项目年份',
