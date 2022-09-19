@@ -137,25 +137,8 @@ const ResponsesList = (props) => {
     return 0;
   };
 
-/**
-  const getFDataColumns = (responses) => {
-    if (!responses || responses.length == 0) return [];
-    let fdata = responses[0].fdata;
-    if (!fdata || fdata.length === 0) return [];
-    let result = [];
-    for (var i = 0; i < fdata.length; i++) {
-      if (fdata[i].type === 'file') continue;
-
-      result.push({Header: fdata[i].label, accessor: fdata[i].label});
-      //let userData = fdata[i].userData;
-    }
-    return result;
-  }
-*/
-
-
   const getFColumns = (fColumns, sampleFData) => {
-    if (!sampleFData) return [];
+    if (!sampleFData) return fColumns;
 
     let result = fColumns;
     Object.keys(sampleFData).forEach(key => {
@@ -172,19 +155,6 @@ const ResponsesList = (props) => {
 
     return result;
   }
-
-/**
-  const SAVE_getFDataColumns = (sampleFData) => {
-    if (!sampleFData) return [];
-
-    let result = [];
-    Object.keys(sampleFData).forEach(key => {
-      result.push({Header: key, accessor: key});
-    });
-
-    return result;
-  }
-*/
 
   const getSelectedLabels = (selectedValues, values) => {
     let result = [];
