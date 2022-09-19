@@ -137,6 +137,7 @@ const ResponsesList = (props) => {
     return 0;
   };
 
+/**
   const getFDataColumns = (responses) => {
     if (!responses || responses.length == 0) return [];
     let fdata = responses[0].fdata;
@@ -148,6 +149,19 @@ const ResponsesList = (props) => {
       result.push({Header: fdata[i].label, accessor: fdata[i].label});
       //let userData = fdata[i].userData;
     }
+    return result;
+  }
+*/
+
+
+  const getFDataColumns = (sampleFData) => {
+    if (!sampleFData) return [];
+
+    let result = [];
+    Object.keys(sampleFData).forEach(key => {
+      result.push({Header: key, accessor: key});
+    });
+
     return result;
   }
 
@@ -178,10 +192,12 @@ const ResponsesList = (props) => {
     for (var i = 0; i < fdata.length; i++) {
       if (fdata[i].type === 'file' || fdata[i].type === 'paragraph' || fdata[i].type === 'header') continue;
 
+      let label = fdata[i].label.replace(/(<([^>]+)>)/ig, ''); // get rid of HTML formatting
+
       if (fdata[i].type === 'radio-group' || fdata[i].type === 'checkbox-group' || fdata[i].type === 'select')
-        result[fdata[i].label] = flattenUserData(getSelectedLabels(fdata[i].userData, fdata[i].values));
+        result[label] = flattenUserData(getSelectedLabels(fdata[i].userData, fdata[i].values));
       else
-        result[fdata[i].label] = flattenUserData(fdata[i].userData);
+        result[label] = flattenUserData(fdata[i].userData);
     }
 
     return result;
@@ -190,12 +206,13 @@ const ResponsesList = (props) => {
   const flatten = (responses) => {
     if (!responses || responses.length == 0) return [];
     let result = [];
+    let f = {};
     for (var i = 0; i < responses.length; i++) {
       const {fdata, ...others} = responses[i];
-      let f = flattenFData(fdata);
+      f = flattenFData(fdata);
       result.push({...others, ...f});
     }
-    return result;
+    return {flattenedFData: result, sampleFData: f};
   }
 
   const retrieveExportResponses = () => {
@@ -205,9 +222,10 @@ const ResponsesList = (props) => {
       .then((response) => {
         const { responses, totalPages, totalItems } = response.data;
 
-        const fColumns = getFDataColumns(responses);
+        const {flattenedFData, sampleFData} = flatten(responses);
+        const fColumns = getFDataColumns(sampleFData);
 
-        const csv = ProjectDataService.exportCSV(flatten(responses), [...columns, ... exportColumns, ...fColumns], {
+        const csv = ProjectDataService.exportCSV(flattenedFData, [...columns, ...exportColumns, ...fColumns], {
           header: '项目年份',
           translate: (dataIndex) => {
             return (!dataIndex || dataIndex.length < 4) ? dataIndex : dataIndex.substring(0, 4)
