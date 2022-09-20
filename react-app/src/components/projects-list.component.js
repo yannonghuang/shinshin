@@ -482,6 +482,11 @@ const ProjectsList = (props) => {
         },
       },
       {
+        Header: "学校地址",
+        accessor: 'school.address',
+        disableSortBy: true,
+      },
+      {
         Header: "学生数",
         accessor: 'school.studentsCount',
         disableSortBy: true,
@@ -551,9 +556,9 @@ const ProjectsList = (props) => {
   const exportOnlyColumns =
     ['school.studentsCount', 'school.teachersCount', 'school.category'];
 
-  var hiddenColumns = (embedded || schoolId)
-    ? [...schoolKnownColumns, ...exportOnlyColumns]
-    : [];
+  var hiddenColumns = ['school.address'];
+  if (embedded || schoolId) hiddenColumns =
+    [...hiddenColumns, ...schoolKnownColumns, ...exportOnlyColumns];
 
   const xrColumns =
     ["response.title", "status"];

@@ -346,6 +346,10 @@ const ResponsesList = (props) => {
       accessor: "school.surveys.schoolBoardRegisteredName",
     },
     {
+      Header: "学校地址",
+      accessor: "school.address",
+    },
+    {
       Header: "学校类型",
       accessor: "school.category",
     },
