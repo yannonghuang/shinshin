@@ -315,6 +315,7 @@ const ResponsesList = (props) => {
         newResponses.splice(rowIndex, 1);
 
         setResponses(newResponses);
+        setTotalItems(prevTotalItems => prevTotalItems - 1);
       })
       .catch((e) => {
         console.log(e);
