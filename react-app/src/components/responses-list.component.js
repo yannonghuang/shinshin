@@ -183,7 +183,8 @@ const ResponsesList = (props) => {
     for (var i = 0; i < fdata.length; i++) {
       if (fdata[i].type === 'file' || fdata[i].type === 'paragraph' || fdata[i].type === 'header') continue;
 
-      let label = fdata[i].label.replace(/(<([^>]+)>)/ig, '').trim(); // get rid of HTML formatting, trim leading & trailing spaces
+      // get rid of HTML formatting, trim leading & trailing spaces
+      let label = fdata[i].label.replace(/(<([^>]+)>)/ig, '').replace(/&nbsp;/g, ' ').trim();
 
       if (fdata[i].type === 'radio-group' || fdata[i].type === 'checkbox-group' || fdata[i].type === 'select')
         result[label] = flattenUserData(getSelectedLabels(fdata[i].userData, fdata[i].values));
