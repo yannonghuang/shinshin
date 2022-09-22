@@ -288,7 +288,7 @@ const ProjectsList = (props) => {
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download',
-          'school_projects' + (detail ? '_detail' : '') + '.csv'
+          'school_projects' + ''/*(detail ? '_detail' : '')*/ + '.csv'
         );
         document.body.appendChild(link);
         link.click();
@@ -721,6 +721,7 @@ const ProjectsList = (props) => {
           </div>
 */}
           <div hidden={!currentUser || isMobile}>
+{/*
             <button
               className="btn btn-primary"
               type="button"
@@ -728,13 +729,13 @@ const ProjectsList = (props) => {
             >
               导出
             </button>
-
+*/}
             <button hidden={schoolId}
-              className="btn btn-primary ml-2"
+              className="btn btn-primary"
               type="button"
               onClick={retrieveExportProjects}
             >
-              详细导出
+              导出
             </button>
 
           </div>
