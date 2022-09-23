@@ -337,6 +337,7 @@ const UsersList = (props) => {
         let newUsers = [...usersRef.current];
         newUsers.splice(rowIndex, 1);
         setUsers(newUsers);
+        setTotalItems(prevTotalItems => prevTotalItems - 1);
       })
       .catch((e) => {
         console.log(e);

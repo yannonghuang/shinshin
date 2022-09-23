@@ -380,6 +380,7 @@ const SchoolsList = (props) => {
         newSchools.splice(rowIndex, 1);
 
         setSchools(newSchools);
+        setTotalItems(prevTotalItems => prevTotalItems - 1);
       })
       .catch((e) => {
         console.log(e);

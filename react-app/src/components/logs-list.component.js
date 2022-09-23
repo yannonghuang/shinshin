@@ -325,6 +325,7 @@ const LogsList = (props) => {
         newLogs.splice(rowIndex, 1);
 
         setLogs(newLogs);
+        setTotalItems(prevTotalItems => prevTotalItems - 1);
       })
       .catch((e) => {
         console.log(e);

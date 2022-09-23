@@ -115,6 +115,7 @@ const AttachmentsList = (props) => {
         newAttachments.splice(rowIndex, 1);
 
         setAttachments(newAttachments);
+        setTotalItems(prevTotalItems => prevTotalItems - 1);
       })
       .catch((e) => {
         console.log(e);

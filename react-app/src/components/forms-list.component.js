@@ -165,6 +165,7 @@ const FormsList = (props) => {
         newForms.splice(rowIndex, 1);
 
         setForms(newForms);
+        setTotalItems(prevTotalItems => prevTotalItems - 1);
       })
       .catch((e) => {
         console.log(e);

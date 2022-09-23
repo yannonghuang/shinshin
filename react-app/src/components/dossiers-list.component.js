@@ -113,6 +113,7 @@ const DossiersList = (props) => {
         newDossiers.splice(rowIndex, 1);
 
         setDossiers(newDossiers);
+        setTotalItems(prevTotalItems => prevTotalItems - 1);
       })
       .catch((e) => {
         console.log(e);
