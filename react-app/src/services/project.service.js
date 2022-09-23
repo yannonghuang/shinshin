@@ -178,9 +178,12 @@ class ProjectDataService {
     const flatten = (obj, path = '', newline = true) => {
       if (obj === null) {
         let empty = '';
-        if (EMPTY_OBJECTS.get(path))
-          for (var i = 0; i < EMPTY_OBJECTS.get(path) - 1; i++) empty += ',';
-        return {hh: '', header: empty, body: empty}
+        if (EMPTY_OBJECTS.get(path)) {
+          for (var i = 0; i < EMPTY_OBJECTS.get(path).split(',').length - 1; i++) empty += ',';
+          //for (var i = 0; i < EMPTY_OBJECTS.get(path) - 1; i++) empty += ',';
+          return {hh: '', header: EMPTY_OBJECTS.get(path), body: empty};
+        }
+        //return {hh: '', header: empty, body: empty}
       }
 
       if (!(obj instanceof Object)) {
@@ -216,8 +219,11 @@ class ProjectDataService {
         body = body.substring(0, body.lastIndexOf(',')); // drop last ','
         header = header.substring(0, header.lastIndexOf(',')); // drop last ','
 
-        if (!EMPTY_OBJECTS.get(path) || EMPTY_OBJECTS.get(path) < body.split(',').length)
-          EMPTY_OBJECTS.set(path, body.split(',').length);
+        //if (!EMPTY_OBJECTS.get(path) || EMPTY_OBJECTS.get(path) < body.split(',').length)
+          //EMPTY_OBJECTS.set(path, body.split(',').length);
+
+        if (!EMPTY_OBJECTS.get(path) || EMPTY_OBJECTS.get(path).split(',').length < header.split(',').length)
+          EMPTY_OBJECTS.set(path, header);
 
         return {hh: '', header: header, body: body};
       }

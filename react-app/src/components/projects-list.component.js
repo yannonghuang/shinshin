@@ -354,6 +354,7 @@ const ProjectsList = (props) => {
         newProjects.splice(rowIndex, 1);
 
         setProjects(newProjects);
+        setTotalItems(prevTotalItems => prevTotalItems - 1);
       })
       .catch((e) => {
         console.log(e);
