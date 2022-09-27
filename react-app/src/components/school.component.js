@@ -1442,7 +1442,7 @@ export default class School extends Component {
                 <Tab>学校文档</Tab>
                 <Tab>学校照片</Tab>
                 {AuthService.isVolunteer() && <Tab>评论区</Tab>}
-                {currentSchool.xr ? <Tab>向荣支持项目</Tab> : null}
+                {AuthService.isVolunteer() && currentSchool.xr ? <Tab>向荣支持项目</Tab> : null}
               </TabList>
 
               <TabPanel>
@@ -1496,7 +1496,7 @@ export default class School extends Component {
                   schoolId = {currentSchool.id}
                 />
               </TabPanel>}
-              {currentSchool.xr ? (<TabPanel>
+              {AuthService.isVolunteer() && currentSchool.xr ? (<TabPanel>
                 <ProjectsList
                   schoolId = {currentSchool.id}
                   embedded = {true}

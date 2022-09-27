@@ -238,7 +238,10 @@ class App extends Component {
 
                 <div class="dropdown-divider"></div>
 
-                <a class="dropdown-item" href={"/projectsXR"}>向荣支持项目列表</a>
+                <a class="dropdown-item"
+                  hidden={!AuthService.isVolunteer()}
+                  href={"/projectsXR"}>向荣支持项目列表
+                </a>
                 <a class="dropdown-item" href={"/addPXR"}
                   hidden={!AuthService.isLogin() || !AuthService.isAdmin()}
                   target="_blank">新增向荣支持项目
