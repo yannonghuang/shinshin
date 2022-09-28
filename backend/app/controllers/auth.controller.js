@@ -47,6 +47,16 @@ const newPrincipal = async (user) => {
       }
     });
 
+    if (!user.contactOnly)
+      await User.destroy({
+        where: {
+          chineseName: user.chineseName,
+          //title: {[Op.eq]: '校长'},
+          contactOnly: {[Op.eq]: 1},
+          id: {[Op.gt]: 0}
+        }
+      });
+
   } catch (err) {
     console.log(err);
   }
