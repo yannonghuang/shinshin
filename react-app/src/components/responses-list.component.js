@@ -488,6 +488,9 @@ const ResponsesList = (props) => {
         disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
+          const expired = responsesRef.current[rowIdx].form.deadline
+            ? new Date(responsesRef.current[rowIdx].form.deadline) < new Date()
+            : false;
           return (
             <div>
               <Link
@@ -502,7 +505,10 @@ const ResponsesList = (props) => {
                 <i className="far fa-edit action mr-2"></i>
               </Link>)}
 
-              {!readonly && AuthService.isVolunteer() && (<span onClick={() => window.confirm("您确定要删除吗 ?") && deleteResponse(rowIdx)}>
+              {((!readonly && AuthService.isVolunteer()) ||
+              (AuthService.isSchoolUser() && !expired)) &&
+              (<span onClick={() => window.confirm("您确定要删除吗 ?") && deleteResponse(rowIdx)}
+              >
                 <i className="fas fa-trash action"></i>
               </span>)}
             </div>

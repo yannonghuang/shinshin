@@ -270,6 +270,11 @@ exports.findAll2 = async (req, res) => {
             attributes: ['id', 'username', 'chineseName'],
             required: false,
           },
+          {
+            model: Form,
+            attributes: ['deadline'],
+            required: false,
+          },
         ];
 
   var attributes = [
