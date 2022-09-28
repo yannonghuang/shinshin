@@ -561,8 +561,16 @@ export default class Response extends Component {
       this.uploadAttachments(attFiles);
       this.props.history.push("/responses/" + response.data.id);
     })
-    .catch(e => {
-      console.log(e);
+    .catch(error => {
+      const resMessage =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      alert(resMessage)
+      console.log(resMessage);
     });
 
       //$('input[name="responseId"]').attr('value', this.state.currentResponse.id);

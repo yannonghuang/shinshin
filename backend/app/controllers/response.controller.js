@@ -37,6 +37,20 @@ exports.create = async (req, res) => {
     return;
   }
 
+  const testResponses = await Response.findAll({
+    where: {
+      formId: req.body.formId,
+      schoolId: req.body.schoolId,
+    }
+  });
+
+  if (testResponses && testResponses.length > 0) {
+    res.status(400).send({
+      message: "该学校已经申请该项目。。。"
+    });
+    return;
+  }
+
   const formId = req.body.formId;
   var startAt = null;
   if (formId) {
