@@ -31,6 +31,22 @@ const getPagingData = (count, data, page, limit) => {
   return { totalItems, users, totalPages, currentPage };
 };
 
+const newRegisteredUser = async (user) => {
+  try {
+    if (!user.contactOnly)
+      await User.destroy({
+        where: {
+          chineseName: user.chineseName,
+          contactOnly: {[Op.eq]: 1},
+          id: {[Op.gt]: 0}
+        }
+      });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+
 const newPrincipal = async (user) => {
   if (!user || user.title != '校长') return;
 
@@ -46,16 +62,6 @@ const newPrincipal = async (user) => {
         schoolId: user.schoolId
       }
     });
-
-    if (!user.contactOnly)
-      await User.destroy({
-        where: {
-          chineseName: user.chineseName,
-          //title: {[Op.eq]: '校长'},
-          contactOnly: {[Op.eq]: 1},
-          id: {[Op.gt]: 0}
-        }
-      });
 
   } catch (err) {
     console.log(err);
@@ -457,6 +463,7 @@ exports.signup = (req, res) => {
       }
 
       newPrincipal(user);
+      newRegisteredUser(user);
     })
     .catch(err => {
       res.status(500).send({ message: '创建用户异常，密码是必填项。。。' + err.message });
