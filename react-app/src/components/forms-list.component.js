@@ -269,7 +269,7 @@ const FormsList = (props) => {
           const rowIdx = props.row.id;
           const expired = formsRef.current[rowIdx].deadline
             ? new Date(formsRef.current[rowIdx].deadline) < new Date()
-            : false;
+            : true;
           return (
             <div>
               {formsRef.current[rowIdx].published && <Link

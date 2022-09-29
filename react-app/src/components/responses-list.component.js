@@ -490,7 +490,7 @@ const ResponsesList = (props) => {
           const rowIdx = props.row.id;
           const expired = responsesRef.current[rowIdx].form.deadline
             ? new Date(responsesRef.current[rowIdx].form.deadline) < new Date()
-            : false;
+            : true;
           return (
             <div>
               <Link
