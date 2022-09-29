@@ -37,8 +37,9 @@ const newRegisteredUser = async (user) => {
       await User.destroy({
         where: {
           chineseName: user.chineseName,
-          contactOnly: {[Op.eq]: 1},
-          id: {[Op.gt]: 0}
+          schoolId: {[Op.eq]: user.schoolId},
+          //contactOnly: {[Op.eq]: 1},
+          id: {[Op.ne]: user.id}
         }
       });
   } catch (err) {
