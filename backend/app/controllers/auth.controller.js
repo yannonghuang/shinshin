@@ -32,16 +32,59 @@ const getPagingData = (count, data, page, limit) => {
 };
 
 const newRegisteredUser = async (user) => {
+  if (user.contactOnly) return;
+
   try {
-    if (!user.contactOnly)
-      await User.destroy({
+    const oldUsers = await User.findAll({
+      where: {
+        chineseName: user.chineseName,
+        schoolId: {[Op.eq]: user.schoolId},
+        id: {[Op.ne]: user.id}
+      }
+    });
+
+    if (!oldUsers || !oldUsers[0]) return;
+
+    for (var i = 0; i < oldUsers.length; i++) {
+
+      await School.update({principalId: user.id, principal: user.chineseName}, {
         where: {
-          chineseName: user.chineseName,
-          schoolId: {[Op.eq]: user.schoolId},
-          //contactOnly: {[Op.eq]: 1},
-          id: {[Op.ne]: user.id}
+          id: user.schoolId,
+          principalId: oldUsers[i].id
         }
       });
+
+      await School.update({contactId: user.id, contact: user.chineseName}, {
+        where: {
+          id: user.schoolId,
+          contactId: oldUsers[i].id
+        }
+      });
+
+      await Survey.update({principalId: user.id, principal: user.chineseName}, {
+        where: {
+          schoolId: user.schoolId,
+          principalId: oldUsers[i].id
+        }
+      });
+
+      await Survey.update({contactId: user.id, contact: user.chineseName}, {
+        where: {
+          schoolId: user.schoolId,
+          contactId: oldUsers[i].id
+        }
+      });
+
+      User.destroy({
+        where: {
+          //chineseName: user.chineseName,
+          //schoolId: {[Op.eq]: user.schoolId},
+          id: {[Op.eq]: oldUsers[i].id}
+        }
+      });
+
+    }
+
   } catch (err) {
     console.log(err);
   }
