@@ -13,6 +13,8 @@ import YearPicker from 'react-single-year-picker';
 
 import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
 
+import debounce from 'lodash.debounce';
+
 const SchoolsList = (props) => {
   const [schools, setSchools] = useState([]);
   const [exportSchools, setExportSchools] = useState([]);
@@ -60,8 +62,13 @@ const SchoolsList = (props) => {
 
   const onChangeSearchCode = (e) => {
     const searchCode = e.target.value;
-    setSearchCode(searchCode);
+    //setSearchCode(searchCode);
+    setSearchCodeDebounced(searchCode);
   };
+
+  const setSearchCodeDebounced = useMemo(
+    () => debounce(setSearchCode, 100)
+  , []);
 
   const onChangeSearchRegion = (e) => {
     const searchRegion = e.target.value;
@@ -343,7 +350,7 @@ const SchoolsList = (props) => {
   };
 
   useEffect(search, [pageSize, orderby, searchName, searchCode, searchRegion, searchStartAt, searchLatestProjectYear,
-                            searchLastVisit, searchDonor, searchStage, searchStatus, searchRequest, searchXR]);
+                     searchLastVisit, searchDonor, searchStage, searchStatus, searchRequest, searchXR]);
 
   useEffect(retrieveSchools, [page]);
 

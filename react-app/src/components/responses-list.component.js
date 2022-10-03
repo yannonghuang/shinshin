@@ -490,7 +490,7 @@ const ResponsesList = (props) => {
         disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
-          const expired = responsesRef.current[rowIdx].form.deadline
+          const expired = (responsesRef.current[rowIdx].form && responsesRef.current[rowIdx].form.deadline)
             ? new Date(responsesRef.current[rowIdx].form.deadline) < new Date()
             : true;
           return (
