@@ -62,8 +62,8 @@ const SchoolsList = (props) => {
 
   const onChangeSearchCode = (e) => {
     const searchCode = e.target.value;
-    //setSearchCode(searchCode);
-    setSearchCodeDebounced(searchCode);
+    setSearchCode(searchCode);
+    //setSearchCodeDebounced(searchCode);
   };
 
   const setSearchCodeDebounced = useMemo(
