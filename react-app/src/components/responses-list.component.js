@@ -28,8 +28,8 @@ const ResponsesList = (props) => {
   const [schoolDisplay, setSchoolDisplay] = useState(null);
 
 
-  const [trigger, setTrigger] = useState(false);
-  const [triggerPage, setTriggerPage] = useState(false);
+  //const [trigger, setTrigger] = useState(false);
+  //const [triggerPage, setTriggerPage] = useState(false);
   const [startup, setStartup] = useState(true);
 
   const orderbyDefault = [
@@ -63,7 +63,7 @@ const ResponsesList = (props) => {
     const searchTitle = e.target.value;
     setSearchTitle(searchTitle);
 
-    setTrigger(!trigger);
+    //setTrigger(!trigger);
     setStartup(false);
   };
 
@@ -71,7 +71,7 @@ const ResponsesList = (props) => {
     const searchCode = e.target.value;
     setSearchCode(searchCode);
 
-    setTrigger(!trigger);
+    //setTrigger(!trigger);
     setStartup(false);
   };
 
@@ -79,7 +79,7 @@ const ResponsesList = (props) => {
     const searchStartAt = e; // e.target.value;
     setSearchStartAt(searchStartAt);
 
-    setTrigger(!trigger);
+    //setTrigger(!trigger);
     setStartup(false);
   };
 
@@ -87,7 +87,7 @@ const ResponsesList = (props) => {
     const searchStartAt = e; //e.target.value;
     setSearchStartAt(searchStartAt);
 
-    setTrigger(!trigger);
+    //setTrigger(!trigger);
     setStartup(false);
   };
 
@@ -108,10 +108,12 @@ const ResponsesList = (props) => {
 
   const getRequestParams = (exportFlag, refresh = false) => {
     //const user = AuthService.getCurrentUser();
+    const REQUEST_PARAMS_KEY = window.location.href;
     if (refresh) {
-      let params = JSON.parse(localStorage.getItem('REQUEST_PARAMS_RESPONSES_LIST'));
+      let params = JSON.parse(localStorage.getItem(REQUEST_PARAMS_KEY));
       if (params) {
         restoreRequestParams(params);
+        localStorage.removeItem(REQUEST_PARAMS_KEY);
         return params;
       }
     }
@@ -159,7 +161,7 @@ const ResponsesList = (props) => {
     }
 
     if (!exportFlag)
-      localStorage.setItem('REQUEST_PARAMS_RESPONSES_LIST', JSON.stringify(params));
+      localStorage.setItem(REQUEST_PARAMS_KEY, JSON.stringify(params));
 
     return params;
   };
@@ -173,7 +175,7 @@ const ResponsesList = (props) => {
 
     setPage(1);
 
-    setTrigger(!trigger);
+    //setTrigger(!trigger);
     setStartup(false);
   };
 
@@ -327,11 +329,10 @@ const ResponsesList = (props) => {
     retrieveResponses();
   };
 
-  useEffect(refreshList, [trigger]);
-  //useEffect(refreshList, [pageSize, orderby, searchTitle, searchCode, searchStartAt]);
-  useEffect(retrieveResponses, [triggerPage]);
-  //useEffect(retrieveResponses, [page]);
-  //useEffect(retrieveResponses, [page]);
+  //useEffect(refreshList, [trigger]);
+  useEffect(refreshList, [pageSize, orderby, searchTitle, searchCode, searchStartAt]);
+  //useEffect(retrieveResponses, [triggerPage]);
+  useEffect(retrieveResponses, [page]);
   useEffect(() => {retrieveResponses(true)}, []);
 
   const getSchoolDisplay = () => {
@@ -622,7 +623,7 @@ const ResponsesList = (props) => {
   const handlePageChange = (event, value) => {
     setPage(value);
 
-    setTriggerPage(!triggerPage);
+    //setTriggerPage(!triggerPage);
     setStartup(false);
   };
 
@@ -635,7 +636,7 @@ const ResponsesList = (props) => {
     if (sortBy && sortBy[0]) {
       setOrderby(sortBy);
 
-      setTrigger(!trigger);
+      //setTrigger(!trigger);
       setStartup(false);
     }
   }, [sortBy]);
