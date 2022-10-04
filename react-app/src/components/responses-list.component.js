@@ -91,29 +91,18 @@ const ResponsesList = (props) => {
     setStartup(false);
   };
 
-  const restoreRequestParams = () => {
-
-    let params = JSON.parse(localStorage.getItem('REQUEST_PARAMS_RESPONSES_LIST'));
+  const restoreRequestParams = (params) => {
     if (!params) return;
 
     setSearchTitle(params["title"]);
-
     setSearchCode(params["code"]);
-
     setSearchStartAt(params["startAt"]);
-
     setPage(params["page"] + 1);
-
     setPageSize(params["size"]);
-
     setFormId(params["formId"]);
-
     setSchoolId(params["schoolId"]);
-
     setOrderby(params["orderby"]);
-
     setUserId(params["userId"]);
-
   };
 
 
@@ -122,7 +111,7 @@ const ResponsesList = (props) => {
     if (refresh) {
       let params = JSON.parse(localStorage.getItem('REQUEST_PARAMS_RESPONSES_LIST'));
       if (params) {
-        restoreRequestParams();
+        restoreRequestParams(params);
         return params;
       }
     }
