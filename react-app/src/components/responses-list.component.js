@@ -27,9 +27,6 @@ const ResponsesList = (props) => {
   const [userId, setUserId] = useState(props.match? props.match.params.userId : props.userId);
   const [schoolDisplay, setSchoolDisplay] = useState(null);
 
-
-  //const [trigger, setTrigger] = useState(false);
-  //const [triggerPage, setTriggerPage] = useState(false);
   const [startup, setStartup] = useState(true);
 
   const orderbyDefault = [
@@ -63,7 +60,6 @@ const ResponsesList = (props) => {
     const searchTitle = e.target.value;
     setSearchTitle(searchTitle);
 
-    //setTrigger(!trigger);
     setStartup(false);
   };
 
@@ -71,7 +67,6 @@ const ResponsesList = (props) => {
     const searchCode = e.target.value;
     setSearchCode(searchCode);
 
-    //setTrigger(!trigger);
     setStartup(false);
   };
 
@@ -79,7 +74,6 @@ const ResponsesList = (props) => {
     const searchStartAt = e; // e.target.value;
     setSearchStartAt(searchStartAt);
 
-    //setTrigger(!trigger);
     setStartup(false);
   };
 
@@ -87,7 +81,6 @@ const ResponsesList = (props) => {
     const searchStartAt = e; //e.target.value;
     setSearchStartAt(searchStartAt);
 
-    //setTrigger(!trigger);
     setStartup(false);
   };
 
@@ -175,7 +168,6 @@ const ResponsesList = (props) => {
 
     setPage(1);
 
-    //setTrigger(!trigger);
     setStartup(false);
   };
 
@@ -329,9 +321,7 @@ const ResponsesList = (props) => {
     retrieveResponses();
   };
 
-  //useEffect(refreshList, [trigger]);
   useEffect(refreshList, [pageSize, orderby, searchTitle, searchCode, searchStartAt]);
-  //useEffect(retrieveResponses, [triggerPage]);
   useEffect(retrieveResponses, [page]);
   useEffect(() => {retrieveResponses(true)}, []);
 
@@ -623,20 +613,20 @@ const ResponsesList = (props) => {
   const handlePageChange = (event, value) => {
     setPage(value);
 
-    //setTriggerPage(!triggerPage);
     setStartup(false);
   };
 
   const handlePageSizeChange = (event) => {
     setPageSize(event.target.value);
     setPage(1);
+
+    setStartup(false);
   };
 
   useEffect(() => {
     if (sortBy && sortBy[0]) {
       setOrderby(sortBy);
 
-      //setTrigger(!trigger);
       setStartup(false);
     }
   }, [sortBy]);

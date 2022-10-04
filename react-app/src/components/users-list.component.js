@@ -47,7 +47,16 @@ const UsersList = (props) => {
 
   const pageSizes = [20, 30, 50];
 
-  const [orderby, setOrderby] = useState([]);
+  const orderbyDefault = [
+    {
+      id: 'startAt',
+      desc: true
+    }
+  ];
+
+  const [orderby, setOrderby] = useState(orderbyDefault);
+
+  const [startup, setStartup] = useState(true);
 
   const [totalItems, setTotalItems] = useState(0);
 
@@ -57,55 +66,75 @@ const UsersList = (props) => {
   const onChangeSearchRole = (e) => {
     const searchRole = e.target.value;
     setSearchRole(searchRole);
+
+    setStartup(false);
   };
 
   const [searchTitle, setSearchTitle] = useState("");
   const onChangeSearchTitle = (e) => {
     const searchTitle = e.target.value;
     setSearchTitle(searchTitle);
+
+    setStartup(false);
   };
 
   const [searchUsername, setSearchUsername] = useState("");
   const onChangeSearchUsername = (e) => {
     const searchUsername = e.target.value;
     setSearchUsername(searchUsername);
+
+    setStartup(false);
   };
 
   const [searchEmail, setSearchEmail] = useState("");
   const onChangeSearchEmail = (e) => {
     const searchEmail = e.target.value;
     setSearchEmail(searchEmail);
+
+    setStartup(false);
   };
 
   const [searchSchoolCode, setSearchSchoolCode] = useState("");
   const onChangeSearchSchoolCode = (e) => {
     const searchSchoolCode = e.target.value;
     setSearchSchoolCode(searchSchoolCode);
+
+    setStartup(false);
   };
 
   const [searchContactOnly, setSearchContactOnly] = useState(null);
   const onChangeSearchContactOnly = (e) => {
     const searchContactOnly = e.target.value;
     setSearchContactOnly(searchContactOnly);
+
+    setStartup(false);
   };
 
   const [searchEmailVerified, setSearchEmailVerified] = useState(null);
   const onChangeSearchEmailVerified = (e) => {
     const searchEmailVerified = e.target.value;
     setSearchEmailVerified(searchEmailVerified);
+
+    setStartup(false);
   };
 
   const [searchStartAt, setSearchStartAt] = useState("");
   const onChangeSearchStartAt = (e) => {
     const searchStartAt = e; //e.target.value;
     setSearchStartAt(searchStartAt);
+
+    setStartup(false);
   };
 
 
   const getRequestParams = (exportFlag = false, refresh = false) => {
+    const REQUEST_PARAMS_KEY = window.location.href;
+
     if (refresh) {
-      let params = JSON.parse(localStorage.getItem('REQUEST_PARAMS'));
+      let params = JSON.parse(localStorage.getItem(REQUEST_PARAMS_KEY));
       if (params) {
+        restoreRequestParams(params);
+        localStorage.removeItem(REQUEST_PARAMS_KEY);
         return params;
       }
     }
@@ -165,9 +194,28 @@ const UsersList = (props) => {
     }
 
     if (!exportFlag)
-      localStorage.setItem('REQUEST_PARAMS', JSON.stringify(params));
+      localStorage.setItem(REQUEST_PARAMS_KEY, JSON.stringify(params));
 
     return params;
+  };
+
+
+  const restoreRequestParams = (params) => {
+    if (!params) return;
+
+    setSearchUsername(params["username"]);
+    setSearchEmail(params["email"]);
+    setSearchRole(params["role"]);
+    setSearchTitle(params["title"]);
+    setSearchSchoolCode(params["schoolCode"]);
+    setSearchContactOnly(params["contactOnly"]);
+    setSearchEmailVerified(params["emailVerified"]);
+    setSearchStartAt(params["startAt"]);
+    setPage(params["page"] + 1);
+    setPageSize(params["size"]);
+    setSchoolId(params["schoolId"]);
+    setOrderby(params["orderby"]);
+
   };
 
   const onClearSearch = (e) => {
@@ -178,8 +226,12 @@ const UsersList = (props) => {
     setSearchTitle("");
     setSearchContactOnly("");
     setSearchEmailVerified("");
-    setOrderby([]);
+    setOrderby(orderbyDefault);
     setSearchStartAt("");
+
+    setPage(1);
+
+    setStartup(false);
   };
 
   const getRoleLabel = (name) => {
@@ -251,6 +303,8 @@ const UsersList = (props) => {
   useEffect(getDepartments, []);
 
   const retrieveUsers = (refresh = false) => {
+    if (startup && !refresh) return;
+
     const params = getRequestParams(false, refresh);
 
     UserDataService.getAll2(params)
@@ -307,7 +361,7 @@ const UsersList = (props) => {
   useEffect(retrieveUsers, [page]);
   useEffect(search, [pageSize, orderby, searchRole, searchTitle, searchUsername, searchEmail, searchSchoolCode,
     searchContactOnly, searchEmailVerified, searchStartAt]);
-
+  useEffect(() => {retrieveUsers(true)}, []);
 
   const removeAllUsers = () => {
     UserDataService.deleteAll()
@@ -524,28 +578,37 @@ const UsersList = (props) => {
     manualSortBy: true,
     initialState: {
       hiddenColumns: hiddenColumns,
+/**
       sortBy: [
         {
           id: 'startAt',
-          desc: false
+          desc: true
         }
       ]
+*/
     },
   },
   useSortBy);
 
   const handlePageChange = (event, value) => {
     setPage(value);
+
+    setStartup(false);
   };
 
   const handlePageSizeChange = (event) => {
     setPageSize(event.target.value);
     setPage(1);
+
+    setStartup(false);
   };
 
   useEffect(() => {
-    if (sortBy && sortBy[0])
+    if (sortBy && sortBy[0]) {
       setOrderby(sortBy);
+
+      setStartup(false);
+    }
   }, [sortBy]);
 
 
