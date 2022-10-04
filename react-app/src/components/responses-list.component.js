@@ -27,7 +27,20 @@ const ResponsesList = (props) => {
   const [userId, setUserId] = useState(props.match? props.match.params.userId : props.userId);
   const [schoolDisplay, setSchoolDisplay] = useState(null);
 
-  const [orderby, setOrderby] = useState([]);
+
+  const [trigger, setTrigger] = useState(false);
+  const [triggerPage, setTriggerPage] = useState(false);
+  const [startup, setStartup] = useState(true);
+
+  const orderbyDefault = [
+    {
+      id: 'startAt',
+      //id: 'school.code',
+      desc: true
+    }
+  ];
+
+  const [orderby, setOrderby] = useState(orderbyDefault);
 
   const [exportResponses, setExportResponses] = useState([]);
 
@@ -49,25 +62,70 @@ const ResponsesList = (props) => {
   const onChangeSearchTitle = (e) => {
     const searchTitle = e.target.value;
     setSearchTitle(searchTitle);
+
+    setTrigger(!trigger);
+    setStartup(false);
   };
 
   const onChangeSearchCode = (e) => {
     const searchCode = e.target.value;
     setSearchCode(searchCode);
+
+    setTrigger(!trigger);
+    setStartup(false);
   };
 
   const onChangeSearchStartAt = (e) => {
     const searchStartAt = e; // e.target.value;
     setSearchStartAt(searchStartAt);
+
+    setTrigger(!trigger);
+    setStartup(false);
   };
 
   const onChangeSearchInputStartAt = (e) => {
     const searchStartAt = e; //e.target.value;
     setSearchStartAt(searchStartAt);
+
+    setTrigger(!trigger);
+    setStartup(false);
   };
 
-  const getRequestParams = (/*searchTitle, page, pageSize, formId, schoolId, userId, orderby*/exportFlag = false) => {
+  const restoreRequestParams = () => {
+
+    let params = JSON.parse(localStorage.getItem('REQUEST_PARAMS_RESPONSES_LIST'));
+    if (!params) return;
+
+    setSearchTitle(params["title"]);
+
+    setSearchCode(params["code"]);
+
+    setSearchStartAt(params["startAt"]);
+
+    setPage(params["page"] + 1);
+
+    setPageSize(params["size"]);
+
+    setFormId(params["formId"]);
+
+    setSchoolId(params["schoolId"]);
+
+    setOrderby(params["orderby"]);
+
+    setUserId(params["userId"]);
+
+  };
+
+
+  const getRequestParams = (exportFlag, refresh = false) => {
     //const user = AuthService.getCurrentUser();
+    if (refresh) {
+      let params = JSON.parse(localStorage.getItem('REQUEST_PARAMS_RESPONSES_LIST'));
+      if (params) {
+        restoreRequestParams();
+        return params;
+      }
+    }
 
     let params = {};
 
@@ -111,6 +169,9 @@ const ResponsesList = (props) => {
       params["exportFlag"] = exportFlag;
     }
 
+    if (!exportFlag)
+      localStorage.setItem('REQUEST_PARAMS_RESPONSES_LIST', JSON.stringify(params));
+
     return params;
   };
 
@@ -118,10 +179,13 @@ const ResponsesList = (props) => {
     setSearchTitle("");
     setSearchCode("");
     setSearchStartAt("");
-    setOrderby([]);
+    setOrderby(orderbyDefault);
     setExportResponses([]);
 
     setPage(1);
+
+    setTrigger(!trigger);
+    setStartup(false);
   };
 
   const getAttachmentsCount = async (responseId) => {
@@ -244,8 +308,10 @@ const ResponsesList = (props) => {
       });
   };
 
-  const retrieveResponses = () => {
-    const params = getRequestParams();
+  const retrieveResponses = (refresh = false) => {
+    if (startup && !refresh) return;
+
+    const params = getRequestParams(false, refresh);
 
     ResponseDataService.getAll2(params)
       .then((response) => {
@@ -272,9 +338,12 @@ const ResponsesList = (props) => {
     retrieveResponses();
   };
 
-  useEffect(refreshList, [pageSize, orderby, searchTitle, searchCode, searchStartAt]);
-  useEffect(retrieveResponses, [page]);
-  useEffect(retrieveResponses, [page]);
+  useEffect(refreshList, [trigger]);
+  //useEffect(refreshList, [pageSize, orderby, searchTitle, searchCode, searchStartAt]);
+  useEffect(retrieveResponses, [triggerPage]);
+  //useEffect(retrieveResponses, [page]);
+  //useEffect(retrieveResponses, [page]);
+  useEffect(() => {retrieveResponses(true)}, []);
 
   const getSchoolDisplay = () => {
     SchoolDataService.get(schoolId)
@@ -543,6 +612,7 @@ const ResponsesList = (props) => {
     manualSortBy: true,
     initialState: {
       hiddenColumns: hiddenColumns,
+/**
       sortBy: [
         {
           id: 'startAt',
@@ -550,6 +620,7 @@ const ResponsesList = (props) => {
           desc: true
         }
       ]
+*/
     },
   },
   useSortBy);
@@ -561,6 +632,9 @@ const ResponsesList = (props) => {
 
   const handlePageChange = (event, value) => {
     setPage(value);
+
+    setTriggerPage(!triggerPage);
+    setStartup(false);
   };
 
   const handlePageSizeChange = (event) => {
@@ -569,8 +643,12 @@ const ResponsesList = (props) => {
   };
 
   useEffect(() => {
-    if (sortBy && sortBy[0])
+    if (sortBy && sortBy[0]) {
       setOrderby(sortBy);
+
+      setTrigger(!trigger);
+      setStartup(false);
+    }
   }, [sortBy]);
 
   return (
