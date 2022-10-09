@@ -104,6 +104,19 @@ const AttachmentsList = (props) => {
     props.history.push("/attachments/" + id);
   };
 
+  const promote = (rowIndex) => {
+    const id = attachmentsRef.current[rowIndex].id;
+
+    AttachmentDataService.promote(id)
+      .then((response) => {
+        alert('项目申请附件成功升级为学校文档');
+      })
+      .catch((e) => {
+        alert('申请附件升级失败：' + JSON.stringify(e));
+        console.log(e);
+      });
+  };
+
   const deleteAttachment = (rowIndex) => {
     const id = attachmentsRef.current[rowIndex].id;
 
@@ -154,6 +167,10 @@ const AttachmentsList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
+              <a href="#" onClick={() => promote(rowIdx)}>
+                <i className="badge badge-success mr-2">升级</i>
+              </a>
+
               {(attachmentsRef.current[rowIdx].mimetype.startsWith('image') ||
                 attachmentsRef.current[rowIdx].mimetype.indexOf('pdf') > 0) && (
               <a href="#" onClick={() => download(attachmentsRef.current[rowIdx].id,

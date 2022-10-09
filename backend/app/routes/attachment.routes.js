@@ -35,6 +35,11 @@ module.exports = function(app) {
     [authJwt.verifyToken],
   attachments.findOne);
 
+  // Promote Attachment with id to become Attachment
+  app.get("/api/attachmentsPromote/:id",
+    [authJwt.verifyToken],
+  attachments.promote);
+
   // Retrieve a single Attachment with id return file contents
   app.get("/api/attachmentsContent/:id",
     [authJwt.verifyToken],

@@ -1,5 +1,7 @@
 const db = require("../models");
 const Attachment = db.attachments;
+const Response = db.responses;
+const Document = db.documents;
 const Op = db.Sequelize.Op;
 const fs = require('fs');
 const path = require("path");
@@ -122,6 +124,35 @@ exports.findAllPublished = (req, res) => {
     });
 };
 
+// Find a response Attachment with an id to become an attachment for the corresponding school
+exports.promote = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    let attachment = await Attachment.findByPk(id);
+    let response = await Response.findByPk(attachment.responseId);
+
+    let document = {
+      schoolId: response.schoolId,
+      docCategory: '学校照片',
+
+      originalname: attachment.originalname,
+      encoding: attachment.encoding,
+      mimetype: attachment.mimetype,
+      destination: attachment.destination,
+      filename: attachment.filename,
+      path: attachment.path,
+    };
+
+    let data = await Document.create(document);
+
+    res.send(data);
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || "Error promoting Attachment with id=" + id
+    });
+  }
+};
 
 // Find a single Attachment with an id
 exports.findOne = (req, res) => {
