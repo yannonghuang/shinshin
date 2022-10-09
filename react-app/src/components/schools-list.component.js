@@ -47,7 +47,16 @@ const SchoolsList = (props) => {
 
   const pageSizes = [20, 30, 50];
 
-  const [orderby, setOrderby] = useState([]);
+  const orderbyDefault = [
+    {
+      id: 'code',
+      desc: false
+    }
+  ];
+
+  const [orderby, setOrderby] = useState(orderbyDefault);
+
+  const [startup, setStartup] = useState(true);
 
   const [regions, setRegions] = useState([]);
   const [stages, setStages] = useState([]);
@@ -58,12 +67,16 @@ const SchoolsList = (props) => {
   const onChangeSearchName = (e) => {
     const searchName = e.target.value;
     setSearchName(searchName);
+
+    setStartup(false);
   };
 
   const onChangeSearchCode = (e) => {
     const searchCode = e.target.value;
     setSearchCode(searchCode);
     //setSearchCodeDebounced(searchCode);
+
+    setStartup(false);
   };
 
   const setSearchCodeDebounced = useMemo(
@@ -73,46 +86,64 @@ const SchoolsList = (props) => {
   const onChangeSearchRegion = (e) => {
     const searchRegion = e.target.value;
     setSearchRegion(searchRegion);
+
+    setStartup(false);
   };
 
   const onChangeSearchDonor = (e) => {
     const searchDonor = e.target.value;
     setSearchDonor(searchDonor);
+
+    setStartup(false);
   };
 
   const onChangeSearchStage = (e) => {
     const searchStage = e.target.value;
     setSearchStage(searchStage);
+
+    setStartup(false);
   };
 
   const onChangeSearchStatus = (e) => {
     const searchStatus = e.target.value;
     setSearchStatus(searchStatus);
+
+    setStartup(false);
   };
 
   const onChangeSearchRequest = (e) => {
     const searchRequest = e.target.value;
     setSearchRequest(searchRequest);
+
+    setStartup(false);
   };
 
   const onChangeSearchStartAt = (e) => {
     const searchStartAt = e; //e.target.value;
     setSearchStartAt(searchStartAt);
+
+    setStartup(false);
   };
 
   const onChangeSearchLastVisit = (e) => {
     const searchLastVisit = e; //e.target.value;
     setSearchLastVisit(searchLastVisit);
+
+    setStartup(false);
   };
 
   const onChangeSearchLatestProjectYear = (e) => {
     const searchLatestProjectYear = e; //e.target.value;
     setSearchLatestProjectYear(searchLatestProjectYear);
+
+    setStartup(false);
   };
 
   const onChangeSearchXR = (e) => {
     const searchXR = e.target.value;
     setSearchXR(searchXR);
+
+    setStartup(false);
   };
   
   const onClearSearch = (e) => {
@@ -128,14 +159,46 @@ const SchoolsList = (props) => {
     setSearchRequest("");
     setSearchXR("");
     
-    setOrderby([]);
+    setOrderby(orderbyDefault);
     setExportSchools([]);
 
     setPage(1);
+
+    setStartup(false);
   };
 
-  const getRequestParams = (/*searchName, page, pageSize, orderby,
-    searchCode, searchRegion, searchStartAt, */exportFlag) => {
+  const restoreRequestParams = (params) => {
+    if (!params) return;
+
+    setSearchName(params["name"]);
+    setPage(params["page"] + 1);
+    setPageSize(params["size"]);
+    setOrderby(params["orderby"]);
+    setSearchCode(params["code"]);
+    setSearchRegion(params["region"]);
+    setSearchStartAt(params["startAt"]);
+    setSearchLatestProjectYear(params["latestProjectYear"]);
+    setSearchLastVisit(params["lastVisit"]);
+    setSearchDonor(params["donor"]);
+    setSearchStage(params["stage"]);
+    setSearchStatus(params["status"]);
+    setSearchRequest(params["request"]);
+    setSearchXR(params["xr"]);
+  };
+
+
+  const getRequestParams = (exportFlag, refresh = false) => {
+    const REQUEST_PARAMS_KEY = window.location.href;
+
+    if (refresh) {
+      let params = JSON.parse(localStorage.getItem(REQUEST_PARAMS_KEY));
+      if (params) {
+        restoreRequestParams(params);
+        localStorage.removeItem(REQUEST_PARAMS_KEY);
+        return params;
+      }
+    }
+
     let params = {};
 
     if (searchName) {
@@ -193,10 +256,13 @@ const SchoolsList = (props) => {
     if (searchXR) {
       params["xr"] = searchXR;
     }
-    
+
     if (exportFlag) {
       params["exportFlag"] = exportFlag;
     }
+
+    if (!exportFlag)
+      localStorage.setItem(REQUEST_PARAMS_KEY, JSON.stringify(params));
 
     return params;
   };
@@ -253,9 +319,11 @@ const SchoolsList = (props) => {
   useEffect(getStatuses, [orderby]);
   useEffect(getRequests, [orderby]);
 
-  const retrieveSchools = () => {
+  const retrieveSchools = (refresh = false) => {
+    if (startup && !refresh) return;
+
     const params = getRequestParams(/*searchName, page, pageSize, orderby,
-        searchCode, searchRegion, searchStartAt, */false);
+        searchCode, searchRegion, searchStartAt, */false, refresh);
 
     SchoolDataService.getAll2(params)
       .then((response) => {
@@ -353,6 +421,7 @@ const SchoolsList = (props) => {
                      searchLastVisit, searchDonor, searchStage, searchStatus, searchRequest, searchXR]);
 
   useEffect(retrieveSchools, [page]);
+  useEffect(() => {retrieveSchools(true)}, []);
 
   const refreshList = () => {
     retrieveSchools();
@@ -831,12 +900,14 @@ const SchoolsList = (props) => {
     manualSortBy: true,
     initialState: {
       hiddenColumns: hiddenColumns,
+/**
       sortBy: [
         {
           id: 'code',
           desc: false
         }
       ]
+*/
     },
   },
   useSortBy,
@@ -849,16 +920,23 @@ const SchoolsList = (props) => {
 
   const handlePageChange = (event, value) => {
     setPage(value);
+
+    setStartup(false);
   };
 
   const handlePageSizeChange = (event) => {
     setPageSize(event.target.value);
     setPage(1);
+
+    setStartup(false);
   };
 
   useEffect(() => {
-    if (sortBy && sortBy[0])
+    if (sortBy && sortBy[0]) {
       setOrderby(sortBy);
+
+      setStartup(false);
+    }
   }, [sortBy]);
 
   //useEffect(() => {

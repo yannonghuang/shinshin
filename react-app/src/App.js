@@ -47,6 +47,14 @@ import UsersList from "./components/users-list.component";
 import AuthService from "./services/auth.service";
 import AccessControlService from "./services/timer.service";
 
+import DonorDataService from "./services/donor.service";
+import Donor from "./components/donor.component";
+import DonorsList from "./components/donors-list.component";
+
+import DesignationDataService from "./services/designation.service";
+import Designation from "./components/designation.component";
+import DesignationsList from "./components/designations-list.component";
+
 import Reset from "./components/reset.component";
 import Login from "./components/login.component";
 import Register from "./components/register.component";
@@ -189,6 +197,28 @@ class App extends Component {
                   <a class="dropdown-item" href={"/addU"} target="_blank">创建用户</a>
                 }
               </div>
+            </li>)}
+
+            {AuthService.isVolunteer() && (
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                捐赠
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href={"/donors"}>捐款人列表</a>
+                {AuthService.isAdmin() &&
+                  <a class="dropdown-item" href={"/addD"} target="_blank">创建捐款人</a>
+                }
+
+                <div class="dropdown-divider"></div>
+
+                <a class="dropdown-item" href={"/designations"}>捐赠指定列表</a>
+                {/*AuthService.isAdmin() &&
+                  <a class="dropdown-item" href={"/addDesignation"} target="_blank">创建捐赠指定</a>
+                */}
+              </div>
+
             </li>)}
 
             {(!AuthService.isLogin() || AuthService.isVolunteer()) && (
@@ -467,6 +497,22 @@ class App extends Component {
 
             <Route path={["/addU", "/users/:id", "/usersView/:id"]} component={Register} >
                 <AccessControlService ComposedClass={Register} />
+            </Route>
+
+            <Route exact path={["/donors"]} component={DonorsList} >
+                <AccessControlService ComposedClass={DonorsList} />
+            </Route>
+
+            <Route path={["/donors/:id", "/donorsView/:id", "/addD"]} component={Donor} >
+                <AccessControlService ComposedClass={Donor} />
+            </Route>
+
+            <Route exact path={["/designations"]} component={DesignationsList} >
+                <AccessControlService ComposedClass={DesignationsList} />
+            </Route>
+
+            <Route path={["/designations/:id", "/designationsView/:id", "/addDesignation/:id"]} component={Designation} >
+                <AccessControlService ComposedClass={Designation} />
             </Route>
 
           </Switch>

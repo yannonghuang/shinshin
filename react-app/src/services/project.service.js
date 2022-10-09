@@ -303,7 +303,7 @@ class ProjectDataService {
       if (this.PROJECT_CATEGORIES_ID[i].id == pCategoryId)
         return this.PROJECT_CATEGORIES_ID[i].name;
 
-    return "其它";
+    return "无";
   }
 
   getIndex = (pCategoryId) => {

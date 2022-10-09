@@ -41,4 +41,10 @@ module.exports = function(app) {
     [authJwt.verifyToken],
     uploadController.dossiersUpload);
 
+
+  // donor photo
+  app.post("/api/single-donor-upload/:id",
+    [authJwt.verifyToken],
+    uploadController.singleDonorUpload);
+
 };

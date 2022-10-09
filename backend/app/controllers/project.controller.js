@@ -1,6 +1,7 @@
 const db = require("../models");
 const Project = db.projects;
 const Response = db.responses;
+const Designation = db.designations;
 const Dossier = db.dossiers;
 const Op = db.Sequelize.Op;
 const REGIONS = db.REGIONS;
@@ -194,6 +195,7 @@ exports.findAll2 = async (req, res) => {
   const region = req.body.region;
   const pCategoryId = req.body.pCategoryId;
   const formId = req.body.formId;
+  const designated = req.body.designated;
 
   /*
     ? req.body.region.startsWith('湖南湘西')
@@ -240,6 +242,17 @@ exports.findAll2 = async (req, res) => {
                 : { '$response.formId$': { [Op.eq]: `${formId}` } },
         ]};
 
+  var include_designations = designated === undefined
+    ? []
+    : [{
+        model: Designation,
+        attributes: ['id', 'pCategoryId',
+          [db.Sequelize.fn("year", db.Sequelize.col("designations.startAt")), "startAt"]
+          //'startAt'
+        ],
+        required: (designated === 'true') ? true : false,
+      }];
+
   var include = [
                     {
                       model: School,
@@ -252,6 +265,8 @@ exports.findAll2 = async (req, res) => {
                       required: false,
                     },
                 ];
+
+  include = [...include, ...include_designations];
 
   const { limit, offset } = getPagination(page, size);
   let limits = {};

@@ -5,6 +5,7 @@ const db = require("../models");
 const Attachment = db.attachments;
 const School = db.schools;
 const Project = db.projects;
+const Donor = db.donors;
 const Document = db.documents;
 const Dossier = db.dossiers;
 const fs = require('fs');
@@ -247,6 +248,36 @@ const singleProjectUpload = async (req, res) => {
   }
 };
 
+
+const singleDonorUpload = async (req, res) => {
+  try {
+    await upload(req, res);
+    console.log(req.files);
+    console.log("req.params.id: " + req.params.id);
+
+    donorId = req.params.id;
+
+    if (req.files != null) {
+      var imageData = fs.readFileSync(req.files[0].path);
+      Donor.update(
+        {photo: imageData},
+        {where: { id: donorId }}
+      )
+      .then(image => {
+        res.json({ success: true, data: image })
+      })
+      fs.unlinkSync(req.files[0].path);
+    }
+  } catch (error) {
+    console.log(error);
+
+    if (error.code === "LIMIT_UNEXPECTED_FILE") {
+      return res.send("Too many files to upload.");
+    }
+    return res.send(`Error when trying upload files: ${error}`);
+  }
+};
+
 const singleUpload = async (req, res) => {
   try {
     await upload(req, res);
@@ -282,5 +313,6 @@ module.exports = {
   documentsUpload: documentsUpload,
   singleProjectUpload: singleProjectUpload,
   dossiersUpload: dossiersUpload,
-  attachmentsUpload: attachmentsUpload
+  attachmentsUpload: attachmentsUpload,
+  singleDonorUpload: singleDonorUpload
 };

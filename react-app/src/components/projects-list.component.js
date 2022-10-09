@@ -48,7 +48,17 @@ const ProjectsList = (props) => {
 
   const pageSizes = [20, 30, 50];
 
-  const [orderby, setOrderby] = useState([]);
+  const orderbyDefault = [
+    {
+      id: 'startAt',
+      //id: 'school.code',
+      desc: true
+    }
+  ];
+
+  const [orderby, setOrderby] = useState(orderbyDefault);
+
+  const [startup, setStartup] = useState(true);
 
   const [regions, setRegions] = useState([]);
 
@@ -80,26 +90,36 @@ const ProjectsList = (props) => {
   const onChangeSearchName = (e) => {
     const searchName = e.target.value;
     setSearchName(searchName);
+
+    setStartup(false);
   };
 
   const onChangeSearchCode = (e) => {
     const searchCode = e.target.value;
     setSearchCode(searchCode);
+
+    setStartup(false);
   };
 
   const onChangeSearchRegion = (e) => {
     const searchRegion = e.target.value;
     setSearchRegion(searchRegion);
+
+    setStartup(false);
   };
 
   const onChangeSearchStartAt = (e) => {
     const searchStartAt = e; // e.target.value;
     setSearchStartAt(searchStartAt);
+
+    setStartup(false);
   };
 
   const onChangeSearchInputStartAt = (e) => {
     const searchStartAt = e; //e.target.value;
     setSearchStartAt(searchStartAt);
+
+    setStartup(false);
   };
 
   const onChangeSearchPCategory = (e) => {
@@ -109,6 +129,16 @@ const ProjectsList = (props) => {
       : categories.length;
 
     setPCategoryId(searchPCategoryId);
+
+    setStartup(false);
+  };
+
+  const [searchDesignated, setSearchDesignated] = useState(null);
+  const onChangeSearchDesignated = (e) => {
+    const searchDesignated = e.target.value;
+    setSearchDesignated(searchDesignated);
+
+    setStartup(false);
   };
 
   const onClearSearch = (e) => {
@@ -116,12 +146,14 @@ const ProjectsList = (props) => {
     setSearchCode("");
     setSearchRegion("");
     setSearchStartAt("");
-    setOrderby([]);
+    setOrderby(orderbyDefault);
     setExportProjects([]);
-
+    setSearchDesignated("");
     setPCategoryAll();
 
     setPage(1);
+
+    setStartup(false);
   };
 
   const setPCategoryAll = () => {
@@ -130,11 +162,32 @@ const ProjectsList = (props) => {
     setPCategoryId(categories.length);
   }
 
+  const restoreRequestParams = (params) => {
+    if (!params) return;
+
+    setSearchName(params["name"]);
+    setPage(params["page"] + 1);
+    setPageSize(params["size"]);
+    setOrderby(params["orderby"]);
+    setSearchCode(params["code"]);
+    setSearchRegion(params["region"]);
+    setSearchStartAt(params["startAt"]);
+    setSchoolId(params["schoolId"]);
+    setFormId(params["formId"]);
+    setSearchDesignated(params["designated"]);
+    setXR(params["xr"]);
+    setPCategoryId(params["pCategoryId"]);
+
+  };
+
   const getRequestParams = (exportFlag, refresh = false) => {
+    const REQUEST_PARAMS_KEY = window.location.href;
 
     if (refresh) {
-      let params = JSON.parse(localStorage.getItem('REQUEST_PARAMS'));
+      let params = JSON.parse(localStorage.getItem(REQUEST_PARAMS_KEY));
       if (params) {
+        restoreRequestParams(params);
+        localStorage.removeItem(REQUEST_PARAMS_KEY);
         return params;
       }
     }
@@ -183,6 +236,10 @@ const ProjectsList = (props) => {
       params["formId"] = formId;
     }
 
+    if (searchDesignated) {
+      params["designated"] = searchDesignated;
+    }
+
     params["xr"] = xr;
 
     if (exportFlag) {
@@ -199,11 +256,10 @@ const ProjectsList = (props) => {
       params["pCategoryId"] = pCategoryId;
 
     if (!exportFlag)
-      localStorage.setItem('REQUEST_PARAMS', JSON.stringify(params));
+      localStorage.setItem(REQUEST_PARAMS_KEY, JSON.stringify(params));
 
     return params;
   };
-
 
   const getRegions = () => {
     if (regions.length == 0) {
@@ -240,6 +296,8 @@ const ProjectsList = (props) => {
 */
 
   const retrieveProjects = (refresh = false) => {
+    if (startup && !refresh) return;
+
     const params = getRequestParams(/*searchName, page, pageSize, orderby,
         searchCode, searchRegion, searchStartAt, schoolId, */false, refresh);
 
@@ -305,8 +363,9 @@ const ProjectsList = (props) => {
     retrieveProjects();
   };
 
-  useEffect(search, [pageSize, orderby, searchCode, searchName, searchStartAt, searchRegion, pCategoryId]);
+  useEffect(search, [pageSize, orderby, searchCode, searchName, searchStartAt, searchRegion, pCategoryId, searchDesignated]);
   useEffect(retrieveProjects, [page]);
+  useEffect(() => {retrieveProjects(true)}, []);
 
   const refreshList = () => {
     retrieveProjects();
@@ -497,11 +556,26 @@ const ProjectsList = (props) => {
         accessor: 'school.teachersCount',
         disableSortBy: true,
       },
-
       {
-        Header: "学校类型",
-        accessor: 'school.category',
-        disableSortBy: true,
+        Header: "指定捐赠",
+        accessor: "designations",
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          const designations = projectsRef.current[rowIdx].designations;
+          return (
+            <div>
+              {
+                designations && designations.map((option, index) => {
+                  return <a href={"/designationsView/" + designations[index].id }>
+                          {designations[index].startAt +
+                           ProjectDataService.getCategory(designations[index].pCategoryId) + ', '}
+                        </a>
+                })
+              }
+
+            </div>
+          );
+        },
       },
       {
         Header: "操作",
@@ -585,6 +659,7 @@ const ProjectsList = (props) => {
     manualSortBy: true,
     initialState: {
       hiddenColumns: hiddenColumns,
+/**
       sortBy: [
         {
           id: 'startAt',
@@ -592,6 +667,7 @@ const ProjectsList = (props) => {
           desc: true
         }
       ]
+*/
     },
   },
   //useFlexLayout,
@@ -600,16 +676,23 @@ const ProjectsList = (props) => {
 
   const handlePageChange = (event, value) => {
     setPage(value);
+
+    setStartup(false);
   };
 
   const handlePageSizeChange = (event) => {
     setPageSize(event.target.value);
     setPage(1);
+
+    setStartup(false);
   };
 
   useEffect(() => {
-    if (sortBy && sortBy[0])
+    if (sortBy && sortBy[0]) {
       setOrderby(sortBy);
+
+      setStartup(false);
+    }
   }, [sortBy]);
 
 
@@ -696,6 +779,21 @@ const ProjectsList = (props) => {
             </option>
             ))}
           </select>)}
+
+          <select
+            className="form-control col-sm-2 ml-2"
+            value={searchDesignated}
+            onChange={onChangeSearchDesignated}
+            id="searchDesignated"
+          >
+            <option value="">指定捐赠?</option>
+              <option value={true}>
+                {'是'}
+              </option>
+              <option value={false}>
+                {'否'}
+              </option>
+          </select>
 
           <div>
             <button
