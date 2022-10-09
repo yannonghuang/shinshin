@@ -24,8 +24,8 @@ class AttachmentDataService {
   }
 */
 
-  promote(id) {
-    return http.get(`/attachmentsPromote/${id}`, { headers: authHeader() });
+  promote(id, data) {
+    return http.post(`/attachmentsPromote/${id}`, data, { headers: authHeader() });
   }
 
   get(id) {

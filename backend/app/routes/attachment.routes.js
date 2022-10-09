@@ -36,7 +36,7 @@ module.exports = function(app) {
   attachments.findOne);
 
   // Promote Attachment with id to become Attachment
-  app.get("/api/attachmentsPromote/:id",
+  app.post("/api/attachmentsPromote/:id",
     [authJwt.verifyToken],
   attachments.promote);
 

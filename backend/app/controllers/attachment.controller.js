@@ -2,6 +2,7 @@ const db = require("../models");
 const Attachment = db.attachments;
 const Response = db.responses;
 const Document = db.documents;
+const School = db.schools;
 const Op = db.Sequelize.Op;
 const fs = require('fs');
 const path = require("path");
@@ -131,23 +132,36 @@ exports.promote = async (req, res) => {
   try {
     let attachment = await Attachment.findByPk(id);
     let response = await Response.findByPk(attachment.responseId);
+    let school = await School.findByPk(response.schoolId);
+
+    let dir = path.join(`${__dirname}/../../upload`, 'School', '' + school.code);
+
+    if (!fs.existsSync(dir)) {
+	  fs.mkdirSync(dir, {recursive: true});
+    }
+
+    const originalname = req.body.originalname ? req.body.originalname : attachment.originalname;
+
+    let filename = Date.now() + '-' + originalname;
+    fs.copyFileSync(attachment.path, path.join(dir, filename));
 
     let document = {
       schoolId: response.schoolId,
       docCategory: '学校照片',
 
-      originalname: attachment.originalname,
+      originalname: originalname, //attachment.originalname,
       encoding: attachment.encoding,
       mimetype: attachment.mimetype,
-      destination: attachment.destination,
-      filename: attachment.filename,
-      path: attachment.path,
+      destination: dir, //path.resolve(dir), //attachment.destination,
+      filename: filename, //attachment.filename,
+      path: path.resolve(dir, filename) //attachment.path,
     };
 
     let data = await Document.create(document);
 
     res.send(data);
   } catch (err) {
+    console.log(err);
     res.status(500).send({
       message: err.message || "Error promoting Attachment with id=" + id
     });
