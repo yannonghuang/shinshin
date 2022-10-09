@@ -153,8 +153,7 @@ export default class Designation extends Component {
     }
   }
 
-  getProjects(pCategoryId = this.state.currentDesignation.pCategoryId,
-    startAt = this.state.currentDesignation.startAt) {
+  getProjects(pCategoryId, startAt) {
 
     let params = {};
     params["pCategoryId"] = pCategoryId; //this.state.currentDesignation.pCategoryId;
@@ -267,7 +266,7 @@ export default class Designation extends Component {
       };
     });
 
-    this.getProjects(pCategoryId);
+    this.getProjects(pCategoryId, this.state.currentDesignation.startAt);
   }
 
   onChangeStartAt(e) {
@@ -281,6 +280,9 @@ export default class Designation extends Component {
         dirty: true
       };
     });
+
+    this.getProjects(this.state.currentDesignation.pCategoryId, startAt);
+
   };
 
   getDesignation(id) {
