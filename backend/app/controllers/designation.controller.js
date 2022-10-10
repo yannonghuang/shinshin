@@ -152,7 +152,7 @@ exports.findAll2 = (req, res) => {
         : null,
 
       startAt
-        ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('startAt')), `${startAt}`) } }
+        ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('designations.startAt')), `${startAt}`) } }
         : null,
   ]};
 

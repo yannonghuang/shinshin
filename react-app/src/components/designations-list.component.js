@@ -460,7 +460,7 @@ const DesignationsList = (props) => {
         },
       },
       {
-        Header: "所属学校",
+        Header: "学校",
         accessor: "schoolId",
         Cell: (props) => {
           const rowIdx = props.row.id;
