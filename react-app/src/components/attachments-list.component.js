@@ -108,7 +108,8 @@ const AttachmentsList = (props) => {
     const id = attachmentsRef.current[rowIndex].id;
 
     let originalname = prompt("请输入新文件名", "");
-
+    if (!originalname) return;
+    
     AttachmentDataService.promote(id, {originalname})
       .then((response) => {
         alert('项目申请附件成功升级为学校文档');
