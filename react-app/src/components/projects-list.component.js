@@ -558,21 +558,14 @@ const ProjectsList = (props) => {
       },
       {
         Header: "指定捐赠",
-        accessor: "designations",
+        accessor: "designationsCount",
         Cell: (props) => {
           const rowIdx = props.row.id;
-          const designations = projectsRef.current[rowIdx].designations;
           return (
             <div>
-              {
-                designations && designations.map((option, index) => {
-                  return <a href={"/designationsView/" + designations[index].id }>
-                          {designations[index].startAt +
-                           ProjectDataService.getCategory(designations[index].pCategoryId) + ', '}
-                        </a>
-                })
-              }
-
+              <a href={"/designations/project/" + projectsRef.current[rowIdx].id }>
+                {projectsRef.current[rowIdx].designationsCount}
+              </a>
             </div>
           );
         },
@@ -882,7 +875,7 @@ const ProjectsList = (props) => {
                     <span>
                       {/*column.isSorted*/ (column.id === 'school.region' || column.id === 'school.code' ||
                       column.id === 'school.name' || column.id === 'startAt' || column.id === 'status'
-                      || column.id === 'name' || column.id === 'pCategoryId')
+                      || column.id === 'name' || column.id === 'pCategoryId' || column.id === 'designationsCount')
                       ? column.isSortedDesc
                         ? ' 🔽'
                         : ' 🔼'

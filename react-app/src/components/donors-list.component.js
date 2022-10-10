@@ -408,13 +408,14 @@ const DonorsList = (props) => {
       },
       {
         Header: "指定捐赠",
-        accessor: "designations.pCategoryId",
+        accessor: "designationsCount",
         Cell: (props) => {
           const rowIdx = props.row.id;
-          const designations = donorsRef.current[rowIdx].designations;
           return (
             <div>
-              {designations && designations[0] ? '有' : ''}
+              <a href={"/designations/donor/" + donorsRef.current[rowIdx].id }>
+                {donorsRef.current[rowIdx].designationsCount}
+              </a>
             </div>
           );
         },
@@ -684,7 +685,8 @@ const DonorsList = (props) => {
                     {column.render('Header')}
                     {/* Add a sort direction indicator */}
                     <span>
-                      {/*column.isSorted*/ (column.id === 'name' || column.id === 'donor')
+                      {/*column.isSorted*/ (column.id === 'name' || column.id === 'donor'
+                      || column.id === 'designationsCount')
                       ? column.isSortedDesc
                         ? ' 🔽'
                         : ' 🔼'

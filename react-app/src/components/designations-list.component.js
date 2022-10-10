@@ -27,8 +27,11 @@ const DesignationsList = (props) => {
   const [searchRegion, setSearchRegion] = useState("");
   const [searchStartAt, setSearchStartAt] = useState(props.match? props.match.params.startAt : props.startAt);
 
-  const [formId, setFormId] = useState(props.match? props.match.params.formId : props.formId);
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
+
+  const [donorId, setDonorId] = useState(props.match? props.match.params.donorId : props.donorId);
+  const [projectId, setProjectId] = useState(props.match? props.match.params.projectId : props.projectId);
+
   const [pCategoryId, setPCategoryId] = useState(props.match? props.match.params.pCategoryId : props.pCategoryId);
   const [searchName, setSearchName] = useState(props.match? props.match.params.name : props.name);
 
@@ -159,6 +162,8 @@ const DesignationsList = (props) => {
     if (!params) return;
 
     setSearchName(params["name"]);
+    setDonorId(params["donorId"]);
+    setProjectId(params["projectId"]);
     setPage(params["page"] + 1);
     setPageSize(params["size"]);
     setOrderby(params["orderby"]);
@@ -183,6 +188,14 @@ const DesignationsList = (props) => {
 
     if (searchName) {
       params["name"] = searchName;
+    }
+
+    if (donorId) {
+      params["donorId"] = donorId;
+    }
+
+    if (projectId) {
+      params["projectId"] = projectId;
     }
 
     if (page) {
@@ -537,6 +550,8 @@ const DesignationsList = (props) => {
       <div className="col-sm-9">
         <h4>
           捐赠指定列表 (总数：{totalItems})
+          {projectId && <a href={"/projectsView/" + projectId }> - 指定项目</a>}
+          {donorId && <a href={"/donorsView/" + donorId }> - 捐款人</a>}
         </h4>
         <div className="row mb-3 ">
 

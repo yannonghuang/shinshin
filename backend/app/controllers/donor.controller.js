@@ -105,6 +105,7 @@ exports.findAll2 = (req, res) => {
   const formId = req.body.formId;
 
 
+/**
   var orderbyObject = null;
   if (orderby) {
     orderbyObject = [];
@@ -118,6 +119,19 @@ exports.findAll2 = (req, res) => {
       }
     }
   }
+*/
+
+  var orderbyObject = null;
+  if (orderby) {
+    orderbyObject = [];
+    for (var i = 0; i < orderby.length; i++) {
+      if (orderby[i].id == 'designationsCount')
+        orderbyObject.push([db.Sequelize.fn("COUNT", db.Sequelize.col("designations.id")),
+          (orderby[i].desc ? "desc" : "asc")]);
+      else
+        orderbyObject.push([orderby[i].id, (orderby[i].desc ? "desc" : "asc")]);
+    }
+  };
 
   var condition = {
     [Op.and]: [
@@ -136,13 +150,12 @@ exports.findAll2 = (req, res) => {
           : null,
   ]};
 
+  var group = ['id'];
+
   var include = [
     {
       model: Designation,
-      attributes: ['id', 'pCategoryId',
-        [db.Sequelize.fn("year", db.Sequelize.col("startAt")), "startAt"]
-        //'startAt'
-      ],
+      attributes: [],
       required: false,
     },
   ];
@@ -156,7 +169,9 @@ exports.findAll2 = (req, res) => {
     }
   }
 
-  var attributes = ['id', 'name', 'phone', 'donor', 'email', 'billingAddress', 'shippingAddress'];
+  var attributes = ['id', 'name', 'phone', 'donor', 'email', 'billingAddress', 'shippingAddress',
+    [db.Sequelize.fn("COUNT", db.Sequelize.col("designations.id")), "designationsCount"]
+  ];
 
   Donor.findAll({
   where: condition,
@@ -164,20 +179,17 @@ exports.findAll2 = (req, res) => {
 //  limit: limit,
 //  offset: offset,
   subQuery: false,
-
   attributes: attributes,
-
   include: include,
-
-  //group: ['id'],
+  group: group,
   order: orderbyObject
 // order: orderby
 // order: [[Response, 'title', 'desc']]
   })
     .then(data => {
-        Donor.count({where: condition, include: include, distinct: true, col: 'id'})
+        Donor.count({where: condition, include: include, group: group, distinct: true, col: 'id'})
           .then(count => {
-            const response = getPagingData(count, data, page, limit);
+            const response = getPagingData((count instanceof Array) ? count.length : count, data, page, limit);
             res.send(response);
           })
           .catch(e => {

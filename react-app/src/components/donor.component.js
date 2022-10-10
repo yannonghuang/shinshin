@@ -559,7 +559,7 @@ export default class Donor extends Component {
 
           <div class="w-100"></div>
 
-          {this.state.readonly && this.displayDesignations()}
+          {/*this.state.readonly && this.displayDesignations()*/}
 
           {!this.state.readonly && (<div>
 

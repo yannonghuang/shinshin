@@ -103,6 +103,8 @@ exports.findAll2 = (req, res) => {
   const pCategoryId = req.body.pCategoryId;
   const formId = req.body.formId;
 
+  const donorId = req.body.donorId;
+  const projectId = req.body.projectId;
 
   var orderbyObject = null;
   if (orderby) {
@@ -128,6 +130,14 @@ exports.findAll2 = (req, res) => {
 
         (pCategoryId || pCategoryId === 0)
           ? { pCategoryId: { [Op.eq]: `${pCategoryId}` } }
+          : null,
+
+        donorId
+          ? { donorId: { [Op.eq]: `${donorId}` } }
+          : null,
+
+        projectId
+          ? { projectId: { [Op.eq]: `${projectId}` } }
           : null,
 
         startAt

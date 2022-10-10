@@ -507,7 +507,8 @@ class App extends Component {
                 <AccessControlService ComposedClass={Donor} />
             </Route>
 
-            <Route exact path={["/designations"]} component={DesignationsList} >
+            <Route exact path={["/designations", "/designations/donor/:donorId", "/designations/project/:projectId"]}
+                component={DesignationsList} >
                 <AccessControlService ComposedClass={DesignationsList} />
             </Route>
 

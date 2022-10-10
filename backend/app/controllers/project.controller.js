@@ -197,14 +197,9 @@ exports.findAll2 = async (req, res) => {
   const formId = req.body.formId;
   const designated = req.body.designated;
 
-  /*
-    ? req.body.region.startsWith('湖南湘西')
-      ? req.body.region.substring(0, 4)
-      : req.body.region.substring(0, 2)
-    : null;
-  */
   const xr = req.body.xr;
 
+/**
   var orderbyObject = null;
   if (orderby) {
     orderbyObject = [];
@@ -212,14 +207,25 @@ exports.findAll2 = async (req, res) => {
       var s = orderby[i].id.split(".");
       if (s.length == 1) orderbyObject.push([s[0], (orderby[i].desc ? "desc" : "asc")]);
       if (s.length == 2) {
-        var m = Response;
-        if (s[0] == 'school') m = School;
+        var m = Project;
+        if (s[0] == 'project') m = Project;
         orderbyObject.push([m, s[1], (orderby[i].desc ? "desc" : "asc")]);
       }
     }
   }
+*/
 
-  //var condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
+  var orderbyObject = null;
+  if (orderby) {
+    orderbyObject = [];
+    for (var i = 0; i < orderby.length; i++) {
+      if (orderby[i].id == 'designationsCount')
+        orderbyObject.push([db.Sequelize.fn("COUNT", db.Sequelize.col("designations.id")),
+          (orderby[i].desc ? "desc" : "asc")]);
+      else
+        orderbyObject.push([orderby[i].id, (orderby[i].desc ? "desc" : "asc")]);
+    }
+  };
 
   var condition = {
         [Op.and]: [
@@ -239,10 +245,19 @@ exports.findAll2 = async (req, res) => {
               ? null
               : formId === 'null'
                 ? { '$response.formId$': null }
-                : { '$response.formId$': { [Op.eq]: `${formId}` } },
+                : { '$response.formId$': { [Op.eq]: `${formId}` } }
         ]};
 
-  var include_designations = designated === undefined
+
+  var group = ['id'];
+
+  var having = (designated === undefined || designated === 'undefined')
+    ? null
+    : designated === 'true'
+      ? db.Sequelize.literal(`count(designations.id) > 0`)
+      : db.Sequelize.literal(`count(designations.id) = 0`);
+
+  var _include_designations = designated === undefined
     ? []
     : [{
         model: Designation,
@@ -251,6 +266,12 @@ exports.findAll2 = async (req, res) => {
           //'startAt'
         ],
         required: (designated === 'true') ? true : false,
+      }];
+
+  var include_designations = [{
+        model: Designation,
+        attributes: [],
+        required: false,
       }];
 
   var include = [
@@ -279,9 +300,12 @@ exports.findAll2 = async (req, res) => {
 
   var attributes = ['id', 'name', 'budget', 'description',
     'pCategoryId',
+
     exportFlag
     ? [db.Sequelize.fn("year", db.Sequelize.col("projects.startAt")), "startAt"]
-    : 'startAt'
+    : 'startAt',
+
+    [db.Sequelize.fn("COUNT", db.Sequelize.col("designations.id")), "designationsCount"]
   ];
   if (!xr)
     attributes.push('status');
@@ -302,15 +326,17 @@ exports.findAll2 = async (req, res) => {
 */
   include: include,
 
-  //group: ['id'],
-  order: orderbyObject
+  group: group,
+  order: orderbyObject,
 // order: orderby
 // order: [[Response, 'title', 'desc']]
+  having: having
   })
     .then(data => {
-        Project.count({where: condition, include: include, distinct: true, col: 'id'})
+        Project.count({where: condition, include: include, group: group, having: having, distinct: true, col: 'id'})
           .then(count => {
-            const response = getPagingData(count, data, page, limit);
+            const response = getPagingData((count instanceof Array) ? count.length : count, data, page, limit);
+            //const response = getPagingData(count, data, page, limit);
             res.send(response);
           })
           .catch(e => {
