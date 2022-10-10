@@ -265,24 +265,14 @@ const DonorsList = (props) => {
         console.log(response.data);
 
         //const csv = DonorDataService.exportCSV(donors, columns);
-        const csv = DonorDataService.exportCSV(donors,
-          detail
-            ? exportDetailColumns
-            : schoolId
-              ? exportColumnsWithSchoolKnown
-              : exportColumns,
-          {
-            header: '项目类型',
-            translate: (dataIndex) => {return DonorDataService.getCategory(dataIndex)}
-          }
-        );
+        const csv = ProjectDataService.exportCSV(donors, columns);
 
         const url = window.URL.createObjectURL(new Blob([csv]));
 
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download',
-          'school_donors' + ''/*(detail ? '_detail' : '')*/ + '.csv'
+          'donors.csv'
         );
         document.body.appendChild(link);
         link.click();

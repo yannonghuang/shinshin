@@ -109,6 +109,7 @@ exports.findAll2 = (req, res) => {
   const donorId = req.body.donorId;
   const projectId = req.body.projectId;
 
+/**
   var orderbyObject = null;
   if (orderby) {
     orderbyObject = [];
@@ -122,7 +123,22 @@ exports.findAll2 = (req, res) => {
       }
     }
   }
+*/
 
+  var orderbyObject = null;
+  if (orderby) {
+    orderbyObject = [];
+    for (var i = 0; i < orderby.length; i++) {
+      if (orderby[i].id == 'schoolId')
+        orderbyObject.push([Project, "schoolId",
+          (orderby[i].desc ? "desc" : "asc")]);
+      else if (orderby[i].id == 'donor')
+        orderbyObject.push([Donor, "donor",
+          (orderby[i].desc ? "desc" : "asc")]);
+      else
+        orderbyObject.push([orderby[i].id, (orderby[i].desc ? "desc" : "asc")]);
+    }
+  };
 
   var condition = {
     [Op.and]: [

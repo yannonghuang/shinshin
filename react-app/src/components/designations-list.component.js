@@ -308,8 +308,7 @@ const DesignationsList = (props) => {
   const retrieveSimpleExportDesignations = () => {retrieveExportDesignations(false)}
 
   const retrieveExportDesignations = (detail = true) => {
-    const params = getRequestParams(/*searchName, page, pageSize, orderby,
-        searchCode, searchRegion, searchStartAt, schoolId, */true);
+    const params = getRequestParams(true);
 
     DesignationDataService.getAll2(params)
       .then((response) => {
@@ -317,25 +316,14 @@ const DesignationsList = (props) => {
         setExportDesignations(designations);
         console.log(response.data);
 
-        //const csv = DesignationDataService.exportCSV(designations, columns);
-        const csv = DesignationDataService.exportCSV(designations,
-          detail
-            ? exportDetailColumns
-            : schoolId
-              ? exportColumnsWithSchoolKnown
-              : exportColumns,
-          {
-            header: '项目类型',
-            translate: (dataIndex) => {return DesignationDataService.getCategory(dataIndex)}
-          }
-        );
+        const csv = ProjectDataService.exportCSV(designations, columns);
 
         const url = window.URL.createObjectURL(new Blob([csv]));
 
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download',
-          'school_designations' + ''/*(detail ? '_detail' : '')*/ + '.csv'
+          'designations.csv'
         );
         document.body.appendChild(link);
         link.click();
@@ -772,7 +760,8 @@ const DesignationsList = (props) => {
                     {/* Add a sort direction indicator */}
                     <span>
                       {/*column.isSorted*/ (column.id === 'appellation' || column.id === 'pCategoryId'
-                      || column.id === 'startAt')
+                      || column.id === 'startAt' || column.id === 'donor' || column.id === 'amount'
+                      || column.id === 'schoolId')
                       ? column.isSortedDesc
                         ? ' 🔽'
                         : ' 🔼'
