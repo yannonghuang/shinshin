@@ -1,6 +1,8 @@
 const db = require("../models");
 const Designation = db.designations;
 const Response = db.responses;
+const Project = db.projects;
+const Donor = db.donors;
 const Dossier = db.dossiers;
 const Op = db.Sequelize.Op;
 const REGIONS = db.REGIONS;
@@ -93,6 +95,7 @@ exports.findAllSimple = (req, res) => {
 exports.findAll2 = (req, res) => {
 
   const name = req.body.name;
+  const donor = req.body.donor;
   const page = req.body.page;
   const size = req.body.size;
   const orderby = req.body.orderby;
@@ -128,42 +131,52 @@ exports.findAll2 = (req, res) => {
           {appellation: { [Op.like]: `%${name}%` }},
         ] } : null,
 
-        (pCategoryId || pCategoryId === 0)
-          ? { pCategoryId: { [Op.eq]: `${pCategoryId}` } }
-          : null,
+      donor ? {
+        [Op.or] : [
+          { '$donor.donor$': { [Op.like]: `%${donor}%` } },
+          { '$donor.name$': { [Op.like]: `%${donor}%` } }
+        ] } : null,
 
-        donorId
-          ? { donorId: { [Op.eq]: `${donorId}` } }
-          : null,
+      //donor ? { '$donor.donor$': { [Op.like]: `%${donor}%` } } : null,
 
-        projectId
-          ? { projectId: { [Op.eq]: `${projectId}` } }
-          : null,
+      (pCategoryId || pCategoryId === 0)
+        ? { pCategoryId: { [Op.eq]: `${pCategoryId}` } }
+        : null,
 
-        startAt
-          ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('startAt')), `${startAt}`) } }
-          : null,
+      donorId
+        ? { donorId: { [Op.eq]: `${donorId}` } }
+        : null,
+
+      projectId
+        ? { projectId: { [Op.eq]: `${projectId}` } }
+        : null,
+
+      startAt
+        ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('startAt')), `${startAt}`) } }
+        : null,
   ]};
 
-  var _condition = {
-        [Op.and]: [
-            name ? { name: { [Op.like]: `%${name}%` } } : null,
-        ]};
+  var inner_include = [
+    {
+       model: School,
+       attributes: ['name'],
+       required: false,
+    },
+ ];
 
-  var include = [];
-
-  var _include = [
-                    {
-                      model: School,
-                      attributes: ['id', 'studentsCount', 'teachersCount', 'category', 'name', 'code', 'region', 'address'],
-                      required: false,
-                    },
-                    {
-                      model: Response,
-                      attributes: ['id', 'title', 'formId'],
-                      required: false,
-                    },
-                ];
+  var include = [
+    {
+      model: Donor,
+      attributes: ['donor'],
+      required: false
+    },
+    {
+      model: Project,
+      attributes: ['id', 'schoolId'],
+      required: false,
+      include: inner_include
+    },
+  ];
 
   const { limit, offset } = getPagination(page, size);
   let limits = {};
@@ -175,7 +188,7 @@ exports.findAll2 = (req, res) => {
   }
 
   var attributes = ['id', 'amount', 'appellation', 'pCategoryId', 'description', 'projectId', 'donorId',
-    [db.Sequelize.fn("year", db.Sequelize.col("startAt")), "startAt"]
+    [db.Sequelize.fn("year", db.Sequelize.col("designations.startAt")), "startAt"]
   ];
 
   Designation.findAll({
@@ -186,9 +199,7 @@ exports.findAll2 = (req, res) => {
   subQuery: false,
 
   attributes: attributes,
-
   include: include,
-
   //group: ['id'],
   order: orderbyObject
 // order: orderby

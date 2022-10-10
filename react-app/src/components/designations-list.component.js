@@ -35,6 +35,8 @@ const DesignationsList = (props) => {
   const [pCategoryId, setPCategoryId] = useState(props.match? props.match.params.pCategoryId : props.pCategoryId);
   const [searchName, setSearchName] = useState(props.match? props.match.params.name : props.name);
 
+  const [searchDonor, setSearchDonor] = useState('');
+
   const [schoolDisplay, setSchoolDisplay] = useState(null);
 
   const [embedded, setEmbedded] = useState(props.embedded ? props.embedded : false);
@@ -97,6 +99,13 @@ const DesignationsList = (props) => {
     setStartup(false);
   };
 
+  const onChangeSearchDonor = (e) => {
+    const searchDonor = e.target.value;
+    setSearchDonor(searchDonor);
+
+    setStartup(false);
+  };
+
   const onChangeSearchCode = (e) => {
     const searchCode = e.target.value;
     setSearchCode(searchCode);
@@ -138,6 +147,7 @@ const DesignationsList = (props) => {
 
   const onClearSearch = (e) => {
     setSearchName("");
+    setSearchDonor("");
     setSearchCode("");
     setSearchRegion("");
     setSearchStartAt("");
@@ -162,6 +172,7 @@ const DesignationsList = (props) => {
     if (!params) return;
 
     setSearchName(params["name"]);
+    setSearchDonor(params["donor"]);
     setDonorId(params["donorId"]);
     setProjectId(params["projectId"]);
     setPage(params["page"] + 1);
@@ -188,6 +199,10 @@ const DesignationsList = (props) => {
 
     if (searchName) {
       params["name"] = searchName;
+    }
+
+    if (searchDonor) {
+      params["donor"] = searchDonor;
     }
 
     if (donorId) {
@@ -337,7 +352,7 @@ const DesignationsList = (props) => {
     retrieveDesignations();
   };
 
-  useEffect(search, [pageSize, orderby, searchCode, searchName, searchStartAt, searchRegion, pCategoryId]);
+  useEffect(search, [pageSize, orderby, searchCode, searchName, searchDonor, searchStartAt, searchRegion, pCategoryId]);
   useEffect(retrieveDesignations, [page]);
   useEffect(() => {retrieveDesignations(true)}, []);
 
@@ -416,8 +431,48 @@ const DesignationsList = (props) => {
         accessor: "startAt",
       },
       {
-        Header: "指定名称",
+        Header: "捐款人",
+        accessor: "donor",
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          const donor = designationsRef.current[rowIdx].donor;
+          return (
+            <div>
+              <a href={"/donorsView/" + designationsRef.current[rowIdx].donorId }>
+                {donor.donor}
+              </a>
+            </div>
+          );
+        },
+      },
+      {
+        Header: "指定项目名称",
         accessor: "appellation",
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+              <a href={"/projectsView/" + designationsRef.current[rowIdx].projectId }>
+                {designationsRef.current[rowIdx].appellation}
+              </a>
+            </div>
+          );
+        },
+      },
+      {
+        Header: "所属学校",
+        accessor: "schoolId",
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          const project = designationsRef.current[rowIdx].project;
+          return (
+            <div>
+              {project && <a href={"/schoolsView/" + project.schoolId }>
+                {project.school.name}
+              </a>}
+            </div>
+          );
+        },
       },
       {
         Header: "金额",
@@ -557,6 +612,15 @@ const DesignationsList = (props) => {
 
           <input
             type="text"
+            className="form-control col-sm-2 ml-2"
+            placeholder="捐款人名称"
+            value={searchDonor}
+            onChange={onChangeSearchDonor}
+            id="searchDonor"
+          />
+
+          <input
+            type="text"
             readonly=""
             className="form-control col-sm-2 ml-2"
             placeholder="年份"
@@ -591,7 +655,7 @@ const DesignationsList = (props) => {
 
           <input
             type="text"
-            className="form-control col-sm-4 ml-2"
+            className="form-control col-sm-3 ml-2"
             placeholder="指定名称"
             value={searchName}
             onChange={onChangeSearchName}
