@@ -316,7 +316,12 @@ const DesignationsList = (props) => {
         setExportDesignations(designations);
         console.log(response.data);
 
-        const csv = ProjectDataService.exportCSV(designations, columns);
+        const csv = ProjectDataService.exportCSV(designations, columns,
+          {
+            header: '项目类型',
+            translate: (dataIndex) => {return ProjectDataService.getCategory(dataIndex)}
+          }
+        );
 
         const url = window.URL.createObjectURL(new Blob([csv]));
 
