@@ -597,7 +597,7 @@ const DesignationsList = (props) => {
     <div className="list row">
       <div className="col-sm-9">
         <h4>
-          捐赠指定列表 (总数：{totalItems})
+          指定列表 (总数：{totalItems})
           {projectId && <a href={"/projectsView/" + projectId }> - 指定项目</a>}
           {donorId && <a href={"/donorsView/" + donorId }> - 捐款人</a>}
         </h4>

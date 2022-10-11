@@ -55,6 +55,10 @@ import DesignationDataService from "./services/designation.service";
 import Designation from "./components/designation.component";
 import DesignationsList from "./components/designations-list.component";
 
+import DonationDataService from "./services/donation.service";
+import Donation from "./components/donation.component";
+import DonationsList from "./components/donations-list.component";
+
 import Reset from "./components/reset.component";
 import Login from "./components/login.component";
 import Register from "./components/register.component";
@@ -213,10 +217,14 @@ class App extends Component {
 
                 <div class="dropdown-divider"></div>
 
-                <a class="dropdown-item" href={"/designations"}>捐赠指定列表</a>
+                <a class="dropdown-item" href={"/designations"}>指定列表</a>
                 {/*AuthService.isAdmin() &&
                   <a class="dropdown-item" href={"/addDesignation"} target="_blank">创建捐赠指定</a>
                 */}
+
+                <div class="dropdown-divider"></div>
+
+                <a class="dropdown-item" href={"/donations"}>捐赠列表</a>
               </div>
 
             </li>)}
@@ -507,13 +515,23 @@ class App extends Component {
                 <AccessControlService ComposedClass={Donor} />
             </Route>
 
-            <Route exact path={["/designations", "/designations/donor/:donorId", "/designations/project/:projectId"]}
+            <Route exact path={["/designations", "/designations/donor/:donorId",
+            "/designations/project/:projectId", "/designations/donation/:donationId"]}
                 component={DesignationsList} >
                 <AccessControlService ComposedClass={DesignationsList} />
             </Route>
 
             <Route path={["/designations/:id", "/designationsView/:id", "/addDesignation/:id"]} component={Designation} >
                 <AccessControlService ComposedClass={Designation} />
+            </Route>
+
+            <Route exact path={["/donations", "/donations/donor/:donorId"]}
+                component={DonationsList} >
+                <AccessControlService ComposedClass={DonationsList} />
+            </Route>
+
+            <Route path={["/donations/:id", "/donationsView/:id", "/addDonation/:id"]} component={Donation} >
+                <AccessControlService ComposedClass={Donation} />
             </Route>
 
           </Switch>

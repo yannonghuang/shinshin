@@ -1,6 +1,7 @@
 const db = require("../models");
 const Donor = db.donors;
 const Designation = db.designations;
+const Donation = db.donations;
 const Response = db.responses;
 const Dossier = db.dossiers;
 const Op = db.Sequelize.Op;
@@ -128,6 +129,9 @@ exports.findAll2 = (req, res) => {
       if (orderby[i].id == 'designationsCount')
         orderbyObject.push([db.Sequelize.fn("COUNT", db.Sequelize.col("designations.id")),
           (orderby[i].desc ? "desc" : "asc")]);
+      else if (orderby[i].id == 'donationsCount')
+        orderbyObject.push([db.Sequelize.fn("COUNT", db.Sequelize.col("donations.id")),
+          (orderby[i].desc ? "desc" : "asc")]);
       else
         orderbyObject.push([orderby[i].id, (orderby[i].desc ? "desc" : "asc")]);
     }
@@ -158,6 +162,11 @@ exports.findAll2 = (req, res) => {
       attributes: [],
       required: false,
     },
+    {
+      model: Donation,
+      attributes: [],
+      required: false,
+    },
   ];
 
   const { limit, offset } = getPagination(page, size);
@@ -170,7 +179,9 @@ exports.findAll2 = (req, res) => {
   }
 
   var attributes = ['id', 'name', 'phone', 'donor', 'email', 'billingAddress', 'shippingAddress',
-    [db.Sequelize.fn("COUNT", db.Sequelize.col("designations.id")), "designationsCount"]
+    [db.Sequelize.fn("COUNT", db.Sequelize.col("designations.id")), "designationsCount"],
+    [db.Sequelize.literal(`count(distinct donations.id)`), "donationsCount"]
+    //[db.Sequelize.fn("COUNT", db.Sequelize.col("donations.id")), "donationsCount"]
   ];
 
   Donor.findAll({

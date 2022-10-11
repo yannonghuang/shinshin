@@ -40,6 +40,7 @@ db.user = require("../models/user.model.js")(sequelize, Sequelize);
 db.role = require("../models/role.model.js")(sequelize, Sequelize);
 db.donors = require("./donor.model.js")(sequelize, Sequelize);
 db.designations = require("./designation.model.js")(sequelize, Sequelize);
+db.donations = require("./donation.model.js")(sequelize, Sequelize);
 
 db.role.belongsToMany(db.user, {
   through: "user_roles",
@@ -317,11 +318,18 @@ db.dossiers.belongsTo(db.projects);
 db.donors.hasMany(db.designations, {foreignKey: 'donorId'}, {as: 'Designations'})
 db.designations.belongsTo(db.donors);
 
+db.donors.hasMany(db.donations, {foreignKey: 'donorId'}, {as: 'Donations'})
+db.donations.belongsTo(db.donors);
+
 db.projects.hasMany(db.designations, {foreignKey: 'projectId'}, {as: 'Designations'})
 db.designations.belongsTo(db.projects);
 
+db.donations.hasMany(db.designations, {foreignKey: 'donationId'}, {as: 'Designations'})
+db.designations.belongsTo(db.donations);
+
 db.user.hasMany(db.designations, {foreignKey: 'userId'}, {as: 'Designations'})
 db.designations.belongsTo(db.user);
+
 
 module.exports = db;
 

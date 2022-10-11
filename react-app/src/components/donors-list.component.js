@@ -397,7 +397,7 @@ const DonorsList = (props) => {
         accessor: "email",
       },
       {
-        Header: "指定捐赠",
+        Header: "指定",
         accessor: "designationsCount",
         Cell: (props) => {
           const rowIdx = props.row.id;
@@ -405,6 +405,20 @@ const DonorsList = (props) => {
             <div>
               <a href={"/designations/donor/" + donorsRef.current[rowIdx].id }>
                 {donorsRef.current[rowIdx].designationsCount}
+              </a>
+            </div>
+          );
+        },
+      },
+      {
+        Header: "捐赠",
+        accessor: "donationsCount",
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+              <a href={"/donations/donor/" + donorsRef.current[rowIdx].id }>
+                {donorsRef.current[rowIdx].donationsCount}
               </a>
             </div>
           );
@@ -423,7 +437,15 @@ const DonorsList = (props) => {
                 to={"/addDesignation/" + donorsRef.current[rowIdx].id}
                 className= "badge badge-success mr-2"
               >
-                指定捐赠
+                指定
+              </Link>
+
+              <Link
+                target="_blank"
+                to={"/addDonation/" + donorsRef.current[rowIdx].id}
+                className= "badge badge-success mr-2"
+              >
+                捐赠
               </Link>
 
               {currentUser &&
@@ -676,7 +698,7 @@ const DonorsList = (props) => {
                     {/* Add a sort direction indicator */}
                     <span>
                       {/*column.isSorted*/ (column.id === 'name' || column.id === 'donor'
-                      || column.id === 'designationsCount')
+                      || column.id === 'designationsCount' || column.id === 'donationsCount')
                       ? column.isSortedDesc
                         ? ' 🔽'
                         : ' 🔼'
