@@ -466,9 +466,14 @@ const DesignationsList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
+              {designationsRef.current[rowIdx].projectId &&
               <a href={"/projectsView/" + designationsRef.current[rowIdx].projectId }>
-                {designationsRef.current[rowIdx].appellation}
+                {designationsRef.current[rowIdx].appellation
+                  ? designationsRef.current[rowIdx].appellation
+                  : "未指定名称"
+                }
               </a>
+              }
             </div>
           );
         },
