@@ -521,7 +521,8 @@ class App extends Component {
                 <AccessControlService ComposedClass={DesignationsList} />
             </Route>
 
-            <Route path={["/designations/:id", "/designationsView/:id", "/addDesignation/:id"]} component={Designation} >
+            <Route path={["/designations/:id", "/designationsView/:id",
+            "/addDesignation/:id", "/addDesignation/:id/:donationId"]} component={Designation} >
                 <AccessControlService ComposedClass={Designation} />
             </Route>
 

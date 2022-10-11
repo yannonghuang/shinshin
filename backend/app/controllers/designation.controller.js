@@ -3,6 +3,7 @@ const Designation = db.designations;
 const Response = db.responses;
 const Project = db.projects;
 const Donor = db.donors;
+const Donation = db.donations;
 const Dossier = db.dossiers;
 const Op = db.Sequelize.Op;
 const REGIONS = db.REGIONS;
@@ -108,7 +109,7 @@ exports.findAll2 = (req, res) => {
 
   const donorId = req.body.donorId;
   const projectId = req.body.projectId;
-
+  const donationId = req.body.donationId;
 /**
   var orderbyObject = null;
   if (orderby) {
@@ -129,7 +130,7 @@ exports.findAll2 = (req, res) => {
   if (orderby) {
     orderbyObject = [];
     for (var i = 0; i < orderby.length; i++) {
-      if (orderby[i].id == 'schoolId')
+      if (orderby[i].id == 'project.school.name')
         orderbyObject.push([Project, "schoolId",
           (orderby[i].desc ? "desc" : "asc")]);
       else if (orderby[i].id == 'donor')
@@ -163,6 +164,10 @@ exports.findAll2 = (req, res) => {
         ? { donorId: { [Op.eq]: `${donorId}` } }
         : null,
 
+      donationId
+        ? { donationId: { [Op.eq]: `${donationId}` } }
+        : null,
+
       projectId
         ? { projectId: { [Op.eq]: `${projectId}` } }
         : null,
@@ -187,6 +192,11 @@ exports.findAll2 = (req, res) => {
       required: false
     },
     {
+      model: Donation,
+      attributes: ['id'],
+      required: false
+    },
+    {
       model: Project,
       attributes: ['id', 'schoolId'],
       required: false,
@@ -203,7 +213,7 @@ exports.findAll2 = (req, res) => {
     }
   }
 
-  var attributes = ['id', 'amount', 'appellation', 'pCategoryId', 'description', 'projectId', 'donorId',
+  var attributes = ['id', 'amount', 'appellation', 'pCategoryId', 'description', 'projectId', 'donorId', 'donationId',
     [db.Sequelize.fn("year", db.Sequelize.col("designations.startAt")), "startAt"]
   ];
 
@@ -248,25 +258,21 @@ exports.findAll2 = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
+  var include = [
+    {
+      model: Donor,
+      attributes: ['donor'],
+      required: false
+    }
+  ];
+
   Designation.findByPk(id, {
-      attributes: ['id', 'amount', 'appellation', 'pCategoryId', 'description', 'projectId', 'donorId',
+      attributes: ['id', 'amount', 'appellation', 'pCategoryId', 'description', 'projectId', 'donorId', 'donationId',
         [db.Sequelize.fn("year", db.Sequelize.col("startAt")), "startAt"]
       ],
 
-      include: [
-/**
-      {
-      model: School,
-      attributes: ['id', 'name', 'code'],
-      required: false,
-      },
-      {
-      model: Response,
-      attributes: ['id', 'title'],
-      required: false,
-      },
-*/
-  ],
+
+      include: include,
       //raw: true,
     }
   )

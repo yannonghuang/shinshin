@@ -16,6 +16,7 @@ import ResponsesList from './responses-list.component.js';
 import DossiersList from './dossiers-list.component.js';
 import DesignationDataService from "../services/designation.service";
 import ProjectDataService from "../services/project.service";
+import DonationDataService from "../services/donation.service";
 import DossierDataService from "../services/dossier.service";
 import SchoolDataService from "../services/school.service";
 import AuthService from "./../services/auth.service";
@@ -48,6 +49,7 @@ export default class Designation extends Component {
     this.onChangeDescription = this.onChangeDescription.bind(this);
     this.onChangePCategoryId = this.onChangePCategoryId.bind(this);
     this.onChangeProjectId = this.onChangeProjectId.bind(this);
+    this.onChangeDonationId = this.onChangeDonationId.bind(this);
     this.onChangeStartAt = this.onChangeStartAt.bind(this);
 
     this.onChangePhoto = this.onChangePhoto.bind(this);
@@ -70,12 +72,14 @@ export default class Designation extends Component {
         id: null,
         donorId: null,
         projectId: null,
+        donationId: null,
         appellation: "",
         amount: 0,
         description: "",
         pCategoryId: 0,
         startAt: new Date().getFullYear(), //null,
       },
+      donor: {donor: null},
 
       photo: null,
       file: null, // for photo
@@ -94,6 +98,7 @@ export default class Designation extends Component {
       pCategories: ProjectDataService.PROJECT_CATEGORIES,
 
       projects: [],
+      donations: [],
     };
   }
 
@@ -102,21 +107,90 @@ export default class Designation extends Component {
     this.setState({newdesignation: newdesignation});
     this.setState({readonly: window.location.pathname.includes('View')});
 
-    if (newdesignation)
+    if (newdesignation) {
       this.setState(function(prevState) {
         return {
           currentDesignation: {
             ...prevState.currentDesignation,
-            donorId: this.props.match.params.id
+            donorId: this.props.match.params.id,
+            donationId: this.props.match.params.donationId
           },
         };
       });
+
+      this.getDonations(this.props.match.params.id);
+    }
 
     if (!newdesignation) {
       this.getDesignation(this.props.match.params.id);
       //this.getDesignationPhoto(this.props.match.params.id);
     }
 
+  }
+
+
+  convertDonations(donations) {
+    const result = [];
+
+    if (donations) {
+      for (var i = 0; i < donations.length; i++) {
+        result.push({value: donations[i].id,
+          label: "日期：" + donations[i].startAt + ", " + "金额：" + donations[i].amount});
+      }
+      return result;
+    }
+  }
+
+  displayDonation(donationId) {
+    if (this.state.donations) {
+      for (var i = 0; i < this.state.donations.length; i++) {
+        if (this.state.donations[i].value == donationId)
+          return this.state.donations[i];
+      }
+      return [];
+    }
+  }
+
+  displayNameDonation(donationId) {
+    if (this.state.donations) {
+      for (var i = 0; i < this.state.donations.length; i++) {
+        if (this.state.donations[i].value == donationId)
+          return this.state.donations[i].label ? this.state.donations[i].label : '指定捐款来源';
+      }
+      return '指定捐款来源';
+    }
+  }
+
+  getDonations(donorId) {
+
+    let params = {};
+    params["donorId"] = donorId;
+
+    DonationDataService.getAll2(params)
+      .then(response => {
+        this.setState({
+          donations: this.convertDonations(response.data.donations)
+        });
+
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  onChangeDonationId(e) {
+    const donationId = e.value; //.target.value
+
+    this.setState(function(prevState) {
+      return {
+        currentDesignation: {
+          ...prevState.currentDesignation,
+          donationId: donationId
+        },
+        dirty: true
+      };
+    });
   }
 
 
@@ -165,6 +239,7 @@ export default class Designation extends Component {
           projects: this.convert(response.data.projects)
         });
         console.log(response);
+
       })
       .catch(e => {
         console.log(e);
@@ -290,13 +365,14 @@ export default class Designation extends Component {
       .then(response => {
         this.setState({
           currentDesignation: response.data,
+          donor: response.data.donor
         });
 
         //this.getDesignationPhoto(id);
         console.log(response.data);
 
         this.getProjects(response.data.pCategoryId, response.data.startAt);
-
+        this.getDonations(response.data.donorId);
       })
       .catch(e => {
         console.log(e);
@@ -330,6 +406,7 @@ export default class Designation extends Component {
 
       id: null,
       donorId: null,
+      donationId: null,
       projectId: null,
       appellation: "",
       amount: 0,
@@ -504,7 +581,7 @@ export default class Designation extends Component {
                 <img src={this.state.photo} height="200" width="300" readonly={this.state.readonly?"":false} />
                 </div>
 */}
-                <div class="form-group">
+                <div class="form-group col-sm-12">
                 <label htmlFor="donor">捐款人</label>
                 <Link
                   to={"/donorsView/" + currentDesignation.donorId}
@@ -512,8 +589,36 @@ export default class Designation extends Component {
                   name="donor"
                   target='_blank'
                 >
-                  点击查看捐款人
+                  {this.state.newdesignation ? '点击查看捐款人' : this.state.donor.donor}
                 </Link>
+                </div>
+
+
+                <div class="form-group col-sm-12"
+                >
+                <label htmlFor="donationId">捐款来源：
+                </label>
+                {!this.state.readonly
+                ? (<Select onChange={this.onChangeDonationId.bind(this)}
+                  class="form-control"
+                  id="donationId"
+                  value={this.displayDonation(currentDesignation.donationId)}
+                  name="donationId"
+                  filterOption={this.customFilter}
+                  options={this.state.donations}
+                  />)
+                : (currentDesignation.donationId
+                  ? <Link
+                  to={ "/donationsView/" + currentDesignation.donationId}
+                  id="donationId"
+                  name="donationId"
+                  target='_blank'
+                  >
+                  {this.displayNameDonation(currentDesignation.donationId)}
+                  </Link>
+                  : <p> 没有指定捐款来源 </p>
+                  )
+                }
                 </div>
 
               </div>

@@ -154,7 +154,7 @@ const DonationsList = (props) => {
     setOrderby(orderbyDefault);
     setExportDonations([]);
 
-    setPCategoryAll();
+    //setPCategoryAll();
 
     setPage(1);
 
@@ -432,7 +432,7 @@ const DonationsList = (props) => {
       },
       {
         Header: "捐款人",
-        accessor: "donor",
+        accessor: "donor.donor",
         Cell: (props) => {
           const rowIdx = props.row.id;
           const donor = donationsRef.current[rowIdx].donor;
@@ -450,6 +450,20 @@ const DonationsList = (props) => {
         accessor: "amount",
       },
       {
+        Header: "指定",
+        accessor: "designationsCount",
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+              <a href={"/designations/donation/" + donationsRef.current[rowIdx].id }>
+                {donationsRef.current[rowIdx].designationsCount}
+              </a>
+            </div>
+          );
+        },
+      },
+      {
         Header: "操作",
         accessor: "actions",
         disableSortBy: true,
@@ -457,6 +471,15 @@ const DonationsList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
+              <Link
+                onClick={refreshOnReturn}
+                target="_blank"
+                to={"/addDesignation/" + donationsRef.current[rowIdx].donorId + "/" + donationsRef.current[rowIdx].id}
+                className= "badge badge-success mr-2"
+              >
+                指定
+              </Link>
+
               {currentUser &&
               (!xr || (xr && AuthService.isAdmin())) && (<Link
                 to={"/donationsView" + (xr ? 'XR' : '') + "/" + donationsRef.current[rowIdx].id}
@@ -594,7 +617,7 @@ const DonationsList = (props) => {
             minRange={1995}
             maxRange={2025}
           />
-
+{/*
           <select
             className="form-control col-sm-3 ml-2"
             placeholder="...."
@@ -620,7 +643,7 @@ const DonationsList = (props) => {
             onChange={onChangeSearchName}
             id="searchName"
           />
-{/*
+
           {!embedded && (<input
             type="text"
             className="form-control col-sm-2 ml-2"

@@ -30,6 +30,7 @@ const DesignationsList = (props) => {
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
 
   const [donorId, setDonorId] = useState(props.match? props.match.params.donorId : props.donorId);
+  const [donationId, setDonationId] = useState(props.match? props.match.params.donationId : props.donationId);
   const [projectId, setProjectId] = useState(props.match? props.match.params.projectId : props.projectId);
 
   const [pCategoryId, setPCategoryId] = useState(props.match? props.match.params.pCategoryId : props.pCategoryId);
@@ -174,6 +175,7 @@ const DesignationsList = (props) => {
     setSearchName(params["name"]);
     setSearchDonor(params["donor"]);
     setDonorId(params["donorId"]);
+    setDonationId(params["donationId"]);
     setProjectId(params["projectId"]);
     setPage(params["page"] + 1);
     setPageSize(params["size"]);
@@ -207,6 +209,10 @@ const DesignationsList = (props) => {
 
     if (donorId) {
       params["donorId"] = donorId;
+    }
+
+    if (donationId) {
+      params["donationId"] = donationId;
     }
 
     if (projectId) {
@@ -425,7 +431,7 @@ const DesignationsList = (props) => {
       },
       {
         Header: "捐款人",
-        accessor: "donor",
+        accessor: "donor.donor",
         Cell: (props) => {
           const rowIdx = props.row.id;
           const donor = designationsRef.current[rowIdx].donor;
@@ -434,6 +440,21 @@ const DesignationsList = (props) => {
               <a href={"/donorsView/" + designationsRef.current[rowIdx].donorId }>
                 {donor.donor}
               </a>
+            </div>
+          );
+        },
+      },
+      {
+        Header: "指定款项",
+        accessor: "donation",
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          const donation = designationsRef.current[rowIdx].donation;
+          return (
+            <div>
+              {donation && <a href={"/donationsView/" + donation.id }>
+                {'点击'}
+              </a>}
             </div>
           );
         },
@@ -454,7 +475,7 @@ const DesignationsList = (props) => {
       },
       {
         Header: "学校",
-        accessor: "schoolId",
+        accessor: "project.school.name",
         Cell: (props) => {
           const rowIdx = props.row.id;
           const project = designationsRef.current[rowIdx].project;
@@ -766,7 +787,7 @@ const DesignationsList = (props) => {
                     <span>
                       {/*column.isSorted*/ (column.id === 'appellation' || column.id === 'pCategoryId'
                       || column.id === 'startAt' || column.id === 'donor' || column.id === 'amount'
-                      || column.id === 'schoolId')
+                      || column.id === 'project.school.name')
                       ? column.isSortedDesc
                         ? ' 🔽'
                         : ' 🔼'

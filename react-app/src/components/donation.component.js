@@ -74,6 +74,7 @@ export default class Donation extends Component {
 
         startAt: new Date(), //null,
       },
+      donor: {donor: null},
 
       photo: null,
       file: null, // for photo
@@ -247,6 +248,7 @@ export default class Donation extends Component {
       .then(response => {
         this.setState({
           currentDonation: response.data,
+          donor: response.data.donor
         });
 
         //this.getDonationPhoto(id);
@@ -460,7 +462,7 @@ export default class Donation extends Component {
                   name="donor"
                   target='_blank'
                 >
-                  点击查看捐款人
+                  {this.state.donor.donor}
                 </Link>
                 </div>
 

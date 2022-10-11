@@ -1,5 +1,6 @@
 const db = require("../models");
 const Donation = db.donations;
+const Designation = db.designations;
 const Response = db.responses;
 const Project = db.projects;
 const Donor = db.donors;
@@ -123,7 +124,7 @@ exports.findAll2 = (req, res) => {
       }
     }
   }
-*/
+
 
   var orderbyObject = null;
   if (orderby) {
@@ -139,6 +140,20 @@ exports.findAll2 = (req, res) => {
         orderbyObject.push([orderby[i].id, (orderby[i].desc ? "desc" : "asc")]);
     }
   };
+*/
+
+  var orderbyObject = null;
+  if (orderby) {
+    orderbyObject = [];
+    for (var i = 0; i < orderby.length; i++) {
+      if (orderby[i].id == 'designationsCount')
+        orderbyObject.push([db.Sequelize.fn("COUNT", db.Sequelize.col("designations.id")),
+          (orderby[i].desc ? "desc" : "asc")]);
+      else
+        orderbyObject.push([orderby[i].id, (orderby[i].desc ? "desc" : "asc")]);
+    }
+  };
+
 
   var condition = {
     [Op.and]: [
@@ -172,13 +187,11 @@ exports.findAll2 = (req, res) => {
         : null,
   ]};
 
-  var inner_include = [
-    {
-       model: School,
-       attributes: ['name'],
-       required: false,
-    },
- ];
+  var include_designations = [{
+        model: Designation,
+        attributes: [],
+        required: false,
+      }];
 
   var include = [
     {
@@ -188,6 +201,7 @@ exports.findAll2 = (req, res) => {
     }
   ];
 
+  include = [...include, ...include_designations];
 
   const { limit, offset } = getPagination(page, size);
   let limits = {};
@@ -198,9 +212,12 @@ exports.findAll2 = (req, res) => {
     }
   }
 
-  var attributes = ['id', 'amount', 'description',
-    [db.Sequelize.fn('date_format', db.Sequelize.col("startAt"), '%Y-%m-%d'), "startAt"]
+  var attributes = ['id', 'amount', 'description', 'donorId',
+    [db.Sequelize.fn('date_format', db.Sequelize.col("donations.startAt"), '%Y-%m-%d'), "startAt"],
+    [db.Sequelize.fn("COUNT", db.Sequelize.col("designations.id")), "designationsCount"]
   ];
+
+  var group = ['id'];
 
   Donation.findAll({
   where: condition,
@@ -211,7 +228,7 @@ exports.findAll2 = (req, res) => {
 
   attributes: attributes,
   include: include,
-  //group: ['id'],
+  group: group,
   order: orderbyObject
 // order: orderby
 // order: [[Response, 'title', 'desc']]
@@ -219,7 +236,8 @@ exports.findAll2 = (req, res) => {
     .then(data => {
         Donation.count({where: condition, include: include, distinct: true, col: 'id'})
           .then(count => {
-            const response = getPagingData(count, data, page, limit);
+            const response = getPagingData((count instanceof Array) ? count.length : count, data, page, limit);
+            //const response = getPagingData(count, data, page, limit);
             res.send(response);
           })
           .catch(e => {
@@ -243,25 +261,20 @@ exports.findAll2 = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
+  var include = [
+    {
+      model: Donor,
+      attributes: ['donor'],
+      required: false
+    }
+  ];
+
   Donation.findByPk(id, {
-      attributes: ['id', 'amount', 'description',
+      attributes: ['id', 'amount', 'description', 'donorId',
         [db.Sequelize.fn('date_format', db.Sequelize.col("startAt"), '%Y-%m-%d'), "startAt"]
       ],
 
-      include: [
-/**
-      {
-      model: School,
-      attributes: ['id', 'name', 'code'],
-      required: false,
-      },
-      {
-      model: Response,
-      attributes: ['id', 'title'],
-      required: false,
-      },
-*/
-  ],
+      include: include,
       //raw: true,
     }
   )
