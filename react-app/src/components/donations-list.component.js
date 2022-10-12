@@ -474,7 +474,7 @@ const DonationsList = (props) => {
               <Link
                 onClick={refreshOnReturn}
                 target="_blank"
-                to={"/addDesignation/" + donationsRef.current[rowIdx].donorId + "/" + donationsRef.current[rowIdx].id}
+                to={"/addDesignation/" + donationsRef.current[rowIdx].donorId + "?donationId=" + donationsRef.current[rowIdx].id}
                 className= "badge badge-success mr-2"
               >
                 指定

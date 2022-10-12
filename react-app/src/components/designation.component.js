@@ -103,6 +103,9 @@ export default class Designation extends Component {
   }
 
   componentDidMount() {
+    const search = this.props.location.search;
+    const donationId = new URLSearchParams(search).get('donationId');
+
     const newdesignation = window.location.pathname.includes('add');
     this.setState({newdesignation: newdesignation});
     this.setState({readonly: window.location.pathname.includes('View')});
@@ -113,7 +116,7 @@ export default class Designation extends Component {
           currentDesignation: {
             ...prevState.currentDesignation,
             donorId: this.props.match.params.id,
-            donationId: this.props.match.params.donationId
+            donationId: donationId //this.props.match.params.donationId
           },
         };
       });
