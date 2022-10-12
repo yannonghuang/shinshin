@@ -179,7 +179,8 @@ exports.findAll2 = (req, res) => {
   }
 
   var attributes = ['id', 'name', 'phone', 'donor', 'email', 'billingAddress', 'shippingAddress',
-    [db.Sequelize.fn("COUNT", db.Sequelize.col("designations.id")), "designationsCount"],
+    //[db.Sequelize.fn("COUNT", db.Sequelize.col("designations.id")), "designationsCount"],
+    [db.Sequelize.literal(`count(distinct designations.id)`), "designationsCount"],
     [db.Sequelize.literal(`count(distinct donations.id)`), "donationsCount"]
     //[db.Sequelize.fn("COUNT", db.Sequelize.col("donations.id")), "donationsCount"]
   ];
