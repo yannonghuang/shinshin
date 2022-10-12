@@ -193,7 +193,10 @@ exports.findAll2 = (req, res) => {
     },
     {
       model: Donation,
-      attributes: ['id'],
+      attributes: ['id',
+        'amount',
+        [db.Sequelize.fn('date_format', db.Sequelize.col("donation.startAt"), '%Y-%m-%d'), "date"]
+      ],
       required: false
     },
     {
@@ -263,12 +266,12 @@ exports.findOne = (req, res) => {
       model: Donor,
       attributes: ['donor'],
       required: false
-    }
+    },
   ];
 
   Designation.findByPk(id, {
       attributes: ['id', 'amount', 'appellation', 'pCategoryId', 'description', 'projectId', 'donorId', 'donationId',
-        [db.Sequelize.fn("year", db.Sequelize.col("startAt")), "startAt"]
+        [db.Sequelize.fn("year", db.Sequelize.col("designations.startAt")), "startAt"]
       ],
 
 

@@ -446,15 +446,16 @@ const DesignationsList = (props) => {
         },
       },
       {
-        Header: "指定款项",
-        accessor: "donation",
+        Header: "专款",
+        accessor: "donation.date",
+        disableSortBy: true,
         Cell: (props) => {
           const rowIdx = props.row.id;
           const donation = designationsRef.current[rowIdx].donation;
           return (
             <div>
               {donation && <a href={"/donationsView/" + donation.id }>
-                {'点击'}
+                {donation.date}
               </a>}
             </div>
           );
@@ -624,7 +625,7 @@ const DesignationsList = (props) => {
     <div className="list row">
       <div className="col-sm-9">
         <h4>
-          指定列表 (总数：{totalItems})
+          专款项目列表 (总数：{totalItems})
           {projectId && <a href={"/projectsView/" + projectId }> - 指定项目</a>}
           {donorId && <a href={"/donorsView/" + donorId }> - 捐款人</a>}
         </h4>
