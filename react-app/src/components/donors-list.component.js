@@ -15,6 +15,8 @@ import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detec
 import AuthService from "./../services/auth.service";
 
 const DonorsList = (props) => {
+  const REQUEST_PARAMS_KEY = window.location.href;
+
   const [donors, setDonors] = useState([]);
   const [exportDonors, setExportDonors] = useState([]);
 
@@ -167,7 +169,6 @@ const DonorsList = (props) => {
 
 
   const getRequestParams = (exportFlag, refresh = false) => {
-    const REQUEST_PARAMS_KEY = window.location.href;
 
     if (refresh) {
       let params = JSON.parse(localStorage.getItem(REQUEST_PARAMS_KEY));
@@ -212,6 +213,22 @@ const DonorsList = (props) => {
       localStorage.setItem(REQUEST_PARAMS_KEY, JSON.stringify(params));
 
     return params;
+  };
+
+  const serializeRequestParams = () => {
+    let params = JSON.parse(localStorage.getItem(REQUEST_PARAMS_KEY));
+    if (!params) return '';
+
+    let result = '?';
+
+    if (params["startAt"]) {
+      result += 'startAt=' + params["startAt"] + '&';
+    }
+
+    if (params["pCategoryId"])
+      result += 'pCategoryId=' + params["pCategoryId"];
+
+    return result;
   };
 
   const getRegions = () => {
@@ -403,7 +420,7 @@ const DonorsList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
-              <a href={"/designations/donor/" + donorsRef.current[rowIdx].id }>
+              <a href={"/designations/donor/" + donorsRef.current[rowIdx].id + serializeRequestParams()}>
                 {donorsRef.current[rowIdx].designationsCount}
               </a>
             </div>
@@ -433,6 +450,7 @@ const DonorsList = (props) => {
           return (
             <div>
               <Link
+                onClick={refreshOnReturn}
                 target="_blank"
                 to={"/addDesignation/" + donorsRef.current[rowIdx].id}
                 className= "badge badge-success mr-2"
@@ -441,6 +459,7 @@ const DonorsList = (props) => {
               </Link>
 
               <Link
+                onClick={refreshOnReturn}
                 target="_blank"
                 to={"/addDonation/" + donorsRef.current[rowIdx].id}
                 className= "badge badge-success mr-2"
@@ -561,7 +580,7 @@ const DonorsList = (props) => {
           <input
             type="text"
             className="form-control col-sm-2 ml-2"
-            placeholder="捐款人名称"
+            placeholder="捐款人"
             value={searchName}
             onChange={onChangeSearchName}
             id="searchName"

@@ -25,7 +25,7 @@ const DesignationsList = (props) => {
 
   const [searchCode, setSearchCode] = useState("");
   const [searchRegion, setSearchRegion] = useState("");
-  const [searchStartAt, setSearchStartAt] = useState(props.match? props.match.params.startAt : props.startAt);
+
 
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
 
@@ -33,7 +33,11 @@ const DesignationsList = (props) => {
   const [donationId, setDonationId] = useState(props.match? props.match.params.donationId : props.donationId);
   const [projectId, setProjectId] = useState(props.match? props.match.params.projectId : props.projectId);
 
-  const [pCategoryId, setPCategoryId] = useState(props.match? props.match.params.pCategoryId : props.pCategoryId);
+  //const [pCategoryId, setPCategoryId] = useState(props.match? props.match.params.pCategoryId : props.pCategoryId);
+  //const [searchStartAt, setSearchStartAt] = useState(props.match? props.match.params.startAt : props.startAt);
+  const [pCategoryId, setPCategoryId] = useState((new URLSearchParams(props.location.search)).get('pCategoryId'));
+  const [searchStartAt, setSearchStartAt] = useState((new URLSearchParams(props.location.search)).get('startAt'));
+
   const [searchName, setSearchName] = useState(props.match? props.match.params.name : props.name);
 
   const [searchDonor, setSearchDonor] = useState('');
@@ -79,9 +83,6 @@ const DesignationsList = (props) => {
   const init = () => {
     if (pCategoryId === 'null')
       setPCategoryId(null);
-
-    //if (formId === 'null')
-      //setFormId(null);
   }
 
   useEffect(init, []);
