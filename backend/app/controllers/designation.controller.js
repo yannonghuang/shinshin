@@ -194,7 +194,6 @@ exports.findAll2 = (req, res) => {
     {
       model: Donation,
       attributes: ['id',
-        'amount',
         [db.Sequelize.fn('date_format', db.Sequelize.col("donation.startAt"), '%Y-%m-%d'), "date"]
       ],
       required: false
