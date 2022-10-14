@@ -208,7 +208,7 @@ class App extends Component {
 
                 <div class="dropdown-divider"></div>
 
-                <a class="dropdown-item" href={"/batch?type=donations"} target="_blank">批量更新</a>
+                <a class="dropdown-item" href={"/batch?type=donations"} target="_blank">批量捐款更新</a>
               </div>
             </li>)}
 

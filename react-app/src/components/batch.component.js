@@ -30,11 +30,16 @@ export default class Batch extends Component {
 
       progress: 0,
       hasErrors: false,
+
+      type: null
     };
 
   }
 
   componentDidMount() {
+    this.setState({type:
+      (new URLSearchParams(window.location.search)).get('type')
+    });
   }
 
   upload() {
@@ -44,7 +49,7 @@ export default class Batch extends Component {
       data.append('multi-files', this.state.currentBatch.docFiles[i],
         this.state.currentBatch.docFiles[i].name);
     }
-    BatchDataService.batch(data, (event) => {
+    BatchDataService.batch(this.state.type, data, (event) => {
       this.setState({
         progress: Math.round((100 * event.loaded) / event.total),
       });
@@ -111,7 +116,7 @@ export default class Batch extends Component {
           <div class="row">
             <div class="col-sm-4">
               <div class="row">
-                <h4>批量更新</h4>
+                <h4>批量{this.state.type === 'donations' && '捐款'}更新</h4>
 
               </div>
             </div>

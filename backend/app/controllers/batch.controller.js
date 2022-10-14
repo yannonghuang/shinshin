@@ -20,7 +20,8 @@ const batchUpload = async (req, res) => {
 
     if (!req.files) return;
 
-    //if ((new URLSearchParams(props.location.search)).get('type') === 'donations')
+    var query = require('url').parse(req.url, true).query;
+    if (query.type === 'donations')
       await uploadDonations(req, res);
 
   } catch (error) {
