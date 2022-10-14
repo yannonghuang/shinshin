@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const homeController = require("../controllers/upload-home");
 const uploadController = require("../controllers/upload");
+const batchController = require("../controllers/batch.controller");
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -41,10 +42,13 @@ module.exports = function(app) {
     [authJwt.verifyToken],
     uploadController.dossiersUpload);
 
-
   // donor photo
   app.post("/api/single-donor-upload/:id",
     [authJwt.verifyToken],
     uploadController.singleDonorUpload);
 
+  // batch upload
+  app.post("/api/batch-upload",
+    [authJwt.verifyToken],
+    batchController.batchUpload);
 };

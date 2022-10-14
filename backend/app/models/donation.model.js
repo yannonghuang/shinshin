@@ -3,6 +3,12 @@ module.exports = (sequelize, Sequelize) => {
     startAt: {
       type: Sequelize.DATE
     },
+    transaction: {
+      type: Sequelize.INTEGER
+    },
+    type: {
+      type: Sequelize.STRING
+    },
     description: {
       type: Sequelize.STRING
     },

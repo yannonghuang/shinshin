@@ -59,6 +59,9 @@ import DonationDataService from "./services/donation.service";
 import Donation from "./components/donation.component";
 import DonationsList from "./components/donations-list.component";
 
+import BatchDataService from "./services/batch.service";
+import Batch from "./components/batch.component";
+
 import Reset from "./components/reset.component";
 import Login from "./components/login.component";
 import Register from "./components/register.component";
@@ -123,6 +126,8 @@ class App extends Component {
     if (this.props.location.pathname.match(/addU/)) return true;
 
     if (this.props.location.pathname.match(/regionsDistribution/)) return true;
+
+    if (this.props.location.pathname.match(/batch/)) return true;
 
     return false;
   }
@@ -200,6 +205,10 @@ class App extends Component {
                 {AuthService.isAdmin() &&
                   <a class="dropdown-item" href={"/addU"} target="_blank">创建用户</a>
                 }
+
+                <div class="dropdown-divider"></div>
+
+                <a class="dropdown-item" href={"/batch?type=donations"} target="_blank">批量更新</a>
               </div>
             </li>)}
 
@@ -533,6 +542,10 @@ class App extends Component {
 
             <Route path={["/donations/:id", "/donationsView/:id", "/addDonation/:id"]} component={Donation} >
                 <AccessControlService ComposedClass={Donation} />
+            </Route>
+
+            <Route path={["/batch"]} component={Batch} >
+                <AccessControlService ComposedClass={Batch} />
             </Route>
 
           </Switch>
