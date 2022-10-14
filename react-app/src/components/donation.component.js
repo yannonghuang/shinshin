@@ -46,7 +46,8 @@ export default class Donation extends Component {
     this.onChangeAmount = this.onChangeAmount.bind(this);
 
     this.onChangeDescription = this.onChangeDescription.bind(this);
-
+    this.onChangeTransaction = this.onChangeTransaction.bind(this);
+    this.onChangeType = this.onChangeType.bind(this);
     this.onChangeStartAt = this.onChangeStartAt.bind(this);
 
     this.onChangePhoto = this.onChangePhoto.bind(this);
@@ -68,7 +69,8 @@ export default class Donation extends Component {
       currentDonation: {
         id: null,
         donorId: null,
-
+        transaction: null,
+        type: null,
         amount: 0,
         description: "",
 
@@ -214,6 +216,30 @@ export default class Donation extends Component {
     }));
   }
 
+  onChangeTransaction(e) {
+    const transaction = e.target.value;
+
+    this.setState(prevState => ({
+      currentDonation: {
+        ...prevState.currentDonation,
+        transaction: transaction
+      },
+      dirty: true
+    }));
+  }
+
+  onChangeType(e) {
+    const type = e.target.value;
+
+    this.setState(prevState => ({
+      currentDonation: {
+        ...prevState.currentDonation,
+        type: type
+      },
+      dirty: true
+    }));
+  }
+
   onChangeDescription(e) {
     const description = e.target.value;
 
@@ -226,8 +252,6 @@ export default class Donation extends Component {
     }));
   }
 
-
-
   onChangeStartAt(e) {
     const startAt = e.target.value;
     this.setState(function(prevState) {
@@ -239,8 +263,6 @@ export default class Donation extends Component {
         dirty: true
       };
     });
-
-
   };
 
   getDonation(id) {
@@ -292,7 +314,8 @@ export default class Donation extends Component {
 
       amount: 0,
       description: "",
-
+      transaction: null,
+      type: null,
       startAt: new Date(), //null,
     },
     photo: null,
@@ -509,6 +532,35 @@ export default class Donation extends Component {
                 value={currentDonation.startAt}
                 onChange={this.onChangeStartAt}
                 name="startAt"
+                />
+              </div>
+
+
+              <div class="col-sm-4">
+                <label htmlFor="transaction">Transaction #</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="transaction"
+                required
+                value={currentDonation.transaction}
+                onChange={this.onChangeTransaction}
+                name="transaction"
+                />
+              </div>
+
+              <div class="col-sm-12">
+                <label htmlFor="type">类别</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="text"
+                class="form-control"
+                id="type"
+                required
+                value={currentDonation.type}
+                onChange={this.onChangeType}
+                name="type"
                 />
               </div>
 

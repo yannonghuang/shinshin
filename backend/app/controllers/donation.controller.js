@@ -149,6 +149,9 @@ exports.findAll2 = (req, res) => {
       if (orderby[i].id == 'designationsCount')
         orderbyObject.push([db.Sequelize.fn("COUNT", db.Sequelize.col("designations.id")),
           (orderby[i].desc ? "desc" : "asc")]);
+      if (orderby[i].id == 'donor.donor')
+        orderbyObject.push([Donor, 'donor',
+          (orderby[i].desc ? "desc" : "asc")]);
       else
         orderbyObject.push([orderby[i].id, (orderby[i].desc ? "desc" : "asc")]);
     }
@@ -212,7 +215,7 @@ exports.findAll2 = (req, res) => {
     }
   }
 
-  var attributes = ['id', 'amount', 'description', 'donorId',
+  var attributes = ['id', 'amount', 'description', 'donorId', 'transaction', 'type',
     [db.Sequelize.fn('date_format', db.Sequelize.col("donations.startAt"), '%Y-%m-%d'), "startAt"],
     [db.Sequelize.fn("COUNT", db.Sequelize.col("designations.id")), "designationsCount"]
   ];
@@ -270,7 +273,7 @@ exports.findOne = (req, res) => {
   ];
 
   Donation.findByPk(id, {
-      attributes: ['id', 'amount', 'description', 'donorId',
+      attributes: ['id', 'amount', 'description', 'donorId', 'transaction', 'type',
         [db.Sequelize.fn('date_format', db.Sequelize.col("startAt"), '%Y-%m-%d'), "startAt"]
       ],
 

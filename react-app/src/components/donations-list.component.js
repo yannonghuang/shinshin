@@ -450,6 +450,11 @@ const DonationsList = (props) => {
         accessor: "amount",
       },
       {
+        Header: "Transaction #",
+        accessor: "transaction",
+        disableSortBy: true,
+      },
+      {
         Header: "指定",
         accessor: "designationsCount",
         Cell: (props) => {
@@ -755,7 +760,7 @@ const DonationsList = (props) => {
                     <span>
                       {/*column.isSorted*/ (column.id === 'appellation' || column.id === 'pCategoryId'
                       || column.id === 'startAt' || column.id === 'donor' || column.id === 'amount'
-                      || column.id === 'schoolId')
+                      || column.id === 'schoolId' || column.id === 'donor.donor')
                       ? column.isSortedDesc
                         ? ' 🔽'
                         : ' 🔼'
