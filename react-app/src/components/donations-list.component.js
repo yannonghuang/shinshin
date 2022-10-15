@@ -37,6 +37,8 @@ const DonationsList = (props) => {
 
   const [searchDonor, setSearchDonor] = useState('');
 
+  const [searchType, setSearchType] = useState('');
+
   const [schoolDisplay, setSchoolDisplay] = useState(null);
 
   const [embedded, setEmbedded] = useState(props.embedded ? props.embedded : false);
@@ -102,6 +104,14 @@ const DonationsList = (props) => {
   const onChangeSearchDonor = (e) => {
     const searchDonor = e.target.value;
     setSearchDonor(searchDonor);
+
+    setStartup(false);
+  };
+
+
+  const onChangeSearchType = (e) => {
+    const searchType = e.target.value;
+    setSearchType(searchType);
 
     setStartup(false);
   };
@@ -173,6 +183,7 @@ const DonationsList = (props) => {
 
     setSearchName(params["name"]);
     setSearchDonor(params["donor"]);
+    setSearchType(params["type"]);
     setDonorId(params["donorId"]);
     setProjectId(params["projectId"]);
     setPage(params["page"] + 1);
@@ -203,6 +214,10 @@ const DonationsList = (props) => {
 
     if (searchDonor) {
       params["donor"] = searchDonor;
+    }
+
+    if (searchType) {
+      params["type"] = searchType;
     }
 
     if (donorId) {
@@ -345,7 +360,7 @@ const DonationsList = (props) => {
     retrieveDonations();
   };
 
-  useEffect(search, [pageSize, orderby, searchCode, searchName, searchDonor, searchStartAt, searchRegion, pCategoryId]);
+  useEffect(search, [pageSize, orderby, searchCode, searchName, searchDonor, searchType, searchStartAt, searchRegion, pCategoryId]);
   useEffect(retrieveDonations, [page]);
   useEffect(() => {retrieveDonations(true)}, []);
 
@@ -450,8 +465,13 @@ const DonationsList = (props) => {
         accessor: "amount",
       },
       {
-        Header: "Transaction #",
-        accessor: "transaction",
+        Header: "类别",
+        accessor: "type",
+        disableSortBy: true,
+      },
+      {
+        Header: "说明",
+        accessor: "description",
         disableSortBy: true,
       },
       {
@@ -622,6 +642,15 @@ const DonationsList = (props) => {
             minRange={1995}
             maxRange={2025}
           />
+
+          <input
+            type="text"
+            className="form-control col-sm-2 ml-2"
+            placeholder="类别"
+            value={searchType}
+            onChange={onChangeSearchType}
+            id="searchType"
+          />
 {/*
           <select
             className="form-control col-sm-3 ml-2"
@@ -760,7 +789,7 @@ const DonationsList = (props) => {
                     <span>
                       {/*column.isSorted*/ (column.id === 'appellation' || column.id === 'pCategoryId'
                       || column.id === 'startAt' || column.id === 'donor' || column.id === 'amount'
-                      || column.id === 'schoolId' || column.id === 'donor.donor')
+                      || column.id === 'schoolId' || column.id === 'donor.donor' || column.id === 'designationsCount')
                       ? column.isSortedDesc
                         ? ' 🔽'
                         : ' 🔼'

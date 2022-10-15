@@ -97,6 +97,7 @@ exports.findAll2 = (req, res) => {
 
   const name = req.body.name;
   const donor = req.body.donor;
+  const type = req.body.type;
   const page = req.body.page;
   const size = req.body.size;
   const orderby = req.body.orderby;
@@ -149,7 +150,7 @@ exports.findAll2 = (req, res) => {
       if (orderby[i].id == 'designationsCount')
         orderbyObject.push([db.Sequelize.fn("COUNT", db.Sequelize.col("designations.id")),
           (orderby[i].desc ? "desc" : "asc")]);
-      if (orderby[i].id == 'donor.donor')
+      else if (orderby[i].id == 'donor.donor')
         orderbyObject.push([Donor, 'donor',
           (orderby[i].desc ? "desc" : "asc")]);
       else
@@ -179,6 +180,10 @@ exports.findAll2 = (req, res) => {
 
       donorId
         ? { donorId: { [Op.eq]: `${donorId}` } }
+        : null,
+
+      type
+        ? { type: { [Op.like]: `%${type}%` } }
         : null,
 
       projectId
