@@ -198,17 +198,13 @@ class App extends Component {
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                管理
+                用户
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href={"/users"}>用户列表</a>
                 {AuthService.isAdmin() &&
                   <a class="dropdown-item" href={"/addU"} target="_blank">创建用户</a>
                 }
-
-                <div class="dropdown-divider"></div>
-
-                <a class="dropdown-item" href={"/batch?type=donations"} target="_blank">批量捐款更新</a>
               </div>
             </li>)}
 
@@ -234,6 +230,10 @@ class App extends Component {
                 <div class="dropdown-divider"></div>
 
                 <a class="dropdown-item" href={"/donations"}>捐赠列表</a>
+
+                <div class="dropdown-divider"></div>
+
+                <a class="dropdown-item" href={"/batch?type=donations"} target="_blank">批量捐款更新</a>
               </div>
 
             </li>)}
