@@ -16,6 +16,9 @@ const SCHOOL_REQUESTS_SS = db.SCHOOL_REQUESTS_SS;
 const SCHOOL_CATEGORIES = db.SCHOOL_CATEGORIES;
 const SCHOOL_IMPORTANT_FIELDS = db.SCHOOL_IMPORTANT_FIELDS;
 
+const OpenCC = require('opencc-js');
+const converter = OpenCC.Converter({ from: 'tw', to: 'cn' });
+
 const { authJwt } = require("../middleware");
 const fs = require('fs');
 
@@ -163,6 +166,28 @@ exports.getSchoolCategories = (req, res) => {
 exports.getSchoolImportantFields = (req, res) => {
   res.send(SCHOOL_IMPORTANT_FIELDS);
 }
+
+
+exports.transform_donor_to_simplified = (req, res) => {
+  //console.log(converter('漢語'));
+  School.findAll()
+  .then(schools => {
+    for (var i = 0; i < schools.length; i++) {
+      schools[i].donor = converter(schools[i].donor);
+      schools[i].save();
+      //console.log('donor = ' + schools[i].donor + ', converter(schools[i].donor) = ' + converter(schools[i].donor));
+    }
+    res.send('Successful updating schools...');
+  })
+  .catch(err => {
+    console.log(err.message || "Some error occurred while updating donor for School.");
+    res.status(500).send({
+      message:
+        err.message || "SSome error occurred while updating donor for School."
+    });
+  });
+}
+
 
 // Create and Save a new School
 exports.create = (req, res) => {

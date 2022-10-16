@@ -102,7 +102,7 @@ const uploadDonations = async (req, res) => {
 
       } else { // donation line
         if (!currentDonorId) continue;
-        
+
         let rowObj = {donorId: currentDonorId};
 
         for (let cn = 1; cn <= 6; cn++) {
