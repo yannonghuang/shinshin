@@ -47,8 +47,8 @@ export default class Donor extends Component {
     this.onChangeDonor = this.onChangeDonor.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePhone = this.onChangePhone.bind(this);
-    this.onChangeBillingAddress = this.onChangeBillingAddress.bind(this);
-    this.onChangeShippingAddress = this.onChangeShippingAddress.bind(this);
+    this.onChangeAddress = this.onChangeAddress.bind(this);
+    this.onChangeDescription = this.onChangeDescription.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
 
     this.onChangePhoto = this.onChangePhoto.bind(this);
@@ -75,8 +75,8 @@ export default class Donor extends Component {
         donor: '',
         email: '',
         phone: '',
-        billingAddress: '',
-        shippingAddress: '',
+        address: '',
+        description: '',
         description: "",
 
         designations: null
@@ -167,28 +167,28 @@ export default class Donor extends Component {
     });
   }
 
-  onChangeShippingAddress(e) {
-    const shippingAddress = e.target.value;
+  onChangeDescription(e) {
+    const description = e.target.value;
 
     this.setState(function(prevState) {
       return {
         currentDonor: {
           ...prevState.currentDonor,
-          shippingAddress: shippingAddress
+          description: description
         },
         dirty: true
       };
     });
   }
 
-  onChangeBillingAddress(e) {
-    const billingAddress = e.target.value;
+  onChangeAddress(e) {
+    const address = e.target.value;
 
     this.setState(function(prevState) {
       return {
         currentDonor: {
           ...prevState.currentDonor,
-          billingAddress: billingAddress
+          address: address
         },
         dirty: true
       };
@@ -265,8 +265,8 @@ export default class Donor extends Component {
       donor: '',
       email: '',
       phone: '',
-      billingAddress: '',
-      shippingAddress: '',
+      address: '',
+      description: '',
       description: "",
     },
     photo: null,
@@ -527,31 +527,19 @@ export default class Donor extends Component {
                 />
               </div>
 
-              <div class="form-group col-sm-6">
-                <label htmlFor="billingAddress">发票地址</label>
+              <div class="form-group col-sm-12">
+                <label htmlFor="address">地址</label>
                 <textarea
                 readonly={this.state.readonly?"":false}
                 class="form-control"
-                id="billingAddress"
+                id="address"
                 required
-                value={currentDonor.billingAddress}
-                onChange={this.onChangeBillingAddress}
-                name="billingAddress"
+                value={currentDonor.address}
+                onChange={this.onChangeAddress}
+                name="address"
                 />
               </div>
 
-              <div class="form-group col-sm-6">
-                <label htmlFor="shippingAddress">发货地址</label>
-                <textarea
-                readonly={this.state.readonly?"":false}
-                class="form-control"
-                id="shippingAddress"
-                required
-                value={currentDonor.shippingAddress}
-                onChange={this.onChangeShippingAddress}
-                name="shippingAddress"
-                />
-              </div>
 
 
             </div>

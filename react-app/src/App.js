@@ -285,6 +285,10 @@ class App extends Component {
 
                 <div class="dropdown-divider"></div>
 
+                <a class="dropdown-item" href={"/batch?type=projects"} target="_blank">批量学校项目更新</a>
+
+                <div class="dropdown-divider"></div>
+
                 <a class="dropdown-item"
                   hidden={!AuthService.isVolunteer()}
                   href={"/projectsXR"}>向荣支持项目列表

@@ -24,12 +24,102 @@ const batchUpload = async (req, res) => {
     if (query.type === 'donations')
       await uploadDonations(req, res);
 
+    if (query.type === 'projects')
+      await uploadProjects(req, res);
+
   } catch (error) {
     console.log(error);
     return res.status(500).send(`Error when trying upload files: ${error}`);
     if (req.files[0].path)
       fs.unlinkSync(req.files[0].path);
   }
+};
+
+const uploadProjects = async (req, res) => {
+
+  const NON_NULL_COLUMN = 1;
+
+  const t = await db.sequelize.transaction();
+  const wb = new ExcelJS.Workbook();
+  wb.xlsx.readFile(req.files[0].path)
+  .then(async () => {
+
+    const ws = wb.getWorksheet(1);
+
+    let headers = ws.getRow(1);
+    let total = 0;
+    let updatedTotal = 0;
+    let notFoundTotal = 0;
+    let duplicatedTotal = 0;
+
+    for (let index = 2; index <= ws.rowCount; index++) {
+      let row = ws.getRow(index);
+
+      if (!row.getCell(NON_NULL_COLUMN).value) break;
+
+      total++;
+
+      let startAt = row.getCell(1).value;
+      let pCategory = row.getCell(2).value;
+      let name = row.getCell(3).value;
+      let state = row.getCell(4).value;
+      let description = row.getCell(5).value;
+      let budget = row.getCell(6).value;
+      let code = row.getCell(7).value;
+
+      var condition = {
+        [Op.and]: [
+          name ? { name: { [Op.eq]: `${name}` } } : null,
+          //(pCategoryId || pCategoryId === 0) ? { pCategoryId: { [Op.eq]: `${pCategoryId}` } } : null,
+          code ? { '$school.code$': { [Op.eq]: `${code}` } } : null,
+          startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('projects.startAt')), `${startAt}`) } } : null,
+        ]
+      };
+
+      var include = [
+        {
+          model: School,
+          attributes: ['id', 'code'],
+          required: false,
+        },
+      ];
+
+      let projects = await Project.findAll({
+        where: condition,
+        include: include,
+        }, { transaction: t }
+      );
+
+      if (!projects || projects.length === 0) notFoundTotal++;
+      else if (projects.length > 1) duplicatedTotal++;
+      else {
+        projects[0].description = description;
+        projects[0].budget = budget;
+        projects[0].update( { transaction: t });
+        updatedTotal++;
+      }
+
+    }
+
+    await t.commit();
+
+    let message = '批量上传学校项目总数：' + total + '，更新数：' + updatedTotal +
+      '， 无项目数：' + notFoundTotal+ '， 重复项目数：' + duplicatedTotal;
+    console.log(message);
+    res.json(message);
+    //res.json({ success: true, data: 'image' });
+    fs.unlinkSync(req.files[0].path);
+
+  })
+  .catch(async (err) => {
+    console.log(err.message);
+    await t.rollback();
+    return res.status(500).send(`Error when updating projects: ${err}`);
+
+    if (req.files[0].path)
+      fs.unlinkSync(req.files[0].path);
+  });
+
 };
 
 const uploadDonations = async (req, res) => {

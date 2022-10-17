@@ -116,7 +116,15 @@ export default class Batch extends Component {
           <div class="row">
             <div class="col-sm-4">
               <div class="row">
-                <h4>批量{this.state.type === 'donations' && '捐款'}更新</h4>
+                <h4>批量
+                {this.state.type === 'donations'
+                ? '捐款'
+                : this.state.type === 'projects'
+                  ? '学校项目'
+                  : ''
+                }
+                  更新
+                </h4>
 
               </div>
             </div>

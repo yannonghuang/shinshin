@@ -12,10 +12,10 @@ module.exports = (sequelize, Sequelize) => {
     phone: {
       type: Sequelize.STRING
     },
-    billingAddress: {
+    address: {
       type: Sequelize.STRING
     },
-    shippingAddress: {
+    description: {
       type: Sequelize.STRING
     },
     photo: {

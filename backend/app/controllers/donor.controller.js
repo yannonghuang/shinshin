@@ -178,7 +178,7 @@ exports.findAll2 = (req, res) => {
     }
   }
 
-  var attributes = ['id', 'name', 'phone', 'donor', 'email', 'billingAddress', 'shippingAddress',
+  var attributes = ['id', 'name', 'phone', 'donor', 'email', 'address', 'description',
     //[db.Sequelize.fn("COUNT", db.Sequelize.col("designations.id")), "designationsCount"],
     [db.Sequelize.literal(`count(distinct designations.id)`), "designationsCount"],
     [db.Sequelize.literal(`count(distinct donations.id)`), "donationsCount"]
@@ -237,7 +237,7 @@ exports.findOne = (req, res) => {
   ];
 
   Donor.findByPk(id, {
-      attributes: ['id', 'name', 'phone', 'donor', 'email', 'billingAddress', 'shippingAddress'],
+      attributes: ['id', 'name', 'phone', 'donor', 'email', 'address', 'description'],
 
       include: include,
 /**
