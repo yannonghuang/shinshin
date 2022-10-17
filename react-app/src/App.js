@@ -231,9 +231,10 @@ class App extends Component {
 
                 <a class="dropdown-item" href={"/donations"}>捐赠列表</a>
 
-                <div class="dropdown-divider"></div>
-
-                <a class="dropdown-item" href={"/batch?type=donations"} target="_blank">批量捐款更新</a>
+                {AuthService.isAdmin() && <div>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href={"/batch?type=donations"} target="_blank">批量捐款更新</a>
+                </div>}
               </div>
 
             </li>)}
@@ -283,9 +284,10 @@ class App extends Component {
 
                 {this.renderProjectsByCategories()}
 
-                <div class="dropdown-divider"></div>
-
-                <a class="dropdown-item" href={"/batch?type=projects"} target="_blank">批量学校项目更新</a>
+                {AuthService.isAdmin() && <div>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href={"/batch?type=projects"} target="_blank">批量学校项目更新</a>
+                </div>}
 
                 <div class="dropdown-divider"></div>
 

@@ -317,6 +317,8 @@ const ResponsesList = (props) => {
   };
 
   const refreshList = () => {
+    if (startup) return;
+
     setPage(1);
     retrieveResponses();
   };

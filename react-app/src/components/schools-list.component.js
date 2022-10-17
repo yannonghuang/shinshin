@@ -413,6 +413,7 @@ const SchoolsList = (props) => {
   };
 
   const search = () => {
+    if (startup) return;
     setPage(1);
     retrieveSchools();
   };

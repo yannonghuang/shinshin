@@ -354,6 +354,7 @@ const UsersList = (props) => {
   };
 
   const search = () => {
+    if (startup) return;
     setPage(1);
     retrieveUsers();
   };
