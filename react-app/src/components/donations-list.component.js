@@ -201,7 +201,7 @@ const DonationsList = (props) => {
       let params = JSON.parse(localStorage.getItem(REQUEST_PARAMS_KEY));
       if (params) {
         restoreRequestParams(params);
-        localStorage.removeItem(REQUEST_PARAMS_KEY);
+        //localStorage.removeItem(REQUEST_PARAMS_KEY);
         return params;
       }
     }
