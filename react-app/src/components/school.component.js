@@ -1436,10 +1436,10 @@ export default class School extends Component {
             {!this.state.newschool && (<Tabs className='mt-2'>
               <TabList>
                 <Tab>更多信息 <i class="fas fa-hand-point-right"></i></Tab>
-                <Tab>学校详情</Tab>
+                {AuthService.isLogin() && <Tab>学校详情</Tab>}
                 <Tab>项目列表</Tab>
-                <Tab>项目申请列表</Tab>
-                <Tab>学校文档</Tab>
+                {AuthService.isLogin() && <Tab>项目申请列表</Tab>}
+                {AuthService.isLogin() && <Tab>学校文档</Tab>}
                 <Tab>学校照片</Tab>
                 {AuthService.isVolunteer() && <Tab>评论区</Tab>}
                 {AuthService.isVolunteer() && currentSchool.xr ? <Tab>向荣支持项目</Tab> : null}
@@ -1447,14 +1447,14 @@ export default class School extends Component {
 
               <TabPanel>
               </TabPanel>
-              <TabPanel>
+              {AuthService.isLogin() && <TabPanel>
                 <Survey
                   schoolId = {currentSchool.id}
                   embedded = {true}
                   readonly = {this.state.readonly}
                   ref = {this.surveyRef}
                 />
-              </TabPanel>
+              </TabPanel>}
               <TabPanel>
                 <ProjectsList
                   schoolId = {currentSchool.id}
@@ -1462,14 +1462,14 @@ export default class School extends Component {
 
                 />
               </TabPanel>
-              <TabPanel>
+              {AuthService.isLogin() && <TabPanel>
                 <ResponsesList
                   schoolId = {currentSchool.id}
                   embedded = {true}
 
                 />
-              </TabPanel>
-              <TabPanel>
+              </TabPanel>}
+              {AuthService.isLogin() && <TabPanel>
                 <DocumentsList
                   schoolId = {currentSchool.id}
                   docCategory = {'!学校照片'}
@@ -1479,7 +1479,7 @@ export default class School extends Component {
                     !AuthService.getCurrentUser())
                   }
                 />
-              </TabPanel>
+              </TabPanel>}
               <TabPanel>
                 <DocumentsList
                   schoolId = {currentSchool.id}

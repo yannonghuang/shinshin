@@ -629,6 +629,10 @@ const ProjectsList = (props) => {
   if (embedded || schoolId) hiddenColumns =
     [...hiddenColumns, ...schoolKnownColumns, ...exportOnlyColumns];
 
+  var hiddenColumnsLogin = (!AuthService.isLogin())
+    ? ['response.title', 'budget', 'designationsCount', 'actions']
+    : [];
+
   const xrColumns =
     ["response.title", "status"];
 
@@ -636,7 +640,7 @@ const ProjectsList = (props) => {
     ? [...hiddenColumns, ...xrColumns]
     : hiddenColumns;
 
-  hiddenColumns = [...hiddenColumns, ...hiddenColumnsMobile];
+  hiddenColumns = [...hiddenColumns, ...hiddenColumnsMobile, ...hiddenColumnsLogin];
 
   const {
     getTableProps,
