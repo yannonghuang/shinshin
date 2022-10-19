@@ -171,7 +171,7 @@ const AttachmentsList = (props) => {
           return (
             <div>
               <a href="#" onClick={() => promote(rowIdx)}>
-                <i className="badge badge-success mr-2">升级</i>
+                <i className="badge badge-success mr-2">存档</i>
               </a>
 
               {(attachmentsRef.current[rowIdx].mimetype.startsWith('image') ||
