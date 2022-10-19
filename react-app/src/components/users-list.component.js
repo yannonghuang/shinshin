@@ -425,7 +425,7 @@ const UsersList = (props) => {
         disableSortBy: true,
       },
       {
-        Header: "中文名",
+        Header: "姓名",
         accessor: "chineseName",
         disableSortBy: true,
       },
@@ -519,7 +519,7 @@ const UsersList = (props) => {
         */
       },
       {
-        Header: "登录过?",
+        Header: "登录过",
         accessor: 'emailVerified',
         disableSortBy: true,
         /**
@@ -619,9 +619,25 @@ const UsersList = (props) => {
       <div class="w-100"></div>
 
       <div className="col-sm-8">
-        <div className="row mb-3" hidden={schoolId}>
+
+        <div className="row" >
           <select
             className="form-control col-sm-3"
+            value={searchContactOnly}
+            onChange={onChangeSearchContactOnly}
+            id="searchContactOnly"
+          >
+            <option value="">用户类型</option>
+              <option value={false}>
+                {'注册用户'}
+              </option>
+              <option value={true}>
+                {'非注册用户'}
+              </option>
+          </select>
+
+          <select hidden={schoolId}
+            className="form-control col-sm-3 ml-2"
             value={searchRole}
             onChange={onChangeSearchRole}
             id="searchRole"
@@ -634,7 +650,7 @@ const UsersList = (props) => {
             ))}
           </select>
 
-          <select
+          <select hidden={schoolId}
             className="form-control col-sm-3 ml-2"
             value={searchTitle}
             onChange={onChangeSearchTitle}
@@ -654,13 +670,31 @@ const UsersList = (props) => {
             ))}
           </select>
 
+          <select
+            className="form-control col-sm-2 ml-2"
+            value={searchEmailVerified}
+            onChange={onChangeSearchEmailVerified}
+            id="searchEmailVerified"
+          >
+            <option value="">登录过</option>
+              <option value={true}>
+                {'是'}
+              </option>
+              <option value={false}>
+                {'否'}
+              </option>
+          </select>
+
+        </div>
+
+        <div className="row mb-3">
           <input
             type="text"
-            className="form-control col-sm-2 ml-2"
-            placeholder="学校编号"
-            value={searchSchoolCode}
-            onChange={onChangeSearchSchoolCode}
-            id="searchSchoolCode"
+            className="form-control col-sm-3"
+            placeholder="用户名/姓名"
+            value={searchUsername}
+            onChange={onChangeSearchUsername}
+            id="searchUsername"
           />
 
           <input
@@ -670,47 +704,16 @@ const UsersList = (props) => {
             value={searchEmail}
             onChange={onChangeSearchEmail}
           />
-        </div>
 
-        <div className="row mb-3">
-          <input
+
+          <input hidden={schoolId}
             type="text"
-            className="form-control col-sm-3"
-            placeholder="用户名/中文名"
-            value={searchUsername}
-            onChange={onChangeSearchUsername}
-            id="searchUsername"
-          />
-
-          <select
-            className="form-control col-sm-3 ml-2"
-            value={searchContactOnly}
-            onChange={onChangeSearchContactOnly}
-            id="searchContactOnly"
-          >
-            <option value="">用户类型</option>
-              <option value={false}>
-                {'注册用户'}
-              </option>
-              <option value={true}>
-                {'非注册用户'}
-              </option>
-          </select>
-
-          <select
             className="form-control col-sm-2 ml-2"
-            value={searchEmailVerified}
-            onChange={onChangeSearchEmailVerified}
-            id="searchEmailVerified"
-          >
-            <option value="">登录过?</option>
-              <option value={true}>
-                {'是'}
-              </option>
-              <option value={false}>
-                {'否'}
-              </option>
-          </select>
+            placeholder="学校编号"
+            value={searchSchoolCode}
+            onChange={onChangeSearchSchoolCode}
+            id="searchSchoolCode"
+          />
 
           <input
             type="text"
