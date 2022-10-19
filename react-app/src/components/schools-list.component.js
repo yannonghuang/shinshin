@@ -881,7 +881,7 @@ const SchoolsList = (props) => {
     : [];
 
   var hiddenColumnsLogin = (!AuthService.isLogin())
-    ? ["stage", "status", "request", "donor"]
+    ? ["stage", "status", "request", "donor", 'latestProjectYear', 'responsesCount', 'xr', 'actions']
     : [];
 
   var hiddenColumns = [...hiddenColumnsMobile, ...hiddenColumnsLogin];
@@ -1083,6 +1083,7 @@ const SchoolsList = (props) => {
 
           <select
             className="form-control col-sm-2 ml-2"
+            hidden={!AuthService.isLogin()}
             value={searchXR}
             onChange={onChangeSearchXR}
           >
