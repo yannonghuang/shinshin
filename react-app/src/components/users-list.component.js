@@ -519,7 +519,7 @@ const UsersList = (props) => {
         */
       },
       {
-        Header: "登录过",
+        Header: "活跃",
         accessor: 'emailVerified',
         disableSortBy: true,
         /**
@@ -676,7 +676,7 @@ const UsersList = (props) => {
             onChange={onChangeSearchEmailVerified}
             id="searchEmailVerified"
           >
-            <option value="">登录过</option>
+            <option value="">活跃</option>
               <option value={true}>
                 {'是'}
               </option>
