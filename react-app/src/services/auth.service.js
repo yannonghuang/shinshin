@@ -112,6 +112,11 @@ class AuthService {
     return user && !user.schoolId && user.roles.includes("ROLE_ADMIN");
   }
 
+  isDonorService() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    return user && !user.schoolId && user.title && user.title.includes("捐款人服务部");
+  }
+
   isVolunteer() {
     const user = JSON.parse(localStorage.getItem('user'));
     return user && !user.schoolId;

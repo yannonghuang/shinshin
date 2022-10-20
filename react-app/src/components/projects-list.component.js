@@ -633,7 +633,7 @@ const ProjectsList = (props) => {
     ? ['response.title', 'budget', 'designationsCount', 'actions']
     : [];
 
-  var hiddenColumnsAdmin = (!AuthService.isAdmin())
+  var hiddenColumnsDonorService = (!AuthService.isDonorService())
     ? ['designationsCount']
     : [];
 
@@ -644,7 +644,7 @@ const ProjectsList = (props) => {
     ? [...hiddenColumns, ...xrColumns]
     : hiddenColumns;
 
-  hiddenColumns = [...hiddenColumns, ...hiddenColumnsMobile, ...hiddenColumnsLogin, ...hiddenColumnsAdmin];
+  hiddenColumns = [...hiddenColumns, ...hiddenColumnsMobile, ...hiddenColumnsLogin, ...hiddenColumnsDonorService];
 
   const {
     getTableProps,

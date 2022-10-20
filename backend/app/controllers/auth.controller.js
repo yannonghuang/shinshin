@@ -652,7 +652,8 @@ exports.signin = (req, res) => {
           roles: authorities,
           accessToken: token,
           thisLogin: Math.floor(Date.now()/1000),
-          validity: config.validity
+          validity: config.validity,
+          title: user.title,
         });
       });
     })

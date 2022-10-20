@@ -90,6 +90,7 @@ db.VOLUNTEER_DEPARTMENTS = [
   "理事会",
   "北京代表处",
   "专项工作",
+  "捐款人服务部",
 ];
 
 db.PROJECT_CATEGORIES = [

@@ -843,7 +843,7 @@ export default class Register extends Component {
                 <label htmlFor="title">义工用户职位（所属部门）</label>
                 <select required
                   onChange={this.onChangeTitle.bind(this)}
-                  disabled={this.state.readonly ? "disabled" : false}
+                  disabled={/*this.state.readonly*/ !AuthService.isAdmin() ? "disabled" : false}
                   class="form-control"
                   id="title"
                   value={this.displayTitle(this.state.title)}
