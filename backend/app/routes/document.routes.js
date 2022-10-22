@@ -26,7 +26,7 @@ module.exports = function(app) {
   );
 
   app.post("/api/documents/all",
-    [authJwt.verifyToken],
+    //[authJwt.verifyToken],
     documents.findAll2
   );
 
