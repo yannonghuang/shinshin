@@ -222,13 +222,11 @@ exports.findAll2 = async (req, res) => {
       if (orderby[i].id == 'designationsCount')
         orderbyObject.push([db.Sequelize.fn("COUNT", db.Sequelize.col("designations.id")),
           (orderby[i].desc ? "desc" : "asc")]);
-      else {
-        if (orderby[i].id.startsWith('school.')) {
-          orderbyObject.push([School, orderby[i].id.substring(orderby[i].id.indexOf('.') + 1),
-            (orderby[i].desc ? "desc" : "asc")]);
-        } else
-          orderbyObject.push([orderby[i].id, (orderby[i].desc ? "desc" : "asc")]);
-      }
+      else if (orderby[i].id.startsWith('school.')) {
+        orderbyObject.push([School, orderby[i].id.substring(orderby[i].id.indexOf('.') + 1),
+          (orderby[i].desc ? "desc" : "asc")]);
+      } else
+        orderbyObject.push([orderby[i].id, (orderby[i].desc ? "desc" : "asc")]);
     }
   };
 
