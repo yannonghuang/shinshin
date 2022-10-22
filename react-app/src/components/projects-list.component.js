@@ -782,7 +782,7 @@ const ProjectsList = (props) => {
             ))}
           </select>)}
 
-          <select
+          <select hidden={!AuthService.isDonorService()}
             className="form-control col-sm-2 ml-2"
             value={searchDesignated}
             onChange={onChangeSearchDesignated}
