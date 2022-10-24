@@ -49,7 +49,8 @@ class AuthService {
     if (!localStorage.getItem('user')) return;
 
     const username = JSON.parse(localStorage.getItem('user')).username;
-    localStorage.removeItem("user");
+    localStorage.clear();
+    //localStorage.removeItem("user");
 
     return axios
       .post(API_URL + "signout", {
