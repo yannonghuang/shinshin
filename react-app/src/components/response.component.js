@@ -610,7 +610,7 @@ export default class Response extends Component {
     return (
 
       <div>
-      {!this.state.updatedRecently
+      {(!this.state.updatedRecently && this.state.newresponse)
       ? (
         <div>
             <p>{'您的学校信息上次更新时间是：' + this.state.updatedAt + ', 请点击下面更新学校信息'}</p>
