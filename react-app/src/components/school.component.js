@@ -148,6 +148,16 @@ export default class School extends Component {
   }
 
   init(readonly) {
+    function onkeydownInEditable(e: KeyboardEvent) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+      }
+      if (e.key === "Backspace" || e.key === "Delete" || e.key === "Paste") {
+        e.preventDefault();
+      }
+    }
+    document.getElementById('schoolPhotoDiv').addEventListener("keydown", onkeydownInEditable);
+
     if (readonly) return;
 
     document.getElementById('schoolPhotoDiv').onpaste = async (pasteEvent) => {
@@ -170,7 +180,9 @@ export default class School extends Component {
               pastedPhotoType: type
             }));
 
-            document.getElementById('schoolPhoto').src = reader.result;
+            if (document.getElementById('schoolPhoto').src)
+              document.getElementById('schoolPhoto').src = reader.result;
+
             return;
           }
 
