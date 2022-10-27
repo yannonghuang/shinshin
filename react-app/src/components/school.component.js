@@ -180,7 +180,7 @@ export default class School extends Component {
               pastedPhotoType: type
             }));
 
-            if (document.getElementById('schoolPhoto').src)
+            if (document.getElementById('schoolPhoto'))
               document.getElementById('schoolPhoto').src = reader.result;
 
             return;
