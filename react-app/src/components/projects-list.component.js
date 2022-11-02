@@ -183,6 +183,8 @@ const ProjectsList = (props) => {
   const getRequestParams = (exportFlag, refresh = false) => {
     const REQUEST_PARAMS_KEY = window.location.href;
 
+    if (embedded) localStorage.removeItem(REQUEST_PARAMS_KEY);
+
     if (refresh) {
       let params = JSON.parse(localStorage.getItem(REQUEST_PARAMS_KEY));
       if (params) {
