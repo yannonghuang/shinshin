@@ -42,6 +42,30 @@ const peg = async (req, formId) => {
   }
 };
 
+const needToPropagate = async (req) => {
+  const id = req.params.id;
+  const {title, startAt, pCategoryId} = req.body;
+
+  const condition = {
+        [Op.and]: [
+          id ? { id: { [Op.eq]: `${id}` } } : null,
+          pCategoryId ? { pCategoryId: { [Op.eq]: `${pCategoryId}` } } : null,
+          title ? { title: { [Op.eq]: `${title}` } } : null,
+          startAt
+            ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('date_format', db.Sequelize.col('startAt'), '%Y-%m-%d'), `${startAt}`) } }
+            : null,
+        ]};
+
+  try {
+    let forms = await Form.findAll({where: condition});
+    //let forms = await Form.findAll({where: { id, title, startAt, pCategoryId }});
+    if (!forms || forms.length === 0) return true;
+  } catch (e) {
+    console.log(e.message);
+  }
+  return false;
+};
+
 const propagateUpdates = async (req) => {
   const formId = req.params.id;
   const {title, startAt, pCategoryId} = req.body;
@@ -528,8 +552,10 @@ exports.publish = async (req, res) => {
 };
 
 // Update a Form by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
   const id = req.params.id;
+
+  const needPropagation = await needToPropagate(req);
 
   Form.update(req.body, {
     where: { id: id }
@@ -539,8 +565,10 @@ exports.update = (req, res) => {
         res.send({
           message: "Form was updated successfully."
         });
-
-        propagateUpdates(req);
+        if (needPropagation)
+          propagateUpdates(req);
+        else
+          console.log('......... NO need to propagate ..... ');
       } else {
         res.send({
           message: `Cannot update Form with id=${id}. Maybe Form was not found or req.body is empty!`
