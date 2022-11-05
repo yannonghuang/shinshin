@@ -372,8 +372,19 @@ exports.update = (req, res) => {
   Response.update(req.body, {
     where: { id: id }
   })
-    .then(num => {
+    .then(async (num) => {
       if (num == 1) {
+
+        if (req.body.schoolId)
+          await Project.update(
+            {
+              schoolId: req.body.schoolId
+            },
+            {
+              where: { responseId: id },
+            }
+          );
+
         res.send({
           message: "Response was updated successfully."
         });

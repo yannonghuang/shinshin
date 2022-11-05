@@ -84,6 +84,10 @@ const ResponsesList = (props) => {
     setStartup(false);
   };
 
+  const refreshOnReturn = () => {
+    window.onblur = () => {window.onfocus = () => {retrieveResponses(true)}}
+  };
+
   const restoreRequestParams = (params) => {
     if (!params) return;
 
@@ -556,6 +560,7 @@ const ResponsesList = (props) => {
               </Link>
               {!readonly && (<Link
                 target = '_blank' //{(!embedded || AuthService.getCurrentUser().schoolId) ? '_blank' : '_self'}
+                onClick={refreshOnReturn}
                 to={"/responses/" + responsesRef.current[rowIdx].id}
               >
                 <i className="far fa-edit action mr-2"></i>
