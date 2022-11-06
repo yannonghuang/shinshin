@@ -17,6 +17,7 @@ const FormsList = (props) => {
   const [searchTitle, setSearchTitle] = useState("");
   const [searchStartAt, setSearchStartAt] = useState("");
   const [searchPublished, setSearchPublished] = useState(null);
+  const [searchMultipleAllowed, setSearchMultipleAllowed] = useState(null);
 
   const formsRef = useRef();
   formsRef.current = forms;
@@ -50,6 +51,12 @@ const FormsList = (props) => {
     const searchPublished = e.target.value;
     setSearchPublished(searchPublished);
   };
+
+  const onChangeSearchMultipleAllowed = (e) => {
+    const searchMultipleAllowed = e.target.value;
+    setSearchMultipleAllowed(searchMultipleAllowed);
+  };
+
 
   const refreshOnReturn = () => {
     window.onblur = () => {window.onfocus = () => {retrieveForms(true)}}
@@ -85,6 +92,10 @@ const FormsList = (props) => {
       params["published"] = searchPublished;
     }
 
+    if (searchMultipleAllowed) {
+      params["multipleAllowed"] = searchMultipleAllowed;
+    }
+
     if (orderby && orderby[0])
       params["orderby"] = orderby;
     else
@@ -103,6 +114,7 @@ const FormsList = (props) => {
     setSearchTitle("");
     setSearchStartAt("");
     setSearchPublished("");
+    setSearchMultipleAllowed("");
     setOrderby([]);
 
     setPage(1);
@@ -131,7 +143,7 @@ const FormsList = (props) => {
     retrieveForms();
   };
 
-  useEffect(refreshList, [pageSize, orderby, searchTitle, searchStartAt, searchPublished]);
+  useEffect(refreshList, [pageSize, orderby, searchTitle, searchStartAt, searchPublished, searchMultipleAllowed]);
   useEffect(retrieveForms, [page]);
 
 
@@ -254,6 +266,18 @@ const FormsList = (props) => {
           return (
             <div>
                 {formsRef.current[rowIdx].published ? '是' : '否'}
+            </div>
+          );
+        },
+      },
+      {
+        Header: "允许多次申请？",
+        accessor: 'multipleAllowed',
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+                {formsRef.current[rowIdx].multipleAllowed ? '是' : '否'}
             </div>
           );
         },
@@ -386,13 +410,13 @@ const FormsList = (props) => {
 
           <input
             type="text"
-            className="form-control col-sm-3 ml-2"
+            className="form-control col-sm-2 ml-2"
             placeholder="标题查找"
             value={searchTitle}
             onChange={onChangeSearchTitle}
           />
 
-          {AuthService.isAdmin() && <select
+          <select
             className="form-control col-sm-2 ml-2"
             value={searchPublished}
             onChange={onChangeSearchPublished}
@@ -404,7 +428,21 @@ const FormsList = (props) => {
               <option value={true}>
                 {'是'}
               </option>
-          </select>}
+          </select>
+
+          <select
+            className="form-control col-sm-3 ml-2"
+            value={searchMultipleAllowed}
+            onChange={onChangeSearchMultipleAllowed}
+          >
+            <option value="">允许多次申请?</option>
+              <option value={false}>
+                {'否'}
+              </option>
+              <option value={true}>
+                {'是'}
+              </option>
+          </select>
 
           <div>
             <button
@@ -466,7 +504,7 @@ const FormsList = (props) => {
                      {/* Add a sort direction indicator */}
                        <span>
                          {/*column.isSorted*/ (column.id === 'startAt' || column.id === 'deadline' ||
-                         column.id === 'responsesCount' || column.id === 'published')
+                         column.id === 'responsesCount' || column.id === 'published'|| column.id === 'multipleAllowed')
                            ? column.isSortedDesc
                              ? ' 🔽'
                              : ' 🔼'

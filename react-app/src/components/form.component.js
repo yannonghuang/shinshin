@@ -24,6 +24,7 @@ export default class Form extends Component {
     this.onChangePCategoryId = this.onChangePCategoryId.bind(this);
     this.getForm = this.getForm.bind(this);
     this.onChangePublished = this.onChangePublished.bind(this);
+    this.onChangeMultipleAllowed = this.onChangeMultipleAllowed.bind(this);
     this.updateForm = this.updateForm.bind(this);
     this.deleteForm = this.deleteForm.bind(this);
     this.saveForm = this.saveForm.bind(this);
@@ -35,6 +36,7 @@ export default class Form extends Component {
         title: "",
         description: "",
         published: false,
+        multipleAllowed: false,
         fdata: null,
         deadline: null,
         startAt: null,
@@ -180,6 +182,16 @@ export default class Form extends Component {
     }));
   }
 
+  onChangeMultipleAllowed(e) {
+    const value = e.target.checked;
+    this.setState(prevState => ({
+      currentForm: {
+        ...prevState.currentForm,
+        multipleAllowed: value
+      }
+    }));
+  }
+
   getForm(id, readonly) {
     FormDataService.get(id)
       .then(response => {
@@ -250,6 +262,7 @@ export default class Form extends Component {
       description: this.state.currentForm.description,
       deadline: this.state.currentForm.deadline,
       published: this.state.currentForm.published,
+      multipleAllowed: this.state.currentForm.multipleAllowed,
       startAt: this.state.currentForm.startAt ? (this.state.currentForm.startAt + '-01-10') : null,
       fdata: this.fBuilder.actions.getData(), /* formData */
       pCategoryId: this.state.currentForm.pCategoryId,
@@ -281,6 +294,7 @@ export default class Form extends Component {
         deadline: null,
         startAt: null,
         published: false,
+        multipleAllowed: false,
         pCategoryId: null,
       },
       submitted: false
@@ -397,7 +411,8 @@ export default class Form extends Component {
                 }
               </div>
 
-              <div class="form-group col-md-2">
+              <div class="form-group col-md-3">
+
                 <label htmlFor="published">发布?</label>
                 <input
                 disabled={this.state.readonly?"disabled":false}
@@ -409,7 +424,25 @@ export default class Form extends Component {
                 onChange={this.onChangePublished}
                 name="published"
                 />
+
               </div>
+
+              <div class="form-group col-md-3">
+
+                <label htmlFor="multipleAllowed">允许多次申请?</label>
+                <input
+                disabled={this.state.readonly?"disabled":false}
+                type="checkbox"
+                class="form-control"
+                id="multipleAllowed"
+                required
+                checked={currentForm.multipleAllowed}
+                onChange={this.onChangeMultipleAllowed}
+                name="multipleAllowed"
+                />
+
+              </div>
+
 
             </form>
 

@@ -38,10 +38,16 @@ exports.create = async (req, res) => {
   }
 
   const testResponses = await Response.findAll({
-    where: {
-      formId: req.body.formId,
-      schoolId: req.body.schoolId,
-    }
+    include: [{
+      model: Form,
+      attributes: ['multipleAllowed'],
+      required: false,
+    }],
+    where: {[Op.and]: [
+      {formId: req.body.formId},
+      {schoolId: req.body.schoolId},
+      {[Op.or]: [{ '$form.multipleAllowed$': { [Op.ne]: `1` }}, { '$form.multipleAllowed$': null }]},
+    ]}
   });
 
   if (testResponses && testResponses.length > 0) {

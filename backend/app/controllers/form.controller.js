@@ -371,6 +371,7 @@ exports.findAll2 = async(req, res) => {
   const size = req.body.size;
   const orderby = req.body.orderby;
   const published = (sid/* || !hasAdminRole */) ? 'true' : req.body.published;
+  const multipleAllowed = req.body.multipleAllowed;
 
   var orderbyObject = null;
   if (orderby) {
@@ -394,6 +395,11 @@ exports.findAll2 = async(req, res) => {
             : published === 'true'
               ? { published: { [Op.eq]: `1` }}
               : {[Op.or]: [{ published: { [Op.ne]: `1` }}, { published: null }]},
+          multipleAllowed === undefined
+            ? null
+            : multipleAllowed === 'true'
+              ? { multipleAllowed: { [Op.eq]: `1` }}
+              : {[Op.or]: [{ multipleAllowed: { [Op.ne]: `1` }}, { multipleAllowed: null }]},
         ]};
 
   const includeCondition = {
@@ -418,7 +424,8 @@ exports.findAll2 = async(req, res) => {
       [db.Sequelize.fn("COUNT", db.Sequelize.col("responses.id")), "responsesCount"],
       [db.Sequelize.fn('date_format', db.Sequelize.col("deadline"), '%Y-%m-%d'), "deadline"],
       "startAt", //[db.Sequelize.fn('date_format', db.Sequelize.col("form.startAt"), '%Y-%m-%d'), "startAt"],
-      "published"
+      "published",
+      "multipleAllowed"
   ],
   include: include,
   group: ['id'],
@@ -497,7 +504,8 @@ exports.findOne = (req, res) => {
       "startAt", //[db.Sequelize.fn('YEAR', db.Sequelize.col('form.startAt')), "startAt"],
       //[db.Sequelize.fn('date_format', db.Sequelize.col("startAt"), '%Y-%m-%d'), "startAt"],
       "published",
-      "pCategoryId"
+      "pCategoryId",
+      "multipleAllowed"
   ]
   })
     .then(data => {

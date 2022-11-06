@@ -25,6 +25,9 @@ module.exports = (sequelize, Sequelize) => {
     pCategoryId: {
       type: Sequelize.INTEGER
     },
+    multipleAllowed: {
+      type: Sequelize.BOOLEAN
+    },
   });
 
   return Form;
