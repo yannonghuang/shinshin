@@ -343,6 +343,8 @@ const FormsList = (props) => {
     []
   );
 
+  const hiddenColumns = ["multipleAllowed"];
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -356,6 +358,7 @@ const FormsList = (props) => {
     disableSortRemove: true,
     manualSortBy: true,
     initialState: {
+      hiddenColumns: hiddenColumns,
       sortBy: [
         {
           id: 'deadline',
@@ -410,7 +413,7 @@ const FormsList = (props) => {
 
           <input
             type="text"
-            className="form-control col-sm-2 ml-2"
+            className="form-control col-sm-3 ml-2"
             placeholder="标题查找"
             value={searchTitle}
             onChange={onChangeSearchTitle}
@@ -429,7 +432,7 @@ const FormsList = (props) => {
                 {'是'}
               </option>
           </select>
-
+{/*
           <select
             className="form-control col-sm-3 ml-2"
             value={searchMultipleAllowed}
@@ -443,7 +446,7 @@ const FormsList = (props) => {
                 {'是'}
               </option>
           </select>
-
+*/}
           <div>
             <button
               className="btn btn-primary ml-2"
