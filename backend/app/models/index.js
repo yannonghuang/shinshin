@@ -199,6 +199,7 @@ db.SCHOOL_CATEGORIES = [
   "中心小学",
   "九年制",
   "初中",
+  "特教学校"
 ];
 
 db.SCHOOL_IMPORTANT_FIELDS = [
