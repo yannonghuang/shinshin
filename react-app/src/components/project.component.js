@@ -76,6 +76,8 @@ export default class Project extends Component {
       message: "",
       submitted: false,
 
+      pastedPhotoType: null,
+
       dirty: false,
       progress: 0,
       hasErrors: false,
@@ -87,7 +89,9 @@ export default class Project extends Component {
   componentDidMount() {
     const newproject = window.location.pathname.includes('add');
     this.setState({newproject: newproject});
-    this.setState({readonly: window.location.pathname.includes('View')});
+    const readonly = window.location.pathname.includes('View');
+    this.setState({readonly: readonly}, () => {this.init(readonly)});
+    //this.setState({readonly: window.location.pathname.includes('View')});
 
     if (!newproject) {
       this.getProject(this.props.match.params.id);
@@ -97,6 +101,49 @@ export default class Project extends Component {
     this.getDocCategories();
     this.getSchools();
     this.getStatuses();
+  }
+
+
+  init(readonly) {
+    function onkeydownInEditable(e: KeyboardEvent) {
+      if (e.key === "Backspace" || e.key === "Delete" || e.key === "Enter")
+        e.preventDefault();
+    }
+    document.getElementById('projectPhotoDiv').addEventListener("keydown", onkeydownInEditable);
+
+    if (readonly) return;
+
+    document.getElementById('projectPhotoDiv').onpaste = async (pasteEvent) => {
+      pasteEvent.preventDefault();
+
+      var items = pasteEvent.clipboardData.items;
+
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf("image") === 0) {
+          var blob = items[i].getAsFile();
+          const type = items[i].type;
+          var reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onload = async () => {
+            await this.setState(prevState => ({
+              currentProject: {
+                ...prevState.currentProject,
+                photo: reader.result
+              },
+              pastedPhotoType: type,
+              dirty: true
+            }));
+
+            if (document.getElementById('projectPhoto'))
+              document.getElementById('projectPhoto').src = reader.result;
+
+            return;
+          }
+
+        }
+      }
+    };
+
   }
 
   convert(schools) {
@@ -508,7 +555,7 @@ export default class Project extends Component {
         },
       }));
 
-      if (this.state.currentProject.file)
+      if (this.state.currentProject.file || this.state.pastedPhotoType)
         await this.updatePhoto();
 
       //if (this.state.currentProject.docFiles) // docs
@@ -556,7 +603,7 @@ export default class Project extends Component {
     try {
       await ProjectDataService.update(this.state.currentProject.id, data);
 
-      if (this.state.currentProject.file)
+      if (this.state.currentProject.file || this.state.pastedPhotoType)
         await this.updatePhoto();
 
       //if (this.state.currentProject.docFiles) // docs
@@ -626,10 +673,23 @@ export default class Project extends Component {
   }
 */
 
-
+/*
   async updatePhoto() {
     var data = new FormData();
     data.append('multi-files', this.state.currentProject.file, this.state.currentProject.file.name);
+    await ProjectDataService.updatePhoto(this.state.currentProject.id, data);
+  }
+*/
+
+  async updatePhoto() {
+    var data = new FormData();
+    if (this.state.currentProject.file)
+      data.append('multi-files', this.state.currentProject.file, this.state.currentProject.file.name);
+    else if (this.state.pastedPhotoType) {
+      const base64Response = await fetch(this.state.currentProject.photo);
+      const blob = await base64Response.blob();
+      data.append('multi-files', new Blob([blob], {type: this.state.pastedPhotoType}));
+    }
     await ProjectDataService.updatePhoto(this.state.currentProject.id, data);
   }
 
@@ -815,10 +875,25 @@ export default class Project extends Component {
             <div class="col-sm-4">
 
               <div class="row">
+
+                <div contenteditable = {this.state.readonly ? "false" : "true"} //"true"
+                  onDragOver={!this.state.readonly && this.onDrag}
+                  onDrop={!this.state.readonly && this.onDrop}
+                  id="projectPhotoDiv"
+                >
+                  {this.state.readonly ? "" :
+                    <p contenteditable="false">编辑项目照片（拖拽照片文件或复制粘贴图标）</p>
+                  }
+                  <img id="projectPhoto" src={currentProject.photo }
+                    width="320" height="320" class="responsive" readonly={this.state.readonly?"":false}
+                  />
+                </div>
+{/*
                 <div onDragOver={this.onDrag} onDrop={this.onDrop}>
                 {!this.state.readonly && <p>上传照片（拖拽照片文件到下框中）</p>}
                 <img src={currentProject.photo} height="200" width="300" readonly={this.state.readonly?"":false} />
                 </div>
+*/}
 
                 <div class="form-group">
                 <label htmlFor="name">{currentProject.xr && '向荣支持'}项目名称</label>
