@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import SchoolDataService from "../services/school.service";
+import ProjectDataService from "../services/project.service";
 import { Link } from "react-router-dom";
 
 import Pagination from "@material-ui/lab/Pagination";
 
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useTable, useSortBy } from "react-table";
+
+import AuthService from "../services/auth.service";
+import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
 
 import * as echarts from 'echarts';
 import { chinaMapConfig } from "./config";
@@ -106,6 +110,21 @@ const RegionsList = (props) => {
     setMapDataMax(mMax);
     setSchoolsTotal(schoolsTotal);
   }
+
+
+  const retrieveExportRegions = () => {
+    const csv = ProjectDataService.exportCSV(regions, columns);
+    const url = window.URL.createObjectURL(new Blob([csv]));
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download',
+      'regions_export.csv'
+    );
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  };
 
   const retrieveRegions =  () => {
     const params = getRequestParams(page, pageSize);
@@ -255,6 +274,15 @@ const RegionsList = (props) => {
     <div hidden={distribution} className="list row">
       <div className="col-sm-8">
         <h4>地区列表(总数：{schoolsTotal})</h4>
+        <div className="row mb-3 ml-1" hidden={!AuthService.isLogin() || isMobile}>
+          <button
+            className="btn btn-primary"
+            type="button"
+            onClick={retrieveExportRegions}
+          >
+            导出
+          </button>
+        </div>
       </div>
 
       <div className="col-sm-12 list">
