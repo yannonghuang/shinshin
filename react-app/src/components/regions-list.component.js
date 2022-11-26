@@ -111,7 +111,6 @@ const RegionsList = (props) => {
     setSchoolsTotal(schoolsTotal);
   }
 
-
   const retrieveExportRegions = () => {
     const csv = ProjectDataService.exportCSV(regions, columns);
     const url = window.URL.createObjectURL(new Blob([csv]));
