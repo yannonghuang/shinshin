@@ -51,6 +51,8 @@ require('./app/routes/user.routes')(app);
 require('./app/routes/donor.routes')(app);
 require('./app/routes/designation.routes')(app);
 require('./app/routes/donation.routes')(app);
+require("./app/routes/questionaire.routes")(app);
+require("./app/routes/feedback.routes")(app);
 
 // Catch all requests that don't match any route
 app.get("*", (req, res) => {

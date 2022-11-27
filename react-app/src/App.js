@@ -38,6 +38,12 @@ import FormsList from "./components/forms-list.component";
 import Response from "./components/response.component";
 import ResponsesList from "./components/responses-list.component";
 
+import Questionaire from "./components/questionaire.component";
+import QuestionairesList from "./components/questionaires-list.component";
+
+import Feedback from "./components/feedback.component";
+import FeedbacksList from "./components/feedbacks-list.component";
+
 //import AddAttachment from "./components/add-attachment.component";
 //import Attachment from "./components/attachment.component";
 import AttachmentsList from "./components/attachments-list.component";
@@ -326,6 +332,30 @@ class App extends Component {
               </div>
             </li>)}
 
+            {(!AuthService.isLogin() || AuthService.isVolunteer()) && (
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                调查问卷
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href={"/questionaires"}
+                  hidden={!AuthService.isLogin()}
+                >
+                  问卷列表
+                </a>
+                <a class="dropdown-item" href={"/addQ"}
+                  hidden={!AuthService.isLogin()}
+                  target="_blank"
+                >
+                  新增问卷
+                </a>
+
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href={"/feedbacks"}>问卷反馈列表</a>
+              </div>
+
+            </li>)}
+
           </div>
 
           {AuthService.isLogin()
@@ -551,6 +581,24 @@ class App extends Component {
 
             <Route path={["/batch"]} component={Batch} >
                 <AccessControlService ComposedClass={Batch} />
+            </Route>
+
+
+            <Route exact path={["/questionaires"]} component={QuestionairesList} >
+                <AccessControlService ComposedClass={QuestionairesList} />
+            </Route>
+
+            <Route path={["/questionaires/:id", "/questionairesView/:id", "/addQ"]} component={Questionaire} >
+                <AccessControlService ComposedClass={Questionaire} />
+            </Route>
+
+            <Route exact path={["/feedbacks", "/feedbacks/questionaire/:questionaireId", "/feedbacks/school/:schoolId",
+                                "/feedbacks/user/:userId"]} component={FeedbacksList} >
+                <AccessControlService ComposedClass={FeedbacksList} />
+            </Route>
+
+            <Route path={["/feedbacks/:id", "/feedbacksView/:id", "/addFeedback/:id"]} component={Feedback} >
+                <AccessControlService ComposedClass={Feedback} />
             </Route>
 
           </Switch>

@@ -1,5 +1,5 @@
 //import React, { Component } from "react";
-import FormDataService from "../services/form.service";
+import QuestionaireDataService from "../services/questionaire.service";
 import ProjectDataService from "../services/project.service";
 
 import $ from "jquery"; //Load jquery
@@ -14,7 +14,7 @@ require("jquery-ui-sortable"); //For FormBuilder Element Drag and Drop
 require("formBuilder");// For FormBuilder
 document.body.style.margin = "30px"; //For add margin in HTML body
 
-export default class Form extends Component {
+export default class Questionaire extends Component {
   constructor(props) {
     super(props);
     this.onChangeTitle = this.onChangeTitle.bind(this);
@@ -22,16 +22,16 @@ export default class Form extends Component {
     this.onChangeDeadline = this.onChangeDeadline.bind(this);
     this.onChangeStartAt = this.onChangeStartAt.bind(this);
     this.onChangePCategoryId = this.onChangePCategoryId.bind(this);
-    this.getForm = this.getForm.bind(this);
+    this.getQuestionaire = this.getQuestionaire.bind(this);
     this.onChangePublished = this.onChangePublished.bind(this);
     this.onChangeMultipleAllowed = this.onChangeMultipleAllowed.bind(this);
-    this.updateForm = this.updateForm.bind(this);
-    this.deleteForm = this.deleteForm.bind(this);
-    this.saveForm = this.saveForm.bind(this);
-    this.newForm = this.newForm.bind(this);
+    this.updateQuestionaire = this.updateQuestionaire.bind(this);
+    this.deleteQuestionaire = this.deleteQuestionaire.bind(this);
+    this.saveQuestionaire = this.saveQuestionaire.bind(this);
+    this.newQuestionaire = this.newQuestionaire.bind(this);
 
     this.state = {
-      currentForm: {
+      currentQuestionaire: {
         id: null,
         title: "",
         description: "",
@@ -43,7 +43,7 @@ export default class Form extends Component {
         pCategoryId: null,
       },
       message: "",
-      newform: true,
+      newquestionaire: true,
       readonly: true,      
       submitted: false,
 
@@ -55,7 +55,7 @@ export default class Form extends Component {
     this.fRender = null;
   }
 
-  newFormOptions = {
+  newQuestionaireOptions = {
     id: "shinshin-form-id",
     action: "http://localhost:8080/multiple-upload",
     method: "POST",
@@ -65,17 +65,17 @@ export default class Form extends Component {
     {
       type: "header",
       subtype: "h4",
-      label: "项目申请表"
+      label: "问卷调查表"
     },
     ],
     onSave: (e, formData) => {   //Auto binds `this`
-      this.saveForm(formData);
+      this.saveQuestionaire(formData);
     }
   };
 
-  oldFormOptions = {
+  oldQuestionaireOptions = {
     onSave: (e, formData) => {   //Auto binds `this`
-     this.updateForm();
+     this.updateQuestionaire();
     },
     showActionButtons: !window.location.pathname.includes('View')
   };
@@ -83,16 +83,16 @@ export default class Form extends Component {
 
   async componentDidMount() {
     const readonly = window.location.pathname.includes('View')
-    const newform = window.location.pathname.includes('add');
-    this.setState({newform: newform});
+    const newquestionaire = window.location.pathname.includes('add');
+    this.setState({newquestionaire: newquestionaire});
     this.setState({readonly: readonly});
 
-    if (newform)
-      this.fBuilder = $(this.fb.current).formBuilder(this.newFormOptions);
+    if (newquestionaire)
+      this.fBuilder = $(this.fb.current).formBuilder(this.newQuestionaireOptions);
     else {
       //if (!readonly)
-        //this.fBuilder = $(this.fb.current).formBuilder(this.oldFormOptions);
-      this.getForm(this.props.match.params.id, readonly);
+        //this.fBuilder = $(this.fb.current).formBuilder(this.oldQuestionaireOptions);
+      this.getQuestionaire(this.props.match.params.id, readonly);
     }
 
   }
@@ -114,8 +114,8 @@ export default class Form extends Component {
     const startAt = e; //e.target.value;
     this.setState(function(prevState) {
       return {
-        currentForm: {
-          ...prevState.currentForm,
+        currentQuestionaire: {
+          ...prevState.currentQuestionaire,
           startAt: startAt
         }
       };
@@ -127,8 +127,8 @@ export default class Form extends Component {
 
     this.setState(function(prevState) {
       return {
-        currentForm: {
-          ...prevState.currentForm,
+        currentQuestionaire: {
+          ...prevState.currentQuestionaire,
           title: title
         }
       };
@@ -142,8 +142,8 @@ export default class Form extends Component {
 
     this.setState(function(prevState) {
       return {
-        currentForm: {
-          ...prevState.currentForm,
+        currentQuestionaire: {
+          ...prevState.currentQuestionaire,
           pCategoryId: pCategoryId
         }
       };
@@ -154,8 +154,8 @@ export default class Form extends Component {
     const description = e.target.value;
 
     this.setState(prevState => ({
-      currentForm: {
-        ...prevState.currentForm,
+      currentQuestionaire: {
+        ...prevState.currentQuestionaire,
         description: description
       }
     }));
@@ -165,8 +165,8 @@ export default class Form extends Component {
     const deadline = e.target.value;
 
     this.setState(prevState => ({
-      currentForm: {
-        ...prevState.currentForm,
+      currentQuestionaire: {
+        ...prevState.currentQuestionaire,
         deadline: deadline
       }
     }));
@@ -175,8 +175,8 @@ export default class Form extends Component {
   onChangePublished(e) {
     const value = e.target.checked;
     this.setState(prevState => ({
-      currentForm: {
-        ...prevState.currentForm,
+      currentQuestionaire: {
+        ...prevState.currentQuestionaire,
         published: value
       }
     }));
@@ -185,22 +185,22 @@ export default class Form extends Component {
   onChangeMultipleAllowed(e) {
     const value = e.target.checked;
     this.setState(prevState => ({
-      currentForm: {
-        ...prevState.currentForm,
+      currentQuestionaire: {
+        ...prevState.currentQuestionaire,
         multipleAllowed: value
       }
     }));
   }
 
-  getForm(id, readonly) {
-    FormDataService.get(id)
+  getQuestionaire(id, readonly) {
+    QuestionaireDataService.get(id)
       .then(response => {
 
       const {startAt, ...others} = response.data;
         this.setState({
-          //currentForm: response.data
+          //currentQuestionaire: response.data
 
-          currentForm: {
+          currentQuestionaire: {
             ...others,
             startAt: (startAt ? (new Date(startAt)).getUTCFullYear() : '')
           }
@@ -218,7 +218,7 @@ export default class Form extends Component {
           // make it readonly
           $('input, textarea, select', '.rendered-form').attr('readonly', true).attr('disabled', true);
         } else {
-          $(this.fb.current).formBuilder(this.oldFormOptions).promise
+          $(this.fb.current).formBuilder(this.oldQuestionaireOptions).promise
             .then(formBuilder => {
               formBuilder.actions.setData(response.data.fdata);
               this.fBuilder = formBuilder;
@@ -231,23 +231,23 @@ export default class Form extends Component {
       });
   }
 
-  updateForm() {
+  updateQuestionaire() {
     this.setState(prevState => ({
-      currentForm: {
-        ...prevState.currentForm,
-        startAt: prevState.currentForm.startAt ? (prevState.currentForm.startAt + '-01-10') : null,
+      currentQuestionaire: {
+        ...prevState.currentQuestionaire,
+        startAt: prevState.currentQuestionaire.startAt ? (prevState.currentQuestionaire.startAt + '-01-10') : null,
         fdata: this.fBuilder.actions.getData()
       }
     }));
 
-    FormDataService.update(
-      this.state.currentForm.id,
-      this.state.currentForm
+    QuestionaireDataService.update(
+      this.state.currentQuestionaire.id,
+      this.state.currentQuestionaire
     )
       .then(response => {
         console.log(response.data);
         this.setState({
-          message: "项目申请表成功更新!",
+          message: "问卷调查表成功更新!",
           submitted: true,
         });
       })
@@ -256,27 +256,27 @@ export default class Form extends Component {
       });
   }
 
-  saveForm(formData) {
+  saveQuestionaire(formData) {
     var data = {
-      title: this.state.currentForm.title,
-      description: this.state.currentForm.description,
-      deadline: this.state.currentForm.deadline,
-      published: this.state.currentForm.published,
-      multipleAllowed: this.state.currentForm.multipleAllowed,
-      startAt: this.state.currentForm.startAt ? (this.state.currentForm.startAt + '-01-10') : null,
+      title: this.state.currentQuestionaire.title,
+      description: this.state.currentQuestionaire.description,
+      deadline: this.state.currentQuestionaire.deadline,
+      published: this.state.currentQuestionaire.published,
+      multipleAllowed: this.state.currentQuestionaire.multipleAllowed,
+      startAt: this.state.currentQuestionaire.startAt ? (this.state.currentQuestionaire.startAt + '-01-10') : null,
       fdata: this.fBuilder.actions.getData(), /* formData */
-      pCategoryId: this.state.currentForm.pCategoryId,
+      pCategoryId: this.state.currentQuestionaire.pCategoryId,
     };
 
-    FormDataService.create(data)
+    QuestionaireDataService.create(data)
       .then(response => {
         this.setState(prevState => ({
-          currentForm: {
-            ...prevState.currentForm,
+          currentQuestionaire: {
+            ...prevState.currentQuestionaire,
             id: response.data.id,
           },
           submitted: true,
-          message: '项目申请表成功提交!'
+          message: '问卷调查表成功提交!'
         }));
         console.log(response.data);
       })
@@ -285,9 +285,9 @@ export default class Form extends Component {
       });
   }
 
-  newForm() {
+  newQuestionaire() {
     this.setState(prevState => ({
-      currentForm: {
+      currentQuestionaire: {
         id: null,
         title: "",
         description: "",
@@ -301,11 +301,11 @@ export default class Form extends Component {
     }));
   }
 
-  deleteForm() {
-    FormDataService.delete(this.state.currentForm.id)
+  deleteQuestionaire() {
+    QuestionaireDataService.delete(this.state.currentQuestionaire.id)
       .then(response => {
         console.log(response.data);
-        this.props.history.push('/forms')
+        this.props.history.push('/questionaires')
       })
       .catch(e => {
         console.log(e);
@@ -313,11 +313,11 @@ export default class Form extends Component {
   }
 
   render() {
-    const { currentForm } = this.state;
+    const { currentQuestionaire } = this.state;
 
     return (
       <div>
-        {/*this.state.newform && */this.state.submitted
+        {/*this.state.newquestionaire && */this.state.submitted
         ? (
           <div>
             <p>{this.state.message}</p>
@@ -328,23 +328,23 @@ export default class Form extends Component {
 {/*}
             <h4>成功提交!</h4>
 
-              <button className="btn btn-success" onClick={this.newForm}>
+              <button className="btn btn-success" onClick={this.newQuestionaire}>
                 Add
               </button>
 */}
           </div>
           ) : (<div>
           <div className="edit-form">
-            <h4>申请表格设计</h4>
+            <h4>问卷调查表设计</h4>
             <form>
               <div className="form-group">
                 <label htmlFor="title">标题</label>
                 <input
-                  readonly={(!this.state.newform && this.state.readonly) ? "" : false}
+                  readonly={(!this.state.newquestionaire && this.state.readonly) ? "" : false}
                   type="text"
                   className="form-control"
                   id="title"
-                  value={currentForm.title}
+                  value={currentQuestionaire.title}
                   onChange={this.onChangeTitle}
                 />
               </div>
@@ -355,7 +355,7 @@ export default class Form extends Component {
                   rows="10"
                   className="form-control"
                   id="description"
-                  value={currentForm.description}
+                  value={currentQuestionaire.description}
                   onChange={this.onChangeDescription}
                 />
               </div>
@@ -366,19 +366,19 @@ export default class Form extends Component {
                   type="date"
                   className="form-control"
                   id="deadline"
-                  value={currentForm.deadline}
+                  value={currentQuestionaire.deadline}
                   onChange={this.onChangeDeadline}
                 />
               </div>
 
-              <div className="form-group">
+              <div className="form-group" hidden={"true"}>
                 <label htmlFor="pCategoryId">项目类型</label>
                 <select
                 disabled={this.state.readonly?"disabled":false}
                 class="form-control"
                 id="pCategoryId"
                 required
-                value={ProjectDataService.getCategory(currentForm.pCategoryId)}
+                value={ProjectDataService.getCategory(currentQuestionaire.pCategoryId)}
                 onChange={this.onChangePCategoryId}
                 name="pCategoryId"
                 >
@@ -390,19 +390,19 @@ export default class Form extends Component {
               </div>
 
               <div className="form-group">
-                <label htmlFor="startAt">项目年份</label>
+                <label htmlFor="startAt">问卷年份</label>
                 {(!this.state.newform && this.state.readonly)
                 ?<input
                    type="text"
                    id='startAt'
                    readonly=""
                    className="form-control"
-                   placeholder="项目年份"
-                   value={currentForm.startAt}
+                   placeholder="问卷年份"
+                   value={currentQuestionaire.startAt}
                 />
                 :<YearPicker
                    yearArray={['2022', '2023']}
-                   value={currentForm.startAt}
+                   value={currentQuestionaire.startAt}
                    onSelect={this.onChangeStartAt}
 
                    minRange={1995}
@@ -420,15 +420,14 @@ export default class Form extends Component {
                 class="form-control"
                 id="published"
                 required
-                checked={currentForm.published}
+                checked={currentQuestionaire.published}
                 onChange={this.onChangePublished}
                 name="published"
                 />
 
               </div>
 
-              <div class="form-group col-md-3">
-
+              <div class="form-group col-md-3" hidden={"true"}>
                 <label htmlFor="multipleAllowed">允许多次申请?</label>
                 <input
                 disabled={this.state.readonly?"disabled":false}
@@ -436,7 +435,7 @@ export default class Form extends Component {
                 class="form-control"
                 id="multipleAllowed"
                 required
-                checked={currentForm.multipleAllowed}
+                checked={currentQuestionaire.multipleAllowed}
                 onChange={this.onChangeMultipleAllowed}
                 name="multipleAllowed"
                 />

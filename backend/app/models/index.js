@@ -41,6 +41,8 @@ db.role = require("../models/role.model.js")(sequelize, Sequelize);
 db.donors = require("./donor.model.js")(sequelize, Sequelize);
 db.designations = require("./designation.model.js")(sequelize, Sequelize);
 db.donations = require("./donation.model.js")(sequelize, Sequelize);
+db.feedbacks = require("./feedback.model.js")(sequelize, Sequelize);
+db.questionaires = require("./questionaire.model.js")(sequelize, Sequelize);
 
 db.role.belongsToMany(db.user, {
   through: "user_roles",
@@ -273,6 +275,11 @@ db.REGIONS = [
 "西藏自治区",
 ];
 
+db.questionaires.hasMany(db.feedbacks, {foreignKey: 'questionaireId'}, {as: 'Feedbacks'})
+db.feedbacks.belongsTo(db.questionaires);
+
+db.schools.hasMany(db.feedbacks, {foreignKey: 'schoolId'}, {as: 'Feedbacks'})
+db.feedbacks.belongsTo(db.schools);
 
 db.forms.hasMany(db.responses, {foreignKey: 'formId'}, {as: 'Responses'})
 db.responses.belongsTo(db.forms);
