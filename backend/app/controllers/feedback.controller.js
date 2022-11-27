@@ -243,17 +243,12 @@ exports.delete = async (req, res) => {
   const id = req.params.id;
 
   try {
-    await Project.destroy({
-      where: { feedbackId: id },
-      force: true
-    })
-
     await Feedback.destroy({
       where: { id: id }
     });
 
     res.send({
-      message: "Feedback & associated project deleted successfully!"
+      message: "Feedback deleted successfully!"
     });
   } catch (err) {
     res.status(500).send({
