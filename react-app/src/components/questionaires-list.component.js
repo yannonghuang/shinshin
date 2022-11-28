@@ -242,6 +242,7 @@ const QuestionairesList = (props) => {
       else console.log('success!');
     });
 
+    canvas.title = str;
   };
 
   const columns = useMemo(
@@ -526,7 +527,7 @@ const QuestionairesList = (props) => {
           onChange={handlePageChange}
         />
 
-<canvas id="qrcode"></canvas>
+<canvas title={"问卷链接二维码"} id="qrcode"></canvas>
       </div>
 
       <div className="col-sm-12 list">
