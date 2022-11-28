@@ -341,6 +341,15 @@ const QuestionairesList = (props) => {
                 <i className="fa fa-qrcode action"></i>
               </Link>}
 
+              {questionairesRef.current[rowIdx].published && !expired &&
+              <Link
+                onClick={(event) => {/*copyToClipboard*/ copyToClipboard(url, event)}}
+                title={"复制问卷链接: " + url}
+                className= "badge badge-success mr-2"
+              >
+                <i className="fa fa-clipboard action"></i>
+              </Link>}
+
               <Link title="查看"
                 to={"/questionairesView/" + questionairesRef.current[rowIdx].id}
               >
@@ -527,7 +536,7 @@ const QuestionairesList = (props) => {
           onChange={handlePageChange}
         />
 
-<canvas title={"问卷链接二维码"} id="qrcode"></canvas>
+        <canvas title={"问卷链接二维码"} id="qrcode"></canvas>
       </div>
 
       <div className="col-sm-12 list">
