@@ -30,6 +30,11 @@ import ProjectsList from "./components/projects-list.component";
 import ProjectsByCategoriesList from "./components/projects-categories-list.component";
 import DossiersList from "./components/dossiers-list.component";
 
+import AwardDataService from "./services/award.service";
+import Award from "./components/award.component";
+import AwardsList from "./components/awards-list.component";
+import MaterialsList from "./components/materials-list.component";
+
 //import AddForm from "./components/add-form.component";
 import Form from "./components/form.component";
 import FormsList from "./components/forms-list.component";
@@ -265,6 +270,9 @@ class App extends Component {
 */}
 
                 <a class="dropdown-item" href={"/logs"} hidden={!AuthService.isLogin()}>更新列表</a>
+
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href={"/awards"} hidden={!AuthService.isLogin()}>奖项列表</a>
               </div>
             </li>)}
 
@@ -599,6 +607,21 @@ class App extends Component {
 
             <Route path={["/feedbacks/:id", "/feedbacksView/:id", "/addFeedback/:id"]} component={Feedback} >
                 <AccessControlService ComposedClass={Feedback} />
+            </Route>
+
+
+            <Route exact path={["/awards", "/awards/school/:schoolId"]}
+                component={AwardsList} >
+                <AccessControlService ComposedClass={AwardsList} />
+            </Route>
+            <Route path={["/awardsView/:id", "/awards/:id", "/addA"]}
+                component={Award} >
+                <AccessControlService ComposedClass={Award} />
+            </Route>
+
+            <Route exact path={["/materials", "/materials/award/:awardId",
+                                            "/materials/award/:awardId/:docCategory"]} component={MaterialsList} >
+                <AccessControlService ComposedClass={MaterialsList} />
             </Route>
 
           </Switch>

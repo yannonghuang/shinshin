@@ -14,6 +14,7 @@ import AuthService from "./../services/auth.service";
 import UserDataService from "../services/auth.service";
 import Survey from './survey.component.js';
 import CommentsList from './comments-list.component.js';
+import AwardsList from './awards-list.component.js';
 import ProjectsList from './projects-list.component.js';
 import ResponsesList from './responses-list.component.js';
 import DocumentsList from './documents-list.component.js';
@@ -954,6 +955,8 @@ export default class School extends Component {
                     >
                       编辑
                     </a>}
+
+                  <a target="_blank" href={"/addA?schoolId=" + currentSchool.id} class="btn btn-primary">新增奖项</a>
                 </div>
                 )}
 
@@ -1445,6 +1448,7 @@ export default class School extends Component {
               <TabList>
                 <Tab>更多信息 <i class="fas fa-hand-point-right"></i></Tab>
                 {AuthService.isLogin() && <Tab>学校详情</Tab>}
+                <Tab>奖项列表</Tab>
                 <Tab>项目列表</Tab>
                 {AuthService.isLogin() && <Tab>项目申请列表</Tab>}
                 {AuthService.isLogin() && <Tab>学校文档</Tab>}
@@ -1464,10 +1468,15 @@ export default class School extends Component {
                 />
               </TabPanel>}
               <TabPanel>
+                <AwardsList
+                  schoolId = {currentSchool.id}
+                  embedded = {true}
+                />
+              </TabPanel>
+              <TabPanel>
                 <ProjectsList
                   schoolId = {currentSchool.id}
                   embedded = {true}
-
                 />
               </TabPanel>
               {AuthService.isLogin() && <TabPanel>

@@ -43,6 +43,8 @@ db.designations = require("./designation.model.js")(sequelize, Sequelize);
 db.donations = require("./donation.model.js")(sequelize, Sequelize);
 db.feedbacks = require("./feedback.model.js")(sequelize, Sequelize);
 db.questionaires = require("./questionaire.model.js")(sequelize, Sequelize);
+db.materials = require("./material.model.js")(sequelize, Sequelize);
+db.awards = require("./award.model.js")(sequelize, Sequelize);
 
 db.role.belongsToMany(db.user, {
   through: "user_roles",
@@ -132,6 +134,24 @@ db.DOSSIER_CATEGORIES = [
   "访校报告",
   "说明文件",
   "学校照片",
+];
+
+db.MATERIAL_CATEGORIES = [
+  "证书",
+  "照片",
+];
+
+db.AWARD_TYPES = [
+  "学科",
+  "社会",
+  "德育",
+];
+
+db.AWARD_CATEGORIES = [
+  "国家级",
+  "省级",
+  "地区级",
+  "县级",
 ];
 
 db.PROJECT_STATUSES = [
@@ -339,6 +359,11 @@ db.designations.belongsTo(db.donations);
 db.user.hasMany(db.designations, {foreignKey: 'userId'}, {as: 'Designations'})
 db.designations.belongsTo(db.user);
 
+db.schools.hasMany(db.awards, {foreignKey: 'schoolId'}, {as: 'Awards'})
+db.awards.belongsTo(db.schools);
+
+db.awards.hasMany(db.materials, {foreignKey: 'awardId'}, {as: 'Materials'})
+db.materials.belongsTo(db.awards);
 
 module.exports = db;
 

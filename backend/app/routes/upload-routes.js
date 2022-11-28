@@ -42,10 +42,18 @@ module.exports = function(app) {
     [authJwt.verifyToken],
     uploadController.dossiersUpload);
 
+  app.post("/api/materials-upload/:id",
+    [authJwt.verifyToken],
+    uploadController.materialsUpload);
+
   // donor photo
   app.post("/api/single-donor-upload/:id",
     [authJwt.verifyToken],
     uploadController.singleDonorUpload);
+
+  app.post("/api/single-award-upload/:id",
+    [authJwt.verifyToken],
+    uploadController.singleAwardUpload);
 
   // batch upload
   app.post("/api/batch-upload",

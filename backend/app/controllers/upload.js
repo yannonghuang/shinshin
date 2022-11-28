@@ -8,6 +8,8 @@ const Project = db.projects;
 const Donor = db.donors;
 const Document = db.documents;
 const Dossier = db.dossiers;
+const Material = db.materials;
+const Award = db.awards;
 const fs = require('fs');
 
 const multipleUpload = async (req, res) => {
@@ -307,6 +309,82 @@ const singleUpload = async (req, res) => {
   }
 };
 
+
+const materialsUpload = async (req, res) => {
+  try {
+    await upload(req, res);
+    console.log(req.files);
+    console.log("req.params.id: " + req.params.id);
+
+    awardId = req.params.id;
+    docCategory = req.body.docCategory;
+
+    // save materials to db
+    if (req.files != null) {
+      for (var i = 0; i < req.files.length; i++) {
+        var material = {
+          originalname: req.files[i].originalname,
+          encoding: req.files[i].encoding,
+          mimetype: req.files[i].mimetype,
+          destination: req.files[i].destination,
+          filename: req.files[i].filename,
+          path: req.files[i].path,
+          awardId: awardId,
+          docCategory: req.body.docCategory
+        };
+        //try {
+        var data = await Material.create(material);
+        /*} catch (err) {
+          console.log(err.message || "Some error occurred while creating the Document.");
+        }*/
+      }
+    }
+
+    return res.send(`Files have been uploaded ... awardId: ` + awardId);
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      message: error.message || "Some error occurred while creating the Material."
+    });
+/**
+    if (error.code === "LIMIT_UNEXPECTED_FILE") {
+      return res.send("Too many files to upload.");
+    }
+    return res.send(`Error when trying upload many files: ${error}`);
+*/
+  }
+};
+
+const singleAwardUpload = async (req, res) => {
+  try {
+    await upload(req, res);
+    console.log(req.files);
+    console.log("req.params.id: " + req.params.id);
+
+    awardId = req.params.id;
+
+    if (req.files != null) {
+      var imageData = fs.readFileSync(req.files[0].path);
+      Award.update(
+        {photo: imageData},
+        {where: { id: awardId }}
+      )
+      .then(image => {
+        res.json({ success: true, data: image })
+      })
+      fs.unlinkSync(req.files[0].path);
+    }
+  } catch (error) {
+    console.log(error);
+
+    if (error.code === "LIMIT_UNEXPECTED_FILE") {
+      return res.send("Too many files to upload.");
+    }
+    return res.send(`Error when trying upload files: ${error}`);
+  }
+};
+
 module.exports = {
   multipleUpload: multipleUpload,
   singleUpload: singleUpload,
@@ -314,5 +392,7 @@ module.exports = {
   singleProjectUpload: singleProjectUpload,
   dossiersUpload: dossiersUpload,
   attachmentsUpload: attachmentsUpload,
-  singleDonorUpload: singleDonorUpload
+  singleDonorUpload: singleDonorUpload,
+  materialsUpload: materialsUpload,
+  singleAwardUpload: singleAwardUpload,
 };

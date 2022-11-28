@@ -32,6 +32,11 @@ const getDirectory = async (req) => {
     code = '' + req.params.id;
   }
 
+  if (req.originalUrl.includes('materials')) {
+    type = 'Material';
+    code = '' + req.params.id;
+  }
+
   let dir = path.join(`${__dirname}/../../upload`, type, code);
 
   if (!fs.existsSync(dir)) {
