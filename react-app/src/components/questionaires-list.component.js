@@ -10,6 +10,8 @@ import YearPicker from 'react-single-year-picker';
 
 import AuthService from "./../services/auth.service";
 
+import QRCode from 'qrcode';
+
 const QuestionairesList = (props) => {
   const [questionaires, setQuestionaires] = useState([]);
   const [currentQuestionaire, setCurrentQuestionaire] = useState(null);
@@ -219,6 +221,29 @@ const QuestionairesList = (props) => {
     return Promise.reject('The Clipboard API is not available.');
   };
 
+  const qrcode = (str, event) => {
+    const canvas = document.getElementById("qrcode");
+    var opts = {
+      width: 100,
+      height: 100,
+
+      errorCorrectionLevel: 'H',
+      type: 'image/jpeg',
+      quality: 0.3,
+      margin: 1,
+      color: {
+        dark:"#010599FF",
+        light:"#FFBF60FF"
+      }
+    };
+
+    QRCode.toCanvas(canvas, str, opts, function (error) {
+      if (error) console.error(error)
+      else console.log('success!');
+    });
+
+  };
+
   const columns = useMemo(
     () => [
       {
@@ -308,11 +333,11 @@ const QuestionairesList = (props) => {
             <div>
               {questionairesRef.current[rowIdx].published && !expired &&
               <Link
-                onClick={(event) => {copyToClipboard(url, event)}}
-                title={"复制问卷链接: " + url}
+                onClick={(event) => {/*copyToClipboard*/ qrcode(url, event)}}
+                title={"问卷链接二维码: " + url}
                 className= "badge badge-success mr-2"
               >
-                <i className="far fa-clipboard action"></i>
+                <i className="fa fa-qrcode action"></i>
               </Link>}
 
               <Link title="查看"
@@ -401,7 +426,7 @@ const QuestionairesList = (props) => {
 
   return (
     <div className="list row">
-      <div className="col-sm-8">
+      <div className="col-sm-9">
         <h4>问卷调查列表(总数：{totalItems})</h4>
         <div className="row mb-3">
           <input
@@ -478,6 +503,7 @@ const QuestionairesList = (props) => {
           </button>
         </div>
 */}
+
       </div>
 
       <div className="mt-3 col-sm-3">
@@ -499,6 +525,8 @@ const QuestionairesList = (props) => {
           shape="rounded"
           onChange={handlePageChange}
         />
+
+<canvas id="qrcode"></canvas>
       </div>
 
       <div className="col-sm-12 list">

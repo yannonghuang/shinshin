@@ -636,7 +636,7 @@ const FeedbacksList = (props) => {
 
   return (
     <div className="list row">
-      <div className="col-sm-8">
+      <div className="col-sm-9">
         <h4>
           {schoolId && !embedded && (<a href={'/schoolsView/' + schoolId}>{schoolDisplay + '-'}</a>)}
           {title ? (title + '-') : ''}
@@ -715,7 +715,7 @@ const FeedbacksList = (props) => {
         </div>
       </div>
 
-      <div className="col-sm-4 mt-3">
+      <div className="col-sm-3 mt-3">
         {"每页显示行数: "}
         <select onChange={handlePageSizeChange} value={pageSize}>
           {pageSizes.map((size) => (
