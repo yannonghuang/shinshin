@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import AwardDataService from "../services/award.service";
+import ProjectDataService from "../services/project.service";
 import SchoolDataService from "../services/school.service";
 import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
@@ -321,8 +322,7 @@ const AwardsList = (props) => {
   const retrieveSimpleExportAwards = () => {retrieveExportAwards(false)}
 
   const retrieveExportAwards = (detail = true) => {
-    const params = getRequestParams(/*searchName, page, pageSize, orderby,
-        searchCode, searchRegion, searchStartAt, schoolId, */true);
+    const params = getRequestParams(true);
 
     AwardDataService.getAll2(params)
       .then((response) => {
@@ -331,16 +331,12 @@ const AwardsList = (props) => {
         console.log(response.data);
 
         //const csv = AwardDataService.exportCSV(awards, columns);
-        const csv = AwardDataService.exportCSV(awards,
+        const csv = ProjectDataService.exportCSV(awards,
           detail
             ? exportDetailColumns
             : schoolId
               ? exportColumnsWithSchoolKnown
-              : exportColumns,
-          {
-            header: '奖项类型',
-            translate: (dataIndex) => {return AwardDataService.getCategory(dataIndex)}
-          }
+              : exportColumns
         );
 
         const url = window.URL.createObjectURL(new Blob([csv]));
