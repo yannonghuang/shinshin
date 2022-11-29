@@ -118,7 +118,11 @@ exports.findAll2 = async (req, res) => {
   var include = [
                     {
                       model: School,
-                      attributes: ['id', 'studentsCount', 'teachersCount', 'category', 'name', 'code', 'region', 'address'],
+                      attributes: ['id', 'studentsCount', 'teachersCount',
+                        //'category',
+                        'name', 'code', 'region', 'address'
+
+                      ],
                       required: false,
                     },
                 ];
