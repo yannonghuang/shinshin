@@ -48,14 +48,15 @@ class AwardDataService {
     return http.put(`/awards/${id}`, data, { headers: authHeader() });
   }
 
-  updatePhoto(id, data) {
+  updatePhoto(id, data, onUploadProgress) {
     const user = JSON.parse(localStorage.getItem('user'));
     return http.post(`/single-award-upload/${id}`, data, {
         headers: {
             'content-type': 'multipart/form-data',
             'x-access-token':  (user && user.accessToken) ? user.accessToken : null
             //authHeader()
-        }
+        },
+        onUploadProgress
     });
   }
 

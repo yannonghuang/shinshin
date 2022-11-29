@@ -514,6 +514,17 @@ export default class Award extends Component {
 
   }
 
+  progressDivide() {
+    let photoPresent = this.state.currentAward.file || this.state.pastedPhotoType;
+    let filesPresent = this.state.currentAward.docFiles && (this.state.currentAward.docFiles.length > 1);
+
+    if (photoPresent && !filesPresent) return 100;
+    if (!photoPresent && filesPresent) return 0;
+    if (!photoPresent && !filesPresent) return 0;
+
+    return 100 / (1 + this.state.currentAward.docFiles.length);
+  }
+
   async updateAward() {
     if (!this.validateSchool()) return;
 
@@ -562,6 +573,8 @@ export default class Award extends Component {
   }
 
   async updatePhoto() {
+    let divide = this.progressDivide();
+
     var data = new FormData();
     if (this.state.currentAward.file)
       data.append('multi-files', this.state.currentAward.file, this.state.currentAward.file.name);
@@ -570,10 +583,16 @@ export default class Award extends Component {
       const blob = await base64Response.blob();
       data.append('multi-files', new Blob([blob], {type: this.state.pastedPhotoType}));
     }
-    await AwardDataService.updatePhoto(this.state.currentAward.id, data);
+    await AwardDataService.updatePhoto(this.state.currentAward.id, data, (event) => {
+      this.setState({
+        progress: Math.round((divide * event.loaded) / event.total),
+      });
+    });
   }
 
   uploadMaterials() {
+    let divide = this.progressDivide();
+
     if (this.state.currentAward.docFiles && (this.state.currentAward.docFiles.length > 1) &&
         !this.state.currentAward.docCategory) {
       throw new Error('奖项信息附件没有上传，请选择文档类型!');
@@ -588,7 +607,7 @@ export default class Award extends Component {
     data.append('docCategory', this.state.currentAward.docCategory);
     AwardDataService.uploadMaterials(this.state.currentAward.id, data, (event) => {
       this.setState({
-        progress: Math.round((100 * event.loaded) / event.total),
+        progress: Math.round(divide + ((100 - divide) * event.loaded) / event.total),
       });
     })
     .then(response => {
