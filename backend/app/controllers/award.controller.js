@@ -121,7 +121,6 @@ exports.findAll2 = async (req, res) => {
                       attributes: ['id', 'studentsCount', 'teachersCount',
                         //'category',
                         'name', 'code', 'region', 'address'
-
                       ],
                       required: false,
                     },
