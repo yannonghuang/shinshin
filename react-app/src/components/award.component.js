@@ -516,7 +516,7 @@ export default class Award extends Component {
 
   progressDivide() {
     let photoPresent = this.state.currentAward.file || this.state.pastedPhotoType;
-    let filesPresent = this.state.currentAward.docFiles && (this.state.currentAward.docFiles.length > 1);
+    let filesPresent = this.state.currentAward.docFiles && (this.state.currentAward.docFiles.length > 0);
 
     if (photoPresent && !filesPresent) return 100;
     if (!photoPresent && filesPresent) return 0;
@@ -593,7 +593,7 @@ export default class Award extends Component {
   uploadMaterials() {
     let divide = this.progressDivide();
 
-    if (this.state.currentAward.docFiles && (this.state.currentAward.docFiles.length > 1) &&
+    if (this.state.currentAward.docFiles && (this.state.currentAward.docFiles.length > 0) &&
         !this.state.currentAward.docCategory) {
       throw new Error('奖项信息附件没有上传，请选择文档类型!');
     }

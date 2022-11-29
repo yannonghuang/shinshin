@@ -698,7 +698,7 @@ export default class School extends Component {
   }
 
   uploadDocuments() {
-    if (this.state.currentSchool.docFiles && (this.state.currentSchool.docFiles.length > 1) &&
+    if (this.state.currentSchool.docFiles && (this.state.currentSchool.docFiles.length > 0) &&
         !this.state.currentSchool.docCategory) {
       throw new Error('学校信息附件没有上传，请选择文档类型!');
     }

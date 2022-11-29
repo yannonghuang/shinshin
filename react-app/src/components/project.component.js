@@ -694,7 +694,7 @@ export default class Project extends Component {
   }
 
   uploadDossiers() {
-    if (this.state.currentProject.docFiles && (this.state.currentProject.docFiles.length > 1) &&
+    if (this.state.currentProject.docFiles && (this.state.currentProject.docFiles.length > 0) &&
         !this.state.currentProject.docCategory) {
       throw new Error('项目信息附件没有上传，请选择文档类型!');
     }

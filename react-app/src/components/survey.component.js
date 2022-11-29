@@ -700,7 +700,7 @@ export default class Survey extends Component {
 
 
   uploadDocuments() {
-    if ((this.state.currentSurvey.docFiles) && (this.state.currentSurvey.docFiles.length > 1) &&
+    if ((this.state.currentSurvey.docFiles) && (this.state.currentSurvey.docFiles.length > 0) &&
         !this.state.currentSurvey.docCategory) {
       this.setState(prevState => ({
         message: prevState.message + " 学校信息附件没有上传，请选择文档类型！",
