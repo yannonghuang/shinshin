@@ -46,10 +46,12 @@ exports.create = (req, res) => {
     name: req.body.name,
     budget: req.body.budget,
     type: req.body.type,
-    category: req.body.type,
+    category: req.body.category,
     schoolId: schoolId,
     description: req.body.description,
     startAt: req.body.startAt,
+    issuer: req.body.issuer,
+    awardee: req.body.awardee,
   };
 
   // Save Award in the database
@@ -81,7 +83,8 @@ exports.findAll2 = async (req, res) => {
   const region = req.body.region;
   const type = req.body.type;
   const category = req.body.category;
-  const designated = req.body.designated;
+  const issuer = req.body.issuer;
+  const awardee = req.body.awardee;
 
   var orderbyObject = null;
   if (orderby) {
@@ -101,6 +104,8 @@ exports.findAll2 = async (req, res) => {
   var condition = {
         [Op.and]: [
             name ? { name: { [Op.like]: `%${name}%` } } : null,
+            issuer ? { issuer: { [Op.like]: `%${issuer}%` } } : null,
+            awardee ? { awardee: { [Op.like]: `%${awardee}%` } } : null,
             schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null,
             type ? { type: { [Op.eq]: `${type}` } } : null,
             category ? { category: { [Op.eq]: `${category}` } } : null,
@@ -127,9 +132,7 @@ exports.findAll2 = async (req, res) => {
     }
   }
 
-  var attributes = ['id', 'name', 'type', 'description',
-    'category',
-
+  var attributes = ['id', 'name', 'type', 'description', 'awardee', 'issuer', 'category',
     exportFlag
     ? [db.Sequelize.fn("year", db.Sequelize.col("awards.startAt")), "startAt"]
     : 'startAt',
@@ -211,8 +214,7 @@ exports.findOne = (req, res) => {
   const id = req.params.id;
 
   Award.findByPk(id, {
-      attributes: ['id', 'name', 'type', 'description',
-                    'category',
+      attributes: ['id', 'name', 'type', 'description', 'awardee', 'issuer', 'category',
                     [db.Sequelize.fn("year", db.Sequelize.col("awards.startAt")), "startAt"],
                   ],
 

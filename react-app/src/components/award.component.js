@@ -29,6 +29,8 @@ export default class Award extends Component {
     this.onChangeCategory = this.onChangeCategory.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
     this.onChangeStartAt = this.onChangeStartAt.bind(this);
+    this.onChangeIssuer = this.onChangeIssuer.bind(this);
+    this.onChangeAwardee = this.onChangeAwardee.bind(this);
 
     this.getAward = this.getAward.bind(this);
     this.getAwardPhoto = this.getAwardPhoto.bind(this);
@@ -345,6 +347,30 @@ export default class Award extends Component {
     }));
   }
 
+  onChangeIssuer(e) {
+    const issuer = e.target.value;
+
+    this.setState(prevState => ({
+      currentAward: {
+        ...prevState.currentAward,
+        issuer: issuer
+      },
+      dirty: true
+    }));
+  }
+
+  onChangeAwardee(e) {
+    const awardee = e.target.value;
+
+    this.setState(prevState => ({
+      currentAward: {
+        ...prevState.currentAward,
+        awardee: awardee
+      },
+      dirty: true
+    }));
+  }
+
   onChangeStartAt(e) {
     const startAt = e; //e.target.value;
     this.setState(function(prevState) {
@@ -413,6 +439,8 @@ export default class Award extends Component {
       docFiles: null, //[],
       docCategory: "",
       description: "",
+      issuer: "",
+      awardee: "",
       startAt: new Date().getFullYear(), //null
      },
 
@@ -441,6 +469,8 @@ export default class Award extends Component {
       type: this.state.currentAward.type,
       category: this.state.currentAward.category,
       description: this.state.currentAward.description,
+      issuer: this.state.currentAward.issuer,
+      awardee: this.state.currentAward.awardee,
       startAt: this.state.currentAward.startAt ? (this.state.currentAward.startAt + '-01-10') : null,
     };
 
@@ -494,6 +524,8 @@ export default class Award extends Component {
       category: this.state.currentAward.category,
       schoolId: this.state.currentAward.schoolId,
       description: this.state.currentAward.description,
+      issuer: this.state.currentAward.issuer,
+      awardee: this.state.currentAward.awardee,
       startAt: this.state.currentAward.startAt ? (this.state.currentAward.startAt + '-01-10') : null,
     };
 
@@ -713,7 +745,7 @@ export default class Award extends Component {
 */}
 
                 <div class="form-group">
-                <label htmlFor="name">{currentAward.xr && '向荣支持'}奖项名称</label>
+                <label htmlFor="name">{currentAward.xr && '向荣支持'}荣誉名称</label>
                 <textarea
                 readonly={(this.state.readonly || !AuthService.isAdmin()) ? "" : false}
                 cols="26"
@@ -742,6 +774,37 @@ export default class Award extends Component {
 
             <div class="col-sm-8">
               <div class="row">
+
+                <div class="form-group col-sm-12">
+                <label htmlFor="issuer">颁奖单位</label>
+                <textarea
+                readonly={this.state.readonly?"":false}
+                class="form-control"
+                id="issuer"
+                required
+                value={currentAward.issuer}
+                onChange={this.onChangeIssuer}
+                name="issuer"
+                />
+                </div>
+
+                <div class="w-100"></div>
+
+                <div class="form-group col-sm-12">
+                <label htmlFor="awardee">获奖人</label>
+                <textarea
+                readonly={this.state.readonly?"":false}
+                class="form-control"
+                id="awardee"
+                required
+                value={currentAward.awardee}
+                onChange={this.onChangeAwardee}
+                name="awardee"
+                />
+                </div>
+
+                <div class="w-100"></div>
+
                 <div class="form-group col-sm-12">
                 <label htmlFor="description">奖项描述</label>
                 <textarea
@@ -826,7 +889,7 @@ export default class Award extends Component {
                 </div>
                 
                 <div className="col-sm-4">
-                  <label htmlFor="startAt">奖项年份</label>
+                  <label htmlFor="startAt">获奖年份</label>
                   {(this.state.readonly)
                   ?<input
                      type="text"

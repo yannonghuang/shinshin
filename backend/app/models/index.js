@@ -142,9 +142,9 @@ db.MATERIAL_CATEGORIES = [
 ];
 
 db.AWARD_TYPES = [
-  "学科",
-  "社会",
-  "德育",
+  "学校",
+  "教师",
+  "学生",
 ];
 
 db.AWARD_CATEGORIES = [

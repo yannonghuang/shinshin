@@ -26,10 +26,12 @@ const AwardsList = (props) => {
   const [searchCode, setSearchCode] = useState("");
   const [searchRegion, setSearchRegion] = useState("");
   const [searchStartAt, setSearchStartAt] = useState(props.match? props.match.params.startAt : props.startAt);
+  const [searchType, setSearchType] = useState("");
+  const [searchCategory, setSearchCategory] = useState("");
 
   const [formId, setFormId] = useState(props.match? props.match.params.formId : props.formId);
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
-  const [pCategoryId, setPCategoryId] = useState(props.match? props.match.params.pCategoryId : props.pCategoryId);
+
   const [searchName, setSearchName] = useState(props.match? props.match.params.name : props.name);
 
   const [schoolDisplay, setSchoolDisplay] = useState(null);
@@ -63,6 +65,10 @@ const AwardsList = (props) => {
 
   const [regions, setRegions] = useState([]);
 
+  const [types, setTypes] = useState([]);
+
+  const [categories, setCategories] = useState([]);
+
   const [startAt, setStartAt] = useState(
   []
   );
@@ -71,15 +77,6 @@ const AwardsList = (props) => {
     ? window.location.pathname.includes('XR')
     : props.xr);
 
-  const init = () => {
-    if (pCategoryId === 'null')
-      setPCategoryId(null);
-
-    //if (formId === 'null')
-      //setFormId(null);
-  }
-
-  useEffect(init, []);
 
   const refreshOnReturn = () => {
     window.onblur = () => {window.onfocus = () => {
@@ -109,6 +106,20 @@ const AwardsList = (props) => {
     setStartup(false);
   };
 
+  const onChangeSearchType = (e) => {
+    const searchType = e.target.value;
+    setSearchType(searchType);
+
+    setStartup(false);
+  };
+
+  const onChangeSearchCategory = (e) => {
+    const searchCategory = e.target.value;
+    setSearchCategory(searchCategory);
+
+    setStartup(false);
+  };
+
   const onChangeSearchStartAt = (e) => {
     const searchStartAt = e; // e.target.value;
     setSearchStartAt(searchStartAt);
@@ -119,17 +130,6 @@ const AwardsList = (props) => {
   const onChangeSearchInputStartAt = (e) => {
     const searchStartAt = e; //e.target.value;
     setSearchStartAt(searchStartAt);
-
-    setStartup(false);
-  };
-
-  const onChangeSearchPCategory = (e) => {
-    //const searchPCategoryId = e.target.selectedIndex;
-    const searchPCategoryId = e.target.selectedIndex < categories.length
-      ? AwardDataService.PROJECT_CATEGORIES_ID[e.target.selectedIndex].id
-      : categories.length;
-
-    setPCategoryId(searchPCategoryId);
 
     setStartup(false);
   };
@@ -149,19 +149,14 @@ const AwardsList = (props) => {
     setSearchStartAt("");
     setOrderby(orderbyDefault);
     setExportAwards([]);
-    setSearchDesignated("");
-    setPCategoryAll();
+    setSearchType("");
+    setSearchCategory("");
 
     setPage(1);
 
     setStartup(false);
   };
 
-  const setPCategoryAll = () => {
-    const select = document.getElementById('pCategoryId');
-    select.value = 'all';
-    setPCategoryId(categories.length);
-  }
 
   const restoreRequestParams = (params) => {
     if (!params) return;
@@ -175,10 +170,8 @@ const AwardsList = (props) => {
     setSearchStartAt(params["startAt"]);
     setSchoolId(params["schoolId"]);
     setFormId(params["formId"]);
-    setSearchDesignated(params["designated"]);
-    setXR(params["xr"]);
-    setPCategoryId(params["pCategoryId"]);
-
+    setSearchType(params["type"]);
+    setSearchCategory(params["category"]);
   };
 
   const getRequestParams = (exportFlag, refresh = false) => {
@@ -239,24 +232,17 @@ const AwardsList = (props) => {
       params["formId"] = formId;
     }
 
-    if (searchDesignated) {
-      params["designated"] = searchDesignated;
+    if (searchType) {
+      params["type"] = searchType;
     }
 
-    params["xr"] = xr;
+    if (searchCategory) {
+      params["category"] = searchCategory;
+    }
 
     if (exportFlag) {
       params["exportFlag"] = exportFlag;
     }
-
-/**
-    if (pCategoryId) {
-      params["pCategoryId"] = pCategoryId;
-    }
-*/
-
-    if ((pCategoryId || pCategoryId === 0) && (pCategoryId !== categories.length))
-      params["pCategoryId"] = pCategoryId;
 
     if (!exportFlag)
       localStorage.setItem(REQUEST_PARAMS_KEY, JSON.stringify(params));
@@ -266,7 +252,7 @@ const AwardsList = (props) => {
 
   const getRegions = () => {
     if (regions.length == 0) {
-      AwardDataService.getRegions()
+      ProjectDataService.getRegions()
         .then(response => {
           setRegions(response.data);
           console.log(response);
@@ -277,12 +263,20 @@ const AwardsList = (props) => {
     }
   }
 
-  useEffect(getRegions, [orderby]);
+  useEffect(getRegions, []);
 
-  const [categories, setCategories] = useState(AwardDataService.PROJECT_CATEGORIES);
+  const getTypes = () => {
+    AwardDataService.getTypes()
+      .then(response => {
+        setTypes(response.data);
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
 
-/**
-  const [categories, setCategories] = useState([]);
+  useEffect(getTypes, []);
 
   const getCategories = () => {
     AwardDataService.getCategories()
@@ -296,7 +290,6 @@ const AwardsList = (props) => {
   }
 
   useEffect(getCategories, []);
-*/
 
   const retrieveAwards = (refresh = false) => {
     if (startup && !refresh) return;
@@ -362,7 +355,7 @@ const AwardsList = (props) => {
     retrieveAwards();
   };
 
-  useEffect(search, [pageSize, orderby, searchCode, searchName, searchStartAt, searchRegion, pCategoryId, searchDesignated]);
+  useEffect(search, [pageSize, orderby, searchCode, searchName, searchStartAt, searchRegion, searchType, searchCategory]);
   useEffect(retrieveAwards, [page]);
   useEffect(() => {retrieveAwards(true)}, []);
 
@@ -437,7 +430,7 @@ const AwardsList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: "奖项年份",
+        Header: "获奖年份",
         accessor: "startAt",
         Cell: (props) => {
           const rowIdx = props.row.id;
@@ -452,7 +445,7 @@ const AwardsList = (props) => {
         }
       },
       {
-        Header: "奖项名称",
+        Header: "荣誉名称",
         accessor: "name",
       },
       {
@@ -464,8 +457,13 @@ const AwardsList = (props) => {
         accessor: "type",
       },
       {
-        Header: "奖项描述",
-        accessor: "description",
+        Header: "颁奖单位",
+        accessor: "issuer",
+        disableSortBy: true,
+      },
+      {
+        Header: "获奖人",
+        accessor: "awardee",
         disableSortBy: true,
       },
       {
@@ -693,11 +691,41 @@ const AwardsList = (props) => {
           <input
             type="text"
             className="form-control col-sm-4 ml-2"
-            placeholder="奖项名称"
+            placeholder="荣誉名称"
             value={searchName}
             onChange={onChangeSearchName}
             id="searchName"
           />
+
+          <select
+            className="form-control col-sm-2 ml-2"
+            placeholder="...."
+            value={searchType}
+            onChange={onChangeSearchType}
+            id="searchType"
+          >
+            <option value="">奖项类型</option>
+            {types.map((option) => (
+            <option value={option}>
+            {option}
+            </option>
+            ))}
+          </select>
+
+          <select
+            className="form-control col-sm-2 ml-2"
+            placeholder="...."
+            value={searchCategory}
+            onChange={onChangeSearchCategory}
+            id="searchCategory"
+          >
+            <option value="">奖项级别</option>
+            {categories.map((option) => (
+            <option value={option}>
+            {option}
+            </option>
+            ))}
+          </select>
 
           {!embedded && (<input
             type="text"
@@ -825,7 +853,7 @@ const AwardsList = (props) => {
                     <span>
                       {/*column.isSorted*/ (column.id === 'school.region' || column.id === 'school.code' ||
                       column.id === 'school.name' || column.id === 'startAt' || column.id === 'status'
-                      || column.id === 'name' || column.id === 'pCategoryId' || column.id === 'designationsCount')
+                      || column.id === 'name')
                       ? column.isSortedDesc
                         ? ' 🔽'
                         : ' 🔼'

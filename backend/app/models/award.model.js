@@ -18,6 +18,12 @@ module.exports = (sequelize, Sequelize) => {
     startAt: {
       type: Sequelize.DATE
     },
+    issuer: {
+      type: Sequelize.STRING
+    },
+    awardee: {
+      type: Sequelize.STRING
+    },
   });
 
   return Award;
