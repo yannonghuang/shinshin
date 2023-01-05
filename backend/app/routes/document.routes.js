@@ -42,7 +42,7 @@ module.exports = function(app) {
 
   // Retrieve a single Document with id return file contents
   app.get("/api/documentsContent/:id",
-    [authJwt.verifyToken],
+  //  [authJwt.verifyToken],
   documents.findOneContent);
 
   app.get("/api/documentsCount/:id",
