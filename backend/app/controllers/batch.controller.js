@@ -51,6 +51,8 @@ const uploadProjects = async (req, res) => {
     let updatedTotal = 0;
     let notFoundTotal = 0;
     let duplicatedTotal = 0;
+    let notFoundSchoolCodes = null;
+    let duplicatedSchoolCodes = null;
 
     for (let index = 2; index <= ws.rowCount; index++) {
       let row = ws.getRow(index);
@@ -90,11 +92,17 @@ const uploadProjects = async (req, res) => {
         }, { transaction: t }
       );
 
-      if (!projects || projects.length === 0)
+      if (!projects || projects.length === 0) {
         notFoundTotal++;
-      else if (projects.length > 1)
+        notFoundSchoolCodes = notFoundSchoolCodes
+          ? ', ' + code + notFoundSchoolCodes
+          : code;
+      } else if (projects.length > 1) {
         duplicatedTotal++;
-      else {
+        duplicatedSchoolCodes = duplicatedSchoolCodes
+          ? ', ' + code + duplicatedSchoolCodes
+          : code;
+      } else {
         //projects[0].description = description;
         //projects[0].budget = budget;
         //projects[0].update( { transaction: t });
@@ -106,8 +114,11 @@ const uploadProjects = async (req, res) => {
 
     await t.commit();
 
-    let message = '批量上传学校项目总数：' + total + '，更新数：' + updatedTotal +
-      '， 无项目数：' + notFoundTotal+ '， 重复项目数：' + duplicatedTotal;
+    let message = '批量上传学校项目总数：' + total +
+      `;\n 更新数：` + updatedTotal +
+      `;\n 无项目数：` + notFoundTotal + (notFoundSchoolCodes ? ' (学校：' + notFoundSchoolCodes + ')' : '') +
+      `;\n 重复项目数：` + duplicatedTotal + (duplicatedSchoolCodes ? ' (学校：' + duplicatedSchoolCodes + ')' : '');
+
     console.log(message);
     res.json(message);
     //res.json({ success: true, data: 'image' });
