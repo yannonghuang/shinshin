@@ -93,9 +93,12 @@ const uploadProjects = async (req, res) => {
       if (!projects || projects.length === 0) notFoundTotal++;
       else if (projects.length > 1) duplicatedTotal++;
       else {
-        projects[0].description = description;
-        projects[0].budget = budget;
-        projects[0].update( { transaction: t });
+        //projects[0].description = description;
+        //projects[0].budget = budget;
+        //projects[0].update( { transaction: t });
+
+        await Project.update({description, budget}, {where: { id: projects[0].id }},  { transaction: t });
+
         updatedTotal++;
       }
 
