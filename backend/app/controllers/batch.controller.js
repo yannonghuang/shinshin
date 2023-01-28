@@ -92,8 +92,8 @@ const uploadProjects = async (req, res) => {
 
       if (!projects || projects.length === 0)
         notFoundTotal++;
-      else if
-        (projects.length > 1) duplicatedTotal++;
+      else if (projects.length > 1)
+        duplicatedTotal++;
       else {
         //projects[0].description = description;
         //projects[0].budget = budget;
