@@ -95,12 +95,12 @@ const uploadProjects = async (req, res) => {
       if (!projects || projects.length === 0) {
         notFoundTotal++;
         notFoundSchoolCodes = notFoundSchoolCodes
-          ? ', ' + code + notFoundSchoolCodes
+          ? notFoundSchoolCodes + ', ' + code
           : code;
       } else if (projects.length > 1) {
         duplicatedTotal++;
         duplicatedSchoolCodes = duplicatedSchoolCodes
-          ? ', ' + code + duplicatedSchoolCodes
+          ? duplicatedSchoolCodes + ', ' + code
           : code;
       } else {
         //projects[0].description = description;
