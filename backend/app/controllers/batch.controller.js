@@ -106,7 +106,7 @@ const uploadProjects = async (req, res) => {
         //projects[0].description = description;
         //projects[0].budget = budget;
         //projects[0].update( { transaction: t });
-        await Project.update({description, budget}, {where: { id: projects[0].id }},  { transaction: t });
+        await Project.update({description, budget, state}, {where: { id: projects[0].id }},  { transaction: t });
         updatedTotal++;
       }
 
