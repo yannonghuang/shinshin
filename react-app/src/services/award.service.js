@@ -56,7 +56,7 @@ class AwardDataService {
             'x-access-token':  (user && user.accessToken) ? user.accessToken : null
             //authHeader()
         },
-        onUploadProgress
+        //onUploadProgress
     });
   }
 
