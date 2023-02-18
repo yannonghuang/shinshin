@@ -688,12 +688,25 @@ export default class School extends Component {
     .then(response => {
       this.setState(prevState => ({
         message: prevState.message + '学校照片成功修改！',
-      }));
-
+      }))
       //if (this.state.currentSchool.docFiles) { // docs
       this.uploadDocuments();
-
       console.log(response.data);
+    })
+    .catch(err => {
+      const resMessage =
+        (err.response &&
+        err.response.data &&
+        err.response.data.message) ||
+        err.message ||
+        err.toString();
+
+      this.setState(prevState => ({
+        message: "学校信息修改失败：" + resMessage,
+        //message: prevState.message + resMessage,
+        //submitted: false
+        hasErrors: true,
+      }));
     });
   }
 

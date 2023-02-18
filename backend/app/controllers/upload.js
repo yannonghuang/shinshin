@@ -238,6 +238,10 @@ const singleProjectUpload = async (req, res) => {
       .then(image => {
         res.json({ success: true, data: image })
       })
+      .catch(e => {
+        console.log(e);
+        return res.status(500).send(`Error when trying upload photo: ${e}`);
+      });
       fs.unlinkSync(req.files[0].path);
     }
   } catch (error) {
@@ -268,6 +272,10 @@ const singleDonorUpload = async (req, res) => {
       .then(image => {
         res.json({ success: true, data: image })
       })
+      .catch(e => {
+        console.log(e);
+        return res.status(500).send(`Error when trying upload photo: ${e}`);
+      });
       fs.unlinkSync(req.files[0].path);
     }
   } catch (error) {
@@ -297,6 +305,11 @@ const singleUpload = async (req, res) => {
       .then(image => {
         res.json({ success: true, data: image })
       })
+      .catch(e => {
+        console.log(e);
+        return res.status(500).send(`Error when trying upload photo: ${e}`);
+      });
+
       fs.unlinkSync(req.files[0].path);
     }
   } catch (error) {
@@ -373,6 +386,11 @@ const singleAwardUpload = async (req, res) => {
       .then(image => {
         res.json({ success: true, data: image })
       })
+      .catch(e => {
+        console.log(e);
+        return res.status(500).send(`Error when trying upload photo: ${e}`);
+      });
+      
       fs.unlinkSync(req.files[0].path);
     }
   } catch (error) {
