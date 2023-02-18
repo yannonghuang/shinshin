@@ -240,7 +240,7 @@ const singleProjectUpload = async (req, res) => {
       })
       .catch(e => {
         console.log(e);
-        return res.status(500).send(`Error when trying upload photo: ${e}`);
+        return res.status(500).send({message: `Error when trying upload photo: ${e}`});
       });
       fs.unlinkSync(req.files[0].path);
     }
@@ -250,7 +250,8 @@ const singleProjectUpload = async (req, res) => {
     if (error.code === "LIMIT_UNEXPECTED_FILE") {
       return res.send("Too many files to upload.");
     }
-    return res.send(`Error when trying upload files: ${error}`);
+    //return res.send(`Error when trying upload files: ${error}`);
+    return res.status(500).send({message: `Error when trying upload files: ${error}`});
   }
 };
 
@@ -274,7 +275,7 @@ const singleDonorUpload = async (req, res) => {
       })
       .catch(e => {
         console.log(e);
-        return res.status(500).send(`Error when trying upload photo: ${e}`);
+        return res.status(500).send({message: `Error when trying upload photo: ${e}`});
       });
       fs.unlinkSync(req.files[0].path);
     }
@@ -284,7 +285,8 @@ const singleDonorUpload = async (req, res) => {
     if (error.code === "LIMIT_UNEXPECTED_FILE") {
       return res.send("Too many files to upload.");
     }
-    return res.send(`Error when trying upload files: ${error}`);
+    //return res.send(`Error when trying upload files: ${error}`);
+    return res.status(500).send({message: `Error when trying upload files: ${error}`});
   }
 };
 
@@ -307,7 +309,7 @@ const singleUpload = async (req, res) => {
       })
       .catch(e => {
         console.log(e);
-        return res.status(500).send(`Error when trying upload photo: ${e}`);
+        return res.status(500).send({message: `Error when trying upload photo: ${e}`});
       });
 
       fs.unlinkSync(req.files[0].path);
@@ -318,7 +320,8 @@ const singleUpload = async (req, res) => {
     if (error.code === "LIMIT_UNEXPECTED_FILE") {
       return res.send("Too many files to upload.");
     }
-    return res.send(`Error when trying upload files: ${error}`);
+    //return res.send(`Error when trying upload files: ${error}`);
+    return res.status(500).send({message: `Error when trying upload photo: ${error}`});
   }
 };
 
@@ -388,7 +391,7 @@ const singleAwardUpload = async (req, res) => {
       })
       .catch(e => {
         console.log(e);
-        return res.status(500).send(`Error when trying upload photo: ${e}`);
+        return res.status(500).send({message: `Error when trying upload photo: ${e}`});
       });
       
       fs.unlinkSync(req.files[0].path);
@@ -399,7 +402,8 @@ const singleAwardUpload = async (req, res) => {
     if (error.code === "LIMIT_UNEXPECTED_FILE") {
       return res.send("Too many files to upload.");
     }
-    return res.send(`Error when trying upload files: ${error}`);
+    //return res.send(`Error when trying upload files: ${error}`);
+    return res.status(500).send({message: `Error when trying upload files: ${error}`});
   }
 };
 
