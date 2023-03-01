@@ -27,6 +27,9 @@ const batchUpload = async (req, res) => {
     if (query.type === 'projects')
       await uploadProjects(req, res);
 
+    if (query.type === 'projectsXR')
+      await uploadProjectsXR(req, res);
+
   } catch (error) {
     console.log(error);
     return res.status(500).send(`Error when trying upload files: ${error}`);
@@ -34,6 +37,70 @@ const batchUpload = async (req, res) => {
       fs.unlinkSync(req.files[0].path);
   }
 };
+
+const uploadProjectsXR = async (req, res) => {
+
+   const NON_NULL_COLUMN = 1;
+
+  const t = await db.sequelize.transaction();
+  const wb = new ExcelJS.Workbook();
+  wb.xlsx.readFile(req.files[0].path)
+  .then(async () => {
+
+    const ws = wb.getWorksheet(1);
+
+    let headers = ws.getRow(1);
+    let total = 0;
+    let updatedTotal = 0;
+    var updates = [];
+    for (let index = 2; index <= ws.rowCount; index++) {
+      let row = ws.getRow(index);
+
+      if (!row.getCell(NON_NULL_COLUMN).value) break;
+
+      total++;
+
+      let startAt = row.getCell(1).value;
+      let code = row.getCell(2).value;
+      //let pCategory = row.getCell(2).value;
+      let name = row.getCell(4).value;
+      let description = row.getCell(5).value;
+      //let budget = row.getCell(6).value;
+
+      let schools = await School.findAll({
+        where: {code},
+        }, { transaction: t }
+      );
+
+      if (schools && schools[0]) {
+        updates.push({startAt: startAt + '-01-10', schoolId: schools[0].id, name, description, xr: 1});
+        updatedTotal++;
+      }
+    }
+    await Project.bulkCreate(updates, { transaction: t });
+    await t.commit();
+
+    let message = '批量上传向荣项目总数：' + total +
+      `;\n 更新数：` + updatedTotal;
+
+    console.log(message);
+    res.json(message);
+    //res.json({ success: true, data: 'image' });
+    fs.unlinkSync(req.files[0].path);
+
+  })
+  .catch(async (err) => {
+    console.log(err.message);
+    await t.rollback();
+    return res.status(500).send(`Error when updating projects: ${err}`);
+
+    if (req.files[0].path)
+      fs.unlinkSync(req.files[0].path);
+  });
+
+};
+
+
 
 const uploadProjects = async (req, res) => {
 

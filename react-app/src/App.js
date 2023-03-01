@@ -312,6 +312,9 @@ class App extends Component {
                   hidden={!AuthService.isLogin() || !AuthService.isAdmin()}
                   target="_blank">新增向荣支持项目
                 </a>
+                {AuthService.isAdmin() && <div>
+                  <a class="dropdown-item" href={"/batch?type=projectsXR"} target="_blank">批量向荣项目录入</a>
+                </div>}                
 {/*
                 <div class="dropdown-divider" hidden={!AuthService.isLogin()}></div>
                 <a class="dropdown-item" href={"/dossiers"} hidden={!AuthService.isLogin()} >项目文档</a>
