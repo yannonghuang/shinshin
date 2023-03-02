@@ -4,3 +4,5 @@ backend/upload/
 **/backend/node_modules/
 **/react-app/node_modules/
 frontend/
+**/*/build/
+security/

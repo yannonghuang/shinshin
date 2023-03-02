@@ -640,7 +640,7 @@ const ProjectsList = (props) => {
     : [];
 
   const xrColumns =
-    ["response.title", "status"];
+    ["response.title", "status", "pCategoryId", "budget"];
 
   hiddenColumns = xr
     ? [...hiddenColumns, ...xrColumns]
