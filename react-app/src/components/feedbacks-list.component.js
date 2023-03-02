@@ -344,6 +344,7 @@ const FeedbacksList = (props) => {
   useEffect(() => {retrieveFeedbacks(true)}, []);
 
   const getSchoolDisplay = () => {
+    if (!schoolId) return;
     SchoolDataService.get(schoolId)
     .then(response => {
       setSchoolDisplay('学校' + response.data.code);

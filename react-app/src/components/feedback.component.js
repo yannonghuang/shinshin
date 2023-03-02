@@ -175,15 +175,17 @@ export default class Feedback extends Component {
 
         const {startAt, questionaireId, ...otherParameters} = response.data;
 
-        let questionaire = await QuestionaireDataService.get(questionaireId);
+        let questionaire = null;
+        if (questionaireId) 
+          questionaire = await QuestionaireDataService.get(questionaireId);
 
         this.setState({
           //currentFeedback: response.data,
           currentFeedback: {
             ...otherParameters,
             startAt: (startAt ? (new Date(startAt)).getUTCFullYear() : ''),
-            description: questionaire.data.description,
-            deadline: questionaire.data.deadline
+            description: questionaire ? questionaire.data.description : '',
+            deadline: questionaire ? questionaire.data.deadline : ''
           },
 
         });
