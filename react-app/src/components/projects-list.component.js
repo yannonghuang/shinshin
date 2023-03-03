@@ -348,7 +348,8 @@ const ProjectsList = (props) => {
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download',
-          'school_projects' + ''/*(detail ? '_detail' : '')*/ + '.csv'
+          'school_projects' + (xr ? '_xr' : '') + '.csv'
+          //'school_projects' + ''/*(detail ? '_detail' : '')*/ + '.csv'
         );
         document.body.appendChild(link);
         link.click();
@@ -610,9 +611,9 @@ const ProjectsList = (props) => {
     []
   );
 
-  const exportDetailColumns = subtract(columns, ['response.title']);
+  var exportDetailColumns = subtract(columns, ['response.title']);
 
-  const exportColumns = subtract(exportDetailColumns,
+  var exportColumns = subtract(exportDetailColumns,
     ['school.category', 'school.teachersCount', 'school.studentsCount', "school.region"]);
 
   const exportColumnsWithSchoolKnown = subtract(exportColumns,
@@ -640,14 +641,19 @@ const ProjectsList = (props) => {
     ? ['designationsCount']
     : [];
 
-  const xrColumns =
+  const hiddenColumnsXR =
     ["response.title", "status", "pCategoryId", "budget"];
 
   hiddenColumns = xr
-    ? [...hiddenColumns, ...xrColumns]
+    ? [...hiddenColumns, ...hiddenColumnsXR]
     : hiddenColumns;
 
   hiddenColumns = [...hiddenColumns, ...hiddenColumnsMobile, ...hiddenColumnsLogin, ...hiddenColumnsDonorService];
+
+  if (xr) {
+    exportDetailColumns = subtract(exportDetailColumns, hiddenColumns);    
+    exportColumns = subtract(exportColumns, hiddenColumns);
+  }
 
   const {
     getTableProps,
