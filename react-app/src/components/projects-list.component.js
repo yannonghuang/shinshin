@@ -611,7 +611,7 @@ const ProjectsList = (props) => {
     []
   );
 
-  var exportDetailColumns = subtract(columns, ['response.title']);
+  var exportDetailColumns = subtract(columns, ['response.title', 'designationsCount']);
 
   var exportColumns = subtract(exportDetailColumns,
     ['school.category', 'school.teachersCount', 'school.studentsCount', "school.region"]);
@@ -642,7 +642,7 @@ const ProjectsList = (props) => {
     : [];
 
   const hiddenColumnsXR =
-    ["response.title", "status", "pCategoryId", "budget"];
+    ["response.title", "status", "pCategoryId", "budget", "designationsCount"];
 
   hiddenColumns = xr
     ? [...hiddenColumns, ...hiddenColumnsXR]
