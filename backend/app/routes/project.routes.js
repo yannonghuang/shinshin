@@ -21,7 +21,7 @@ module.exports = function(app) {
   );
 
   app.get("/api/projects/regions",
-    [authJwt.verifyToken],
+    //[authJwt.verifyToken],
     projects.getRegions
   );
 
