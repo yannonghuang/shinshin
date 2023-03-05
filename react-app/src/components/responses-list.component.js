@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useTable, useSortBy } from "react-table";
+import queryString from 'query-string';
 
 import YearPicker from 'react-single-year-picker';
 
@@ -18,7 +19,10 @@ const ResponsesList = (props) => {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [searchTitle, setSearchTitle] = useState("");
   const [searchCode, setSearchCode] = useState("");
-  const [searchStartAt, setSearchStartAt] = useState("");
+
+  //const [searchStartAt, setSearchStartAt] = useState("");
+  const qString = queryString.parse(props.location.search);
+  const [searchStartAt, setSearchStartAt] = useState(qString.startAt);
 
   const [formId, setFormId] = useState(props.match? props.match.params.formId : props.formId);
   const [title, setTitle] = useState(null);

@@ -365,6 +365,7 @@ const buildFilters = async (req) => {
   const exportFlag = req.body.exportFlag;
   const region = req.body.region;
   const latestProjectYear = req.body.latestProjectYear;
+  const projectYear = req.body.projectYear;
   /**
     ? req.body.region.startsWith('湖南省湘西州')
       ? req.body.region.substring(0, 6)
@@ -403,11 +404,12 @@ const buildFilters = async (req) => {
             request ? { request: { [Op.eq]: `${request}` } } : null,
             startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('schools.startAt')), `${startAt}`) } } : null,
             lastVisit ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('schools.lastVisit')), `${lastVisit}`) } } : null,
+            projectYear ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('projects.startAt')), `${projectYear}`) } } : null,            
             xr === undefined
               ? null
               : xr === 'true'
                 ? { xr: { [Op.eq]: `1` }}
-                : {[Op.or]: [{ xr: { [Op.ne]: `1` }}, { xr: null }]},
+                : {[Op.or]: [{ xr: { [Op.ne]: `1` }}, { xr: null }]},               
         ]};
 
   const having = {
@@ -509,6 +511,17 @@ exports.SAVE_findAll2 = async (req, res) => {
            required: false,
            //where: { xr: null }
            where: {[Op.or] : [{ xr: null }, { xr: { [Op.eq]: `0` }}]}
+/*           
+           where: {
+            [Op.and]: [
+              xr === undefined
+              ? null
+              : xr === 'true'
+                ? { xr: { [Op.eq]: `1` }}
+                : {[Op.or]: [{ xr: { [Op.ne]: `1` }}, { xr: null }]},
+            ]
+           }
+*/           
            //include: inner_include,
         },
       ];

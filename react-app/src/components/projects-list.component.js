@@ -3,6 +3,7 @@ import ProjectDataService from "../services/project.service";
 import SchoolDataService from "../services/school.service";
 import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
+import queryString from 'query-string'
 
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useTable, useSortBy, useFlexLayout } from "react-table";
@@ -24,7 +25,10 @@ const ProjectsList = (props) => {
 
   const [searchCode, setSearchCode] = useState("");
   const [searchRegion, setSearchRegion] = useState("");
-  const [searchStartAt, setSearchStartAt] = useState(props.match? props.match.params.startAt : props.startAt);
+
+  //const [searchStartAt, setSearchStartAt] = useState(props.match? props.match.params.startAt : props.startAt);
+  const qString = queryString.parse(props.location.search);
+  const [searchStartAt, setSearchStartAt] = useState(qString.startAt);
 
   const [formId, setFormId] = useState(props.match? props.match.params.formId : props.formId);
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);

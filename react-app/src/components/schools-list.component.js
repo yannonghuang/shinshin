@@ -29,6 +29,7 @@ const SchoolsList = (props) => {
   const [searchStartAt, setSearchStartAt] = useState("");
   const [searchLastVisit, setSearchLastVisit] = useState("");
   const [searchLatestProjectYear, setSearchLatestProjectYear] = useState("");
+  const [searchProjectYear, setSearchProjectYear] = useState("");
 
   const [searchDonor, setSearchDonor] = useState("");
   const [searchStage, setSearchStage] = useState("");
@@ -139,6 +140,13 @@ const SchoolsList = (props) => {
     setStartup(false);
   };
 
+  const onChangeSearchProjectYear = (e) => {
+    const searchProjectYear = e; //e.target.value;
+    setSearchProjectYear(searchProjectYear);
+
+    setStartup(false);
+  };
+
   const onChangeSearchXR = (e) => {
     const searchXR = e.target.value;
     setSearchXR(searchXR);
@@ -153,6 +161,7 @@ const SchoolsList = (props) => {
     setSearchStartAt("");
     setSearchLastVisit("");
     setSearchLatestProjectYear("");
+    setSearchProjectYear("");
     setSearchDonor("");
     setSearchStage("");
     setSearchStatus("");
@@ -178,6 +187,7 @@ const SchoolsList = (props) => {
     setSearchRegion(params["region"]);
     setSearchStartAt(params["startAt"]);
     setSearchLatestProjectYear(params["latestProjectYear"]);
+    setSearchProjectYear(params["projectYear"]);
     setSearchLastVisit(params["lastVisit"]);
     setSearchDonor(params["donor"]);
     setSearchStage(params["stage"]);
@@ -231,6 +241,10 @@ const SchoolsList = (props) => {
 
     if (searchLatestProjectYear) {
       params["latestProjectYear"] = searchLatestProjectYear;
+    }
+
+    if (searchProjectYear) {
+      params["projectYear"] = searchProjectYear;
     }
 
     if (searchLastVisit) {
@@ -418,7 +432,7 @@ const SchoolsList = (props) => {
     retrieveSchools();
   };
 
-  useEffect(search, [pageSize, orderby, searchName, searchCode, searchRegion, searchStartAt, searchLatestProjectYear,
+  useEffect(search, [pageSize, orderby, searchName, searchCode, searchRegion, searchStartAt, searchLatestProjectYear, searchProjectYear,
                      searchLastVisit, searchDonor, searchStage, searchStatus, searchRequest, searchXR]);
 
   useEffect(retrieveSchools, [page]);
@@ -805,7 +819,7 @@ const SchoolsList = (props) => {
           return (
             <div>
               <Link
-                to={"/projects/school/" + schoolsRef.current[rowIdx].id}
+                to={"/projects/school/" + schoolsRef.current[rowIdx].id + (searchProjectYear ? ('?startAt=' + searchProjectYear) : '') }
                 className="badge badge-success"
               >
                 {schoolsRef.current[rowIdx].projectsCount}
@@ -823,7 +837,7 @@ const SchoolsList = (props) => {
           return (
             <div>
               <Link
-                to={"/responses/school/" + schoolsRef.current[rowIdx].id}
+                to={"/responses/school/" + schoolsRef.current[rowIdx].id + (searchProjectYear ? ('?startAt=' + searchProjectYear) : '')}
                 className="badge badge-success"
               >
                 {schoolsRef.current[rowIdx].responsesCount}
@@ -873,7 +887,7 @@ const SchoolsList = (props) => {
         },
       },
     ],
-    []
+    [searchProjectYear]
   );
 
   var hiddenColumnsMobile = (isMobile)
@@ -1011,7 +1025,7 @@ const SchoolsList = (props) => {
             onSelect={onChangeSearchLastVisit}
             hideInput={true}
             minRange={1995}
-            maxRange={2022}
+            maxRange={2025}
           />
 
 
@@ -1028,7 +1042,23 @@ const SchoolsList = (props) => {
             onSelect={onChangeSearchLatestProjectYear}
             hideInput={true}
             minRange={1995}
-            maxRange={2022}
+            maxRange={2025}
+          />
+
+          <input
+            type="text"
+            readonly=""
+            className="form-control col-sm-2 ml-2"
+            placeholder="项目年份"
+            value={searchProjectYear}
+          />
+          <YearPicker
+            yearArray={['2019', '2020']}
+            value={searchProjectYear}
+            onSelect={onChangeSearchProjectYear}
+            hideInput={true}
+            minRange={1995}
+            maxRange={2025}
           />
 
           <select hidden={!AuthService.isLogin()}
