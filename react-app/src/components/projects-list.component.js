@@ -27,8 +27,8 @@ const ProjectsList = (props) => {
   const [searchRegion, setSearchRegion] = useState("");
 
   //const [searchStartAt, setSearchStartAt] = useState(props.match? props.match.params.startAt : props.startAt);
-  const qString = queryString.parse(props.location.search);
-  const [searchStartAt, setSearchStartAt] = useState(qString.startAt);
+  const qString = props.location ? queryString.parse(props.location.search) : null;
+  const [searchStartAt, setSearchStartAt] = useState(qString ? qString.startAt: null);
 
   const [formId, setFormId] = useState(props.match? props.match.params.formId : props.formId);
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);

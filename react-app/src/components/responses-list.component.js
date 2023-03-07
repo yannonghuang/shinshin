@@ -21,8 +21,8 @@ const ResponsesList = (props) => {
   const [searchCode, setSearchCode] = useState("");
 
   //const [searchStartAt, setSearchStartAt] = useState("");
-  const qString = queryString.parse(props.location.search);
-  const [searchStartAt, setSearchStartAt] = useState(qString.startAt);
+  const qString = props.location ? queryString.parse(props.location.search) : null;
+  const [searchStartAt, setSearchStartAt] = useState(qString ? qString.startAt: null);
 
   const [formId, setFormId] = useState(props.match? props.match.params.formId : props.formId);
   const [title, setTitle] = useState(null);
