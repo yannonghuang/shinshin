@@ -788,6 +788,11 @@ const SchoolsList = (props) => {
       {
         Header: "最近项目年份",
         accessor: "latestProjectYear",
+      },
+/**            
+      {
+        Header: "最近项目年份",
+        accessor: "latestProjectYear",
         Cell: (props) => {
           const rowIdx = props.row.id;
             var d = null;
@@ -800,7 +805,6 @@ const SchoolsList = (props) => {
             );
         }
       },
-/**
       {
         Header: "教师人数",
         accessor: "teachersCount",

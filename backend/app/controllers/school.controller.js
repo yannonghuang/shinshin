@@ -366,12 +366,6 @@ const buildFilters = async (req) => {
   const region = req.body.region;
   const latestProjectYear = req.body.latestProjectYear;
   const projectYear = req.body.projectYear;
-  /**
-    ? req.body.region.startsWith('湖南省湘西州')
-      ? req.body.region.substring(0, 6)
-      : req.body.region.substring(0, 2)
-    : null;
-  */
   const xr = req.body.xr;
 
   var orderbyObject = null;
@@ -422,153 +416,28 @@ const buildFilters = async (req) => {
   return {condition, orderbyObject, having}
 }
 
+const setLatestProjectYears = async (schools) => {
+  let maxProjectYears = await Project.findAll({ 
+    attributes: [
+      'schoolId',
+      //[db.Sequelize.fn("MAX", db.Sequelize.col("startAt")), "latestProjectYear"],
+      [db.Sequelize.fn("year", db.Sequelize.fn("MAX", db.Sequelize.col("projects.startAt"))), "latestProjectYear"]
+    ],    
+    group: 'schoolId'
+  });
 
-exports.SAVE_findAll2 = async (req, res) => {
-  const {condition, orderbyObject, having} = await buildFilters(req);
-
-  const page = req.body.page;
-  const size = req.body.size;
-  const exportFlag = req.body.exportFlag;
-
-/**
-  const id = await authJwt.getSchoolId(req);
-
-  const name = req.body.name;
-  const orderby = req.body.orderby;
-  const code = req.body.code;
-  const donor = req.body.donor;
-  //const region = req.body.region;
-  const stage = req.body.stage;
-  const status = req.body.status;
-  const request = req.body.request;
-  const startAt = req.body.startAt;
-  const lastVisit = req.body.lastVisit;
-  const region = req.body.region
-    ? req.body.region.startsWith('湖南湘西')
-      ? req.body.region.substring(0, 4)
-      : req.body.region.substring(0, 2)
-    : null;
-  const xr = req.body.xr;
-
-  var orderbyObject = null;
-  if (orderby) {
-    orderbyObject = [];
-    for (var i = 0; i < orderby.length; i++) {
-      if (orderby[i].id == "projectsCount")
-        orderbyObject.push([db.Sequelize.fn("COUNT", db.Sequelize.col("projects.id")),
-          (orderby[i].desc ? "desc" : "asc")]);
-      else if (orderby[i].id == "responsesCount")
-        orderbyObject.push([db.Sequelize.fn("COUNT", db.Sequelize.col("projects.responseId")),
-          (orderby[i].desc ? "desc" : "asc")]);
-      else orderbyObject.push([orderby[i].id, (orderby[i].desc ? "desc" : "asc")]);
+  result = [];
+  for (i = 0; i < schools.length; i++)
+    for (j = 0; j < maxProjectYears.length; j++) {
+      if (schools[i].id === maxProjectYears[j].schoolId) {
+        schoolClone = JSON.parse(JSON.stringify(schools[i]))
+        projectClone = JSON.parse(JSON.stringify(maxProjectYears[j]))
+        const {latestProjectYear, ...others} = projectClone
+        result.push({...schoolClone, latestProjectYear})
+        continue;
+      }
     }
-  };
-
-  const condition = {
-        [Op.and]: [
-            id ? { id: { [Op.eq]: `${id}` } } : null,
-            name ? { name: { [Op.like]: `%${name}%` } } : null,
-            code ? { code: { [Op.like]: `${code}` } } : null,
-            donor ? { donor: { [Op.like]: `%${donor}%` } } : null,
-            //region ? { region: { [Op.eq]: `${region}` } } : null,
-            region ? { region: { [Op.like]: `%${region}%` } } : null,
-            stage ? { stage: { [Op.eq]: `${stage}` } } : null,
-            status ? { status: { [Op.eq]: `${status}` } } : null,
-            request ? { request: { [Op.eq]: `${request}` } } : null,
-            startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('schools.startAt')), `${startAt}`) } } : null,
-            lastVisit ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('schools.lastVisit')), `${lastVisit}`) } } : null,
-            xr === undefined
-              ? null
-              : xr === 'true'
-                ? { xr: { [Op.eq]: `1` }}
-                : {[Op.or]: [{ xr: { [Op.ne]: `1` }}, { xr: null }]},
-        ]};
-
-*/
-
-  const { limit, offset } = getPagination(page, size);
-
-  let limits = {};
-  if (!exportFlag) {
-    limits = {
-      offset: offset,
-      limit: limit
-    }
-  }
-
-  const inner_include = [
-        {
-           model: Response,
-           attributes: [],
-           required: false,
-        },
-      ];
-
-  const include = [
-        {
-           model: Project,
-           attributes: [],
-           required: false,
-           //where: { xr: null }
-           where: {[Op.or] : [{ xr: null }, { xr: { [Op.eq]: `0` }}]}
-/*           
-           where: {
-            [Op.and]: [
-              xr === undefined
-              ? null
-              : xr === 'true'
-                ? { xr: { [Op.eq]: `1` }}
-                : {[Op.or]: [{ xr: { [Op.ne]: `1` }}, { xr: null }]},
-            ]
-           }
-*/           
-           //include: inner_include,
-        },
-      ];
-
-  School.findAll({
-  where: condition,
-  ...limits,
-//  limit: limit,
-//  offset: offset,
-  subQuery: false,
-  attributes: ['id', 'code', 'name', 'description', 'principal', 'region', 'address', 'phone', 'teachersCount', 'studentsCount',
-            'stage', 'status', 'request', 'category', 'principalId', 'contactId', 'donor', 'xr',
-            [db.Sequelize.fn("year", db.Sequelize.col("schools.startAt")), "startAt"],
-            [db.Sequelize.fn("year", db.Sequelize.col("schools.lastVisit")), "lastVisit"],
-            [db.Sequelize.fn("COUNT", db.Sequelize.col("projects.id")), "projectsCount"],
-            [db.Sequelize.fn("COUNT", db.Sequelize.col("projects.responseId")), "responsesCount"], //`projects->response`.`id`
-            [db.Sequelize.fn("MAX", db.Sequelize.col("projects.startAt")), "latestProjectYear"],
-  ],
-
-  include: include,
-  group: ['id'],
-  having: having,
-  order: orderbyObject
-  })
-    .then(data => {
-        School.count({
-          where: condition,
-        })
-        //School.count({where: condition, include: include, distinct: true, col: 'id'})
-          .then(count => {
-            const response = getPagingData(count, data, page, limit);
-            res.send(response);
-          })
-          .catch(e => {
-            res.status(500).send({
-              message:
-              e.message || "Some error occurred while retrieving responses."
-            });
-          });
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).send({
-        message:
-        err.message || "Some error occurred while retrieving responses."
-      });
-    });
+  return result;
 };
 
 exports.findAll2 = async (req, res) => {
@@ -607,38 +476,40 @@ exports.findAll2 = async (req, res) => {
         },
       ];
 
-  School.findAndCountAll({
-  where: condition,
-  ...limits,
-//  limit: limit,
-//  offset: offset,
-  subQuery: false,
-  attributes: ['id', 'code', 'name', 'description', 'principal', 'region', 'address', 'phone', 'teachersCount', 'studentsCount',
+  try {
+    let data = await School.findAndCountAll({
+      where: condition,
+      ...limits,
+      //  limit: limit,
+      //  offset: offset,
+      subQuery: false,
+      attributes: ['id', 'code', 'name', 'description', 'principal', 'region', 'address', 'phone', 'teachersCount', 'studentsCount',
             'stage', 'status', 'request', 'category', 'principalId', 'contactId', 'donor', 'xr',
             [db.Sequelize.fn("year", db.Sequelize.col("schools.startAt")), "startAt"],
             [db.Sequelize.fn("year", db.Sequelize.col("schools.lastVisit")), "lastVisit"],
             [db.Sequelize.fn("COUNT", db.Sequelize.col("projects.id")), "projectsCount"],
             [db.Sequelize.fn("COUNT", db.Sequelize.col("projects.responseId")), "responsesCount"], //`projects->response`.`id`
             [db.Sequelize.fn("MAX", db.Sequelize.col("projects.startAt")), "latestProjectYear"],
-  ],
+      ],
 
-  include: include,
-  group: ['id'],
-  having: having,
-  order: orderbyObject
-  })
-    .then(data => {
-      const { count: totalItems, rows: schools } = data;
-      const response = getPagingData(totalItems.length, schools, page, limit);
-      res.send(response);
-    })
-    .catch(err => {
+      include: include,
+      group: ['id'],
+      having: having,
+      order: orderbyObject
+    });
+
+
+    const { count: totalItems, rows: schools } = data;
+    const response = getPagingData(totalItems.length, await setLatestProjectYears(schools), page, limit);
+    res.send(response);
+
+  } catch(err) {
       console.log(err);
       res.status(500).send({
         message:
         err.message || "Some error occurred while retrieving responses."
       });
-    });
+    };
 };
 
 exports.findExport = async (req, res) => {
@@ -688,7 +559,7 @@ exports.findExport = async (req, res) => {
   School.findAll({
     where: condition,
 
-    attributes: [
+    attributes: ['id',
             [db.Sequelize.fn("year", db.Sequelize.col("schools.startAt")), "startAt"],
             [db.Sequelize.fn("year", db.Sequelize.col("schools.lastVisit")), "lastVisit"],
             [db.Sequelize.fn("year", db.Sequelize.fn("MAX", db.Sequelize.col("projects.startAt"))), "latestProjectYear"],
@@ -700,8 +571,9 @@ exports.findExport = async (req, res) => {
     having: having,
     order: orderbyObject
   })
-  .then(schools => {
-      res.send(schools);
+  .then(async schools => {
+      res.send(await setLatestProjectYears(schools));
+      //res.send(schools);
     })
   .catch(err => {
       console.log(err);
@@ -742,29 +614,6 @@ exports.findCountsByRegion = (req, res) => {
       res.status(500).send({
         message:
           err.message || "Some error occurred while retrieving responses."
-      });
-    });
-};
-
-exports.SAVE_SAVE_findAll2 = (req, res) => {
-  const title = req.body.title;
-  const page = req.body.page;
-  const size = req.body.size;
-
-  //const { page, size, title } = req.query;
-  var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
-
-  const { limit, offset } = getPagination(page, size);
-
-  School.findAndCountAll({ where: condition, limit, offset })
-    .then(data => {
-      const response = getPagingData(data, page, limit);
-      res.send(response);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving schools."
       });
     });
 };
