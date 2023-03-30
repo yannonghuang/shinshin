@@ -8,11 +8,14 @@ import Pagination from "@material-ui/lab/Pagination";
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useTable, useSortBy } from "react-table";
 
+import YearPicker from 'react-single-year-picker';
+
 const DocumentsList = (props) => {
   const [documents, setDocuments] = useState([]);
   const [currentDocument, setCurrentDocument] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [searchOriginalname, setSearchOriginalname] = useState("");
+  const [searchStartAt, setSearchStartAt] = useState("");
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
   const [docCategory, setDocCategory] = useState(props.match? props.match.params.docCategory : props.docCategory);
 
@@ -34,6 +37,17 @@ const DocumentsList = (props) => {
   const onChangeSearchOriginalname = (e) => {
     const searchOriginalname = e.target.value;
     setSearchOriginalname(searchOriginalname);
+  };
+
+  const onChangeSearchStartAt = (e) => {
+    const searchStartAt = e; //e.target.value;
+    setSearchStartAt(searchStartAt);
+  };
+
+  const onClearSearch = (e) => {
+    setSearchOriginalname("");
+    setSearchStartAt("");
+    setPage(1);
   };
 
   const [orderby, setOrderby] = useState([]);
@@ -61,9 +75,13 @@ const DocumentsList = (props) => {
       params["docCategory"] = docCategory;
     }
 
+    if (searchStartAt) {
+      params["startAt"] = searchStartAt;
+    }
+
     if (orderby && orderby[0])
       params["orderby"] = orderby;
-     else
+    else
       params["orderby"] = [
         {
           id: 'createdAt',
@@ -97,12 +115,46 @@ const DocumentsList = (props) => {
     retrieveDocuments();
   };
 
-  useEffect(search, [pageSize, orderby, searchOriginalname]);
+  useEffect(search, [pageSize, orderby, searchOriginalname, searchStartAt]);
   useEffect(retrieveDocuments, [page]);
 
 
   const refreshList = () => {
     retrieveDocuments();
+  };
+
+  const updateStartAt = (rowIndex) => {
+    const id = documentsRef.current[rowIndex].id;
+
+    let startAt = prompt("请输入年份", "" + new Date(documentsRef.current[rowIndex].createdAt).getFullYear());
+    if (!startAt) return;
+
+    DocumentDataService.update(id, {startAt: startAt + '-01-01'})
+      .then((response) => {
+        refreshList();
+        //alert('修改成功');
+      })
+      .catch((e) => {
+        alert('修改失败：' + JSON.stringify(e));
+        console.log(e);
+      });
+  };
+
+  const updateDescription = (rowIndex) => {
+    const id = documentsRef.current[rowIndex].id;
+
+    let description = prompt("请输入说明", "");
+    if (!description) return;
+
+    DocumentDataService.update(id, {description})
+      .then((response) => {
+        refreshList();
+        //alert('修改成功');
+      })
+      .catch((e) => {
+        alert('修改失败：' + JSON.stringify(e));
+        console.log(e);
+      });
   };
 
   const removeAllDocuments = () => {
@@ -144,7 +196,11 @@ const DocumentsList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: "时间",
+        Header: "年份",
+        accessor: "startAt",
+      },      
+      {
+        Header: "文件上传时间",
         accessor: "createdAt",
         Cell: (props) => {
           const rowIdx = props.row.id;
@@ -159,11 +215,17 @@ const DocumentsList = (props) => {
       {
         Header: "文档名",
         accessor: "originalname",
+        disableSortBy: true,        
       },
       {
         Header: "类别",
         accessor: "docCategory",
       },
+      {
+        Header: "说明",
+        accessor: "description",
+        disableSortBy: true,        
+      },      
       {
         Header: "学校",
         accessor: 'school',
@@ -190,6 +252,13 @@ const DocumentsList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
+              <a href="#" onClick={() => updateStartAt(rowIdx)}>
+                <i className="badge badge-success mr-2">年份</i>
+              </a>    
+
+              <a href="#" onClick={() => updateDescription(rowIdx)}>
+                <i className="badge badge-success mr-2">说明</i>
+              </a>                           
 {/*
               {(documentsRef.current[rowIdx].mimetype.startsWith('image') ||
                 documentsRef.current[rowIdx].mimetype.indexOf('pdf') > 0 ) && (
@@ -307,23 +376,40 @@ const DocumentsList = (props) => {
   return (
     <div className="list row">
       <div className="col-sm-8">
-        <div className="input-group mb-3">
+        <div className="mb-3">
           <h4>学校附件列表(总数：{totalItems})</h4>
-          <div className="input-group mb-3">
+          <div className="row mb-3 ml-1">
+            <div>
+              <input
+              type="text"
+              className="form-control"
+              placeholder="文档名或说明查找。。。"
+              value={searchOriginalname}
+              onChange={onChangeSearchOriginalname}
+              />
+            </div>
             <input
-            type="text"
-            className="form-control"
-            placeholder="文件名查找。。。"
-            value={searchOriginalname}
-            onChange={onChangeSearchOriginalname}
+              type="text"
+              readonly=""
+              className="form-control col-sm-2 ml-2"
+              placeholder="年份"
+              value={searchStartAt}
             />
-            <div className="input-group-append">
+            <YearPicker
+              yearArray={['2019', '2020']}
+              value={searchStartAt}
+              onSelect={onChangeSearchStartAt}
+              hideInput={true}
+              minRange={1995}
+              maxRange={2025}
+            />
+            <div>
               <button
-              className="btn btn-outline-secondary"
-              type="button"
-              onClick={findByOriginalname}
+                className="btn btn-primary  ml-2"
+                type="button"
+                onClick={onClearSearch}
               >
-              Search
+                清空
               </button>
             </div>
           </div>

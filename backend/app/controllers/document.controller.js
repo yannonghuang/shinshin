@@ -80,16 +80,22 @@ exports.findAll = (req, res) => {
 
 exports.findAll2 = (req, res) => {
   const originalname = req.body.originalname;
+  const startAt = req.body.startAt;
   const page = req.body.page;
   const size = req.body.size;
   const schoolId = req.body.schoolId;
   var docCategory = req.body.docCategory;
   const orderby = req.body.orderby;
-
+  
+  
   //const { page, size, originalname } = req.query;
   var condition = {
         [Op.and]: [
-            originalname ? { originalname: { [Op.like]: `%${originalname}%` } } : null,
+            originalname 
+              ? {[Op.or]: [{ originalname: { [Op.like]: `%${originalname}%` } }, { description: { [Op.like]: `%${originalname}%` } }]}
+              //? { originalname: { [Op.like]: `%${originalname}%` } } 
+              : null,
+            startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('startAt')), `${startAt}`) } } : null,            
             schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null,
             docCategory
               ? docCategory.startsWith('!')
@@ -118,8 +124,9 @@ exports.findAll2 = (req, res) => {
   limit: limit,
   offset: offset,
   attributes: ['id', 'originalname', 'docCategory', 'schoolId', 'mimetype',
-              'createdAt' //[db.Sequelize.fn('date_format', db.Sequelize.col("createdAt"), '%Y-%m-%d'), "createdAt"],
-
+              'createdAt', //[db.Sequelize.fn('date_format', db.Sequelize.col("createdAt"), '%Y-%m-%d'), "createdAt"],
+              [db.Sequelize.fn("year", db.Sequelize.col("startAt")), "startAt"],
+              'description'
   ],
   order: orderbyObject
   })

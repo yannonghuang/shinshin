@@ -21,6 +21,12 @@ module.exports = (sequelize, Sequelize) => {
     docCategory: {
       type: Sequelize.STRING
     },
+    description: {
+      type: Sequelize.STRING
+    },
+    startAt: {
+      type: Sequelize.DATE
+    },        
   });
 
   return Document;
