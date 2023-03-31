@@ -125,7 +125,7 @@ exports.findAll2 = (req, res) => {
   offset: offset,
   attributes: ['id', 'originalname', 'docCategory', 'schoolId', 'mimetype',
               'createdAt', //[db.Sequelize.fn('date_format', db.Sequelize.col("createdAt"), '%Y-%m-%d'), "createdAt"],
-              [db.Sequelize.fn("year", db.Sequelize.col("startAt")), "startAt"],
+              'startAt', //[db.Sequelize.fn("year", db.Sequelize.col("startAt")), "startAt"],
               'description'
   ],
   order: orderbyObject

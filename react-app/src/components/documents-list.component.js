@@ -123,13 +123,22 @@ const DocumentsList = (props) => {
     retrieveDocuments();
   };
 
+  const getStartAt = (rowIndex) => {
+    let s = documentsRef.current[rowIndex].startAt;
+    s = s ? s : documentsRef.current[rowIndex].createdAt;
+
+    return "" + new Date(s).getFullYear();
+  }
+
   const updateStartAt = (rowIndex) => {
     const id = documentsRef.current[rowIndex].id;
+    let s = documentsRef.current[rowIndex].startAt;
+    s = s ? s : documentsRef.current[rowIndex].createdAt;
 
-    let startAt = prompt("请输入年份", "" + new Date(documentsRef.current[rowIndex].createdAt).getFullYear());
+    let startAt = prompt("请输入年份", getStartAt(rowIndex));
     if (!startAt) return;
 
-    DocumentDataService.update(id, {startAt: startAt + '-01-01'})
+    DocumentDataService.update(id, {startAt: startAt + '-02-01'})
       .then((response) => {
         refreshList();
         //alert('修改成功');
@@ -198,6 +207,14 @@ const DocumentsList = (props) => {
       {
         Header: "年份",
         accessor: "startAt",
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+              {getStartAt(rowIdx)}
+            </div>
+          );
+        },        
       },      
       {
         Header: "文件上传时间",
