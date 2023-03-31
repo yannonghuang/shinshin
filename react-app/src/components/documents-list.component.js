@@ -143,7 +143,7 @@ const DocumentsList = (props) => {
   const updateDescription = (rowIndex) => {
     const id = documentsRef.current[rowIndex].id;
 
-    let description = prompt("请输入说明", "");
+    let description = prompt("请输入说明", documentsRef.current[rowIndex].description);
     if (!description) return;
 
     DocumentDataService.update(id, {description})
