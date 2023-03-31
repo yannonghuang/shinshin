@@ -1,23 +1,23 @@
 
-import React, { Component, createRef } from "react"; //For react component
+import React, { Component } from "react"; //For react component
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+//import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import $ from "jquery"; //Load jquery
+//import $ from "jquery"; //Load jquery
 import { Link } from "react-router-dom";
-import Select from 'react-select';
-import Input from "react-validation/build/input";
+//import Select from 'react-select';
+//import Input from "react-validation/build/input";
 import { isEmail } from "validator";
 
-import YearPicker from 'react-single-year-picker';
+//import YearPicker from 'react-single-year-picker';
 
-import ResponsesList from './responses-list.component.js';
-import DossiersList from './dossiers-list.component.js';
+//import ResponsesList from './responses-list.component.js';
+//import DossiersList from './dossiers-list.component.js';
 import DonationDataService from "../services/donation.service";
 import ProjectDataService from "../services/project.service";
-import DossierDataService from "../services/dossier.service";
-import SchoolDataService from "../services/school.service";
+//import DossierDataService from "../services/dossier.service";
+//import SchoolDataService from "../services/school.service";
 import AuthService from "./../services/auth.service";
 
 const required = value => {
@@ -52,7 +52,7 @@ export default class Donation extends Component {
 
     this.onChangePhoto = this.onChangePhoto.bind(this);
 
-    this.onChangeDescription = this.onChangeDescription.bind(this);
+    //this.onChangeDescription = this.onChangeDescription.bind(this);
 
     this.getDonation = this.getDonation.bind(this);
 
@@ -137,7 +137,7 @@ export default class Donation extends Component {
   display(projectId) {
     if (this.state.projects) {
       for (var i = 0; i < this.state.projects.length; i++) {
-        if (this.state.projects[i].value == projectId)
+        if (this.state.projects[i].value === projectId)
           return this.state.projects[i];
       }
       return [];
@@ -147,7 +147,7 @@ export default class Donation extends Component {
   displayName(projectId) {
     if (this.state.projects) {
       for (var i = 0; i < this.state.projects.length; i++) {
-        if (this.state.projects[i].value == projectId)
+        if (this.state.projects[i].value === projectId)
           return this.state.projects[i].label ? this.state.projects[i].label : '指定学校项目';
       }
       return '指定学校项目';
@@ -188,8 +188,6 @@ export default class Donation extends Component {
     });
   }
 
-
-
   onChangeDescription(e) {
     const description = e.target.value;
 
@@ -203,6 +201,20 @@ export default class Donation extends Component {
       };
     });
   }
+
+/** 
+  onChangeDescription(e) {
+    const description = e.target.value;
+
+    this.setState(prevState => ({
+      currentDonation: {
+        ...prevState.currentDonation,
+        description: description
+      },
+      dirty: true
+    }));
+  }
+*/
 
   onChangePhoto(e) {
     const photo = e.target.value;
@@ -235,18 +247,6 @@ export default class Donation extends Component {
       currentDonation: {
         ...prevState.currentDonation,
         type: type
-      },
-      dirty: true
-    }));
-  }
-
-  onChangeDescription(e) {
-    const description = e.target.value;
-
-    this.setState(prevState => ({
-      currentDonation: {
-        ...prevState.currentDonation,
-        description: description
       },
       dirty: true
     }));

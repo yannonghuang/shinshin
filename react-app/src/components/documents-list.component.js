@@ -252,13 +252,13 @@ const DocumentsList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
-              <a href="#" onClick={() => updateStartAt(rowIdx)}>
+              {!readonly && AuthService.isVolunteer() &&<a href="#" onClick={() => updateStartAt(rowIdx)}>
                 <i className="badge badge-success mr-2">年份</i>
-              </a>    
+              </a>}    
 
-              <a href="#" onClick={() => updateDescription(rowIdx)}>
+              {!readonly && AuthService.isVolunteer() &&<a href="#" onClick={() => updateDescription(rowIdx)}>
                 <i className="badge badge-success mr-2">说明</i>
-              </a>                           
+              </a>}                           
 {/*
               {(documentsRef.current[rowIdx].mimetype.startsWith('image') ||
                 documentsRef.current[rowIdx].mimetype.indexOf('pdf') > 0 ) && (

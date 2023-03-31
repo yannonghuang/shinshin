@@ -1,17 +1,17 @@
 //import React, { Component } from "react";
-import React, { Component, createRef } from "react"; //For react component
+import React, { Component } from "react"; //For react component
 //import 'bootstrap/dist/css/bootstrap.min.css';
 //import {Tabs, Tab} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import $ from "jquery"; //Load jquery
+//import $ from "jquery"; //Load jquery
 import { Link } from "react-router-dom";
 import Select from 'react-select';
 
 import YearPicker from 'react-single-year-picker';
 
-import ResponsesList from './responses-list.component.js';
+//import ResponsesList from './responses-list.component.js';
 import DossiersList from './dossiers-list.component.js';
 import ProjectDataService from "../services/project.service";
 import DossierDataService from "../services/dossier.service";
@@ -160,7 +160,7 @@ export default class Project extends Component {
   display(schoolId) {
     if (this.state.schools) {
       for (var i = 0; i < this.state.schools.length; i++) {
-        if (this.state.schools[i].value == schoolId)
+        if (this.state.schools[i].value === schoolId)
           return this.state.schools[i];
       }
       return [];
@@ -170,7 +170,7 @@ export default class Project extends Component {
   displayName(schoolId) {
     if (this.state.schools) {
       for (var i = 0; i < this.state.schools.length; i++) {
-        if (this.state.schools[i].value == schoolId)
+        if (this.state.schools[i].value === schoolId)
           return this.state.schools[i].label ? this.state.schools[i].label : '学校名';
       }
       return '';

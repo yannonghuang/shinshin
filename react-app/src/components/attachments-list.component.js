@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 import AttachmentDataService from "../services/attachment.service";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
 
 import { useState, useEffect, useMemo, useRef } from "react";

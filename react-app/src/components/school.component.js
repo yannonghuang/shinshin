@@ -5,9 +5,9 @@ import React, { Component, createRef } from "react"; //For react component
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import $ from "jquery"; //Load jquery
+//import $ from "jquery"; //Load jquery
 import { Link } from "react-router-dom";
-import Divider from '@material-ui/core/Divider';
+//import Divider from '@material-ui/core/Divider';
 import Select from 'react-select';
 
 import AuthService from "./../services/auth.service";
@@ -22,7 +22,7 @@ import SchoolDataService from "../services/school.service";
 import SurveyDataService from "../services/survey.service";
 import DocumentDataService from "../services/document.service";
 //import SchoolDetails from './collapsible-school.component';
-import defaultPhoto from '../defaultPhoto.jpg';
+//import defaultPhoto from '../defaultPhoto.jpg';
 
 import YearPicker from 'react-single-year-picker';
 
@@ -221,7 +221,7 @@ export default class School extends Component {
   display(userId) {
     if (this.state.users) {
       for (var i = 0; i < this.state.users.length; i++) {
-        if (this.state.users[i].value == userId)
+        if (this.state.users[i].value === userId)
           return this.state.users[i];
       }
       return [];
@@ -231,7 +231,7 @@ export default class School extends Component {
   displayName(userId) {
     if (this.state.users) {
       for (var i = 0; i < this.state.users.length; i++) {
-        if (this.state.users[i].value == userId)
+        if (this.state.users[i].value === userId)
           return this.state.users[i].label ? this.state.users[i].label : '中文名';
       }
       return '';

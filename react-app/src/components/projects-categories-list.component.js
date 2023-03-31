@@ -1,15 +1,15 @@
-import React, { Component } from "react";
+import React from "react";
 import ProjectDataService from "../services/project.service";
-import SchoolDataService from "../services/school.service";
+//import SchoolDataService from "../services/school.service";
 import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
 
-import { useState, useEffect, useMemo, useRef, useCallback } from "react";
-import { useTable, useSortBy, useFlexLayout } from "react-table";
+import { useState, useEffect, useMemo, useRef } from "react";
+import { useTable, useSortBy } from "react-table";
 
 import YearPicker from 'react-single-year-picker';
 
-import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
+import { isMobile } from 'react-device-detect';
 
 import AuthService from "./../services/auth.service";
 import FormDataService from "../services/form.service";

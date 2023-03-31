@@ -1,19 +1,19 @@
-import React, { Component } from "react";
+import React from "react";
 import SchoolDataService from "../services/school.service";
 import ProjectDataService from "../services/project.service";
 import { Link } from "react-router-dom";
 
-import Pagination from "@material-ui/lab/Pagination";
+//import Pagination from "@material-ui/lab/Pagination";
 
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useTable, useSortBy } from "react-table";
 
 import AuthService from "../services/auth.service";
-import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
+import { isMobile } from 'react-device-detect';
 
 import * as echarts from 'echarts';
-import { chinaMapConfig } from "./config";
-import { geoJson } from "./geojson.js";
+import { chinaMapConfig } from "../geo/config";
+import { geoJson } from "../geo/geojson.js";
 
 const RegionsList = (props) => {
 
@@ -40,11 +40,12 @@ const RegionsList = (props) => {
   const [pageSize, setPageSize] = useState(5);
 
   const pageSizes = [5, 10, 20];
-
+/**
   const onChangeSearchOriginalname = (e) => {
     const searchOriginalname = e.target.value;
     setSearchOriginalname(searchOriginalname);
   };
+*/
 
   const getRequestParams = (page, pageSize) => {
     let params = {};
@@ -197,10 +198,12 @@ const RegionsList = (props) => {
   },
   useSortBy);
 
+/**
   const findByOriginalname = () => {
     setPage(1);
     retrieveRegions();
   };
+*/
 
   const handlePageChange = (event, value) => {
     setPage(value);

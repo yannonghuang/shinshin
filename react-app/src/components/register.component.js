@@ -286,7 +286,7 @@ export default class Register extends Component {
   display(schoolId) {
     if (this.state.schools) {
       for (var i = 0; i < this.state.schools.length; i++) {
-        if (this.state.schools[i].value == schoolId)
+        if (this.state.schools[i].value === schoolId)
           return this.state.schools[i];
       }
       return [];
@@ -296,7 +296,7 @@ export default class Register extends Component {
   displayName(schoolId) {
     if (this.state.schools) {
       for (var i = 0; i < this.state.schools.length; i++) {
-        if (this.state.schools[i].value == schoolId)
+        if (this.state.schools[i].value === schoolId)
           return this.state.schools[i].label ? this.state.schools[i].label : '学校名';
       }
       return '';

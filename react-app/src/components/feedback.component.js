@@ -2,9 +2,9 @@
 import FeedbackDataService from "../services/feedback.service";
 import QuestionaireDataService from "../services/questionaire.service";
 //import AttachmentsList from './collapsible-attachments-list.component.js';
-import AttachmentsList from './attachments-list.component.js';
+//import AttachmentsList from './attachments-list.component.js';
 import SchoolDataService from "../services/school.service";
-import SurveyDataService from "../services/survey.service";
+//import SurveyDataService from "../services/survey.service";
 import AuthService from "./../services/auth.service";
 //import TheCollapsible from './collapsible-attachments-list.component';
 import ProjectDataService from "../services/project.service";
@@ -13,7 +13,7 @@ import $ from "jquery"; //Load jquery
 import React, { Component, createRef } from "react"; //For react component
 //import ReactDOM from "react-dom";
 import Select from 'react-select';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+//import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { Link } from "react-router-dom";
 
 window.jQuery = $; //JQuery alias

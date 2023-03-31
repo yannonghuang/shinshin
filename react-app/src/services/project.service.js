@@ -245,7 +245,7 @@ class ProjectDataService {
     }
 
     const order = (line, header = false) => {
-      if (!line || line.trim().length == 0) return "";
+      if (!line || line.trim().length === 0) return "";
 
       const column = line.split(',');
       //if (column.length == 0)
@@ -301,7 +301,7 @@ class ProjectDataService {
 
   getCategory = (pCategoryId) => {
     for (var i = 0; i < this.PROJECT_CATEGORIES_ID.length; i++)
-      if (this.PROJECT_CATEGORIES_ID[i].id == pCategoryId)
+      if (this.PROJECT_CATEGORIES_ID[i].id === pCategoryId)
         return this.PROJECT_CATEGORIES_ID[i].name;
 
     return "无";
@@ -310,7 +310,7 @@ class ProjectDataService {
   getIndex = (pCategoryId) => {
     let result = 0;
     for (var i = 0; i < this.PROJECT_CATEGORIES_ID.length; i++)
-      if (this.PROJECT_CATEGORIES_ID[i].id == pCategoryId)
+      if (this.PROJECT_CATEGORIES_ID[i].id === pCategoryId)
         return result;
       else
         result++;

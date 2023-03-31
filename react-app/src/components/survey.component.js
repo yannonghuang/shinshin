@@ -1,11 +1,11 @@
 //import React, { Component } from "react";
-import React, { Component, createRef } from "react"; //For react component
+import React, { Component } from "react"; //For react component
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import $ from "jquery"; //Load jquery
+//import $ from "jquery"; //Load jquery
 import { Link } from "react-router-dom";
-import Divider from '@material-ui/core/Divider';
+//import Divider from '@material-ui/core/Divider';
 
 import Select from 'react-select';
 
@@ -15,7 +15,7 @@ import SchoolDataService from "../services/school.service";
 import DocumentDataService from "../services/document.service";
 import AuthService from "../services/auth.service";
 
-import YearPicker from 'react-single-year-picker';
+//import YearPicker from 'react-single-year-picker';
 
 export default class Survey extends Component {
   constructor(props) {
@@ -175,7 +175,7 @@ export default class Survey extends Component {
   displayUser(userId) {
     if (this.state.users) {
       for (var i = 0; i < this.state.users.length; i++) {
-        if (this.state.users[i].value == userId)
+        if (this.state.users[i].value === userId)
           return this.state.users[i];
       }
       return [];
@@ -185,7 +185,7 @@ export default class Survey extends Component {
   displayNameUser(userId) {
     if (this.state.users) {
       for (var i = 0; i < this.state.users.length; i++) {
-        if (this.state.users[i].value == userId)
+        if (this.state.users[i].value === userId)
           return this.state.users[i].label ? this.state.users[i].label : '中文名';
       }
       return '';
@@ -195,7 +195,7 @@ export default class Survey extends Component {
   displayNameSchool(schoolId) {
     if (this.state.schools) {
       for (var i = 0; i < this.state.schools.length; i++) {
-        if (this.state.schools[i].value == schoolId)
+        if (this.state.schools[i].value === schoolId)
           return this.state.schools[i].label ? this.state.schools[i].label : '学校名';
       }
       return '';
@@ -310,7 +310,7 @@ export default class Survey extends Component {
   display(schoolId) {
     if (this.state.schools) {
       for (var i = 0; i < this.state.schools.length; i++) {
-        if (this.state.schools[i].value == schoolId)
+        if (this.state.schools[i].value === schoolId)
           return this.state.schools[i];
       }
       return [];

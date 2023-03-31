@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import FormDataService from "../services/form.service";
 import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
@@ -370,10 +370,12 @@ const FormsList = (props) => {
   useFlexLayout,
   useSortBy);
 
+  /**
   const findByTitle = () => {
     setPage(1);
     retrieveForms();
   };
+  */
 
   const handlePageChange = (event, value) => {
     setPage(value);

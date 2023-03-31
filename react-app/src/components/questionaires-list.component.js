@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import QuestionaireDataService from "../services/questionaire.service";
 import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
@@ -415,10 +415,12 @@ const QuestionairesList = (props) => {
   useFlexLayout,
   useSortBy);
 
+/**
   const findByTitle = () => {
     setPage(1);
     retrieveQuestionaires();
   };
+*/
 
   const handlePageChange = (event, value) => {
     setPage(value);

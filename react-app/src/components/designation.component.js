@@ -1,24 +1,24 @@
 
-import React, { Component, createRef } from "react"; //For react component
+import React, { Component } from "react"; //For react component
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+//import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import $ from "jquery"; //Load jquery
+//import $ from "jquery"; //Load jquery
 import { Link } from "react-router-dom";
 import Select from 'react-select';
-import Input from "react-validation/build/input";
+//import Input from "react-validation/build/input";
 import { isEmail } from "validator";
 
 import YearPicker from 'react-single-year-picker';
 
-import ResponsesList from './responses-list.component.js';
-import DossiersList from './dossiers-list.component.js';
+//import ResponsesList from './responses-list.component.js';
+//import DossiersList from './dossiers-list.component.js';
 import DesignationDataService from "../services/designation.service";
 import ProjectDataService from "../services/project.service";
 import DonationDataService from "../services/donation.service";
-import DossierDataService from "../services/dossier.service";
-import SchoolDataService from "../services/school.service";
+//import DossierDataService from "../services/dossier.service";
+//import SchoolDataService from "../services/school.service";
 import AuthService from "./../services/auth.service";
 
 const required = value => {
@@ -54,7 +54,7 @@ export default class Designation extends Component {
 
     this.onChangePhoto = this.onChangePhoto.bind(this);
 
-    this.onChangeDescription = this.onChangeDescription.bind(this);
+    //this.onChangeDescription = this.onChangeDescription.bind(this);
 
     this.getDesignation = this.getDesignation.bind(this);
 
@@ -147,7 +147,7 @@ export default class Designation extends Component {
   displayDonation(donationId) {
     if (this.state.donations) {
       for (var i = 0; i < this.state.donations.length; i++) {
-        if (this.state.donations[i].value == donationId)
+        if (this.state.donations[i].value === donationId)
           return this.state.donations[i];
       }
       return [];
@@ -157,7 +157,7 @@ export default class Designation extends Component {
   displayNameDonation(donationId) {
     if (this.state.donations) {
       for (var i = 0; i < this.state.donations.length; i++) {
-        if (this.state.donations[i].value == donationId)
+        if (this.state.donations[i].value === donationId)
           return this.state.donations[i].label ? this.state.donations[i].label : '指定捐款来源';
       }
       return '指定捐款来源';
@@ -213,7 +213,7 @@ export default class Designation extends Component {
   display(projectId) {
     if (this.state.projects) {
       for (var i = 0; i < this.state.projects.length; i++) {
-        if (this.state.projects[i].value == projectId)
+        if (this.state.projects[i].value === projectId)
           return this.state.projects[i];
       }
       return [];
@@ -223,7 +223,7 @@ export default class Designation extends Component {
   displayName(projectId) {
     if (this.state.projects) {
       for (var i = 0; i < this.state.projects.length; i++) {
-        if (this.state.projects[i].value == projectId)
+        if (this.state.projects[i].value === projectId)
           return this.state.projects[i].label ? this.state.projects[i].label : '指定学校项目';
       }
       return '指定学校项目';
@@ -306,6 +306,20 @@ export default class Designation extends Component {
     });
   }
 
+/** 
+  onChangeDescription(e) {
+    const description = e.target.value;
+
+    this.setState(prevState => ({
+      currentDesignation: {
+        ...prevState.currentDesignation,
+        description: description
+      },
+      dirty: true
+    }));
+  }
+*/
+
   onChangePhoto(e) {
     const photo = e.target.value;
 
@@ -318,17 +332,7 @@ export default class Designation extends Component {
     }));
   }
 
-  onChangeDescription(e) {
-    const description = e.target.value;
 
-    this.setState(prevState => ({
-      currentDesignation: {
-        ...prevState.currentDesignation,
-        description: description
-      },
-      dirty: true
-    }));
-  }
 
   onChangePCategoryId(e) {
     //const pCategoryId = e.target.selectedIndex; //e.target.value;

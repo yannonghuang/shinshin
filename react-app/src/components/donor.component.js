@@ -1,22 +1,22 @@
 
-import React, { Component, createRef } from "react"; //For react component
+import React, { Component } from "react"; //For react component
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+//import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import $ from "jquery"; //Load jquery
-import { Link } from "react-router-dom";
-import Select from 'react-select';
-import Input from "react-validation/build/input";
+//import $ from "jquery"; //Load jquery
+//import { Link } from "react-router-dom";
+//import Select from 'react-select';
+//import Input from "react-validation/build/input";
 import { isEmail } from "validator";
 
-import YearPicker from 'react-single-year-picker';
+//import YearPicker from 'react-single-year-picker';
 
-import ResponsesList from './responses-list.component.js';
-import DossiersList from './dossiers-list.component.js';
+//import ResponsesList from './responses-list.component.js';
+//import DossiersList from './dossiers-list.component.js';
 import DonorDataService from "../services/donor.service";
-import DossierDataService from "../services/dossier.service";
-import SchoolDataService from "../services/school.service";
+//import DossierDataService from "../services/dossier.service";
+//import SchoolDataService from "../services/school.service";
 import ProjectDataService from "../services/project.service";
 import AuthService from "./../services/auth.service";
 
@@ -49,11 +49,10 @@ export default class Donor extends Component {
     this.onChangePhone = this.onChangePhone.bind(this);
     this.onChangeAddress = this.onChangeAddress.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
-    this.onChangeDescription = this.onChangeDescription.bind(this);
 
     this.onChangePhoto = this.onChangePhoto.bind(this);
 
-    this.onChangeDescription = this.onChangeDescription.bind(this);
+    //this.onChangeDescription = this.onChangeDescription.bind(this);
 
     this.getDonor = this.getDonor.bind(this);
 
@@ -77,7 +76,6 @@ export default class Donor extends Component {
         phone: '',
         address: '',
         description: '',
-        description: "",
 
         designations: null
       },
@@ -181,6 +179,20 @@ export default class Donor extends Component {
     });
   }
 
+/**
+  onChangeDescription(e) {
+    const description = e.target.value;
+
+    this.setState(prevState => ({
+      currentDonor: {
+        ...prevState.currentDonor,
+        description: description
+      },
+      dirty: true
+    }));
+  }
+*/
+
   onChangeAddress(e) {
     const address = e.target.value;
 
@@ -206,19 +218,6 @@ export default class Donor extends Component {
       dirty: true
     }));
   }
-
-  onChangeDescription(e) {
-    const description = e.target.value;
-
-    this.setState(prevState => ({
-      currentDonor: {
-        ...prevState.currentDonor,
-        description: description
-      },
-      dirty: true
-    }));
-  }
-
 
   getDonor(id) {
     DonorDataService.get(id)
@@ -256,24 +255,22 @@ export default class Donor extends Component {
   }
 
   newDonor() {
-  this.setState(prevState => ({
-    currentDonor: {
-      ...prevState.currentDonor,
+    this.setState(prevState => ({
+      currentDonor: {
+        ...prevState.currentDonor,
 
-      id: null,
-      name: "",
-      donor: '',
-      email: '',
-      phone: '',
-      address: '',
-      description: '',
-      description: "",
-    },
-    photo: null,
-    file: null,
-    submitted: false
-  }));
-
+        id: null,
+        name: "",
+        donor: '',
+        email: '',
+        phone: '',
+        address: '',
+        description: '',
+      },
+      photo: null,
+      file: null,
+      submitted: false
+    }));
   }
 
   async saveDonor() {

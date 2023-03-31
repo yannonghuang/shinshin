@@ -4,7 +4,7 @@ import ProjectDataService from "../services/project.service";
 
 import $ from "jquery"; //Load jquery
 import React, { Component, createRef } from "react"; //For react component
-import ReactDOM from "react-dom";
+//import ReactDOM from "react-dom";
 
 import YearPicker from 'react-single-year-picker';
 

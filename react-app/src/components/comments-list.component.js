@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import CommentDataService from "../services/comment.service";
 import AuthService from "../services/auth.service";
 
@@ -210,6 +210,7 @@ const CommentsList = (props) => {
     []
   );
 
+/**
   const defaultColumn = React.useMemo(
     () => ({
       minWidth: 30,
@@ -218,6 +219,7 @@ const CommentsList = (props) => {
     }),
     []
   );
+*/
 
   const {
     getTableProps,

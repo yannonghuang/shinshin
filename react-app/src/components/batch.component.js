@@ -1,14 +1,14 @@
-import React, { Component, createRef } from "react";
+import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+//import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import $ from "jquery"; //Load jquery
-import { Link } from "react-router-dom";
-import Divider from '@material-ui/core/Divider';
-import Select from 'react-select';
+//import $ from "jquery"; //Load jquery
+//import { Link } from "react-router-dom";
+//import Divider from '@material-ui/core/Divider';
+//import Select from 'react-select';
 
-import AuthService from "./../services/auth.service";
-import UserDataService from "../services/auth.service";
+//import AuthService from "./../services/auth.service";
+//import UserDataService from "../services/auth.service";
 
 import BatchDataService from "../services/batch.service";
 

@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Switch, Route, Link, Redirect, withRouter } from "react-router-dom";
+import React, { Component, Suspense } from "react";
+import { Switch, Route, Link, withRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'bootstrap/dist/js/bootstrap.min.js'
 import "@fortawesome/fontawesome-free/css/all.css";
@@ -20,7 +20,7 @@ import SurveysList from "./components/surveys-list.component";
 import School from "./components/school.component";
 import SchoolsList from "./components/schools-list.component";
 import DocumentsList from "./components/documents-list.component";
-import RegionsList from "./components/regions-list.component";
+
 import CommentsList from "./components/comments-list.component";
 import LogsList from "./components/logs-list.component";
 
@@ -30,7 +30,7 @@ import ProjectsList from "./components/projects-list.component";
 import ProjectsByCategoriesList from "./components/projects-categories-list.component";
 import DossiersList from "./components/dossiers-list.component";
 
-import AwardDataService from "./services/award.service";
+//import AwardDataService from "./services/award.service";
 import Award from "./components/award.component";
 import AwardsList from "./components/awards-list.component";
 import MaterialsList from "./components/materials-list.component";
@@ -58,29 +58,32 @@ import UsersList from "./components/users-list.component";
 import AuthService from "./services/auth.service";
 import AccessControlService from "./services/timer.service";
 
-import DonorDataService from "./services/donor.service";
+//import DonorDataService from "./services/donor.service";
 import Donor from "./components/donor.component";
 import DonorsList from "./components/donors-list.component";
 
-import DesignationDataService from "./services/designation.service";
+//import DesignationDataService from "./services/designation.service";
 import Designation from "./components/designation.component";
 import DesignationsList from "./components/designations-list.component";
 
-import DonationDataService from "./services/donation.service";
+//import DonationDataService from "./services/donation.service";
 import Donation from "./components/donation.component";
 import DonationsList from "./components/donations-list.component";
 
-import BatchDataService from "./services/batch.service";
+//import BatchDataService from "./services/batch.service";
 import Batch from "./components/batch.component";
 
 import Reset from "./components/reset.component";
 import Login from "./components/login.component";
 import Register from "./components/register.component";
-import Home from "./components/home.component";
+//import Home from "./components/home.component";
 import Profile from "./components/profile.component";
 //import BoardUser from "./components/board-user.component";
 //import BoardModerator from "./components/board-moderator.component";
 //import BoardAdmin from "./components/board-admin.component";
+
+//import RegionsList from "./components/regions-list.component";
+const RegionsList = React.lazy(() => import("./components/regions-list.component"));
 
 const jwt = require("jsonwebtoken");
 
@@ -472,8 +475,11 @@ class App extends Component {
 
 
             <Route exact path={["/regions", "/regionsDistribution", "/regionsDistNav"]} component={RegionsList} >
+              <Suspense fallback={<span>Loading...</span>}>
                 <AccessControlService ComposedClass={RegionsList} />
+              </Suspense> 
             </Route>
+           
             <Route exact path={["/schools", "/schools/region/:region"]} >
                 <AccessControlService ComposedClass={SchoolsList} />
             </Route>
