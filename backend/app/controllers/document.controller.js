@@ -87,7 +87,7 @@ exports.findAll2 = (req, res) => {
   var docCategory = req.body.docCategory;
   const orderby = req.body.orderby;
   
-  
+
   //const { page, size, originalname } = req.query;
   var condition = {
         [Op.and]: [
@@ -95,7 +95,16 @@ exports.findAll2 = (req, res) => {
               ? {[Op.or]: [{ originalname: { [Op.like]: `%${originalname}%` } }, { description: { [Op.like]: `%${originalname}%` } }]}
               //? { originalname: { [Op.like]: `%${originalname}%` } } 
               : null,
-            startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('startAt')), `${startAt}`) } } : null,            
+            //startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('startAt')), `${startAt}`) } } : null,
+            startAt 
+              ? {[Op.or] : [
+                { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('startAt')), `${startAt}`) } }, 
+                {[Op.and] : [
+                  { startAt: null }, 
+                  { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('createdAt')), `${startAt}`) } }
+                ]} 
+              ]} 
+              : null,
             schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null,
             docCategory
               ? docCategory.startsWith('!')
