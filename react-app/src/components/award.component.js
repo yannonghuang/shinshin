@@ -766,7 +766,7 @@ export default class Award extends Component {
                 <div class="form-group">
                 <label htmlFor="name">{currentAward.xr && '向荣支持'}荣誉名称</label>
                 <textarea
-                readonly={(this.state.readonly || !AuthService.isAdmin()) ? "" : false}
+                readonly={this.state.readonly ? "" : false}
                 cols="26"
                 class="form-control"
                 id="name"

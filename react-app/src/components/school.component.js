@@ -950,7 +950,6 @@ export default class School extends Component {
 
                 {(this.state.readonly && AuthService.getCurrentUser()) && (
                 <div class="box">
-
                   {AuthService.getCurrentUser().schoolId &&
                     <a href={"/forms"} class="btn btn-primary">项目申请</a>}
                   <a href={"/users/school/" + currentSchool.id} class="btn btn-primary">通讯录</a>
@@ -968,11 +967,15 @@ export default class School extends Component {
                     >
                       编辑
                     </a>}
-
-                  <a target="_blank" href={"/addA?schoolId=" + currentSchool.id} class="btn btn-primary">新增奖项</a>
                 </div>
                 )}
-
+                {(AuthService.getCurrentUser() && 
+                  ((this.state.readonly && AuthService.getCurrentUser().schoolId) ||
+                  (!this.state.readonly && !AuthService.getCurrentUser().schoolId))
+                ) && (
+                  <a target="_blank" href={"/addA?schoolId=" + currentSchool.id} class="btn btn-primary">新增奖项</a>
+                )}
+                
               </div>
             </div>
 
