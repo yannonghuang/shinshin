@@ -1527,6 +1527,7 @@ export default class School extends Component {
               {AuthService.isVolunteer() && <TabPanel>
                 <CommentsList
                   schoolId = {currentSchool.id}
+                  readonly = {this.state.readonly}
                 />
               </TabPanel>}
               {AuthService.isVolunteer() && currentSchool.xr ? (<TabPanel>

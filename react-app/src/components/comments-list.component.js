@@ -272,7 +272,7 @@ const CommentsList = (props) => {
   return (
     <div className="list row">
 
-      <div class="form-group col-sm-12" >
+      {!readonly && <div class="form-group col-sm-12" >
         <label htmlFor="text"><h4>评论</h4></label>
         <textarea
           rows="4"
@@ -285,7 +285,7 @@ const CommentsList = (props) => {
         <button className="btn btn-primary badge-success mb-5" onClick={save}>
           提交
         </button>
-      </div>
+      </div>}
 
       <div class="w-100"></div>
 
