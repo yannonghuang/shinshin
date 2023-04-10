@@ -301,7 +301,7 @@ class ProjectDataService {
 
   getCategory = (pCategoryId) => {
     for (var i = 0; i < this.PROJECT_CATEGORIES_ID.length; i++)
-      if (this.PROJECT_CATEGORIES_ID[i].id === pCategoryId)
+      if (this.PROJECT_CATEGORIES_ID[i].id == pCategoryId)
         return this.PROJECT_CATEGORIES_ID[i].name;
 
     return "无";
