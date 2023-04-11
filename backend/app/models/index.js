@@ -230,6 +230,19 @@ db.SCHOOL_IMPORTANT_FIELDS = [
   {name: "teachersCount", label: "教师人数"},
   {name: "classesCount", label: "总班级数"},
   {name: "gradesCount", label: "总年级数"},
+  {name: "stage", label: "学校阶段"},
+  {name: "status", label: "学校状态"},
+  {name: "request", label: "学校需求"},
+  {name: "code", label: "学校编号"},
+  {name: "name", label: "欣欣学校名称"},
+  {name: "schoolBoardRegisteredName", label: "教育局注册校名"},
+  {name: "schoolBoard", label: "教育局名称"},
+  {name: "city", label: "市"},
+  {name: "county", label: "区/县"},
+  {name: "community", label: "乡/镇"},
+  {name: "address", label: "地址"},
+  {name: "phone", label: "学校电话"},
+  {name: "email", label: "学校电子邮箱"},
 ];
 
 /**
