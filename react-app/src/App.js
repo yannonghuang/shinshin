@@ -270,10 +270,8 @@ class App extends Component {
                 <div class="dropdown-divider" hidden={!AuthService.isLogin()}></div>
                 <a class="dropdown-item" href={"/documents"} hidden={!AuthService.isLogin()}>学校文档</a>
                 <a class="dropdown-item" href={"/comments"} hidden={!AuthService.isLogin()}>留言</a>
-*/}
-
                 <a class="dropdown-item" href={"/logs"} hidden={!AuthService.isLogin()}>更新列表</a>
-
+*/}
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href={"/awards"} hidden={!AuthService.isLogin()}>奖项列表</a>
               </div>

@@ -147,9 +147,9 @@ const LogsList = (props) => {
   const onClearSearch = (e) => {
     setSearchText("");
     setSearchField("");
-    setSchoolId(null);
+    //setSchoolId(null);
     setSearchCreatedAt("");
-    setSearchRegion("");
+    //setSearchRegion("");
 
     setOrderby([]);
 
@@ -249,7 +249,7 @@ const LogsList = (props) => {
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download',
-                'school_change_logs.csv'
+                'school(' + (school ? school.code : '') + ')_change_logs.csv'
         );
         document.body.appendChild(link);
         link.click();
@@ -346,29 +346,6 @@ const LogsList = (props) => {
             </div>
           );
         },
-      },
-      {
-        Header: "学校",
-        accessor: 'school.code',
-        Cell: (props) => {
-          const rowIdx = props.row.id;
-          return (
-            <div>
-
-              {logsRef.current[rowIdx].school && <Link
-                to={"/schoolsView/" + logsRef.current[rowIdx].schoolId}
-                className="badge badge-success"
-              >
-                {logsRef.current[rowIdx].school.code}
-              </Link>}
-
-            </div>
-          );
-        },
-      },
-      {
-        Header: "地区",
-        accessor: 'school.region'
       },
       {
         Header: "修改人",
@@ -511,12 +488,16 @@ const LogsList = (props) => {
             ))}
           </select>
 
+          <button
+              className="btn btn-primary ml-2 mb-2"
+              type="button"
+              onClick={onClearSearch}
+            >
+              清空
+            </button>
         </div>
-
-        <div className="row">
-
-
 {/*
+        <div className="row">
           <input
             type="text"
             className="form-control col-sm-2 ml-2"
@@ -524,7 +505,7 @@ const LogsList = (props) => {
             value={searchText}
             onChange={onChangeSearchText}
           />
-*/}
+
 
           <select
             className="form-control col-sm-2 ml-3"
@@ -548,19 +529,9 @@ const LogsList = (props) => {
             name="schoolId"
             filterOption={customFilter}
             options={schools}
-          />
-
-          <div>
-            <button
-              className="btn btn-primary ml-2 mb-2"
-              type="button"
-              onClick={onClearSearch}
-            >
-              清空
-            </button>
-          </div>
+          />         
         </div>
-
+*/} 
         <div className="row mb-4 ml-1">
           <div hidden={isMobile}>
             <button
