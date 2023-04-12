@@ -6,6 +6,7 @@ const Survey = db.surveys;
 const Response = db.responses;
 const Project = db.projects;
 const Document = db.documents;
+const Comment = db.comments;
 const Op = db.Sequelize.Op;
 const REGIONS = db.REGIONS;
 const SCHOOL_STAGES = db.SCHOOL_STAGES;
@@ -440,6 +441,37 @@ const setLatestProjectYears = async (schools) => {
   return result;
 };
 
+const setComments = async (schools) => {
+  let commentsR = await Comment.findAll({ 
+    attributes: [
+      'schoolId',
+      [db.Sequelize.fn("GROUP_CONCAT", db.Sequelize.literal(`text SEPARATOR ''`)), "schoolComments"],
+      //[db.Sequelize.fn("GROUP_CONCAT", db.Sequelize.col("text"), '-'), "comments"],
+    ],    
+    group: 'schoolId'
+  });
+
+  //[sequelize.fn('GROUP_CONCAT', sequelize.literal(`module_name SEPARATOR '->'`)), 'module_name']],
+
+  result = [];
+  for (i = 0; i < schools.length; i++) {
+    found = false
+    schoolClone = JSON.parse(JSON.stringify(schools[i]))
+    for (j = 0; j < commentsR.length; j++) {
+      if (schools[i].id === commentsR[j].schoolId) {
+        commentClone = JSON.parse(JSON.stringify(commentsR[j]))
+        const {schoolComments, ...others} = commentClone
+        result.push({schoolComments, ...schoolClone})
+        found = true
+        continue;
+      }
+    }
+    if (!found)
+      result.push({ schoolComments: '', ...schoolClone})
+  }
+  return result;
+};
+
 exports.findAll2 = async (req, res) => {
   const {condition, orderbyObject, having} = await buildFilters(req);
 
@@ -572,7 +604,11 @@ exports.findExport = async (req, res) => {
     order: orderbyObject
   })
   .then(async schools => {
-      res.send(await setLatestProjectYears(schools));
+      s = await setLatestProjectYears(schools)
+      if (detailAttributes && detailAttributes.length > 0)
+        s = await setComments(s)
+      res.send(s);
+      //res.send(await setLatestProjectYears(schools));
       //res.send(schools);
     })
   .catch(err => {

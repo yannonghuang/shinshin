@@ -711,6 +711,10 @@ const SchoolsList = (props) => {
         Header: "图书册数",
         accessor: "booksCount",
       },
+      {
+        Header: "评论",
+        accessor: "schoolComments",
+      },      
     ];
 
   const exportColumns = [...exportColumnsMain, ...exportColumnsDetail];
