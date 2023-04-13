@@ -461,13 +461,13 @@ const setComments = async (schools) => {
       if (schools[i].id === commentsR[j].schoolId) {
         commentClone = JSON.parse(JSON.stringify(commentsR[j]))
         const {schoolComments, ...others} = commentClone
-        result.push({schoolComments, ...schoolClone})
+        result.push({...schoolClone, schoolComments})
         found = true
         continue;
       }
     }
     if (!found)
-      result.push({ schoolComments: '', ...schoolClone})
+      result.push({ ...schoolClone, schoolComments: ''})
   }
   return result;
 };

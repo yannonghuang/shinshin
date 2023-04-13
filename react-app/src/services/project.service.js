@@ -176,7 +176,7 @@ class ProjectDataService {
     const EMPTY_OBJECTS = new Map();
 
     const flatten = (obj, path = '', newline = true) => {
-      if (obj === null) {
+      if (obj === null || obj.length === 0) {
         let empty = '';
         if (EMPTY_OBJECTS.get(path)) {
           for (var i = 0; i < EMPTY_OBJECTS.get(path).split(',').length - 1; i++) empty += ',';
