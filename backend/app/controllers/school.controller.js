@@ -443,15 +443,18 @@ const setLatestProjectYears = async (schools) => {
 
 const setComments = async (schools) => {
   let commentsR = await Comment.findAll({ 
+    include: [{
+      model: User,
+      attributes: [],
+      //required: true,
+    }],    
     attributes: [
       'schoolId',
-      [db.Sequelize.fn("GROUP_CONCAT", db.Sequelize.literal(`text SEPARATOR ''`)), "schoolComments"],
-      //[db.Sequelize.fn("GROUP_CONCAT", db.Sequelize.col("text"), '-'), "comments"],
+      [db.Sequelize.fn("GROUP_CONCAT", db.Sequelize.literal(`CONCAT('[', comment.createdAt, '; ', user.chineseName, '] ', text) SEPARATOR ''`)), "schoolComments"],
+      //[db.Sequelize.fn("GROUP_CONCAT", db.Sequelize.literal(`text SEPARATOR '\n'`)), "schoolComments"],
     ],    
     group: 'schoolId'
   });
-
-  //[sequelize.fn('GROUP_CONCAT', sequelize.literal(`module_name SEPARATOR '->'`)), 'module_name']],
 
   result = [];
   for (i = 0; i < schools.length; i++) {
