@@ -163,7 +163,7 @@ exports.promote = async (req, res) => {
 
     let document = {
       schoolId: project.schoolId,
-      docCategory: acceptedImageTypes.includes(dossier.mimetype) 
+      docCategory: acceptedImageTypes.includes(dossier.mimetype) || dossier.docCategory.includes("图片") || dossier.docCategory.includes("照片")
         ? '学校照片'
         : '项目文档',
 
