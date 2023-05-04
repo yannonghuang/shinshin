@@ -35,6 +35,11 @@ module.exports = function(app) {
     dossiers.findAllPublished
   );
 
+    // Promote Dossier with id 
+  app.post("/api/dossiersPromote/:id",
+    [authJwt.verifyToken],
+  dossiers.promote);
+
   // Retrieve a single Dossier with id
   app.get("/api/dossiers/:id",
     [authJwt.verifyToken],

@@ -1,5 +1,8 @@
 const db = require("../models");
 const Dossier = db.dossiers;
+const Project = db.projects;
+const Document = db.documents;
+const School = db.schools;
 const Op = db.Sequelize.Op;
 const fs = require('fs');
 const path = require("path");
@@ -136,6 +139,52 @@ exports.findAllPublished = (req, res) => {
     });
 };
 
+// Find a project dossier with an id to become a document for the corresponding school
+exports.promote = async (req, res) => {
+  const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png'];  
+
+  const id = req.params.id;
+
+  try {
+    let dossier = await Dossier.findByPk(id);
+    let project = await Project.findByPk(dossier.projectId);
+    let school = await School.findByPk(project.schoolId);
+
+    let dir = path.join(`${__dirname}/../../upload`, 'School', '' + school.code);
+
+    if (!fs.existsSync(dir)) {
+	  fs.mkdirSync(dir, {recursive: true});
+    }
+
+    const originalname = req.body.originalname ? req.body.originalname : dossier.originalname;
+
+    let filename = Date.now() + '-' + originalname;
+    fs.copyFileSync(dossier.path, path.join(dir, filename));
+
+    let document = {
+      schoolId: project.schoolId,
+      docCategory: acceptedImageTypes.includes(dossier.mimetype) 
+        ? '学校照片'
+        : '项目文档',
+
+      originalname: originalname, //dossier.originalname,
+      encoding: dossier.encoding,
+      mimetype: dossier.mimetype,
+      destination: dir, //path.resolve(dir), //dossier.destination,
+      filename: filename, //dossier.filename,
+      path: path.resolve(dir, filename) //dossier.path,
+    };
+
+    let data = await Document.create(document);
+
+    res.send(data);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      message: err.message || "Error promoting Dossier with id=" + id
+    });
+  }
+};
 
 // Find a single Dossier with an id
 exports.findOne = (req, res) => {

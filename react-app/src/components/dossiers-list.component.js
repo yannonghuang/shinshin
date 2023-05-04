@@ -102,6 +102,22 @@ const DossiersList = (props) => {
     props.history.push("/dossiers/" + id);
   };
 
+  const promote = (rowIndex) => {
+    const id = dossiersRef.current[rowIndex].id;
+
+    let originalname = prompt("请输入新文件名", "");
+    if (!originalname) return;
+
+    DossierDataService.promote(id, {originalname})
+      .then((response) => {
+        alert('项目附件成功升级为学校文档');
+      })
+      .catch((e) => {
+        alert('项目附件升级失败：' + JSON.stringify(e));
+        console.log(e);
+      });
+  };
+
   const deleteDossier = (rowIndex) => {
     const id = dossiersRef.current[rowIndex].id;
 
@@ -151,6 +167,9 @@ const DossiersList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
+              <a href="#" onClick={() => promote(rowIdx)}>
+                <i className="badge badge-success mr-2">存档</i>
+              </a>              
 {/*
               {(dossiersRef.current[rowIdx].mimetype.startsWith('image') ||
                 dossiersRef.current[rowIdx].mimetype.indexOf('pdf') > 0 ||

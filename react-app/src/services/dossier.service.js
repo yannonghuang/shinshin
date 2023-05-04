@@ -38,6 +38,10 @@ class DossierDataService {
       });
   }
 
+  promote(id, data) {
+    return http.post(`/dossiersPromote/${id}`, data, { headers: authHeader() });
+  }
+
   getDocCategories() {
     return http.get(`/dossiers/categories`, { headers: authHeader() });
   }
