@@ -44,6 +44,7 @@ export default class Project extends Component {
     this.onChangeDocFiles = this.onChangeDocFiles.bind(this);
     this.onChangeDocCategory = this.onChangeDocCategory.bind(this);
     this.onChangePCategoryId = this.onChangePCategoryId.bind(this);
+    this.onChangePSubCategoryId = this.onChangePSubCategoryId.bind(this);
 
     this.saveProject = this.saveProject.bind(this);
     this.newProject = this.newProject.bind(this);
@@ -64,7 +65,8 @@ export default class Project extends Component {
 
         docFiles: null, //[],
         docCategory: "",
-        pCategoryId: null
+        pCategoryId: null,
+        pSubCategoryId: null        
       },
       currentUser: null,
       schools: [],
@@ -290,6 +292,20 @@ export default class Project extends Component {
     });
   }
 
+  onChangePSubCategoryId(e) {
+    const pSubCategoryId = e.target.selectedIndex;
+
+    this.setState(function(prevState) {
+      return {
+        currentProject: {
+          ...prevState.currentProject,
+          pSubCategoryId: pSubCategoryId
+        },
+        dirty: true
+      };
+    });
+  }
+
   onChangeResponseId(e) {
     const responseId = e.target.value;
 
@@ -466,7 +482,8 @@ export default class Project extends Component {
       docCategory: "",
       description: "",
       startAt: new Date().getFullYear(), //null
-      pCategoryId: null
+      pCategoryId: null,
+      pSubCategoryId: null      
     },
 
     submitted: false
@@ -543,6 +560,7 @@ export default class Project extends Component {
       startAt: this.state.currentProject.startAt ? (this.state.currentProject.startAt + '-01-10') : null,
       xr: this.state.currentProject.xr,
       pCategoryId: this.state.currentProject.pCategoryId,
+      pSubCategoryId: this.state.currentProject.pSubCategoryId,      
     };
 
     try {
@@ -598,6 +616,7 @@ export default class Project extends Component {
       description: this.state.currentProject.description,
       startAt: this.state.currentProject.startAt ? (this.state.currentProject.startAt + '-01-10') : null,
       pCategoryId: this.state.currentProject.pCategoryId,
+      pSubCategoryId: this.state.currentProject.pSubCategoryId,      
     };
 
     try {
@@ -941,7 +960,7 @@ export default class Project extends Component {
 
                 <div class="w-100"></div>
 
-                <div className="form-group col-sm-12">
+                <div className="form-group col-sm-6">
                   <label htmlFor="pCategoryId">项目类型</label>
                   <select
                     disabled={this.state.readonly?"disabled":false}
@@ -956,6 +975,27 @@ export default class Project extends Component {
                     {this.state.pCategories.map((option, index) => (
                     <option value={option}>{option}</option>
                     ))}
+                  </select>
+                </div>
+
+                <div className="form-group col-sm-6">
+                  <label htmlFor="pSubCategoryId">项目子类型</label>
+                  <select
+                    disabled={this.state.readonly?"disabled":false}
+                    class="form-control"
+                    id="pSubCategoryId"
+                    required
+                    value={ProjectDataService.getSubCategory(currentProject.pCategoryId, currentProject.pSubCategoryId)}
+                    onChange={this.onChangePSubCategoryId}
+                    name="pSubCategoryId"
+                  >
+
+                    {ProjectDataService.getProjectSubCategories(currentProject.pCategoryId).map((option, index) => (
+                    <option value={option}>{option}</option>
+                    ))}
+                    <option value=''>
+                      --
+                    </option>                        
                   </select>
                 </div>
 

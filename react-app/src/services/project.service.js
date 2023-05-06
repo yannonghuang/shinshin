@@ -144,6 +144,7 @@ class ProjectDataService {
   }
 
   exportCSV = (obj, mapper, translator = null) => {
+    let associate = null;
 
     const render = (item) => {
       if (item === true) return '是';
@@ -281,7 +282,9 @@ class ProjectDataService {
     {id: 1, name: "新建校"},
     {id: 2, name: "设施改善"},
     {id: 3, name: "欣美乡村学校"},
-    {id: 4, name: "信息化教学设备"},
+    {id: 4, name: "信息化教学设备",
+      sub: ['电脑', '微机室']
+    },
     {id: 5, name: "图书项目"},
     {id: 6, name: "在线培训"},
     {id: 7, name: "暑期教师培训"},
@@ -296,6 +299,8 @@ class ProjectDataService {
     {id: 17, name: "欣乐成长"},
     // additional categories go here...
     {id: 18, name: "空中互动"},
+
+    // this is always the last one ...
     {id: 16, name: "其它"},
   ];
 
@@ -305,6 +310,28 @@ class ProjectDataService {
         return this.PROJECT_CATEGORIES_ID[i].name;
 
     return "无";
+  }
+
+  getSubCategory = (pCategoryId, pSubCategoryId) => {
+    for (var i = 0; i < this.PROJECT_CATEGORIES_ID.length; i++)
+      if (this.PROJECT_CATEGORIES_ID[i].id == pCategoryId)
+        if (this.PROJECT_CATEGORIES_ID[i].sub)
+          return this.PROJECT_CATEGORIES_ID[i].sub[pSubCategoryId];
+        else
+          return ''
+
+    return '';
+  }
+
+  getProjectSubCategories = (pCategoryId) => {
+    for (var i = 0; i < this.PROJECT_CATEGORIES_ID.length; i++)
+      if (this.PROJECT_CATEGORIES_ID[i].id == pCategoryId)
+        if (this.PROJECT_CATEGORIES_ID[i].sub) 
+          return this.PROJECT_CATEGORIES_ID[i].sub;
+        else 
+          return [];
+
+    return [];
   }
 
   getIndex = (pCategoryId) => {

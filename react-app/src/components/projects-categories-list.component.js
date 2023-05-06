@@ -23,6 +23,7 @@ const ProjectsByCategoriesList = (props) => {
   const [currentIndex, setCurrentIndex] = useState(-1);
 
   const [pCategoryId, setPCategoryId] = useState(props.match? props.match.params.pCategoryId : props.pCategoryId);
+  const [pSubCategoryId, setPSubCategoryId] = useState(props.match? props.match.params.pSubCategoryId : props.pSubCategoryId);
 
   const [canonical, setCanonical] = useState(window.location.pathname.includes('Canonical'));
 
@@ -73,6 +74,13 @@ const ProjectsByCategoriesList = (props) => {
       : categories.length;
 
     setPCategoryId(searchPCategoryId);
+    setPSubCategoryId(null);
+  };
+
+  const onChangeSearchPSubCategory = (e) => {
+    const searchPSubCategoryId = e.target.selectedIndex;
+
+    setPSubCategoryId(searchPSubCategoryId);
   };
 
   const onChangeSearchStartAt = (e) => {
@@ -97,6 +105,7 @@ const ProjectsByCategoriesList = (props) => {
     const select = document.getElementById('pCategoryId');
     select.value = 'all';
     setPCategoryId(categories.length);
+    setPSubCategoryId('');    
   }
 
   const getRequestParams = (exportFlag = false, refresh = false) => {
@@ -119,6 +128,10 @@ const ProjectsByCategoriesList = (props) => {
 
     if ((pCategoryId || pCategoryId === 0) && (pCategoryId !== categories.length))
       params["pCategoryId"] = pCategoryId;
+
+    if ((pSubCategoryId || pSubCategoryId === 0) && (pSubCategoryId !== ProjectDataService.getProjectSubCategories(pCategoryId).length))
+      params["pSubCategoryId"] = pSubCategoryId;
+
 
     if (searchName) {
       params["name"] = searchName;
@@ -225,7 +238,7 @@ const ProjectsByCategoriesList = (props) => {
     retrieveProjects();
   };
 
-  useEffect(search, [pageSize, searchName, searchStartAt, pCategoryId, searchApplied, orderby]);
+  useEffect(search, [pageSize, searchName, searchStartAt, pCategoryId, pSubCategoryId, searchApplied, orderby]);
   useEffect(retrieveProjects, [page]);
 
 
@@ -279,6 +292,19 @@ const ProjectsByCategoriesList = (props) => {
         },
       },
       {
+        Header: "项目子类型",
+        accessor: "pSubCategoryId",
+        disableSortBy: true,        
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+                {ProjectDataService.getSubCategory(projectsRef.current[rowIdx].pCategoryId, projectsRef.current[rowIdx].pSubCategoryId) /*categories[projectsRef.current[rowIdx].pCategoryId]*/}
+            </div>
+          );
+        },
+      },      
+      {
         Header: "项目名称",
         accessor: "name",
       },
@@ -292,6 +318,7 @@ const ProjectsByCategoriesList = (props) => {
               <Link
                 target = '_blank'
                 to={"/projectsByCategoryByStartAt/" + projectsRef.current[rowIdx].pCategoryId +
+                    "/" + projectsRef.current[rowIdx].pSubCategoryId +
                     "/" + projectsRef.current[rowIdx].startAt +
                     "/" + projectsRef.current[rowIdx].name +
                     "/" + projectsRef.current[rowIdx].formId
@@ -405,7 +432,7 @@ const ProjectsByCategoriesList = (props) => {
           <input
             type="text"
             readonly=""
-            className="form-control col-sm-1 ml-2"
+            className="form-control col-sm-2 ml-2"
             placeholder="年份"
             value={searchStartAt}
             id="searchStartAt"
@@ -433,6 +460,23 @@ const ProjectsByCategoriesList = (props) => {
             ))}
             <option value='all'>
             项目类型
+            </option>
+          </select>
+
+          <select
+            className="form-control col-sm-3 ml-2"
+            placeholder="...."
+            value={ ProjectDataService.getSubCategory(pCategoryId, pSubCategoryId) }
+            onChange={onChangeSearchPSubCategory}
+            id="pSubCategoryId"
+          >
+            {ProjectDataService.getProjectSubCategories(pCategoryId).map((option) => (
+            <option value={option}>
+            {option}
+            </option>
+            ))}
+            <option value=''>
+            项目子类型
             </option>
           </select>
 

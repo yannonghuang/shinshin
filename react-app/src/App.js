@@ -171,7 +171,7 @@ class App extends Component {
       <div>
         {this.state.pCategories.map((option, index) => {
           if (index > 0)
-            return <a class="dropdown-item" href={"/projects/categoryCanonical/" + ProjectDataService.PROJECT_CATEGORIES_ID[index].id }>{option}</a>
+            return <a class="dropdown-item" href={"/projects/categoryCanonical/" + ProjectDataService.PROJECT_CATEGORIES_ID[index].id}>{option}</a>
         })}
       </div>
     )
@@ -507,11 +507,11 @@ class App extends Component {
 
             <Route exact path={["/projects", "/projects/school/:schoolId",
                     "/projectsXR", "/projectsXR/school/:schoolId",
-                    "/projectsByCategoryByStartAt/:pCategoryId/:startAt/:name/:formId"]}
+                    "/projectsByCategoryByStartAt/:pCategoryId/:pSubCategoryId/:startAt/:name/:formId"]}
                 component={ProjectsList} >
                 <AccessControlService ComposedClass={ProjectsList} />
             </Route>
-            <Route exact path={["/projects/category/:pCategoryId", "/projects/categoryCanonical/:pCategoryId",
+            <Route exact path={["/projects/category/:pCategoryId/:pSubCategoryId", "/projects/categoryCanonical/:pCategoryId",
                             "/projects/allCategories", "/projects/allCategoriesCanonical"]}
                 component={ProjectsByCategoriesList} >
                 <AccessControlService ComposedClass={ProjectsByCategoriesList} />

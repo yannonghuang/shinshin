@@ -33,6 +33,7 @@ const ProjectsList = (props) => {
   const [formId, setFormId] = useState(props.match? props.match.params.formId : props.formId);
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
   const [pCategoryId, setPCategoryId] = useState(props.match? props.match.params.pCategoryId : props.pCategoryId);
+  const [pSubCategoryId, setPSubCategoryId] = useState(props.match? props.match.params.pSubCategoryId : props.pSubCategoryId);
   const [searchName, setSearchName] = useState(props.match? props.match.params.name : props.name);
 
   const [schoolDisplay, setSchoolDisplay] = useState(null);
@@ -133,6 +134,15 @@ const ProjectsList = (props) => {
       : categories.length;
 
     setPCategoryId(searchPCategoryId);
+    setPSubCategoryId(null);
+
+    setStartup(false);
+  };
+
+  const onChangeSearchPSubCategory = (e) => {
+    const searchPSubCategoryId = e.target.selectedIndex;
+
+    setPSubCategoryId(searchPSubCategoryId);
 
     setStartup(false);
   };
@@ -164,6 +174,7 @@ const ProjectsList = (props) => {
     const select = document.getElementById('pCategoryId');
     select.value = 'all';
     setPCategoryId(categories.length);
+    setPSubCategoryId(null);
   }
 
   const restoreRequestParams = (params) => {
@@ -181,7 +192,7 @@ const ProjectsList = (props) => {
     setSearchDesignated(params["designated"]);
     setXR(params["xr"]);
     setPCategoryId(params["pCategoryId"]);
-
+    setPSubCategoryId(params["pSubCategoryId"]);
   };
 
   const getRequestParams = (exportFlag, refresh = false) => {
@@ -260,6 +271,9 @@ const ProjectsList = (props) => {
 
     if ((pCategoryId || pCategoryId === 0) && (pCategoryId !== categories.length))
       params["pCategoryId"] = pCategoryId;
+
+    if (pSubCategoryId || pSubCategoryId === 0) 
+      params["pSubCategoryId"] = pSubCategoryId;
 
     if (!exportFlag)
       localStorage.setItem(REQUEST_PARAMS_KEY, JSON.stringify(params));
@@ -343,7 +357,12 @@ const ProjectsList = (props) => {
               : exportColumns,
           {
             header: '项目类型',
-            translate: (dataIndex) => {return ProjectDataService.getCategory(dataIndex)}
+            translate: (dataIndex) => {return ProjectDataService.getCategory(dataIndex)},
+            associate: {
+              pCategoryId,
+              header: '项目子类型',
+              translate: (pCategoryId, pSubCategoryId) => {return ProjectDataService.getSubCategory(pCategoryId, pSubCategoryId)}
+            }
           }
         );
 
@@ -371,7 +390,7 @@ const ProjectsList = (props) => {
     retrieveProjects();
   };
 
-  useEffect(search, [pageSize, orderby, searchCode, searchName, searchStartAt, searchRegion, pCategoryId, searchDesignated]);
+  useEffect(search, [pageSize, orderby, searchCode, searchName, searchStartAt, searchRegion, pCategoryId, pSubCategoryId, searchDesignated]);
   useEffect(retrieveProjects, [page]);
   useEffect(() => {retrieveProjects(true)}, []);
 
@@ -473,6 +492,19 @@ const ProjectsList = (props) => {
           );
         },
       },
+      {
+        Header: "项目子类型",
+        accessor: "pSubCategoryId",
+        disableSortBy: true,        
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+                {ProjectDataService.getSubCategory(projectsRef.current[rowIdx].pCategoryId, projectsRef.current[rowIdx].pSubCategoryId)}
+            </div>
+          );
+        },
+      },      
       {
         Header: "项目名称",
         accessor: "name",
@@ -646,7 +678,7 @@ const ProjectsList = (props) => {
     : [];
 
   const hiddenColumnsXR =
-    ["response.title", "status", "pCategoryId", "budget", "designationsCount"];
+    ["response.title", "status", "pCategoryId", "pSubCategoryId", "budget", "designationsCount"];
 
   hiddenColumns = xr
     ? [...hiddenColumns, ...hiddenColumnsXR]
@@ -760,6 +792,23 @@ const ProjectsList = (props) => {
             <option value='all'>
             项目类型
             </option>
+          </select>
+
+          <select
+            className="form-control col-sm-3 ml-2"
+            placeholder="...."
+            value={ ProjectDataService.getSubCategory(pCategoryId, pSubCategoryId) }
+            onChange={onChangeSearchPSubCategory}
+            id="pSubCategoryId"
+          >
+            {ProjectDataService.getProjectSubCategories(pCategoryId).map((option) => (
+            <option value={option}>
+            {option}
+            </option>
+            ))}
+            <option value=''>
+            项目子类型
+            </option>            
           </select>
 
           <input

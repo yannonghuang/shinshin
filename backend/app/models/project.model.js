@@ -24,6 +24,9 @@ module.exports = (sequelize, Sequelize) => {
     pCategoryId: {
       type: Sequelize.INTEGER
     },
+    pSubCategoryId: {
+      type: Sequelize.INTEGER
+    },    
   });
 
   return Project;
