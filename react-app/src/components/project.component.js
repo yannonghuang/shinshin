@@ -285,7 +285,8 @@ export default class Project extends Component {
       return {
         currentProject: {
           ...prevState.currentProject,
-          pCategoryId: pCategoryId
+          pCategoryId: pCategoryId,
+          pSubCategoryId: null
         },
         dirty: true
       };

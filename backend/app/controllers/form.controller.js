@@ -68,7 +68,7 @@ const needToPropagate = async (req) => {
 
 const propagateUpdates = async (req) => {
   const formId = req.params.id;
-  const {title, startAt, pCategoryId} = req.body;
+  const {title, startAt, pCategoryId, pCategoryIdDirty} = req.body;
 
   try {
     await Response.update({title: title, startAt: startAt, pCategoryId: pCategoryId}, {where: { formId: formId }});
@@ -82,11 +82,18 @@ const propagateUpdates = async (req) => {
 
     if (rIds.length === 0) return;
 
-    await Project.update({name: title, startAt: startAt, pCategoryId: pCategoryId}, {
-      where: {
-        responseId: {[Op.or]: rIds}
-      }
-    });
+    if (pCategoryIdDirty)
+      await Project.update({name: title, startAt: startAt, pCategoryId: pCategoryId, pSubCategoryId: null}, {
+        where: {
+          responseId: {[Op.or]: rIds}
+        }
+      });
+    else
+      await Project.update({name: title, startAt: startAt, pCategoryId: pCategoryId}, {
+        where: {
+          responseId: {[Op.or]: rIds}
+        }
+      });    
 
   } catch (e) {
     console.log(e.message);

@@ -41,6 +41,7 @@ export default class Form extends Component {
         deadline: null,
         startAt: null,
         pCategoryId: null,
+        pCategoryIdDirty: false
       },
       message: "",
       newform: true,
@@ -144,7 +145,8 @@ export default class Form extends Component {
       return {
         currentForm: {
           ...prevState.currentForm,
-          pCategoryId: pCategoryId
+          pCategoryId: pCategoryId,
+          pCategoryIdDirty: true
         }
       };
     });
