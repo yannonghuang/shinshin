@@ -272,7 +272,7 @@ const ProjectsList = (props) => {
     if ((pCategoryId || pCategoryId === 0) && (pCategoryId !== categories.length))
       params["pCategoryId"] = pCategoryId;
 
-    if (pSubCategoryId || pSubCategoryId === 0) 
+    if ((pSubCategoryId || pSubCategoryId === 0) && (pSubCategoryId !== ProjectDataService.getProjectSubCategories(pCategoryId).length))
       params["pSubCategoryId"] = pSubCategoryId;
 
     if (!exportFlag)

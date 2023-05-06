@@ -193,7 +193,12 @@ const ProjectsByCategoriesList = (props) => {
 
         const csv = ProjectDataService.exportCSV(projects, columns, {
           header: '项目类型',
-          translate: (dataIndex) => {return ProjectDataService.getCategory(dataIndex)}
+          translate: (dataIndex) => {return ProjectDataService.getCategory(dataIndex)},
+          associate: {
+            pCategoryId,
+            header: '项目子类型',
+            translate: (pCategoryId, pSubCategoryId) => {return ProjectDataService.getSubCategory(pCategoryId, pSubCategoryId)}
+          }          
         });
         //const csv = ProjectDataService.exportCSV(projects, columns, {header: '项目类型', dictionary: categories});
 

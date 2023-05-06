@@ -168,8 +168,19 @@ class ProjectDataService {
 */
 
     const translate = (header, dataIndex) => {
+      if (associate && associate.header == header) {
+        let result = associate.translate(associate.pCategoryId, dataIndex)
+        associate = null;
+        return result;
+      }
+
       if (!translator || !translator.header || !translator.translate ||
         translator.header !== header) return dataIndex;
+
+      if (translator.associate) {
+        associate = translator.associate;
+        associate.pCategoryId = dataIndex;
+      }
 
       return translator.translate(dataIndex);
     }
@@ -315,7 +326,7 @@ class ProjectDataService {
   getSubCategory = (pCategoryId, pSubCategoryId) => {
     for (var i = 0; i < this.PROJECT_CATEGORIES_ID.length; i++)
       if (this.PROJECT_CATEGORIES_ID[i].id == pCategoryId)
-        if (this.PROJECT_CATEGORIES_ID[i].sub)
+        if ((this.PROJECT_CATEGORIES_ID[i].sub) && this.PROJECT_CATEGORIES_ID[i].sub[pSubCategoryId])
           return this.PROJECT_CATEGORIES_ID[i].sub[pSubCategoryId];
         else
           return ''
