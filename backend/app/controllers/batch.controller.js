@@ -11,7 +11,7 @@ const Donation = db.donations;
 const fs = require('fs');
 const Op = db.Sequelize.Op;
 
-
+/** 
 const PROJECT_CATEGORIES_ID = [
   {id: 0, name: "未分类"},
   {id: 1, name: "新建校"},
@@ -51,6 +51,7 @@ const PROJECT_CATEGORIES_ID = [
   {id: 16, name: "其它"},
 ];
 
+
 const getCategoryAndSub = (pCategory, pSubCategory) => {
   let pCategoryId = null;
   let pSubCategoryId = null;
@@ -66,6 +67,7 @@ const getCategoryAndSub = (pCategory, pSubCategory) => {
     }
   return {pCategoryId, pSubCategoryId};
 }
+*/
 
 const batchUpload = async (req, res) => {
   try {
@@ -155,7 +157,23 @@ const uploadProjectsXR = async (req, res) => {
 };
 
 const uploadProjects = async (req, res) => {
-
+  PROJECT_CATEGORIES_ID = JSON.parse(req.body.PROJECT_CATEGORIES_ID);
+  const getCategoryAndSub = (pCategory, pSubCategory) => {
+    let pCategoryId = null;
+    let pSubCategoryId = null;
+  
+    for (var i = 0; i < PROJECT_CATEGORIES_ID.length; i++)
+      if (PROJECT_CATEGORIES_ID[i].name == pCategory) {
+        pCategoryId = i;
+        if (PROJECT_CATEGORIES_ID[i].sub) {
+          let index = PROJECT_CATEGORIES_ID[i].sub.findIndex((element) => element == pSubCategory);
+          if (index >= 0)
+            pSubCategoryId = index;
+        }
+      }
+    return {pCategoryId, pSubCategoryId};
+  }
+  
   const NON_NULL_COLUMN = 1;
 
   const t = await db.sequelize.transaction();

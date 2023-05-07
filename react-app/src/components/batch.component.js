@@ -8,7 +8,7 @@ import 'react-tabs/style/react-tabs.css';
 //import Select from 'react-select';
 
 //import AuthService from "./../services/auth.service";
-//import UserDataService from "../services/auth.service";
+import ProjectDataService from "../services/project.service";
 
 import BatchDataService from "../services/batch.service";
 
@@ -49,6 +49,8 @@ export default class Batch extends Component {
       data.append('multi-files', this.state.currentBatch.docFiles[i],
         this.state.currentBatch.docFiles[i].name);
     }
+    data.append('PROJECT_CATEGORIES_ID', JSON.stringify(ProjectDataService.PROJECT_CATEGORIES_ID));
+
     BatchDataService.batch(this.state.type, data, (event) => {
       this.setState({
         progress: Math.round((100 * event.loaded) / event.total),
