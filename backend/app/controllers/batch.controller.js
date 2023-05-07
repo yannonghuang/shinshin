@@ -11,64 +11,6 @@ const Donation = db.donations;
 const fs = require('fs');
 const Op = db.Sequelize.Op;
 
-/** 
-const PROJECT_CATEGORIES_ID = [
-  {id: 0, name: "未分类"},
-  {id: 1, name: "新建校"},
-  {id: 2, name: "设施改善"},
-  {id: 3, name: "欣美乡村学校"},
-  {id: 4, name: "信息化教学设备",
-    sub: [
-      '微机室',
-      '多媒体一体机',
-      '教师电脑',
-      '投影仪',
-      '打印机',
-    ]
-  },
-  {id: 5, name: "图书项目",
-    sub: [
-      '阅览室', 
-      '图书角', 
-      '图书'
-    ]
-  },
-  {id: 6, name: "在线培训"},
-  {id: 7, name: "暑期教师培训"},
-  {id: 8, name: "校长培训"},
-  {id: 9, name: "阅读教育"},
-  {id: 10, name: "项目式学习-美化校园"},
-  {id: 11, name: "乡土教育"},
-  {id: 12, name: "读书月活动"},
-  {id: 13, name: "美术园活动"},
-  {id: 14, name: "编程活动"},
-  {id: 15, name: "小心愿活动"},
-  {id: 17, name: "欣乐成长"},
-  // additional categories go here...
-  {id: 18, name: "空中互动"},
-
-  // this is always the last one ...
-  {id: 16, name: "其它"},
-];
-
-
-const getCategoryAndSub = (pCategory, pSubCategory) => {
-  let pCategoryId = null;
-  let pSubCategoryId = null;
-
-  for (var i = 0; i < PROJECT_CATEGORIES_ID.length; i++)
-    if (PROJECT_CATEGORIES_ID[i].name == pCategory) {
-      pCategoryId = i;
-      if (PROJECT_CATEGORIES_ID[i].sub) {
-        let index = PROJECT_CATEGORIES_ID[i].sub.findIndex((element) => element == pSubCategory);
-        if (index >= 0)
-          pSubCategoryId = index;
-      }
-    }
-  return {pCategoryId, pSubCategoryId};
-}
-*/
-
 const batchUpload = async (req, res) => {
   try {
     await upload(req, res);

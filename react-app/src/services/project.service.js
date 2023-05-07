@@ -327,24 +327,6 @@ class ProjectDataService {
     {id: 16, name: "其它"},
   ];
 
-/**   
-  getCategoryAndSub = (pCategory, pSubCategory) => {
-    let pCategoryId = null;
-    let pSubCategoryId = null;
-
-    for (var i = 0; i < this.PROJECT_CATEGORIES_ID.length; i++)
-      if (this.PROJECT_CATEGORIES_ID[i].name == pCategory) {
-        pCategoryId = i;
-        if (this.PROJECT_CATEGORIES_ID[i].sub) {
-          let index = this.PROJECT_CATEGORIES_ID[i].sub.findIndex((element) => element == pSubCategory);
-          if (index >= 0)
-            pSubCategoryId = index;
-        }
-      }
-    return {pCategoryId, pSubCategoryId};
-  }
-*/
-
   getCategory = (pCategoryId) => {
     for (var i = 0; i < this.PROJECT_CATEGORIES_ID.length; i++)
       if (this.PROJECT_CATEGORIES_ID[i].id == pCategoryId)
