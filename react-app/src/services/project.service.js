@@ -300,6 +300,7 @@ class ProjectDataService {
         '教师电脑',
         '投影仪',
         '打印机',
+        '摄像头'
       ]
     },
     {id: 5, name: "图书项目",
