@@ -306,7 +306,8 @@ class ProjectDataService {
       sub: [
         '阅览室', 
         '图书角', 
-        '图书'
+        '图书',
+        '期刊'
       ]
     },
     {id: 6, name: "在线培训"},
