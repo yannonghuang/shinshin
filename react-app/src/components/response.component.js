@@ -104,7 +104,7 @@ export default class Response extends Component {
   }
 
   async setUpdateStatus() {
-    const UPDATE_THRESHOLD = 365; // number of days
+    const UPDATE_THRESHOLD = 300; // number of days
     //const REFRESH_RATE = 3; // number of seconds
 
     const user = AuthService.getCurrentUser();
