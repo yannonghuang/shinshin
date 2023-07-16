@@ -246,7 +246,10 @@ exports.findAll2 = async (req, res) => {
 
             pSubCategoryId === 'null'      
               ? { pSubCategoryId: null }                    
-              : (pSubCategoryId || pSubCategoryId === 0) ? { pSubCategoryId: { [Op.eq]: `${pSubCategoryId}` } } : null,
+              : (pSubCategoryId || pSubCategoryId === 0) 
+                //? { pSubCategoryId: { [Op.eq]: `${pSubCategoryId}` } } 
+                ? db.Sequelize.literal("cast(pSubCategoryId as CHAR) like " + `'%${pSubCategoryId}%'`)
+                : null,
 
             code ? { '$school.code$': { [Op.eq]: `${code}` } } : null,
             //region ? { '$school.region$': { [Op.like]: `%${region}%` } } : null,
@@ -397,7 +400,10 @@ exports.findAllByCategories = async (req, res) => {
 
             pSubCategoryId === 'null'      
               ? { pSubCategoryId: null }                    
-              : (pSubCategoryId || pSubCategoryId === 0) ? { pSubCategoryId: { [Op.eq]: `${pSubCategoryId}` } } : null,
+              : (pSubCategoryId || pSubCategoryId === 0) 
+                //? { pSubCategoryId: { [Op.eq]: `${pSubCategoryId}` } } 
+                ? db.Sequelize.literal("cast(pSubCategoryId as CHAR) like " + `'%${pSubCategoryId}%'`)
+                : null,
 
             {[Op.or] : [{ xr: null }, { xr: { [Op.eq]: `0` }}]},
             applied === undefined
@@ -427,7 +433,8 @@ exports.findAllByCategories = async (req, res) => {
         ((pCategoryId || pCategoryId === 0) ? `AND (projects.pCategoryId = ${pCategoryId}) ` : ``) +
 
         ((pSubCategoryId || pSubCategoryId === 0) 
-          ? `AND (projects.pSubCategoryId ` + (pSubCategoryId === 'null' ? `is NULL ` : `= ${pSubCategoryId}`) + `) ` 
+          //? `AND (projects.pSubCategoryId ` + (pSubCategoryId === 'null' ? `is NULL ` : `= ${pSubCategoryId}`) + `) ` 
+          ? `AND (cast(projects.pSubCategoryId as CHAR) ` + (pSubCategoryId === 'null' ? `is NULL ` : `like '%${pSubCategoryId}%'`) + `) `           
           : ``) +
 
         //((pSubCategoryId || pSubCategoryId === 0) ? `AND (projects.pSubCategoryId = ${pSubCategoryId}) ` : ``) +

@@ -337,7 +337,7 @@ class ProjectDataService {
     return "无";
   }
 
-  getSubCategory = (pCategoryId, pSubCategoryId) => {
+  SAVEgetSubCategory = (pCategoryId, pSubCategoryId) => {
     for (var i = 0; i < this.PROJECT_CATEGORIES_ID.length; i++)
       if (this.PROJECT_CATEGORIES_ID[i].id == pCategoryId)
         if ((this.PROJECT_CATEGORIES_ID[i].sub) && this.PROJECT_CATEGORIES_ID[i].sub[pSubCategoryId])
@@ -346,6 +346,25 @@ class ProjectDataService {
           return ''
 
     return '';
+  }
+
+  getSubCategory = (pCategoryId, pSubCategoryId) => {
+    let result = '';
+    let arr = this.getSubCategoryArray(pCategoryId, pSubCategoryId);
+    if (!arr)
+      return result;
+
+    for (var i = 0; i < arr.length; i++)
+      result += arr[i] + '，';
+    return result.substring(0, result.lastIndexOf('，'));
+  }
+
+  getSubCategoryArray = (pCategoryId, pSubCategoryId) => {
+    for (var i = 0; i < this.PROJECT_CATEGORIES_ID.length; i++)
+      if (this.PROJECT_CATEGORIES_ID[i].id == pCategoryId)
+        return this.decodeSub(this.PROJECT_CATEGORIES_ID[i].sub, pSubCategoryId);
+
+    return [];
   }
 
   getProjectSubCategories = (pCategoryId) => {
@@ -374,7 +393,37 @@ class ProjectDataService {
     this.PROJECT_CATEGORIES_ID,
     (option) => option.name
   );
+  
+  encodeSub = (subsFull, selected) => {
+    if (!subsFull || !selected)
+      return null;
 
+    let result = 0;
+    for (var i = subsFull.length; i > 0; i--)
+      for (var j = selected.length; j > 0 ; j--)
+        if (subsFull[i-1] === selected[j-1]) {
+          result = (10 * result) + (i-1);          
+          break;
+        }
+
+    return result;
+  }
+
+  decodeSub = (subsFull, code) => {
+    let result = [];
+    if (!subsFull)
+      return result;
+
+    let remain = code;
+    do {
+      let oldRemain = remain;
+      remain = Math.floor(oldRemain / 10);
+      let subId = oldRemain - remain * 10;
+      result.push(subsFull[subId]);
+    } while (remain > 0);
+
+    return result;
+  }
 
 /**
   OLD_PROJECT_CATEGORIES = [

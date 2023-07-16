@@ -100,6 +100,22 @@ const uploadProjectsXR = async (req, res) => {
 
 const uploadProjects = async (req, res) => {
   PROJECT_CATEGORIES_ID = JSON.parse(req.body.PROJECT_CATEGORIES_ID);
+
+  const encodeSub = (subsFull, selected) => {
+    if (!subsFull || !selected)
+      return null;
+
+    let result = 0;
+    for (var i = subsFull.length; i > 0; i--)
+      for (var j = selected.length; j > 0 ; j--)
+        if (subsFull[i-1] === selected[j-1]) {
+          result = (10 * result) + (i-1);          
+          break;
+        }
+
+    return result;
+  }
+
   const getCategoryAndSub = (pCategory, pSubCategory) => {
     let pCategoryId = null;
     let pSubCategoryId = null;
@@ -108,9 +124,19 @@ const uploadProjects = async (req, res) => {
       if (PROJECT_CATEGORIES_ID[i].name == pCategory) {
         pCategoryId = i;
         if (PROJECT_CATEGORIES_ID[i].sub) {
+          /** 
           let index = PROJECT_CATEGORIES_ID[i].sub.findIndex((element) => element == pSubCategory);
           if (index >= 0)
             pSubCategoryId = index;
+          */
+         let pSubCategoryArray = null;
+         if (pSubCategory)
+          if (pSubCategory.indexOf('，') > 0)
+            pSubCategoryArray = pSubCategory.split('，');
+          else
+            pSubCategoryArray = pSubCategory.split(',');
+
+          pSubCategoryId = encodeSub(PROJECT_CATEGORIES_ID[i].sub, pSubCategoryArray);
         }
       }
     return {pCategoryId, pSubCategoryId};

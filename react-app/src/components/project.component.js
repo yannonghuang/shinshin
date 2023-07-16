@@ -293,7 +293,7 @@ export default class Project extends Component {
     });
   }
 
-  onChangePSubCategoryId(e) {
+  SAVE_onChangePSubCategoryId(e) {
     const pSubCategoryId = e.target.selectedIndex;
 
     this.setState(function(prevState) {
@@ -305,6 +305,28 @@ export default class Project extends Component {
         dirty: true
       };
     });
+  }
+
+  onChangePSubCategoryId(e) {
+    let selectedOptions = Array.from(
+      e.target.selectedOptions,
+      (option) => option.value
+    );
+
+    let pSubCategoryId = ProjectDataService.encodeSub(
+        ProjectDataService.getProjectSubCategories(this.state.currentProject.pCategoryId), 
+        selectedOptions);
+
+    this.setState(function(prevState) {
+      return {
+        currentProject: {
+          ...prevState.currentProject,
+          pSubCategoryId: pSubCategoryId
+        },
+        dirty: true
+      };
+    });
+
   }
 
   onChangeResponseId(e) {
@@ -979,16 +1001,18 @@ export default class Project extends Component {
                   </select>
                 </div>
 
-                <div className="form-group col-sm-6">
+                <div className="form-group col-sm-6" title={'可多选：按Command(Mac系统)或Ctrl(windows系统)键'}
+                >
                   <label htmlFor="pSubCategoryId">项目子类型</label>
                   <select
                     disabled={this.state.readonly?"disabled":false}
                     class="form-control"
                     id="pSubCategoryId"
                     required
-                    value={ProjectDataService.getSubCategory(currentProject.pCategoryId, currentProject.pSubCategoryId)}
+                    value={ProjectDataService.getSubCategoryArray(currentProject.pCategoryId, currentProject.pSubCategoryId)}
                     onChange={this.onChangePSubCategoryId}
                     name="pSubCategoryId"
+                    multiple
                   >
 
                     {ProjectDataService.getProjectSubCategories(currentProject.pCategoryId).map((option, index) => (
