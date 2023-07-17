@@ -395,23 +395,27 @@ class ProjectDataService {
   );
   
   encodeSub = (subsFull, selected) => {
-    if (!subsFull || !selected)
+    if (!subsFull || !selected || selected.length == 0)
       return null;
 
     let result = 0;
+    let hit = false;
     for (var i = subsFull.length; i > 0; i--)
       for (var j = selected.length; j > 0 ; j--)
         if (subsFull[i-1] === selected[j-1]) {
-          result = (10 * result) + (i-1);          
+          result = (10 * result) + (i-1);
+          hit = true;          
           break;
         }
+
+    if (!hit) return null;
 
     return result;
   }
 
   decodeSub = (subsFull, code) => {
     let result = [];
-    if (!subsFull)
+    if (!subsFull || code == null)
       return result;
 
     let remain = code;

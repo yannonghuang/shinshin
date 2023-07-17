@@ -142,7 +142,12 @@ const ProjectsList = (props) => {
   const onChangeSearchPSubCategory = (e) => {
     const searchPSubCategoryId = e.target.selectedIndex;
 
-    setPSubCategoryId(searchPSubCategoryId);
+    if (ProjectDataService.PROJECT_CATEGORIES_ID[pCategoryId].sub &&
+      ProjectDataService.PROJECT_CATEGORIES_ID[pCategoryId].sub.length > searchPSubCategoryId
+    )
+      setPSubCategoryId(searchPSubCategoryId);
+    else
+      setPSubCategoryId(null);
 
     setStartup(false);
   };
