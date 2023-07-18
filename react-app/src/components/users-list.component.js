@@ -335,7 +335,12 @@ const UsersList = (props) => {
         setExportUsers(users);
         console.log(response.data);
 
-        const csv = ProjectDataService.exportCSV(users, columns);
+        const csv = ProjectDataService.exportCSV(users, columns,
+          {
+            header: '职务/部门',
+            translate: (title) => {return title.replace(/,/gm, "，") },
+          }          
+        );
         const url = window.URL.createObjectURL(new Blob([csv]));
 
         const link = document.createElement('a');
@@ -442,7 +447,7 @@ const UsersList = (props) => {
       {
         Header: "职务/部门",
         accessor: "title",
-        disableSortBy: true,
+        disableSortBy: true,      
       },
       {
         Header: "角色",

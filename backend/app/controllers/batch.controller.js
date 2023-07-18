@@ -101,7 +101,7 @@ const uploadProjectsXR = async (req, res) => {
 const uploadProjects = async (req, res) => {
   PROJECT_CATEGORIES_ID = JSON.parse(req.body.PROJECT_CATEGORIES_ID);
 
-  const encodeSub = (subsFull, selected) => {
+  const SAVE_encodeSub = (subsFull, selected) => {
     if (!subsFull || !selected)
       return null;
 
@@ -112,6 +112,25 @@ const uploadProjects = async (req, res) => {
           result = (10 * result) + (i-1);          
           break;
         }
+
+    return result;
+  }
+
+  const encodeSub = (subsFull, selected) => {
+    if (!subsFull || !selected || selected.length == 0)
+      return null;
+
+    let result = 0;
+    let hit = false;
+    for (var i = subsFull.length; i > 0; i--)
+      for (var j = selected.length; j > 0 ; j--)
+        if (subsFull[i-1] === selected[j-1]) {
+          result = (10 * result) + (i-1);
+          hit = true;          
+          break;
+        }
+
+    if (!hit) return null;
 
     return result;
   }
