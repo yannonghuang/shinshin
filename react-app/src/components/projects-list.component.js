@@ -329,7 +329,7 @@ const ProjectsList = (props) => {
     ProjectDataService.getAll2(params)
       .then((response) => {
         const { projects, totalPages, totalItems } = response.data;
-
+   
         setProjects(projects);
         setCount(totalPages);
         setTotalItems(totalItems);
@@ -602,6 +602,18 @@ const ProjectsList = (props) => {
         accessor: 'school.teachersCount',
         disableSortBy: true,
       },
+
+      {
+        Header: "校长",
+        accessor: 'school.principalName',
+        disableSortBy: true,
+      },
+      {
+        Header: "校长电话",
+        accessor: 'school.principalPhone',
+        disableSortBy: true,
+      },
+
       {
         Header: "指定捐赠",
         accessor: "designationsCount",
@@ -670,7 +682,7 @@ const ProjectsList = (props) => {
   const exportOnlyColumns =
     ['school.studentsCount', 'school.teachersCount', 'school.category'];
 
-  var hiddenColumns = ['school.address'];
+  var hiddenColumns = ['school.address', 'school.principalName', 'school.principalPhone'];
   if (embedded || schoolId) hiddenColumns =
     [...hiddenColumns, ...schoolKnownColumns, ...exportOnlyColumns];
 

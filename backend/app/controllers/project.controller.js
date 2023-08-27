@@ -1,6 +1,7 @@
 const db = require("../models");
 const Project = db.projects;
 const Response = db.responses;
+const User = db.user;
 const Designation = db.designations;
 const Dossier = db.dossiers;
 const Op = db.Sequelize.Op;
@@ -293,11 +294,26 @@ exports.findAll2 = async (req, res) => {
         required: false,
       }];
 
+  const inner_include = [{
+    model: User,
+    //attributes: [['chineseName', 'principalName'], ['phone', 'principalPhone'], ['wechat', 'principalWechat']],
+    attributes: [],
+    required: false,
+    //where :  { id: { [Op.eq]: 'school'.'principalId' } }
+    where: db.Sequelize.literal('`school`.`principalId` = `school->users`.`id`')
+  }];
+
+  //'$school.region$'
+  
   var include = [
                     {
                       model: School,
-                      attributes: ['id', 'studentsCount', 'teachersCount', 'category', 'name', 'code', 'region', 'address'],
+                      attributes: ['id', 'studentsCount', 'teachersCount', 'category', 'name', 'code', 'region', 'address',
+                        [db.Sequelize.literal('`school->users`.`chineseName`'), 'principalName'],
+                        [db.Sequelize.literal('`school->users`.`phone`'), 'principalPhone']
+                      ],
                       required: false,
+                      include: inner_include
                     },
                     {
                       model: Response,
