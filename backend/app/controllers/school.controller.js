@@ -428,16 +428,21 @@ const setLatestProjectYears = async (schools) => {
   });
 
   result = [];
-  for (i = 0; i < schools.length; i++)
+  for (i = 0; i < schools.length; i++) {
+    found = false;
+    schoolClone = JSON.parse(JSON.stringify(schools[i]));
     for (j = 0; j < maxProjectYears.length; j++) {
       if (schools[i].id === maxProjectYears[j].schoolId) {
-        schoolClone = JSON.parse(JSON.stringify(schools[i]))
+        found = true;
         projectClone = JSON.parse(JSON.stringify(maxProjectYears[j]))
         const {latestProjectYear, ...others} = projectClone
         result.push({...schoolClone, latestProjectYear})
         continue;
       }
     }
+    if (!found)
+      result.push({...schoolClone, latestProjectYear: null})
+  }
   return result;
 };
 
