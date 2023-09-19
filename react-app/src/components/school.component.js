@@ -993,7 +993,7 @@ export default class School extends Component {
                 onSelect={this.onChangeYPStartAt}
                 hideInput={true}
                 minRange={1995}
-                maxRange={2022}
+                maxRange={2030}
                 />)}
                 </div>
                 </div>
@@ -1034,7 +1034,7 @@ export default class School extends Component {
                 onSelect={this.onChangeYPLastVisit}
                 hideInput={true}
                 minRange={1995}
-                maxRange={2022}
+                maxRange={2030}
                 />)}
                 </div>
                 </div>
