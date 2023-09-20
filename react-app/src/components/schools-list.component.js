@@ -1103,7 +1103,7 @@ const SchoolsList = (props) => {
             value={searchActive}
             onChange={onChangeSearchActive}
           >
-            <option value="">建校</option>
+            <option value="">活跃</option>
               <option value={true}>
                 {'是'}
               </option>
