@@ -368,6 +368,7 @@ const buildFilters = async (req) => {
   const latestProjectYear = req.body.latestProjectYear;
   const projectYear = req.body.projectYear;
   const xr = req.body.xr;
+  const active = req.body.active;
 
   var orderbyObject = null;
   if (orderby) {
@@ -404,7 +405,10 @@ const buildFilters = async (req) => {
               ? null
               : xr === 'true'
                 ? { xr: { [Op.eq]: `1` }}
-                : {[Op.or]: [{ xr: { [Op.ne]: `1` }}, { xr: null }]},               
+                : {[Op.or]: [{ xr: { [Op.ne]: `1` }}, { xr: null }]},
+            active !== undefined && active !== 'true'
+              ? { code: { [Op.gt]: 10000 }}  
+              : { code: { [Op.lt]: 10000 }}                             
         ]};
 
   const having = {

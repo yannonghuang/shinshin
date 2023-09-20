@@ -36,6 +36,7 @@ const SchoolsList = (props) => {
   const [searchStatus, setSearchStatus] = useState("");
   const [searchRequest, setSearchRequest] = useState("");
   const [searchXR, setSearchXR] = useState(null);
+  const [searchActive, setSearchActive] = useState(null);
 
   const schoolsRef = useRef();
   schoolsRef.current = schools;
@@ -154,6 +155,13 @@ const SchoolsList = (props) => {
     setStartup(false);
   };
   
+  const onChangeSearchActive = (e) => {
+    const searchActive = e.target.value;
+    setSearchActive(searchActive);
+
+    setStartup(false);
+  };
+
   const onClearSearch = (e) => {
     setSearchName("");
     setSearchCode("");
@@ -167,7 +175,8 @@ const SchoolsList = (props) => {
     setSearchStatus("");
     setSearchRequest("");
     setSearchXR("");
-    
+    setSearchActive("");
+
     setOrderby(orderbyDefault);
     setExportSchools([]);
 
@@ -194,6 +203,7 @@ const SchoolsList = (props) => {
     setSearchStatus(params["status"]);
     setSearchRequest(params["request"]);
     setSearchXR(params["xr"]);
+    setSearchActive(params["active"]);    
   };
 
 
@@ -269,6 +279,10 @@ const SchoolsList = (props) => {
 
     if (searchXR) {
       params["xr"] = searchXR;
+    }
+
+    if (searchActive) {
+      params["active"] = searchActive;
     }
 
     if (exportFlag) {
@@ -433,7 +447,7 @@ const SchoolsList = (props) => {
   };
 
   useEffect(search, [pageSize, orderby, searchName, searchCode, searchRegion, searchStartAt, searchLatestProjectYear, searchProjectYear,
-                     searchLastVisit, searchDonor, searchStage, searchStatus, searchRequest, searchXR]);
+                     searchLastVisit, searchDonor, searchStage, searchStatus, searchRequest, searchXR, searchActive]);
 
   useEffect(retrieveSchools, [page]);
   useEffect(() => {retrieveSchools(true)}, []);
@@ -1007,7 +1021,7 @@ const SchoolsList = (props) => {
             type="text"
             readonly=""
             className="form-control col-sm-2 ml-2"
-            placeholder="建校"
+            placeholder="建校年份"
             value={searchStartAt}
           />
           <YearPicker
@@ -1024,7 +1038,7 @@ const SchoolsList = (props) => {
             type="text"
             readonly=""
             className="form-control col-sm-2 ml-2"
-            placeholder="访校"
+            placeholder="访校年份"
             value={searchLastVisit}
           />
           <YearPicker
@@ -1083,6 +1097,21 @@ const SchoolsList = (props) => {
             ))}
           </select>
 
+          <select
+            className="form-control col-sm-1 ml-2"
+            hidden={!AuthService.isLogin()}
+            value={searchActive}
+            onChange={onChangeSearchActive}
+          >
+            <option value="">建校</option>
+              <option value={true}>
+                {'是'}
+              </option>
+              <option value={false}>
+                {'否'}
+              </option>
+          </select>
+
           <select hidden={!AuthService.isLogin()}
             className="form-control col-sm-3 ml-2"
             placeholder="...."
@@ -1133,7 +1162,9 @@ const SchoolsList = (props) => {
                 {'是'}
               </option>
           </select>
-          
+
+
+
           <div>
             <button
               className="btn btn-primary  ml-2"
