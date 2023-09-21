@@ -648,9 +648,9 @@ exports.findCountsByRegion = (req, res) => {
   offset: offset,
   //subQuery: false,
   attributes: ['region',
-      [db.Sequelize.fn("COUNT", db.Sequelize.col("id")), "schoolsCount"]
+      [db.Sequelize.fn("COUNT", db.Sequelize.col("id")), "schoolsCount"],
   ],
-
+  where: { code: { [Op.lt]: 10000 }},
   group: ['region']
   })
     .then(data => {
