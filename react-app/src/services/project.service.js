@@ -415,7 +415,7 @@ class ProjectDataService {
 
   decodeSub = (subsFull, code) => {
     let result = [];
-    if (!subsFull || code == null || code == '')
+    if (!subsFull || code == null || code === '')
       return result;
 
     let remain = code;
