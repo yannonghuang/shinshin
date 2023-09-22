@@ -910,7 +910,7 @@ const ProjectsList = (props) => {
               导出
             </button>
 */}
-            <button hidden={schoolId}
+            <button 
               className="btn btn-primary"
               type="button"
               onClick={retrieveExportProjects}
