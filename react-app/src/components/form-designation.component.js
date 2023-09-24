@@ -129,6 +129,7 @@ export default class FormDesignation extends Component {
           <label htmlFor="available">未选学校</label>
           <Select onChange={this.onSelectSchool.bind(this)}
           readonly={this.state.readonly?"":false}
+          value={''}
           class="form-control"
           required
           id="available"
@@ -146,6 +147,7 @@ export default class FormDesignation extends Component {
           <label htmlFor="chosen">已选学校</label>
           <Select onChange={this.onDeselectSchool.bind(this)}
           readonly={this.state.readonly?"":false}
+          value={''}
           class="form-control"
           required
           id="chosen"
