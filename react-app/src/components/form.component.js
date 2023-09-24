@@ -440,40 +440,42 @@ export default class Form extends Component {
                 }
               </div>
 
-              <div class="form-group col-md-3">
-                <label htmlFor="published">发布?</label>
-                <input
-                  disabled={this.state.readonly?"disabled":false}
-                  type="checkbox"
-                  class="form-control"
-                  id="published"
-                  required
-                  checked={currentForm.published}
-                  onChange={this.onChangePublished}
-                  name="published"
-                />
-              </div>
+              <div className="row mb-3 ">
+                <div class="form-group col-md-3">
+                  <label htmlFor="published">发布?</label>
+                  <input
+                    disabled={this.state.readonly?"disabled":false}
+                    type="checkbox"
+                    class="form-control"
+                    id="published"
+                    required
+                    checked={currentForm.published}
+                    onChange={this.onChangePublished}
+                    name="published"
+                  />
+                </div>
 
-              <div class="form-group col-md-3">
-                <label htmlFor="multipleAllowed">允许多次申请?</label>
-                <input
-                  disabled={this.state.readonly?"disabled":false}
-                  type="checkbox"
-                  class="form-control"
-                  id="multipleAllowed"
-                  required
-                  checked={currentForm.multipleAllowed}
-                  onChange={this.onChangeMultipleAllowed}
-                  name="multipleAllowed"
-                />
-              </div>   
+                <div class="form-group col-md-3">
+                  <label htmlFor="multipleAllowed">允许多次申请?</label>
+                  <input
+                    disabled={this.state.readonly?"disabled":false}
+                    type="checkbox"
+                    class="form-control"
+                    id="multipleAllowed"
+                    required
+                    checked={currentForm.multipleAllowed}
+                    onChange={this.onChangeMultipleAllowed}
+                    name="multipleAllowed"
+                  />
+                </div>   
+              </div>
 
             </form>
 
           </div>
 
 
-          <Tabs className='mt-3'>
+          <Tabs className='mb-6'>
             <TabList>
               <Tab> <i class="fas fa-hand-point-right"></i></Tab>
               <Tab>指定学校</Tab>
@@ -490,7 +492,9 @@ export default class Form extends Component {
             </TabPanel>
           </Tabs>
 
-          <div className='mt-3' id="fb-editor" ref={this.fb} />
+<br/><br/><br/>
+
+          <div className='mt-6' id="fb-editor" ref={this.fb} />
 
           </div>)}
 {/*}
