@@ -393,7 +393,7 @@ exports.findAll2 = async(req, res) => {
     }
   };
 
-  //
+
   const condition = {
         [Op.and]: [
           sid ? { deadline: { [Op.gt]: new Date() } } : null,
@@ -440,13 +440,13 @@ exports.findAll2 = async(req, res) => {
           where: incldueSchoolCondition
         }
   ]
-  : [
-    {
-      model: Response,
-      attributes: [],
-      required: false,
-      where: includeCondition
-    } 
+    : [
+        {
+          model: Response,
+          attributes: [],
+          required: false,
+          where: includeCondition
+        } 
   ];
 
   const { limit, offset } = getPagination(page, size);
