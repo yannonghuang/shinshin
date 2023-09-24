@@ -46,6 +46,17 @@ db.questionaires = require("./questionaire.model.js")(sequelize, Sequelize);
 db.materials = require("./material.model.js")(sequelize, Sequelize);
 db.awards = require("./award.model.js")(sequelize, Sequelize);
 
+db.forms.belongsToMany(db.schools, {
+  through: "form_school",
+  foreignKey: "formId",
+  otherKey: "schoolId"
+});
+db.schools.belongsToMany(db.forms, {
+  through: "form_school",
+  foreignKey: "schoolId",
+  otherKey: "formId"
+});
+
 db.role.belongsToMany(db.user, {
   through: "user_roles",
   foreignKey: "roleId",

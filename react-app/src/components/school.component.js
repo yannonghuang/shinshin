@@ -951,7 +951,7 @@ export default class School extends Component {
                 {(this.state.readonly && AuthService.getCurrentUser()) && (
                 <div class="box">
                   {AuthService.getCurrentUser().schoolId &&
-                    <a href={"/forms"} class="btn btn-primary">项目申请</a>}
+                    <a href={"/forms?schoolId=" + AuthService.getCurrentUser().schoolId} class="btn btn-primary">项目申请</a>}
                   <a href={"/users/school/" + currentSchool.id} class="btn btn-primary">通讯录</a>
                   {!AuthService.getCurrentUser().schoolId &&
                     <a href={"/logs/school/" + currentSchool.id} class="btn btn-primary">修改记录</a>}

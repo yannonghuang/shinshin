@@ -4,6 +4,7 @@ const Staging_Form = db.staging_forms;
 const Response = db.responses;
 const Staging_Response = db.staging_responses;
 const Project = db.projects;
+const School = db.schools;
 const Op = db.Sequelize.Op;
 const { authJwt } = require("../middleware");
 
@@ -392,6 +393,7 @@ exports.findAll2 = async(req, res) => {
     }
   };
 
+  //
   const condition = {
         [Op.and]: [
           sid ? { deadline: { [Op.gt]: new Date() } } : null,
@@ -400,7 +402,8 @@ exports.findAll2 = async(req, res) => {
           published === undefined
             ? null
             : published === 'true'
-              ? { published: { [Op.eq]: `1` }}
+              ? {[Op.or]: [{ published: { [Op.eq]: `1` }}, sid ? { '$schools.id$': { [Op.eq]: `${sid}` } } : null]}
+              //? { published: { [Op.eq]: `1` }}              
               : {[Op.or]: [{ published: { [Op.ne]: `1` }}, { published: null }]},
           multipleAllowed === undefined
             ? null
@@ -409,17 +412,43 @@ exports.findAll2 = async(req, res) => {
               : {[Op.or]: [{ multipleAllowed: { [Op.ne]: `1` }}, { multipleAllowed: null }]},
         ]};
 
+  const incldueSchoolCondition = {
+          [Op.and]: [
+            sid ? { '$schools.id$': { [Op.eq]: `${sid}` } } : null,
+          ]};
+  
   const includeCondition = {
         [Op.and]: [
           sid ? { '$responses.schoolId$': { [Op.eq]: `${sid}` } } : null,
         ]};
 
-  const include = [{
+  const include = sid
+    ? [
+        {
           model: Response,
           attributes: [],
           required: false,
           where: includeCondition
-        }];
+        },
+        {
+          model: School,
+          attributes: [],
+          through: {
+            attributes: []
+          },
+          required: false,
+          where: incldueSchoolCondition
+        }
+  ]
+  : [
+    {
+      model: Response,
+      attributes: [],
+      required: false,
+      where: includeCondition
+    } 
+  ];
+
   const { limit, offset } = getPagination(page, size);
 
   Form.findAll({
@@ -435,7 +464,7 @@ exports.findAll2 = async(req, res) => {
       "multipleAllowed"
   ],
   include: include,
-  group: ['id'],
+  group: ['form.id'],
   order: orderbyObject
   })
     .then(data => {
@@ -513,7 +542,14 @@ exports.findOne = (req, res) => {
       "published",
       "pCategoryId",
       "multipleAllowed"
-  ]
+  ],
+  include: [
+    {
+      model: School,
+      attributes: ['id'],
+      required: false,
+    },
+  ],  
   })
     .then(data => {
       if (data) {
@@ -577,9 +613,28 @@ exports.update = async (req, res) => {
   })
     .then(num => {
       if (num == 1) {
+        Form.findByPk(id).then(form=>{
+          if (req.body.schools) {
+            School.findAll({
+              where: {
+                id: {
+                  [Op.or]: req.body.schools
+                }
+              }
+            }).then(schools => {
+              form.setSchools(schools).then(() => {
+                res.send({ message: "Form and School were updated successfully!" });
+              });
+            });
+          } else {
+            res.send({message: "Form was updated successfully."});
+          }
+        })
+/*
         res.send({
           message: "Form was updated successfully."
         });
+*/
         if (needPropagation)
           propagateUpdates(req);
         else

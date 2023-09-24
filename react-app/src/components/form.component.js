@@ -1,10 +1,12 @@
 //import React, { Component } from "react";
 import FormDataService from "../services/form.service";
 import ProjectDataService from "../services/project.service";
+import FormDesignation from ".//form-designation.component";
 
 import $ from "jquery"; //Load jquery
 import React, { Component, createRef } from "react"; //For react component
 //import ReactDOM from "react-dom";
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import YearPicker from 'react-single-year-picker';
 
@@ -41,7 +43,8 @@ export default class Form extends Component {
         deadline: null,
         startAt: null,
         pCategoryId: null,
-        pCategoryIdDirty: false
+        pCategoryIdDirty: false,
+        schools: null,
       },
       message: "",
       newform: true,
@@ -54,6 +57,17 @@ export default class Form extends Component {
     this.fb = createRef();
     this.fBuilder = null;
     this.fRender = null;
+  }
+
+  setSchools = (schools) => {
+    this.setState(function(prevState) {
+      return {
+        currentForm: {
+          ...prevState.currentForm,
+          schools: schools
+        }
+      };
+    });
   }
 
   newFormOptions = {
@@ -194,17 +208,29 @@ export default class Form extends Component {
     }));
   }
 
+  getSchoolIds(schools) {
+    const ids = [];
+    if (schools) {
+      for (let i = 0; i < schools.length; i++){
+        ids.push(schools[i].id);
+      }
+    }
+    return ids;
+  }
+
   getForm(id, readonly) {
     FormDataService.get(id)
       .then(response => {
 
-      const {startAt, ...others} = response.data;
+        const {startAt, schools, ...others} = response.data;
+      
         this.setState({
           //currentForm: response.data
 
           currentForm: {
             ...others,
-            startAt: (startAt ? (new Date(startAt)).getUTCFullYear() : '')
+            startAt: (startAt ? (new Date(startAt)).getUTCFullYear() : ''),
+            schools: this.getSchoolIds(schools)
           }
 
         });
@@ -268,6 +294,7 @@ export default class Form extends Component {
       startAt: this.state.currentForm.startAt ? (this.state.currentForm.startAt + '-01-10') : null,
       fdata: this.fBuilder.actions.getData(), /* formData */
       pCategoryId: this.state.currentForm.pCategoryId,
+      schools: this.state.currentForm.schools,
     };
 
     FormDataService.create(data)
@@ -414,43 +441,56 @@ export default class Form extends Component {
               </div>
 
               <div class="form-group col-md-3">
-
                 <label htmlFor="published">发布?</label>
                 <input
-                disabled={this.state.readonly?"disabled":false}
-                type="checkbox"
-                class="form-control"
-                id="published"
-                required
-                checked={currentForm.published}
-                onChange={this.onChangePublished}
-                name="published"
+                  disabled={this.state.readonly?"disabled":false}
+                  type="checkbox"
+                  class="form-control"
+                  id="published"
+                  required
+                  checked={currentForm.published}
+                  onChange={this.onChangePublished}
+                  name="published"
                 />
-
               </div>
 
               <div class="form-group col-md-3">
-
                 <label htmlFor="multipleAllowed">允许多次申请?</label>
                 <input
-                disabled={this.state.readonly?"disabled":false}
-                type="checkbox"
-                class="form-control"
-                id="multipleAllowed"
-                required
-                checked={currentForm.multipleAllowed}
-                onChange={this.onChangeMultipleAllowed}
-                name="multipleAllowed"
+                  disabled={this.state.readonly?"disabled":false}
+                  type="checkbox"
+                  class="form-control"
+                  id="multipleAllowed"
+                  required
+                  checked={currentForm.multipleAllowed}
+                  onChange={this.onChangeMultipleAllowed}
+                  name="multipleAllowed"
                 />
-
-              </div>
-
+              </div>   
 
             </form>
 
           </div>
 
-          <div id="fb-editor" ref={this.fb} />
+
+          <Tabs className='mt-3'>
+            <TabList>
+              <Tab> <i class="fas fa-hand-point-right"></i></Tab>
+              <Tab>指定学校</Tab>
+            </TabList>
+            <TabPanel>
+            </TabPanel>
+            <TabPanel>
+              <FormDesignation
+                embedded = {true}
+                readonly = {this.state.readonly}
+                chosenSchools = {this.state.currentForm.schools}
+                setSchools =  {this.setSchools}
+              />
+            </TabPanel>
+          </Tabs>
+
+          <div className='mt-3' id="fb-editor" ref={this.fb} />
 
           </div>)}
 {/*}

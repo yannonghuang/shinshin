@@ -6,6 +6,8 @@ import Pagination from "@material-ui/lab/Pagination";
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useTable, useSortBy, useFlexLayout } from "react-table";
 
+import queryString from 'query-string'
+
 import YearPicker from 'react-single-year-picker';
 
 import AuthService from "./../services/auth.service";
@@ -18,6 +20,9 @@ const FormsList = (props) => {
   const [searchStartAt, setSearchStartAt] = useState("");
   const [searchPublished, setSearchPublished] = useState(null);
   const [searchMultipleAllowed, setSearchMultipleAllowed] = useState(null);
+
+  const qString = props.location ? queryString.parse(props.location.search) : null;
+  const [schoolId, setSchoolId] = useState(qString ? qString.schoolId: null);
 
   const formsRef = useRef();
   formsRef.current = forms;
@@ -296,7 +301,7 @@ const FormsList = (props) => {
             : true;
           return (
             <div>
-              {formsRef.current[rowIdx].published && <Link
+              {(formsRef.current[rowIdx].published || schoolId) && <Link
                 onClick={refreshOnReturn}
                 target="_blank"
                 to={"/addR/" + formsRef.current[rowIdx].id}
