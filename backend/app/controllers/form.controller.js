@@ -614,7 +614,7 @@ exports.update = async (req, res) => {
     .then(num => {
       if (num == 1) {
         Form.findByPk(id).then(form=>{
-          if (req.body.schools && req.body.schools.length > 1) {
+          if (req.body.schools && req.body.schools.length > 0) {
             School.findAll({
               where: {
                 id: {
