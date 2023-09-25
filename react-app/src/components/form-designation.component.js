@@ -90,7 +90,15 @@ export default class FormDesignation extends Component {
     }
   }
 
-
+  getSchoolIds(schools) {
+    const ids = [];
+    if (schools) {
+      for (let i = 0; i < schools.length; i++){
+        ids.push(schools[i].value);
+      }
+    }
+    return ids;
+  }
 
   getSchools(chosenSchools) {
     SchoolDataService.getAllSimple()
@@ -141,6 +149,20 @@ export default class FormDesignation extends Component {
           filterOption={this.customFilter}
           options={this.state.availableSchoolsFull}
         />
+      </div>
+
+      <div className="row mb-3 col-sm-2">
+
+        <button className="col-sm-3" title="全选" onClick={() => {this.updateSelection(this.getSchoolIds(this.state.schools))}} >
+          <i class="fa fa-angle-double-right" ></i>
+        </button>
+
+        <div className="col-sm-6"/>
+
+        <button className="col-sm-3" title="全退" onClick={() => {this.updateSelection([])}} >
+          <i class="fa fa-angle-double-left" ></i>
+        </button>        
+
       </div>
 
       <div className="col-sm-5 ml-2">

@@ -614,12 +614,14 @@ exports.update = async (req, res) => {
     .then(num => {
       if (num == 1) {
         Form.findByPk(id).then(form=>{
-          if (req.body.schools && req.body.schools.length > 0) {
+          if (req.body.schools) {
             School.findAll({
               where: {
-                id: {
-                  [Op.or]: req.body.schools
-                }
+                [Op.and]: [
+                  req.body.schools.length > 0
+                    ? {id: {[Op.or]: req.body.schools}}
+                    : db.Sequelize.literal("false")
+                ]
               }
             }).then(schools => {
               form.setSchools(schools).then(() => {
