@@ -301,7 +301,7 @@ const FormsList = (props) => {
             : true;
           return (
             <div>
-              {(formsRef.current[rowIdx].published || schoolId) && <Link
+              {(formsRef.current[rowIdx].published) && <Link
                 onClick={refreshOnReturn}
                 target="_blank"
                 to={"/addR/" + formsRef.current[rowIdx].id}
