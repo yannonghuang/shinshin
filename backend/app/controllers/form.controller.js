@@ -537,7 +537,6 @@ const getSchoolCode = async(sid) => {
 }
 
 var Forms_With_School_Designations = [];
-var Forms_Without_School_Designations = [];
 const getFormDesignations = async() => {
   const include = [
         {
@@ -550,49 +549,25 @@ const getFormDesignations = async() => {
         }
   ];
 
-  if (Forms_With_School_Designations.length === 0) {
-    try {
-       let r = await Form.findAll({
-        //subQuery: false,
-        attributes: ['id',
-         // [db.Sequelize.fn("COUNT", db.Sequelize.col("schools.id")), "designatedSchoolsCount"]
-        ],
-        include: include,
-        group: ['id'],
-        having: db.Sequelize.literal("count(schools.id) > 0")
-      });
-
-      for (var i = 0; i < r.length; i++) Forms_With_School_Designations.push(r[i].id);
-
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  if (Forms_Without_School_Designations.length === 0) {
-    try {
-      let r = await Form.findAll({
-        //subQuery: false,
-        attributes: ['id',
-         // [db.Sequelize.fn("COUNT", db.Sequelize.col("schools.id")), "designatedSchoolsCount"]
-        ],
-        include: include,
-        group: ['id'],
-        having: db.Sequelize.literal("count(schools.id) = 0")
-      });
-
-      for (var i = 0; i < r.length; i++) Forms_Without_School_Designations.push(r[i].id);
-
-    } catch (e) {
-      console.log(e);
-    }    
+  Forms_With_School_Designations = [];
+  try {
+     let r = await Form.findAll({
+      //subQuery: false,
+      attributes: ['id'],
+      include: include,
+      group: ['id'],
+      having: db.Sequelize.literal("count(schools.id) > 0")
+    });
+    for (var i = 0; i < r.length; i++) Forms_With_School_Designations.push(r[i].id);
+  } catch (e) {
+    console.log(e);
   }
 
   if (Forms_With_School_Designations.length === 0)
     Forms_With_School_Designations = [-1];
-
-  if (Forms_Without_School_Designations.length === 0)
-    Forms_Without_School_Designations = [-1];    
+  
+  Forms_With_School_Designations = Forms_With_School_Designations.filter((item,
+      index) => Forms_With_School_Designations.indexOf(item) === index);
 };
 
 exports.SAVE_findAll2 = (req, res) => {
