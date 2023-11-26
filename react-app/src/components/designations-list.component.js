@@ -270,7 +270,7 @@ const DesignationsList = (props) => {
     }
   }
 
-  useEffect(getRegions, [orderby]);
+  //useEffect(getRegions, [orderby]);
 
   const [categories, setCategories] = useState(ProjectDataService.PROJECT_CATEGORIES);
 
@@ -372,7 +372,7 @@ const DesignationsList = (props) => {
     });
   }
 
-  useEffect(getSchoolDisplay, [schoolId]);
+  //useEffect(getSchoolDisplay, [schoolId]);
 
   const removeAllDesignations = () => {
     DesignationDataService.deleteAll()
@@ -440,9 +440,9 @@ const DesignationsList = (props) => {
           const donor = designationsRef.current[rowIdx].donor;
           return (
             <div>
-              <a href={"/donorsView/" + designationsRef.current[rowIdx].donorId }>
+              {donor && <a href={"/donorsView/" + designationsRef.current[rowIdx].donorId }>
                 {donor.donor}
-              </a>
+              </a>}
             </div>
           );
         },

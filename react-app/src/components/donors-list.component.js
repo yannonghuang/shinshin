@@ -244,7 +244,7 @@ const DonorsList = (props) => {
     }
   }
 
-  useEffect(getRegions, [orderby]);
+  //useEffect(getRegions, [orderby]);
 
   const [categories, setCategories] = useState(ProjectDataService.PROJECT_CATEGORIES);
 
@@ -326,7 +326,7 @@ const DonorsList = (props) => {
     });
   }
 
-  useEffect(getSchoolDisplay, [schoolId]);
+  //useEffect(getSchoolDisplay, [schoolId]);
 
   const removeAllDonors = () => {
     DonorDataService.deleteAll()

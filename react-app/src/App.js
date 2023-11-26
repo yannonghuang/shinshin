@@ -235,7 +235,7 @@ class App extends Component {
 
                 <div class="dropdown-divider"></div>
 
-                <a class="dropdown-item" href={"/designations"}>专款项目</a>
+                <a class="dropdown-item" href={"/designations"}>专款项目列表</a>
                 {/*AuthService.isAdmin() &&
                   <a class="dropdown-item" href={"/addDesignation"} target="_blank">创建捐赠指定</a>
                 */}

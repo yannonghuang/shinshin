@@ -278,7 +278,7 @@ const DonationsList = (props) => {
     }
   }
 
-  useEffect(getRegions, [orderby]);
+  //useEffect(getRegions, [orderby]);
 
   const [categories, setCategories] = useState(ProjectDataService.PROJECT_CATEGORIES);
 
