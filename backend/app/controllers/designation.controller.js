@@ -189,7 +189,7 @@ exports.findAll2 = (req, res) => {
     {
       model: Donor,
       attributes: ['donor'],
-      required: false
+      required: true //false
     },
     {
       model: Donation,
