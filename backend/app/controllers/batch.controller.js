@@ -189,7 +189,7 @@ const uploadProjects = async (req, res) => {
       let pCategory = row.getCell(2).value;
       let pSubCategory = row.getCell(3).value;      
       let name = row.getCell(4).value;
-      let state = row.getCell(5).value;
+      let status = row.getCell(5).value;
       let description = row.getCell(6).value;
       let budget = row.getCell(7).value;
       let code = row.getCell(8).value;
@@ -236,12 +236,12 @@ const uploadProjects = async (req, res) => {
         for (var i = 1; i < projects.length; i++) {
           await Project.destroy({where: { id: projects[i].id }}, { transaction: t });
         }
-        await Project.update({description, budget, state, pCategoryId, pSubCategoryId, responseId: null}, {where: { id: projects[0].id }}, { transaction: t });
+        await Project.update({description, budget, status, pCategoryId, pSubCategoryId, responseId: null}, {where: { id: projects[0].id }}, { transaction: t });
       } else {
         //projects[0].description = description;
         //projects[0].budget = budget;
         //projects[0].update( { transaction: t });
-        await Project.update({description, budget, state, pCategoryId, pSubCategoryId}, {where: { id: projects[0].id }}, { transaction: t });
+        await Project.update({description, budget, status, pCategoryId, pSubCategoryId}, {where: { id: projects[0].id }}, { transaction: t });
         updatedTotal++;
       }
 
@@ -252,7 +252,7 @@ const uploadProjects = async (req, res) => {
     let message = '批量上传学校项目总数：' + total +
       `;\n 更新数：` + updatedTotal +
       `;\n 无项目数：` + notFoundTotal + (notFoundSchoolCodes ? ' (学校：' + notFoundSchoolCodes + ')' : '') +
-      `;\n 重复项目数：` + duplicatedTotal + (duplicatedSchoolCodes ? ' (学校：' + duplicatedSchoolCodes + ')' : '');
+      `;\n 重复项目数：` + duplicatedTotal // + (duplicatedSchoolCodes ? ' (学校：' + duplicatedSchoolCodes + ')' : '');
 
     console.log(message);
     res.json(message);
