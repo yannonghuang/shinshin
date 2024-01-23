@@ -314,7 +314,12 @@ class ProjectDataService {
     {id: 6, name: "在线培训"},
     {id: 7, name: "暑期教师培训"},
     {id: 8, name: "校长培训"},
-    {id: 9, name: "阅读教育"},
+    {id: 9, name: "阅读教育",
+      sub: [
+        '阅读培训',
+        '评估指导'
+      ]
+    },
     {id: 10, name: "项目式学习-美化校园"},
     {id: 11, name: "乡土教育"},
     {id: 12, name: "读书月活动"},
