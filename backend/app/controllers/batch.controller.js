@@ -233,10 +233,12 @@ const uploadProjects = async (req, res) => {
           ? duplicatedSchoolCodes + ', ' + code
           : code;
 
-        for (var i = 1; i < projects.length; i++) {
-          await Project.destroy({where: { id: projects[i].id }}, { transaction: t });
+        if (name && code && startAt) {
+          for (var i = 1; i < projects.length; i++) {
+            await Project.destroy({where: { id: projects[i].id }}, { transaction: t });
+          }
+          await Project.update({description, budget, status, pCategoryId, pSubCategoryId, responseId: null}, {where: { id: projects[0].id }}, { transaction: t });
         }
-        await Project.update({description, budget, status, pCategoryId, pSubCategoryId, responseId: null}, {where: { id: projects[0].id }}, { transaction: t });
       } else {
         //projects[0].description = description;
         //projects[0].budget = budget;
