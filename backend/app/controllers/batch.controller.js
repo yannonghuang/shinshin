@@ -141,7 +141,8 @@ const uploadProjects = async (req, res) => {
   
     for (var i = 0; i < PROJECT_CATEGORIES_ID.length; i++)
       if (PROJECT_CATEGORIES_ID[i].name == pCategory) {
-        pCategoryId = i;
+        pCategoryId = PROJECT_CATEGORIES_ID[i].id;
+        //pCategoryId = i;
         if (PROJECT_CATEGORIES_ID[i].sub) {
           /** 
           let index = PROJECT_CATEGORIES_ID[i].sub.findIndex((element) => element == pSubCategory);
@@ -196,6 +197,7 @@ const uploadProjects = async (req, res) => {
 
       const {pCategoryId, pSubCategoryId} = getCategoryAndSub(pCategory, pSubCategory);
 
+      console.log('pCategory = ' + pCategory)
       console.log({pCategoryId, pSubCategoryId});
 
       var condition = {

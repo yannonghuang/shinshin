@@ -326,7 +326,14 @@ class ProjectDataService {
     {id: 13, name: "美术园活动"},
     {id: 14, name: "编程活动"},
     {id: 15, name: "小心愿活动"},
-    {id: 17, name: "欣乐成长"},
+    {id: 17, name: "欣乐成长",
+      sub: [
+        '文体设施',
+        '饮水设备',
+        '卫生角柜',
+        '书包收纳柜'
+      ]
+    },
     // additional categories go here...
     {id: 18, name: "空中互动"},
 

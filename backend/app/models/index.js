@@ -138,13 +138,17 @@ db.DOCUMENT_CATEGORIES = [
 
 db.DOSSIER_CATEGORIES = [
   "项目申请",
-  "说明文件",
+  "项目计划书",
   "项目预算",
   "项目协议",
+  "说明文件",
   "总结报告",
   "项目图片",
   "学校反馈",
+  "请款单"
 ];
+
+
 
 db.MATERIAL_CATEGORIES = [
   "证书",
