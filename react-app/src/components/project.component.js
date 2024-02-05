@@ -1119,7 +1119,7 @@ export default class Project extends Component {
                      value={currentProject.startAt}
                      onSelect={this.onChangeStartAt}
                      minRange={1995}
-                     maxRange={2022}
+                     maxRange={2030}
                   />
                   }
                 </div>
