@@ -427,6 +427,14 @@ const ResponsesList = (props) => {
       Header: "教师人数",
       accessor: "school.teachersCount",
     },
+    {
+      Header: "班级数",
+      accessor: 'school.classesCount',
+    },
+    {
+      Header: "年级数",
+      accessor: 'school.gradesCount',
+    },    
   ];
 
   const columns = useMemo(

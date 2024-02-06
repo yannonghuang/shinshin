@@ -602,7 +602,16 @@ const ProjectsList = (props) => {
         accessor: 'school.teachersCount',
         disableSortBy: true,
       },
-
+      {
+        Header: "班级数",
+        accessor: 'school.classesCount',
+        disableSortBy: true,
+      },
+      {
+        Header: "年级数",
+        accessor: 'school.gradesCount',
+        disableSortBy: true,
+      },
       {
         Header: "校长",
         accessor: 'school.principalName',
@@ -680,9 +689,9 @@ const ProjectsList = (props) => {
     ['id', 'school.region', 'school.code', 'school.name'];
 
   const exportOnlyColumns =
-    ['school.studentsCount', 'school.teachersCount', 'school.category'];
+    ['school.studentsCount', 'school.teachersCount', 'school.category', 'school.classesCount', 'school.gradesCount'];
 
-  var hiddenColumns = ['school.address', 'school.principalName', 'school.principalPhone'];
+  var hiddenColumns = ['school.address', 'school.principalName', 'school.principalPhone', 'school.classesCount', 'school.gradesCount'];
   if (embedded || schoolId) hiddenColumns =
     [...hiddenColumns, ...schoolKnownColumns, ...exportOnlyColumns];
 

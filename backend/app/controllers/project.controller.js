@@ -308,7 +308,7 @@ exports.findAll2 = async (req, res) => {
   var include = [
                     {
                       model: School,
-                      attributes: ['id', 'studentsCount', 'teachersCount', 'category', 'name', 'code', 'region', 'address',
+                      attributes: ['id', 'studentsCount', 'teachersCount', 'category', 'name', 'code', 'region', 'address', 'classesCount', 'gradesCount',
                         [db.Sequelize.literal('`school->users`.`chineseName`'), 'principalName'],
                         [db.Sequelize.literal('`school->users`.`phone`'), 'principalPhone']
                       ],

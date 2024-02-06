@@ -267,7 +267,7 @@ exports.findAll2 = async (req, res) => {
 */
           {
             model: School,
-            attributes: ['id', 'code', 'name', 'region', 'teachersCount', 'studentsCount', 'category', 'address'],
+            attributes: ['id', 'code', 'name', 'region', 'teachersCount', 'studentsCount', 'category', 'address', 'classesCount', 'gradesCount'],
             required: false,
             include: innerInclude
           },
