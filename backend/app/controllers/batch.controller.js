@@ -192,7 +192,7 @@ const uploadProjects = async (req, res) => {
       let name = row.getCell(4).value;
       let status = row.getCell(5).value;
       let description = row.getCell(6).value;
-      let budget = row.getCell(7).value;
+      let budget = parseFloat(row.getCell(7).value);
       let code = row.getCell(8).value;
 
       const {pCategoryId, pSubCategoryId} = getCategoryAndSub(pCategory, pSubCategory);
