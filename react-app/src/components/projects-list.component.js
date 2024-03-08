@@ -381,8 +381,8 @@ const ProjectsList = (props) => {
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download',
-          'school_projects' + (xr ? '_xr' : '') + '.csv'
-          //'school_projects' + ''/*(detail ? '_detail' : '')*/ + '.csv'
+          //'school_projects' + (xr ? '_xr' : '') + '.csv'
+          'school_projects' + (detail ? '_detail' : '') + (xr ? '_xr' : '') + '.csv'
         );
         document.body.appendChild(link);
         link.click();
@@ -681,7 +681,7 @@ const ProjectsList = (props) => {
   var exportDetailColumns = subtract(columns, ['response.title', 'designationsCount']);
 
   var exportColumns = subtract(exportDetailColumns,
-    ['school.category', 'school.teachersCount', 'school.studentsCount', "school.region"]);
+    ['status', 'school.name', 'school.classesCount', 'school.gradesCount', 'school.principalName', 'school.principalPhone', 'school.category', 'school.teachersCount', 'school.studentsCount']);
 
   const exportColumnsWithSchoolKnown = subtract(exportColumns,
     ['school.code', 'school.name']);
@@ -915,21 +915,21 @@ const ProjectsList = (props) => {
           </div>
 */}
           <div hidden={!currentUser || isMobile}>
-{/*
+{
             <button
               className="btn btn-primary"
               type="button"
               onClick={retrieveSimpleExportProjects}
             >
-              导出
+              基本导出
             </button>
-*/}
+}
             <button 
-              className="btn btn-primary"
+              className="btn btn-primary ml-2" 
               type="button"
               onClick={retrieveExportProjects}
             >
-              导出
+                详细导出
             </button>
 
           </div>
