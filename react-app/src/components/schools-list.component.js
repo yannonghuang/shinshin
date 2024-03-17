@@ -36,7 +36,7 @@ const SchoolsList = (props) => {
   const [searchStatus, setSearchStatus] = useState("");
   const [searchRequest, setSearchRequest] = useState("");
   const [searchXR, setSearchXR] = useState(null);
-  const [searchActive, setSearchActive] = useState(null);
+  const [searchActive, setSearchActive] = useState(true);
 
   const schoolsRef = useRef();
   schoolsRef.current = schools;
@@ -175,7 +175,7 @@ const SchoolsList = (props) => {
     setSearchStatus("");
     setSearchRequest("");
     setSearchXR("");
-    setSearchActive("");
+    setSearchActive(true);
 
     setOrderby(orderbyDefault);
     setExportSchools([]);
@@ -1103,13 +1103,13 @@ const SchoolsList = (props) => {
             value={searchActive}
             onChange={onChangeSearchActive}
           >
-            <option value="">活跃</option>
               <option value={true}>
-                {'是'}
+                {'欣欣'}
               </option>
               <option value={false}>
-                {'否'}
+                {'非欣欣'}
               </option>
+              <option value="">全部</option>              
           </select>
 
           <select hidden={!AuthService.isLogin()}

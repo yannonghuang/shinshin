@@ -409,9 +409,9 @@ const buildFilters = async (req) => {
 
             active === undefined
               ? null                
-              : active !== 'true'
-                ? { code: { [Op.gt]: 10000 }}  
-                : { code: { [Op.lt]: 10000 }} 
+              : active === true || active === 'true' 
+                ? { code: { [Op.lt]: 10000 }}  
+                : { code: { [Op.gt]: 10000 }} 
 /*
               active !== undefined && active !== 'true'
               ? { code: { [Op.gt]: 10000 }}  
