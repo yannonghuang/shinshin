@@ -406,9 +406,17 @@ const buildFilters = async (req) => {
               : xr === 'true'
                 ? { xr: { [Op.eq]: `1` }}
                 : {[Op.or]: [{ xr: { [Op.ne]: `1` }}, { xr: null }]},
-            active !== undefined && active !== 'true'
+
+            active === undefined
+              ? null                
+              : active !== 'true'
+                ? { code: { [Op.gt]: 10000 }}  
+                : { code: { [Op.lt]: 10000 }} 
+/*
+              active !== undefined && active !== 'true'
               ? { code: { [Op.gt]: 10000 }}  
-              : { code: { [Op.lt]: 10000 }}                             
+              : { code: { [Op.lt]: 10000 }}    
+*/                                                     
         ]};
 
   const having = {

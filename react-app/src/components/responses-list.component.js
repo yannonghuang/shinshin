@@ -35,9 +35,9 @@ const ResponsesList = (props) => {
 
   const orderbyDefault = [
     {
-      id: 'startAt',
-      //id: 'school.code',
-      desc: true
+      //id: 'startAt',
+      id: 'school.code',
+      desc: false
     }
   ];
 
