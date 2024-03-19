@@ -406,13 +406,21 @@ const buildFilters = async (req) => {
               : xr === 'true'
                 ? { xr: { [Op.eq]: `1` }}
                 : {[Op.or]: [{ xr: { [Op.ne]: `1` }}, { xr: null }]},
-
+                
+            active === '全部'
+              ? null
+              : active === '欣欣'
+                ? { code: { [Op.lt]: 10000 }} 
+                : active === '非欣欣' 
+                  ? { code: { [Op.gt]: 20000 }}
+                  : {[Op.and]: [ { code: { [Op.gt]: 10000 }},  { code: { [Op.lt]: 20000 }}]}  // 再续
+/*                
             active === undefined
               ? null                
               : active === true || active === 'true' 
                 ? { code: { [Op.lt]: 10000 }}  
                 : { code: { [Op.gt]: 10000 }} 
-/*
+
               active !== undefined && active !== 'true'
               ? { code: { [Op.gt]: 10000 }}  
               : { code: { [Op.lt]: 10000 }}    
