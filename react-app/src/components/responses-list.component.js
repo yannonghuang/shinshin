@@ -33,13 +33,21 @@ const ResponsesList = (props) => {
 
   const [startup, setStartup] = useState(true);
 
-  const orderbyDefault = [
-    {
+  const orderbyDefault = schoolId
+  ? [
+      {
+        id: 'startAt',
+        //id: 'school.code',
+        desc: true
+      }
+    ]
+  : [
+      {
       //id: 'startAt',
-      id: 'school.code',
-      desc: false
-    }
-  ];
+        id: 'school.code',
+        desc: false
+      }
+    ];
 
   const [orderby, setOrderby] = useState(orderbyDefault);
 

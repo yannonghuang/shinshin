@@ -53,15 +53,24 @@ const ProjectsList = (props) => {
 
   const pageSizes = [20, 30, 50];
 
-  const orderbyDefault = [
-    {
-      id: 'startAt',
-      //id: 'school.code',
-      desc: true
-    }
-  ];
+  const orderbyDefault = searchStartAt
+    ? [
+      {
+        //id: 'startAt',
+        id: 'school.code',
+        desc: false
+      }
+    ]  
+    : [
+      {
+        id: 'startAt',
+        //id: 'school.code',
+        desc: true
+      }
+    ];
 
-  const [orderby, setOrderby] = useState(orderbyDefault);
+  //const [orderby, setOrderby] = useState(orderbyDefault);
+  const [orderby, setOrderby] = useState(null);
 
   const [startup, setStartup] = useState(true);
 
@@ -117,6 +126,8 @@ const ProjectsList = (props) => {
     const searchStartAt = e; // e.target.value;
     setSearchStartAt(searchStartAt);
 
+    //setOrderby(orderbyDefault)
+
     setStartup(false);
   };
 
@@ -170,7 +181,8 @@ const ProjectsList = (props) => {
     setSearchCode("");
     setSearchRegion("");
     setSearchStartAt("");
-    setOrderby(orderbyDefault);
+    //setOrderby(orderbyDefault);
+    setOrderby(null);    
     setExportProjects([]);
     setSearchDesignated("");
     setPCategoryAll();
@@ -233,16 +245,6 @@ const ProjectsList = (props) => {
       params["size"] = pageSize;
     }
 
-    if (orderby && orderby[0])
-      params["orderby"] = orderby;
-     else
-      params["orderby"] = [
-        {
-          id: 'startAt',
-          desc: true
-        }
-      ];
-
     if (searchCode) {
       params["code"] = searchCode;
     }
@@ -254,6 +256,19 @@ const ProjectsList = (props) => {
     if (searchStartAt) {
       params["startAt"] = searchStartAt;
     }
+
+    if (orderby && orderby[0])
+      params["orderby"] = orderby;
+     else
+      params["orderby"] = orderbyDefault;
+    /*
+      params["orderby"] = [
+        {
+          id: 'startAt',
+          desc: true
+        }
+      ];
+    */
 
     if (schoolId) {
       params["schoolId"] = schoolId;
