@@ -53,7 +53,7 @@ const ProjectsList = (props) => {
 
   const pageSizes = [20, 30, 50];
 
-  const orderbyDefault = searchStartAt
+  const orderbyDefault = searchStartAt || qString
     ? [
       {
         //id: 'startAt',
