@@ -696,7 +696,7 @@ const ProjectsList = (props) => {
   var exportDetailColumns = subtract(columns, ['response.title', 'designationsCount']);
 
   var exportColumns = subtract(exportDetailColumns,
-    ['status', 'school.name', 'school.classesCount', 'school.gradesCount', 'school.principalName', 'school.principalPhone', 'school.category', 'school.teachersCount', 'school.studentsCount']);
+    ['school.name', 'school.classesCount', 'school.gradesCount', 'school.principalName', 'school.principalPhone', 'school.category', 'school.teachersCount', 'school.studentsCount']);
 
   const exportColumnsWithSchoolKnown = subtract(exportColumns,
     ['school.code', 'school.name']);

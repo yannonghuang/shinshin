@@ -37,9 +37,8 @@ const AutoLogoutTimer = (props: any) => {
       const win = window.open("/login", newTarget ? "_blank" : null);
       win.focus();
     } else {
-      //props.history.push('/login');
-      //props.history.push('/');
-      window.location.replace('/login');      
+      props.history.push('/login');
+      window.location.reload();
     }
   }
 
