@@ -610,10 +610,7 @@ const SchoolsList = (props) => {
         Header: "联络人微信",
         accessor: "contactWechat",
       },
-      {
-        Header: "内部注释",
-        accessor: "notes",
-      },
+
   ];
 
   const exportColumnsDetail = [
