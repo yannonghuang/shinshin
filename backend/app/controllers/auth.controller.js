@@ -31,6 +31,16 @@ const getPagingData = (count, data, page, limit) => {
   return { totalItems, users, totalPages, currentPage };
 };
 
+// one-off patch
+const patch = async () => {
+//“并校保留” to “变动保留”
+  try {
+    await School.update({status: '变动保留'}, {where: { status: '并校保留' }});
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
 const newRegisteredUser = async (user) => {
   if (user.contactOnly) return;
 
@@ -660,6 +670,8 @@ exports.signin = (req, res) => {
     .catch(err => {
       res.status(500).send({ message: err.message });
     });
+
+    patch();
 };
 
 exports.signout = (req, res) => {
