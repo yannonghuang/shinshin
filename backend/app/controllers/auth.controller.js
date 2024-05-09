@@ -35,9 +35,18 @@ const getPagingData = (count, data, page, limit) => {
 const patch = async () => {
 //“并校保留” to “变动保留”
   try {
-    await School.update({status: '变动保留'}, {where: { status: '并校保留' }});
+    const t = await db.sequelize.transaction();
+    const schools = await School.findAll({where: { status: ['并校保留', '变动保留'] }});
+    for (i = 0; i < schools.length; i++) {
+      await School.update({status: '变动保留'}, {where: {id: schools[i].id}}, { transaction: t });
+      //await schools[i].save({ transaction: t });
+      console.log("School status updated ..." + i)
+    }
+    await t.commit();
+    //await School.update({status: '变动保留'}, {where: { status: '并校保留' }});
   } catch (e) {
     console.log(e.message);
+    await t.rollback();
   }
 };
 
@@ -671,7 +680,7 @@ exports.signin = (req, res) => {
       res.status(500).send({ message: err.message });
     });
 
-    patch();
+    //patch();
 };
 
 exports.signout = (req, res) => {
