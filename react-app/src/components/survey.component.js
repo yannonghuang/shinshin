@@ -1250,7 +1250,7 @@ export default class Survey extends Component {
                 <label htmlFor="stayBehindCount">留守儿童</label>
                 <input
                 readonly={this.state.readonly?"":false}
-                type="number" min="0"
+                type="text" min="0"
                 class="form-control"
                 id="stayBehindCount"
                 required

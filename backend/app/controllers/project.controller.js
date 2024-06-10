@@ -340,8 +340,11 @@ exports.findAll2 = async (req, res) => {
     ? [db.Sequelize.fn("year", db.Sequelize.col("projects.startAt")), "startAt"]
     : 'startAt',
 
-    [db.Sequelize.fn("COUNT", db.Sequelize.col("designations.id")), "designationsCount"]
+    [db.Sequelize.fn("COUNT", db.Sequelize.col("designations.id")), "designationsCount"],
+
+    'quantity1', 'quantity2', 'quantity3'
   ];
+  
   if (!xr)
     attributes.push('status');
 
@@ -672,6 +675,7 @@ exports.findOne = (req, res) => {
       attributes: ['id', 'name', 'budget', 'status', 'description', 'xr',
                     'pCategoryId', 'pSubCategoryId',
                     [db.Sequelize.fn("year", db.Sequelize.col("projects.startAt")), "startAt"],
+                    'quantity1', 'quantity2', 'quantity3'
                   ],
 
       include: [

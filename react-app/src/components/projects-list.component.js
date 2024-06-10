@@ -657,6 +657,20 @@ const ProjectsList = (props) => {
           );
         },
       },
+
+      {
+        Header: "数量1",
+        accessor: "quantity1",
+      },
+      {
+        Header: "数量2",
+        accessor: "quantity2",
+      },
+      {
+        Header: "数量3",
+        accessor: "quantity3",
+      },
+
       {
         Header: "操作",
         accessor: "actions",
@@ -696,7 +710,7 @@ const ProjectsList = (props) => {
   var exportDetailColumns = subtract(columns, ['response.title', 'designationsCount']);
 
   var exportColumns = subtract(exportDetailColumns,
-    ['school.name', 'school.classesCount', 'school.gradesCount', 'school.principalName', 'school.principalPhone', 'school.category', 'school.teachersCount', 'school.studentsCount']);
+    ['quantity1', 'quantity2', 'quantity3', 'school.name', 'school.classesCount', 'school.gradesCount', 'school.principalName', 'school.principalPhone', 'school.category', 'school.teachersCount', 'school.studentsCount']);
 
   const exportColumnsWithSchoolKnown = subtract(exportColumns,
     ['school.code', 'school.name']);
@@ -711,7 +725,7 @@ const ProjectsList = (props) => {
   const exportOnlyColumns =
     ['school.studentsCount', 'school.teachersCount', 'school.category', 'school.classesCount', 'school.gradesCount'];
 
-  var hiddenColumns = ['school.address', 'school.principalName', 'school.principalPhone', 'school.classesCount', 'school.gradesCount'];
+  var hiddenColumns = ['quantity1', 'quantity2', 'quantity3', 'school.address', 'school.principalName', 'school.principalPhone', 'school.classesCount', 'school.gradesCount'];
   if (embedded || schoolId) hiddenColumns =
     [...hiddenColumns, ...schoolKnownColumns, ...exportOnlyColumns];
 

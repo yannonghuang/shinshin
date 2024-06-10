@@ -33,6 +33,10 @@ export default class Project extends Component {
     this.onChangeDescription = this.onChangeDescription.bind(this);
     this.onChangeStartAt = this.onChangeStartAt.bind(this);
 
+    this.onChangeQuantity1 = this.onChangeQuantity1.bind(this);
+    this.onChangeQuantity2 = this.onChangeQuantity2.bind(this);
+    this.onChangeQuantity3 = this.onChangeQuantity3.bind(this);
+
     this.getProject = this.getProject.bind(this);
     this.getProjectPhoto = this.getProjectPhoto.bind(this);
     this.updatePublished = this.updatePublished.bind(this);
@@ -66,7 +70,11 @@ export default class Project extends Component {
         docFiles: null, //[],
         docCategory: "",
         pCategoryId: null,
-        pSubCategoryId: null        
+        pSubCategoryId: null,
+        
+        quantity1: 0,
+        quantity2: 0,
+        quantity3: 0,
       },
       currentUser: null,
       schools: [],
@@ -419,6 +427,42 @@ export default class Project extends Component {
     });
   };
 
+  onChangeQuantity1(e) {
+    const quantity1 = e.target.value;
+
+    this.setState(prevState => ({
+      currentProject: {
+        ...prevState.currentProject,
+        quantity1: quantity1
+      },
+      dirty: true
+    }));
+  }
+
+  onChangeQuantity2(e) {
+    const quantity2 = e.target.value;
+
+    this.setState(prevState => ({
+      currentProject: {
+        ...prevState.currentProject,
+        quantity2: quantity2
+      },
+      dirty: true
+    }));
+  }
+
+  onChangeQuantity3(e) {
+    const quantity3 = e.target.value;
+
+    this.setState(prevState => ({
+      currentProject: {
+        ...prevState.currentProject,
+        quantity3: quantity3
+      },
+      dirty: true
+    }));
+  }
+
   getProject(id) {
     ProjectDataService.get(id)
       .then(response => {
@@ -473,7 +517,10 @@ export default class Project extends Component {
       id: this.state.currentProject.id,
       title: this.state.currentProject.title,
       budget: this.state.currentProject.budget,
-      published: status
+      published: status,
+      quantity1: this.state.currentProject.quantity1,
+      quantity2: this.state.currentProject.quantity2,
+      quantity3: this.state.currentProject.quantity3,
     };
 
     ProjectDataService.update(this.state.currentProject.id, data)
@@ -506,7 +553,10 @@ export default class Project extends Component {
       description: "",
       startAt: new Date().getFullYear(), //null
       pCategoryId: null,
-      pSubCategoryId: null      
+      pSubCategoryId: null,
+      quantity1: 0,      
+      quantity2: 0,
+      quantity3: 0
     },
 
     submitted: false
@@ -583,7 +633,10 @@ export default class Project extends Component {
       startAt: this.state.currentProject.startAt ? (this.state.currentProject.startAt + '-01-10') : null,
       xr: this.state.currentProject.xr,
       pCategoryId: this.state.currentProject.pCategoryId,
-      pSubCategoryId: this.state.currentProject.pSubCategoryId,      
+      pSubCategoryId: this.state.currentProject.pSubCategoryId,   
+      quantity1: this.state.currentProject.quantity1,   
+      quantity2: this.state.currentProject.quantity2,  
+      quantity3: this.state.currentProject.quantity3,  
     };
 
     try {
@@ -639,7 +692,10 @@ export default class Project extends Component {
       description: this.state.currentProject.description,
       startAt: this.state.currentProject.startAt ? (this.state.currentProject.startAt + '-01-10') : null,
       pCategoryId: this.state.currentProject.pCategoryId,
-      pSubCategoryId: this.state.currentProject.pSubCategoryId,      
+      pSubCategoryId: this.state.currentProject.pSubCategoryId, 
+      quantity1: this.state.currentProject.quantity1,     
+      quantity2: this.state.currentProject.quantity2, 
+      quantity3: this.state.currentProject.quantity3, 
     };
 
     try {
@@ -1122,6 +1178,50 @@ export default class Project extends Component {
                      maxRange={2030}
                   />
                   }
+                </div>
+
+                <div class="w-100 mb-2"></div>
+
+                <div class="col-sm-4">
+                <label htmlFor="quantity1">数量1</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number" 
+                class="form-control"
+                id="quantity1"
+                required
+                value={currentProject.quantity1}
+                onChange={this.onChangeQuantity1}
+                name="quantity1"
+                />
+                </div>
+
+                <div class="col-sm-4">
+                <label htmlFor="quantity2">数量2</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number" 
+                class="form-control"
+                id="quantity2"
+                required
+                value={currentProject.quantity2}
+                onChange={this.onChangeQuantity2}
+                name="quantity2"
+                />
+                </div>
+
+                <div class="col-sm-4">
+                <label htmlFor="quantity3">数量3</label>
+                <input
+                readonly={this.state.readonly?"":false}
+                type="number" 
+                class="form-control"
+                id="quantity3"
+                required
+                value={currentProject.quantity3}
+                onChange={this.onChangeQuantity3}
+                name="quantity3"
+                />
                 </div>
 
               </div>

@@ -195,6 +195,10 @@ const uploadProjects = async (req, res) => {
       let budget = parseFloat(row.getCell(7).value);
       let code = row.getCell(8).value;
 
+      let quantity1 = row.getCell(9).value;
+      let quantity2 = row.getCell(10).value;
+      let quantity3 = row.getCell(11).value;
+
       const {pCategoryId, pSubCategoryId} = getCategoryAndSub(pCategory, pSubCategory);
 
       console.log('pCategory = ' + pCategory)
@@ -239,16 +243,27 @@ const uploadProjects = async (req, res) => {
           for (var i = 1; i < projects.length; i++) {
             await Project.destroy({where: { id: projects[i].id }}, { transaction: t });
           }
-          await Project.update({description, budget, status, pCategoryId, pSubCategoryId, responseId: null}, {where: { id: projects[0].id }}, { transaction: t });
+          if (!quantity1 && !quantity2 && !quantity3) {
+            await Project.update({description, budget, status, pCategoryId, pSubCategoryId, responseId: null}, 
+              {where: { id: projects[0].id }}, { transaction: t });
+          } else {
+            await Project.update({description, budget, status, pCategoryId, pSubCategoryId, quantity1, quantity2, quantity3, responseId: null}, 
+              {where: { id: projects[0].id }}, { transaction: t });
+          }
         }
       } else {
         //projects[0].description = description;
         //projects[0].budget = budget;
         //projects[0].update( { transaction: t });
-        await Project.update({description, budget, status, pCategoryId, pSubCategoryId}, {where: { id: projects[0].id }}, { transaction: t });
+        if (!quantity1 && !quantity2 && !quantity3) {
+          await Project.update({description, budget, status, pCategoryId, pSubCategoryId}, 
+            {where: { id: projects[0].id }}, { transaction: t });
+        } else {
+          await Project.update({description, budget, status, pCategoryId, pSubCategoryId, quantity1, quantity2, quantity3}, 
+            {where: { id: projects[0].id }}, { transaction: t });
+        }
         updatedTotal++;
       }
-
     }
 
     await t.commit();

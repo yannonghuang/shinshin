@@ -26,7 +26,16 @@ module.exports = (sequelize, Sequelize) => {
     },
     pSubCategoryId: {
       type: Sequelize.INTEGER
-    },    
+    }, 
+    quantity1: {
+      type: Sequelize.INTEGER
+    },  
+    quantity2: {
+      type: Sequelize.INTEGER
+    },       
+    quantity3: {
+      type: Sequelize.INTEGER
+    },            
   });
 
   return Project;
