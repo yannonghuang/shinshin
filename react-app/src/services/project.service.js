@@ -309,6 +309,11 @@ class ProjectDataService {
         '图书角', 
         '图书',
         '期刊'
+      ],
+      quantity: [
+        '阅览室图书角数量',
+        '阅览室座位数量',
+        '图书数量'
       ]
     },
     {id: 6, name: "在线培训"},
@@ -340,6 +345,14 @@ class ProjectDataService {
     // this is always the last one ...
     {id: 16, name: "其它"},
   ];
+
+  getQuantity = (pCategoryId) => {
+    for (var i = 0; i < this.PROJECT_CATEGORIES_ID.length; i++)
+      if (this.PROJECT_CATEGORIES_ID[i].id == pCategoryId)
+        return this.PROJECT_CATEGORIES_ID[i].quantity;
+
+    return null;
+  }
 
   getCategory = (pCategoryId) => {
     for (var i = 0; i < this.PROJECT_CATEGORIES_ID.length; i++)

@@ -1182,8 +1182,10 @@ export default class Project extends Component {
 
                 <div class="w-100 mb-2"></div>
 
+                
+                {ProjectDataService.getQuantity(currentProject.pCategoryId) ? (
                 <div class="col-sm-4">
-                <label htmlFor="quantity1">数量1</label>
+                <label htmlFor="quantity1">{ProjectDataService.getQuantity(currentProject.pCategoryId)[0]}</label>
                 <input
                 readonly={this.state.readonly?"":false}
                 type="number" 
@@ -1195,9 +1197,11 @@ export default class Project extends Component {
                 name="quantity1"
                 />
                 </div>
+                ) : '' }
 
+                {ProjectDataService.getQuantity(currentProject.pCategoryId) ? (
                 <div class="col-sm-4">
-                <label htmlFor="quantity2">数量2</label>
+                <label htmlFor="quantity2">{ProjectDataService.getQuantity(currentProject.pCategoryId)[1]}</label>
                 <input
                 readonly={this.state.readonly?"":false}
                 type="number" 
@@ -1209,9 +1213,11 @@ export default class Project extends Component {
                 name="quantity2"
                 />
                 </div>
+                ) : '' }
 
+                {ProjectDataService.getQuantity(currentProject.pCategoryId) ? (
                 <div class="col-sm-4">
-                <label htmlFor="quantity3">数量3</label>
+                <label htmlFor="quantity3">{ProjectDataService.getQuantity(currentProject.pCategoryId)[2]}</label>
                 <input
                 readonly={this.state.readonly?"":false}
                 type="number" 
@@ -1223,6 +1229,7 @@ export default class Project extends Component {
                 name="quantity3"
                 />
                 </div>
+                ) : '' }
 
               </div>
             </div>

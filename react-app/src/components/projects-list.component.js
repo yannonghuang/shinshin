@@ -376,7 +376,7 @@ const ProjectsList = (props) => {
         //const csv = ProjectDataService.exportCSV(projects, columns);
         const csv = ProjectDataService.exportCSV(projects,
           detail
-            ? exportDetailColumns
+            ? setQuantityLabel(exportDetailColumns)
             : schoolId
               ? exportColumnsWithSchoolKnown
               : exportColumns,
@@ -485,6 +485,23 @@ const ProjectsList = (props) => {
     let result = [];
     for (var i = 0; i < columnSet1.length; i++)
       if (!columnSet2.includes(columnSet1[i].accessor)) result.push(columnSet1[i])
+    return result;
+  }
+
+  const setQuantityLabel = (columnSet) => {
+    if (!ProjectDataService.getQuantity(pCategoryId)) return columnSet;
+
+    let result = [];
+    for (var i = 0; i < columnSet.length; i++) {
+      const {Header, accessor, ...others} = columnSet[i]
+      if (accessor === "quantity1") 
+        result.push({Header: ProjectDataService.getQuantity(pCategoryId)[0], accessor, ...others})
+      else if (accessor === "quantity2") 
+        result.push({Header: ProjectDataService.getQuantity(pCategoryId)[1], accessor, ...others})
+      else if (accessor === "quantity3") 
+        result.push({Header: ProjectDataService.getQuantity(pCategoryId)[2], accessor, ...others})
+      else result.push(columnSet[i])
+    }
     return result;
   }
 
