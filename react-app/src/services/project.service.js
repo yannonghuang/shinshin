@@ -301,6 +301,11 @@ class ProjectDataService {
         '投影仪',
         '打印机',
         '摄像头'
+      ],
+      quantity: [
+        '微机室数量',
+        '一体机数量',
+        '电脑数量'
       ]
     },
     {id: 5, name: "图书项目",
@@ -311,8 +316,8 @@ class ProjectDataService {
         '期刊'
       ],
       quantity: [
-        '阅览室图书角数量',
-        '阅览室座位数量',
+        '阅览室数量',
+        '图书角数量',
         '图书数量'
       ]
     },
@@ -338,6 +343,11 @@ class ProjectDataService {
         '卫生角柜',
         '书包柜',
         '美术画板'
+      ],
+      quantity: [
+        '卫生角柜数量',
+        '书包柜数量',
+        '饮水设备数量'
       ]
     },
     // additional categories go here...
