@@ -336,7 +336,8 @@ class ProjectDataService {
         '文体设施',
         '饮水设备',
         '卫生角柜',
-        '书包收纳柜'
+        '书包柜',
+        '美术画板'
       ]
     },
     // additional categories go here...
