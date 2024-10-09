@@ -356,7 +356,7 @@ class App extends Component {
                   问卷列表
                 </a>
                 <a class="dropdown-item" href={"/addQ"}
-                  hidden={!AuthService.isLogin()}
+                  hidden={!AuthService.isAdmin()}
                   target="_blank"
                 >
                   新增问卷
