@@ -552,7 +552,7 @@ const FeedbacksList = (props) => {
               >
                 <i className="fas fa-eye action mr-2"></i>
               </Link>
-              {!readonly && (<Link
+              {!readonly && AuthService.isAdmin() && (<Link
                 target = '_blank' //{(!embedded || AuthService.getCurrentUser().schoolId) ? '_blank' : '_self'}
                 onClick={refreshOnReturn}
                 to={"/feedbacks/" + feedbacksRef.current[rowIdx].id}
@@ -560,7 +560,7 @@ const FeedbacksList = (props) => {
                 <i className="far fa-edit action mr-2"></i>
               </Link>)}
 
-              {((!readonly && AuthService.isVolunteer()) ||
+              {((!readonly && AuthService.isAdmin()) ||
               (AuthService.isSchoolUser() && !expired)) &&
               (<span onClick={() => window.confirm("您确定要删除吗 ?") && deleteFeedback(rowIdx)}
               >

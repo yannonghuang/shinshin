@@ -356,26 +356,26 @@ const QuestionairesList = (props) => {
                 <i className='fa fa-eye action mr-2' ></i>
               </Link>
 
-              {AuthService.isVolunteer() &&
+              {AuthService.isAdmin() &&
                 <span title="编辑" onClick={() => {refreshOnReturn(); openQuestionaire(rowIdx)}}>
                   <i className="far fa-edit action mr-2"></i>
                 </span>
               }
 
-              {AuthService.isVolunteer() &&
+              {AuthService.isAdmin() &&
                 <span title="复制" onClick={() => copyQuestionaire(rowIdx)}>
                   <i className="far fa-copy action mr-2"></i>
                 </span>
               }
 
-              {AuthService.isVolunteer() &&
+              {AuthService.isAdmin() &&
               !questionairesRef.current[rowIdx].published &&
                 <span title="发布" onClick={() => window.confirm("您确定发布吗 ?") && publishQuestionaire(rowIdx)} >
                   <i className="fa fa-check action mr-2"></i>
                 </span>
               }
 
-              {AuthService.isVolunteer() &&
+              {AuthService.isAdmin() &&
                 <span title="删除" onClick={() => window.confirm("您确定要删除吗 ?") && deleteQuestionaire(rowIdx)} >
                   <i className="fas fa-trash action"></i>
                 </span>
