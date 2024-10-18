@@ -344,7 +344,7 @@ class App extends Component {
               </div>
             </li>)}
 
-            {(!AuthService.isLogin() || AuthService.isVolunteer()) && (
+            {(/*!AuthService.isLogin() || */AuthService.isVolunteer()) && (
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 调查问卷
