@@ -445,7 +445,7 @@ export default class School extends Component {
       let x = {...base, ...rSchool.data, ...rSurveyButId};
       let y = SchoolDataService.reduce(x, base);
 
-      await this.setState({
+      this.setState({
         currentSchool: {
           ...y,
           id: schoolId
