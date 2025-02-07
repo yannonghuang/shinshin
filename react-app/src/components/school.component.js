@@ -984,7 +984,7 @@ export default class School extends Component {
 
                 <div class="form-group col-sm-4">
                 <div>
-                <div class="side"><label htmlFor="startAt">建校年份</label></div>
+                <div class="side"><label htmlFor="startAt">加入年份</label></div>
                 <div class="side">
                 {!this.state.readonly && AuthService.isAdmin() &&
                 (<YearPicker
