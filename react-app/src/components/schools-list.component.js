@@ -506,7 +506,7 @@ const SchoolsList = (props) => {
         accessor: "code",
       },
       {
-        Header: "学校名称",
+        Header: "欣欣学校名称",
         accessor: "name",
       },
       {
@@ -762,7 +762,7 @@ const SchoolsList = (props) => {
       },
 
       {
-        Header: "学校名称",
+        Header: "欣欣学校名称",
         accessor: "name",
       },
 
@@ -1008,7 +1008,7 @@ const SchoolsList = (props) => {
           <input
             type="text"
             className="form-control col-sm-4 ml-2"
-            placeholder="学校名称"
+            placeholder="欣欣学校名称"
             value={searchName}
             onChange={onChangeSearchName}
           />

@@ -607,7 +607,7 @@ const ProjectsList = (props) => {
         accessor: "school.region",
       },
       {
-        Header: "学校名称",
+        Header: "欣欣学校名称",
         accessor: "school.name",
         Cell: (props) => {
           const rowIdx = props.row.id;
