@@ -518,7 +518,7 @@ const SchoolsList = (props) => {
         accessor: "schoolBoard",
       },
       {
-        Header: "建校年份",
+        Header: "加入年份",
         accessor: "startAt",
       },
       {
@@ -767,7 +767,7 @@ const SchoolsList = (props) => {
       },
 
       {
-        Header: "建校年份",
+        Header: "加入年份",
         accessor: "startAt",
         //Filter: SelectStartAtFilter,
       },
@@ -1018,7 +1018,7 @@ const SchoolsList = (props) => {
             type="text"
             readonly=""
             className="form-control col-sm-2 ml-2"
-            placeholder="建校年份"
+            placeholder="加入年份"
             value={searchStartAt}
           />
           <YearPicker
