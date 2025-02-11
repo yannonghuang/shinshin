@@ -284,7 +284,8 @@ class ProjectDataService {
     }
 
     const newHeader = order(csv.hh, true);
-    return (newHeader + newBody);
+    return ("\ufeff" + newHeader + newBody); //prepending BOM to make it openable from Excel
+    //return (newHeader + newBody);
   }
 
 
