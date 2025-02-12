@@ -30,6 +30,8 @@ const ProjectsList = (props) => {
   const qString = props.location ? queryString.parse(props.location.search) : null;
   const [searchStartAt, setSearchStartAt] = useState(qString ? qString.startAt: null);
 
+  const [searchYearCount, setSearchYearCount] = useState(null);
+
   const [formId, setFormId] = useState(props.match? props.match.params.formId : props.formId);
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
   const [pCategoryId, setPCategoryId] = useState(props.match? props.match.params.pCategoryId : props.pCategoryId);
@@ -131,6 +133,13 @@ const ProjectsList = (props) => {
     setStartup(false);
   };
 
+  const onChangeSearchYearCount = (e) => {
+    const searchYearCount = e.target.value;
+    setSearchYearCount(searchYearCount);
+
+    setStartup(false);
+  };
+
   const onChangeSearchInputStartAt = (e) => {
     const searchStartAt = e; //e.target.value;
     setSearchStartAt(searchStartAt);
@@ -181,6 +190,7 @@ const ProjectsList = (props) => {
     setSearchCode("");
     setSearchRegion("");
     setSearchStartAt("");
+    setSearchYearCount("");
     //setOrderby(orderbyDefault);
     setOrderby(null);    
     setExportProjects([]);
@@ -256,6 +266,8 @@ const ProjectsList = (props) => {
     if (searchStartAt) {
       params["startAt"] = searchStartAt;
     }
+
+    params["yearCount"] = searchYearCount;
 
     if (orderby && orderby[0])
       params["orderby"] = orderby;
@@ -415,7 +427,7 @@ const ProjectsList = (props) => {
     retrieveProjects();
   };
 
-  useEffect(search, [pageSize, orderby, searchCode, searchName, searchStartAt, searchRegion, pCategoryId, pSubCategoryId, searchDesignated]);
+  useEffect(search, [pageSize, orderby, searchCode, searchName, searchStartAt, searchYearCount, searchRegion, pCategoryId, pSubCategoryId, searchDesignated]);
   useEffect(retrieveProjects, [page]);
   useEffect(() => {retrieveProjects(true)}, []);
 
@@ -844,7 +856,7 @@ const ProjectsList = (props) => {
             type="text"
             readonly=""
             className="form-control col-sm-2 ml-2"
-            placeholder="年份"
+            placeholder="开始年份"
             value={searchStartAt}
             id="searchStartAt"
           />
@@ -855,6 +867,15 @@ const ProjectsList = (props) => {
             hideInput={true}
             minRange={1995}
             maxRange={2025}
+          />
+
+          <input
+            type="number" min="1"
+            className="form-control col-sm-2 ml-2"
+            placeholder="年数"
+            value={searchYearCount}
+            onChange={onChangeSearchYearCount}
+            id="searchYearCount"
           />
 
           <select

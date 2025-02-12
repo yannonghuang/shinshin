@@ -191,6 +191,9 @@ exports.findAll2 = async (req, res) => {
   const size = req.body.size;
   const orderby = req.body.orderby;
   const startAt = req.body.startAt;
+
+  const yearCount = req.body.yearCount ? req.body.yearCount : 1;
+
   const schoolId = sid ? sid : req.body.schoolId;
   const code = req.body.code;
   const exportFlag = req.body.exportFlag;
@@ -255,7 +258,14 @@ exports.findAll2 = async (req, res) => {
             code ? { '$school.code$': { [Op.eq]: `${code}` } } : null,
             //region ? { '$school.region$': { [Op.like]: `%${region}%` } } : null,
             region ? { '$school.region$': { [Op.eq]: `${region}` } } : null,
-            startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('projects.startAt')), `${startAt}`) } } : null,
+
+            //startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('projects.startAt')), `${startAt}`) } } : null,
+            startAt 
+              ? db.Sequelize.literal(`
+                  year(projects.startAt) - ${startAt} < ${yearCount} and year(projects.startAt) - ${startAt} >= 0
+                `) 
+              : null,
+
             xr /*=== undefined
               ? null
               : xr === 'true'*/
