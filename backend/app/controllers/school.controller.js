@@ -438,13 +438,24 @@ const buildFilters = async (req) => {
 }
 
 const setLatestProjectYears = async (schools) => {
+  const where = 
+    db.Sequelize.literal(`
+      year(projects.startAt) = (
+        select year(MAX(internalR.startAt))
+        from projects internalR
+        where projects.schoolId = internalR.schoolId
+      )
+    `);
+      
   let maxProjectYears = await Project.findAll({ 
     attributes: [
       'schoolId',
       //[db.Sequelize.fn("MAX", db.Sequelize.col("startAt")), "latestProjectYear"],
-      [db.Sequelize.fn("year", db.Sequelize.fn("MAX", db.Sequelize.col("projects.startAt"))), "latestProjectYear"]
+      [db.Sequelize.fn("year", db.Sequelize.fn("MAX", db.Sequelize.col("projects.startAt"))), "latestProjectYear"],
+      [db.Sequelize.fn("GROUP_CONCAT", db.Sequelize.literal(`DISTINCT name SEPARATOR '；'`)), "latestProjects"]
     ],    
-    group: 'schoolId'
+    group: 'schoolId',
+    where: where
   });
 
   result = [];
@@ -455,13 +466,13 @@ const setLatestProjectYears = async (schools) => {
       if (schools[i].id === maxProjectYears[j].schoolId) {
         found = true;
         projectClone = JSON.parse(JSON.stringify(maxProjectYears[j]))
-        const {latestProjectYear, ...others} = projectClone
-        result.push({...schoolClone, latestProjectYear})
+        const {latestProjectYear, latestProjects, ...others} = projectClone
+        result.push({...schoolClone, latestProjectYear, latestProjects})
         continue;
       }
     }
     if (!found)
-      result.push({...schoolClone, latestProjectYear: null})
+      result.push({...schoolClone, latestProjectYear: null, latestProjects: null})
   }
   return result;
 };

@@ -615,6 +615,10 @@ const SchoolsList = (props) => {
 
   const exportColumnsDetail = [
       {
+        Header: "最近项目",
+        accessor: "latestProjects",
+      },    
+      {
         Header: "学校电话",
         accessor: "phone",
       },
