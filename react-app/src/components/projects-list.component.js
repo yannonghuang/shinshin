@@ -779,7 +779,7 @@ const ProjectsList = (props) => {
   hiddenColumns = [...hiddenColumns, ...hiddenColumnsMobile, ...hiddenColumnsLogin, ...hiddenColumnsDonorService];
 
   if (xr) {
-    exportDetailColumns = subtract(exportDetailColumns, hiddenColumns);    
+    //exportDetailColumns = subtract(exportDetailColumns, hiddenColumns);    
     exportColumns = subtract(exportColumns, hiddenColumns);
   }
 
