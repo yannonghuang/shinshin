@@ -152,7 +152,7 @@ class ProjectDataService {
 
       return ((item || item === 0)
         ? typeof item === 'string'
-          ? item.replace(/(\r\n|\n|\r)/gm, "").replace(/,/gm, "，") // As ',' is used as a delimited, use chinese comma '，' in texts
+          ? item.replace(/(\r\n|\n|\r|")/gm, "").replace(/,/gm, "，") // As ',' is used as a delimited, use chinese comma '，' in texts
           : item
         : ''
       );

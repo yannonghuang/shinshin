@@ -770,7 +770,7 @@ const ProjectsList = (props) => {
     : [];
 
   const hiddenColumnsXR =
-    ["response.title", "status", "pCategoryId", "pSubCategoryId", "budget", "designationsCount"];
+    ["response.title", "status", "pCategoryId", "pSubCategoryId", /*"budget", */"designationsCount"];
 
   hiddenColumns = xr
     ? [...hiddenColumns, ...hiddenColumnsXR]
