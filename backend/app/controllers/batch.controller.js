@@ -196,12 +196,17 @@ const uploadProjects = async (req, res) => {
       let code = row.getCell(8).value;
 
       let quantity1 = row.getCell(9).value;
+      if (! /^\d+$/.test(quantity1)) {console.log('quantity1 = ' + quantity1); quantity1 = 0;}
+
       let quantity2 = row.getCell(10).value;
+      if (! /^\d+$/.test(quantity2)) {console.log('quantity2 = ' + quantity2); quantity2 = 0;}
+
       let quantity3 = row.getCell(11).value;
+      if (! /^\d+$/.test(quantity3)) {console.log('quantity3 = ' + quantity3); quantity3 = 0;}
 
       const {pCategoryId, pSubCategoryId} = getCategoryAndSub(pCategory, pSubCategory);
 
-      console.log('pCategory = ' + pCategory)
+      console.log('pCategory = ' + pCategory);
       console.log({pCategoryId, pSubCategoryId});
 
       var condition = {
