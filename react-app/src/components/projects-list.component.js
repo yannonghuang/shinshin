@@ -197,6 +197,8 @@ const ProjectsList = (props) => {
       setPCategoryAll();
     }
 
+    setPSubCategoryId(null);
+    
     setSearchCode("");
     setSearchRegion("");
 
