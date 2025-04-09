@@ -130,8 +130,7 @@ const ProjectsByCategoriesList = (props) => {
       params["pCategoryId"] = pCategoryId;
 
     if ((pSubCategoryId || pSubCategoryId === 0) && (pSubCategoryId !== ProjectDataService.getProjectSubCategories(pCategoryId).length))
-      params["pSubCategoryId"] = pSubCategoryId;
-
+       params["pSubCategoryId"] = pSubCategoryId;
 
     if (searchName) {
       params["name"] = searchName;
@@ -380,8 +379,8 @@ const ProjectsByCategoriesList = (props) => {
   );
 
   var hiddenColumns = (canonical)
-    ? ['formId']
-    : [];
+    ? ['formId', 'pSubCategoryId']
+    : ['pSubCategoryId'];
 
   const {
     getTableProps,
@@ -468,7 +467,7 @@ const ProjectsByCategoriesList = (props) => {
             </option>
           </select>
 
-          <select
+          <select hidden={true}
             className="form-control col-sm-3 ml-2"
             placeholder="...."
             value={ ProjectDataService.getSubCategory(pCategoryId, pSubCategoryId) }

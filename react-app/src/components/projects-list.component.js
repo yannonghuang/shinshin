@@ -29,13 +29,18 @@ const ProjectsList = (props) => {
   //const [searchStartAt, setSearchStartAt] = useState(props.match? props.match.params.startAt : props.startAt);
   const qString = props.location ? queryString.parse(props.location.search) : null;
   const [searchStartAt, setSearchStartAt] = useState(qString ? qString.startAt: null);
+  
+  const categorized = props.location.pathname.includes('projectsByCategoryByStartAt');
 
   const [searchYearCount, setSearchYearCount] = useState(null);
 
   const [formId, setFormId] = useState(props.match? props.match.params.formId : props.formId);
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
   const [pCategoryId, setPCategoryId] = useState(props.match? props.match.params.pCategoryId : props.pCategoryId);
-  const [pSubCategoryId, setPSubCategoryId] = useState(props.match? props.match.params.pSubCategoryId : props.pSubCategoryId);
+  
+  //const [pSubCategoryId, setPSubCategoryId] = useState(props.match? props.match.params.pSubCategoryId : props.pSubCategoryId);
+  const [pSubCategoryId, setPSubCategoryId] = useState(null);
+
   const [searchName, setSearchName] = useState(props.match? props.match.params.name : props.name);
 
   const [schoolDisplay, setSchoolDisplay] = useState(null);
@@ -186,16 +191,20 @@ const ProjectsList = (props) => {
   };
 
   const onClearSearch = (e) => {
-    setSearchName("");
+    if (!categorized) {
+      setSearchName("");
+      setSearchStartAt("");
+      setPCategoryAll();
+    }
+
     setSearchCode("");
     setSearchRegion("");
-    setSearchStartAt("");
+
     setSearchYearCount("");
     //setOrderby(orderbyDefault);
     setOrderby(null);    
     setExportProjects([]);
     setSearchDesignated("");
-    setPCategoryAll();
 
     setPage(1);
 

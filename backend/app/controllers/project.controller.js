@@ -208,6 +208,7 @@ exports.findAll2 = async (req, res) => {
   //if (pCategoryId === 'null') pCategoryId = null;    
   //if (pSubCategoryId === 'null') pSubCategoryId = null;
 
+  console.log('pSubCategoryId = ' + pSubCategoryId)
 /**
   var orderbyObject = null;
   if (orderby) {
@@ -248,7 +249,7 @@ exports.findAll2 = async (req, res) => {
               ? { pCategoryId: null }
               : (pCategoryId || pCategoryId === 0) ? { pCategoryId: { [Op.eq]: `${pCategoryId}` } } : null,
 
-            pSubCategoryId === 'null'      
+            pSubCategoryId === 'null' || pSubCategoryId === 'undefined'      
               ? { pSubCategoryId: null }                    
               : (pSubCategoryId || pSubCategoryId === 0) 
                 //? { pSubCategoryId: { [Op.eq]: `${pSubCategoryId}` } } 
@@ -418,6 +419,8 @@ exports.findAllByCategories = async (req, res) => {
   //if (pCategoryId === 'null') pCategoryId = null;  
   //if (pSubCategoryId === 'null') pSubCategoryId = null;
 
+  //pSubCategoryId = null
+
   var condition = {
         [Op.and]: [
             name ? { name: { [Op.like]: `%${name}%` } } : null,
@@ -430,8 +433,8 @@ exports.findAllByCategories = async (req, res) => {
             pSubCategoryId === 'null'      
               ? { pSubCategoryId: null }                    
               : (pSubCategoryId || pSubCategoryId === 0) 
-                //? { pSubCategoryId: { [Op.eq]: `${pSubCategoryId}` } } 
-                ? db.Sequelize.literal("cast(pSubCategoryId as CHAR) like " + `'%${pSubCategoryId}%'`)
+                ? { pSubCategoryId: { [Op.eq]: `${pSubCategoryId}` } } 
+                //? db.Sequelize.literal("cast(pSubCategoryId as CHAR) like " + `'%${pSubCategoryId}%'`)
                 : null,
 
             {[Op.or] : [{ xr: null }, { xr: { [Op.eq]: `0` }}]},
@@ -454,7 +457,9 @@ exports.findAllByCategories = async (req, res) => {
 
   try {
     let data = await db.sequelize.query(
-      `SELECT projects.pCategoryId, projects.pSubCategoryId, projects.name, year(projects.startAt) AS startAt ` +
+      //`SELECT projects.pCategoryId, projects.pSubCategoryId, projects.name, year(projects.startAt) AS startAt ` +
+      `SELECT projects.pCategoryId, projects.name, year(projects.startAt) AS startAt ` +
+
         (canonical ? `` : `, response.formId AS formId`) +
         `, COUNT(*) AS count ` +
       `FROM projects AS projects LEFT OUTER JOIN responses AS response ON projects.responseId = response.id ` +
@@ -462,8 +467,8 @@ exports.findAllByCategories = async (req, res) => {
         ((pCategoryId || pCategoryId === 0) ? `AND (projects.pCategoryId = ${pCategoryId}) ` : ``) +
 
         ((pSubCategoryId || pSubCategoryId === 0) 
-          //? `AND (projects.pSubCategoryId ` + (pSubCategoryId === 'null' ? `is NULL ` : `= ${pSubCategoryId}`) + `) ` 
-          ? `AND (cast(projects.pSubCategoryId as CHAR) ` + (pSubCategoryId === 'null' ? `is NULL ` : `like '%${pSubCategoryId}%'`) + `) `           
+          ? `AND (projects.pSubCategoryId ` + (pSubCategoryId === 'null' ? `is NULL ` : `= ${pSubCategoryId}`) + `) ` 
+          //? `AND (cast(projects.pSubCategoryId as CHAR) ` + (pSubCategoryId === 'null' ? `is NULL ` : `like '%${pSubCategoryId}%'`) + `) `           
           : ``) +
 
         //((pSubCategoryId || pSubCategoryId === 0) ? `AND (projects.pSubCategoryId = ${pSubCategoryId}) ` : ``) +
@@ -471,18 +476,25 @@ exports.findAllByCategories = async (req, res) => {
         (name ? `AND (projects.name like '%${name}%') ` : ``) +
         (startAt ? `AND (YEAR(projects.startAt) = ${startAt}) ` : ``) +
         ((applied === undefined) ? `` : ((applied === 'true') ? `AND (response.formId is not null) ` : `AND (response.formId is null) `)) +
-      `GROUP BY projects.pCategoryId, projects.pSubCategoryId, year(projects.startAt), projects.name ` +
+      
+      //  `GROUP BY projects.pCategoryId, projects.pSubCategoryId, year(projects.startAt), projects.name ` +
+      `GROUP BY projects.pCategoryId, year(projects.startAt), projects.name ` +
+
         (canonical ? `` : `, response.formId `) +
       (
         orderby[0].id === 'startAt'
-        ? `ORDER BY year(projects.startAt) ` + (orderby[0].desc ? `desc` : `asc`) + `, projects.pCategoryId, projects.pSubCategoryId, projects.name `
+        //? `ORDER BY year(projects.startAt) ` + (orderby[0].desc ? `desc` : `asc`) + `, projects.pCategoryId, projects.pSubCategoryId, projects.name `
+        ? `ORDER BY year(projects.startAt) ` + (orderby[0].desc ? `desc` : `asc`) + `, projects.pCategoryId, projects.name `
         :
           orderby[0].id === 'pCategoryId'
-          ? `ORDER BY projects.pCategoryId, projects.pSubCategoryId ` + (orderby[0].desc ? `desc` : `asc`) + `, year(projects.startAt) desc, projects.name `
+          //? `ORDER BY projects.pCategoryId, projects.pSubCategoryId ` + (orderby[0].desc ? `desc` : `asc`) + `, year(projects.startAt) desc, projects.name `
+          ? `ORDER BY projects.pCategoryId ` + (orderby[0].desc ? `desc` : `asc`) + `, year(projects.startAt) desc, projects.name `
           :
             orderby[0].id === 'name'
-            ? `ORDER BY projects.name ` + (orderby[0].desc ? `desc` : `asc`) + `, year(projects.startAt) desc, projects.pCategoryId, projects.pSubCategoryId `
-            : `ORDER BY year(projects.startAt) desc, projects.pCategoryId, projects.pSubCategoryId, projects.name `
+            //? `ORDER BY projects.name ` + (orderby[0].desc ? `desc` : `asc`) + `, year(projects.startAt) desc, projects.pCategoryId, projects.pSubCategoryId `
+            ? `ORDER BY projects.name ` + (orderby[0].desc ? `desc` : `asc`) + `, year(projects.startAt) desc, projects.pCategoryId `
+            //: `ORDER BY year(projects.startAt) desc, projects.pCategoryId, projects.pSubCategoryId, projects.name `
+            : `ORDER BY year(projects.startAt) desc, projects.pCategoryId, projects.name `
       )
       +
       (canonical ? `` : `, response.formId `) +
@@ -496,7 +508,10 @@ exports.findAllByCategories = async (req, res) => {
       where: condition,
       include: include,
       distinct: true,
-      group: db.Sequelize.literal(`projects.pCategoryId, projects.pSubCategoryId, year(projects.startAt), projects.name ` +
+      
+      //group: db.Sequelize.literal(`projects.pCategoryId, projects.pSubCategoryId, year(projects.startAt), projects.name ` +
+      group: db.Sequelize.literal(`projects.pCategoryId, year(projects.startAt), projects.name ` +
+
         (canonical ? `` : `, response.formId`)),
     });
 
