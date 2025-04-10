@@ -30,7 +30,7 @@ const ProjectsList = (props) => {
   const qString = props.location ? queryString.parse(props.location.search) : null;
   const [searchStartAt, setSearchStartAt] = useState(qString ? qString.startAt: null);
   
-  const categorized = props.location.pathname.includes('projectsByCategoryByStartAt');
+  const categorized = props.location ? props.location.pathname.includes('projectsByCategoryByStartAt') : false;
 
   const [searchYearCount, setSearchYearCount] = useState(null);
 
