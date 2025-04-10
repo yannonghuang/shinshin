@@ -33,6 +33,7 @@ const DonorsList = (props) => {
   const [schoolId, setSchoolId] = useState(props.match? props.match.params.schoolId : props.schoolId);
   const [pCategoryId, setPCategoryId] = useState(props.match? props.match.params.pCategoryId : props.pCategoryId);
   const [searchName, setSearchName] = useState(props.match? props.match.params.name : props.name);
+  const [source, setSource] = useState('');
 
   const [schoolDisplay, setSchoolDisplay] = useState(null);
 
@@ -96,6 +97,13 @@ const DonorsList = (props) => {
     setStartup(false);
   };
 
+  const onChangeSource = (e) => {
+    const source = e.target.value;
+    setSource(source);
+
+    setStartup(false);
+  };
+
   const onChangeSearchCode = (e) => {
     const searchCode = e.target.value;
     setSearchCode(searchCode);
@@ -140,6 +148,7 @@ const DonorsList = (props) => {
     setSearchCode("");
     setSearchRegion("");
     setSearchStartAt("");
+    setSource("");
     setOrderby(orderbyDefault);
     setExportDonors([]);
 
@@ -183,6 +192,10 @@ const DonorsList = (props) => {
 
     if (searchName) {
       params["name"] = searchName;
+    }
+
+    if (source) {
+      params["source"] = source;
     }
 
     if (page) {
@@ -308,7 +321,7 @@ const DonorsList = (props) => {
     retrieveDonors();
   };
 
-  useEffect(search, [pageSize, orderby, searchCode, searchName, searchStartAt, searchRegion, pCategoryId]);
+  useEffect(search, [pageSize, orderby, searchCode, searchName, searchStartAt, searchRegion, pCategoryId, source]);
   useEffect(retrieveDonors, [page]);
   useEffect(() => {retrieveDonors(true)}, []);
 
@@ -414,6 +427,10 @@ const DonorsList = (props) => {
       {
         Header: "电子邮件",
         accessor: "email",
+      },
+      {
+        Header: "来源",
+        accessor: "source",
       },
       {
         Header: "指定",
@@ -620,6 +637,18 @@ const DonorsList = (props) => {
             <option value='all'>
             指定项目类型
             </option>
+          </select>
+
+          <select
+            className="form-control col-sm-3 ml-2"
+            placeholder="...."
+            value={source}
+            onChange={onChangeSource}
+            id="source"
+          >
+            <option value=''>数据来源</option>
+            <option value='QuickBook'>QuickBook</option>
+            <option value='MailChimp'>MailChimp</option>
           </select>
 
 {/*

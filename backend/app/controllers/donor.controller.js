@@ -8,7 +8,6 @@ const Op = db.Sequelize.Op;
 const REGIONS = db.REGIONS;
 const School = db.schools;
 
-
 const { authJwt } = require("../middleware");
 
 const getPagination = (page, size) => {
@@ -104,7 +103,7 @@ exports.findAll2 = (req, res) => {
   const region = req.body.region;
   const pCategoryId = req.body.pCategoryId;
   const formId = req.body.formId;
-
+  const source = req.body.source;
 
 /**
   var orderbyObject = null;
@@ -145,6 +144,10 @@ exports.findAll2 = (req, res) => {
           {donor: { [Op.like]: `%${name}%` }},
         ] } : null,
 
+        source 
+          ? {source: { [Op.eq]: `${source}` }}
+          : null,
+
         (pCategoryId || pCategoryId === 0)
           ? { '$designations.pCategoryId$': { [Op.eq]: `${pCategoryId}` } }
           : null,
@@ -178,7 +181,7 @@ exports.findAll2 = (req, res) => {
     }
   }
 
-  var attributes = ['id', 'name', 'phone', 'donor', 'email', 'address', 'description',
+  var attributes = ['id', 'name', 'phone', 'donor', 'email', 'address', 'description', 'source',
     //[db.Sequelize.fn("COUNT", db.Sequelize.col("designations.id")), "designationsCount"],
     [db.Sequelize.literal(`count(distinct designations.id)`), "designationsCount"],
     [db.Sequelize.literal(`count(distinct donations.id)`), "donationsCount"]

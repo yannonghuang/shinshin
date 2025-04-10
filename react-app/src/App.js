@@ -246,6 +246,12 @@ class App extends Component {
 
                 <div>
                   <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href={"/batch?type=donors&source=QuickBook"} target="_blank">批量捐款人更新(QuickBook)</a>
+                  <a class="dropdown-item" href={"/batch?type=donors&source=MailChimp"} target="_blank">批量捐款人更新(MailChimp)</a>
+                </div>
+
+                <div>
+                  <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href={"/batch?type=donations"} target="_blank">批量捐款更新</a>
                 </div>
               </div>

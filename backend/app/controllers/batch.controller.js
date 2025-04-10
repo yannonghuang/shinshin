@@ -22,6 +22,9 @@ const batchUpload = async (req, res) => {
     if (query.type === 'donations')
       await uploadDonations(req, res);
 
+    if (query.type === 'donors')
+      await uploadDonors(req, res, query.source);
+
     if (query.type === 'projects')
       await uploadProjects(req, res);
 
@@ -295,6 +298,85 @@ const uploadProjects = async (req, res) => {
 
 };
 
+const uploadDonors = async (req, res, source) => {
+  const t = await db.sequelize.transaction();
+  const wb = new ExcelJS.Workbook();
+  wb.xlsx.readFile(req.files[0].path)
+  .then(async () => {
+
+    const ws = wb.getWorksheet(1);
+
+    let headers = ws.getRow(1);
+    let currentDonor = null;
+    let currentDonorId = null;
+    let total = 0;
+    let newDonor = 0;
+    let existingDonor = 0;
+    let newDonors = [];
+
+    for (let index = 2; index <= ws.rowCount; index++) {
+      let row = ws.getRow(index);
+      let cell = row.getCell(1);
+
+      //let rowObj = {donorId: currentDonorId};
+      let rowObj = {source};
+
+      for (let cn = 1; cn <= 6; cn++) {
+        let c = row.getCell(cn);
+        //if (headers.getCell(cn).value === 'donor') continue;
+        rowObj[headers.getCell(cn).value.trim()] = c.value;
+      }
+
+      if (cell.value) { // donor line
+        currentDonor = cell.value;
+
+        const condition = {
+          [Op.or]: [
+            { donor: { [Op.like]: `%${currentDonor}%` } } ,
+            { name: { [Op.like]: `%${currentDonor}%` } } ,
+        ]};
+
+        let donor = await Donor.findAll({
+          where: condition
+        })
+
+        if (donor.length === 0) { // new donor
+          //let newDonorObj = await Donor.create(rowObj, { transaction: t });
+          //currentDonorId = newDonor['id'];
+          newDonors.push(rowObj);
+          newDonor++;
+        } else { // existing donor
+          currentDonorId = donor[0].id;
+          await Donor.update(rowObj, {where: { id: currentDonorId }, transaction: t}); 
+          existingDonor++;
+        }
+
+        total++;
+      } 
+    }
+
+    await Donor.bulkCreate(newDonors, { transaction: t });
+
+    await t.commit();
+
+    let message = '批量上传捐款人总数：' + total + '，新增捐款人数：' + newDonor + '； 修改现存捐款人数：' + existingDonor;
+    console.log(message);
+    res.json(message);
+    //res.json({ success: true, data: 'image' });
+    fs.unlinkSync(req.files[0].path);
+
+  })
+  .catch(async (err) => {
+    console.log(err.message);
+    await t.rollback();
+    return res.status(500).send(`Error when trying upload files: ${err}`);
+
+    if (req.files[0].path)
+      fs.unlinkSync(req.files[0].path);
+  });
+
+};
+
 const uploadDonations = async (req, res) => {
 
   const NON_NULL_COLUMN = 2;
@@ -356,8 +438,8 @@ const uploadDonations = async (req, res) => {
         })
 
         if (donor.length === 0) {
-          let newDonor = await Donor.create({donor: currentDonor, name: currentDonor}, { transaction: t });
-          currentDonorId = newDonor['id'];
+          let newDonorObj = await Donor.create({donor: currentDonor, name: currentDonor}, { transaction: t });
+          currentDonorId = newDonorObj['id'];
           newDonor++;
         } else {
           currentDonorId = donor[0].id;

@@ -21,6 +21,9 @@ module.exports = (sequelize, Sequelize) => {
     photo: {
       type: Sequelize.BLOB('medium')
     },
+    source: {
+      type: Sequelize.STRING
+    },
   });
 
   return Donor;

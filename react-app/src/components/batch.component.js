@@ -31,14 +31,16 @@ export default class Batch extends Component {
       progress: 0,
       hasErrors: false,
 
-      type: null
+      type: null,
+      source: null
     };
 
   }
 
   componentDidMount() {
-    this.setState({type:
-      (new URLSearchParams(window.location.search)).get('type')
+    this.setState({
+      type: (new URLSearchParams(window.location.search)).get('type'),
+      source: (new URLSearchParams(window.location.search)).get('source')
     });
   }
 
@@ -51,7 +53,7 @@ export default class Batch extends Component {
     }
     data.append('PROJECT_CATEGORIES_ID', JSON.stringify(ProjectDataService.PROJECT_CATEGORIES_ID));
 
-    BatchDataService.batch(this.state.type, data, (event) => {
+    BatchDataService.batch(this.state.type, this.state.source, data, (event) => {
       this.setState({
         progress: Math.round((100 * event.loaded) / event.total),
       });
