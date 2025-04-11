@@ -298,7 +298,7 @@ const uploadProjects = async (req, res) => {
 
 };
 
-const TO_DELETE_uploadDonors = async (req, res, source) => {
+const uploadDonors = async (req, res, source) => {
   let t = await db.sequelize.transaction();
   const wb = new ExcelJS.Workbook();
   wb.xlsx.readFile(req.files[0].path)
@@ -314,7 +314,7 @@ const TO_DELETE_uploadDonors = async (req, res, source) => {
     let existingDonor = 0;
     let newDonors = [];
 
-    const process = async (newDonor) => {
+    const process = async (isNewDonor) => {
       for (let index = 2; index <= ws.rowCount; index++) {
         let row = ws.getRow(index);
         let cell = row.getCell(1);
@@ -341,13 +341,13 @@ const TO_DELETE_uploadDonors = async (req, res, source) => {
             where: condition
           })
 
-          if (donor.length === 0 && newDonor) { // new donor
+          if (donor.length === 0 && isNewDonor) { // new donor
             newDonors.push(rowObj);
             newDonor++;
             total++;
           } 
           
-          if (donor.length > 0 && !newDonor) { // existing donor
+          if (donor.length > 0 && !isNewDonor) { // existing donor
             currentDonorId = donor[0].id;
             await Donor.update(rowObj, {where: { id: currentDonorId }, transaction: t}); 
             existingDonor++;
@@ -385,7 +385,7 @@ const TO_DELETE_uploadDonors = async (req, res, source) => {
 
 };
 
-const uploadDonors = async (req, res, source) => {
+const TO_DELETE_uploadDonors = async (req, res, source) => {
   let t = await db.sequelize.transaction();
   const wb = new ExcelJS.Workbook();
   wb.xlsx.readFile(req.files[0].path)
