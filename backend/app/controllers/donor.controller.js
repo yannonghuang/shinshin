@@ -145,7 +145,9 @@ exports.findAll2 = (req, res) => {
         ] } : null,
 
         source 
-          ? {source: { [Op.eq]: `${source}` }}
+          ? source === 'other'
+            ?  { source: null }
+            : {source: { [Op.eq]: `${source}` }}
           : null,
 
         (pCategoryId || pCategoryId === 0)

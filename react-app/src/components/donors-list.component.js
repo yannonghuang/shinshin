@@ -649,6 +649,7 @@ const DonorsList = (props) => {
             <option value=''>数据来源</option>
             <option value='QuickBook'>QuickBook</option>
             <option value='MailChimp'>MailChimp</option>
+            <option value='other'>other</option>
           </select>
 
 {/*
