@@ -37,8 +37,8 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "node -v | grep 'v22' && NODE_OPTIONS=--openssl-legacy-provider react-scripts start || node -v | grep 'v16' && react-scripts start",
-    "build": "node -v | grep 'v22' && NODE_OPTIONS=--openssl-legacy-provider react-scripts build || node -v | grep 'v16' && react-scripts build",
+    "start": "node -v | grep 'v16' && react-scripts start || NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
+    "build": "node -v | grep 'v16' && react-scripts build || NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
