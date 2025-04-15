@@ -789,7 +789,7 @@ export default class Register extends Component {
                   type="text"
                   class="form-control"
                   name="email"
-                  value={this.state.email}
+                  value={'请输入电子邮箱。。。' /*this.state.email*/}
                   onChange={this.onChangeEmail}
                 />
               </div>

@@ -165,6 +165,54 @@ const uploadProjects = async (req, res) => {
     return {pCategoryId, pSubCategoryId};
   }
   
+  const findProjects = async (name, code, startAt, given, t) => {
+    var condition = {
+      [Op.and]: [
+        name ? { name: { [Op.eq]: `${name}` } } : null,
+        //(pCategoryId || pCategoryId === 0) ? { pCategoryId: { [Op.eq]: `${pCategoryId}` } } : null,
+        //(pSubCategoryId || pSubCategoryId === 0) ? { pSubCategoryId: { [Op.eq]: `${pSubCategoryId}` } } : null,
+        given && code ? { '$school.code$': { [Op.eq]: `${code}` } } : null,
+        startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('projects.startAt')), `${startAt}`) } } : null,
+      ]
+    };
+
+    var include = !given
+      ? []
+      : [
+        {
+          model: School,
+          attributes: ['id', 'code'],
+          required: false,
+        },
+      ];
+
+    return await Project.findAll({
+      where: condition,
+      include: include,
+      }, { transaction: t }
+    );
+  }
+
+  const destroyNonGivenProjects = async (name, startAt, pCategoryId, givenProjectIds, t) => {
+    var condition = {
+      [Op.and]: [
+        { id: { [Op.notIn]: givenProjectIds } },
+        name ? { name: { [Op.eq]: `${name}` } } : null,
+        (pCategoryId || pCategoryId === 0) ? { pCategoryId: { [Op.eq]: `${pCategoryId}` } } : null,
+        //(pSubCategoryId || pSubCategoryId === 0) ? { pSubCategoryId: { [Op.eq]: `${pSubCategoryId}` } } : null,
+        //given && code ? { '$school.code$': { [Op.eq]: `${code}` } } : null,
+        startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('projects.startAt')), `${startAt}`) } } : null,
+      ]
+    };
+
+    let projectsDeleted = await Project.findAll({where: condition}, { transaction: t });
+    await Project.destroy({where: condition}, { transaction: t });
+
+    if (!projectsDeleted) return 0;
+
+    return projectsDeleted.length;
+  }
+
   const NON_NULL_COLUMN = 1;
 
   const t = await db.sequelize.transaction();
@@ -178,9 +226,17 @@ const uploadProjects = async (req, res) => {
     let total = 0;
     let updatedTotal = 0;
     let notFoundTotal = 0;
+    let notFoundCodeTotal = 0;
+    let newProjects = [];
+
     let duplicatedTotal = 0;
     let notFoundSchoolCodes = null;
     let duplicatedSchoolCodes = null;
+
+    let givenProjectIds = [];
+    let universeName = '';
+    let universeStartAt = '';
+    let universePCategoryId = '';
 
     for (let index = 2; index <= ws.rowCount; index++) {
       let row = ws.getRow(index);
@@ -212,6 +268,13 @@ const uploadProjects = async (req, res) => {
       console.log('pCategory = ' + pCategory);
       console.log({pCategoryId, pSubCategoryId});
 
+      if (index === 2) {
+        universeName = name;
+        universeStartAt = startAt;
+        universePCategoryId = pCategoryId;
+      }
+
+/*
       var condition = {
         [Op.and]: [
           name ? { name: { [Op.eq]: `${name}` } } : null,
@@ -235,12 +298,33 @@ const uploadProjects = async (req, res) => {
         include: include,
         }, { transaction: t }
       );
+*/
 
+      let projects = await findProjects(name, code, startAt, true, t);
+      givenProjectIds = [...givenProjectIds, ...projects.map(p => p.id)];
+
+      
       if (!projects || projects.length === 0) {
         notFoundTotal++;
         notFoundSchoolCodes = notFoundSchoolCodes
           ? notFoundSchoolCodes + ', ' + code
           : code;
+
+        let schools = await School.findAll({
+            where: {code: code},
+          }, { transaction: t }
+        );
+
+        if (schools && schools.length > 0) {
+          if (!quantity1 && !quantity2 && !quantity3) {
+            newProjects.push({name, startAt: `${startAt}-01-10`, description, budget, status, pCategoryId, pSubCategoryId, schoolId: schools[0].id});
+          } else {
+            newProjects.push({name, startAt: `${startAt}-01-10`, description, budget, status, pCategoryId, pSubCategoryId, quantity1, quantity2, quantity3, schoolId: schools[0].id});
+          }       
+        } else {
+          notFoundCodeTotal++;
+        }
+
       } else if (projects.length > 1) {
         duplicatedTotal++;
         duplicatedSchoolCodes = duplicatedSchoolCodes
@@ -274,12 +358,18 @@ const uploadProjects = async (req, res) => {
       }
     }
 
+    let projectsDestroyed = await destroyNonGivenProjects(universeName, universeStartAt, universePCategoryId, givenProjectIds, t);
+
+    await Project.bulkCreate(newProjects, { transaction: t });
+
     await t.commit();
 
     let message = '批量上传学校项目总数：' + total +
       `;\n 更新数：` + updatedTotal +
-      `;\n 无项目数：` + notFoundTotal + (notFoundSchoolCodes ? ' (学校：' + notFoundSchoolCodes + ')' : '') +
-      `;\n 重复项目数：` + duplicatedTotal // + (duplicatedSchoolCodes ? ' (学校：' + duplicatedSchoolCodes + ')' : '');
+      `;\n 原无项目、后增加项目数：` + notFoundTotal + (notFoundSchoolCodes ? ' (学校：' + notFoundSchoolCodes + ')' : '') +
+      `;\n 删除项目数：` + projectsDestroyed +      
+      `;\n 重复项目数：` + duplicatedTotal + // + (duplicatedSchoolCodes ? ' (学校：' + duplicatedSchoolCodes + ')' : '');
+      `;\n 无效学校代码数：` + notFoundCodeTotal
 
     console.log(message);
     res.json(message);
