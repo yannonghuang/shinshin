@@ -165,7 +165,34 @@ const uploadProjects = async (req, res) => {
     return {pCategoryId, pSubCategoryId};
   }
   
-  const findProjects = async (name, code, startAt, given, t) => {
+  const buildCondition = (name, code, startAt, pCategoryId, given, givenProjectIds=[]) => {
+    var condition = {
+      [Op.and]: [
+        !given ? { id: { [Op.notIn]: givenProjectIds } } : null,
+        name ? { name: { [Op.eq]: `${name}` } } : null,
+        (pCategoryId || pCategoryId === 0) ? { pCategoryId: { [Op.eq]: `${pCategoryId}` } } : null,
+        //(pSubCategoryId || pSubCategoryId === 0) ? { pSubCategoryId: { [Op.eq]: `${pSubCategoryId}` } } : null,
+        given && code ? { '$school.code$': { [Op.eq]: `${code}` } } : null,
+        startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('projects.startAt')), `${startAt}`) } } : null,
+      ]
+    };
+
+    var include = !given
+      ? null
+      : [
+        {
+          model: School,
+          attributes: ['id', 'code'],
+          required: false,
+        },
+      ];
+
+    return {condition, include};
+  }
+
+  const findGivenProjects = async (name, code, startAt, pCategoryId, t) => {
+    const {condition, include} = buildCondition(name, code, startAt, pCategoryId, true);
+/*
     var condition = {
       [Op.and]: [
         name ? { name: { [Op.eq]: `${name}` } } : null,
@@ -185,7 +212,7 @@ const uploadProjects = async (req, res) => {
           required: false,
         },
       ];
-
+*/
     return await Project.findAll({
       where: condition,
       include: include,
@@ -194,6 +221,8 @@ const uploadProjects = async (req, res) => {
   }
 
   const destroyNonGivenProjects = async (name, startAt, pCategoryId, givenProjectIds, t) => {
+    const {condition} = buildCondition(name, null, startAt, pCategoryId, false, givenProjectIds);
+/*
     var condition = {
       [Op.and]: [
         { id: { [Op.notIn]: givenProjectIds } },
@@ -204,7 +233,7 @@ const uploadProjects = async (req, res) => {
         startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('projects.startAt')), `${startAt}`) } } : null,
       ]
     };
-
+*/
     let projectsDeleted = await Project.findAll({where: condition}, { transaction: t });
     await Project.destroy({where: condition}, { transaction: t });
 
@@ -300,7 +329,7 @@ const uploadProjects = async (req, res) => {
       );
 */
 
-      let projects = await findProjects(name, code, startAt, true, t);
+      let projects = await findGivenProjects(name, code, startAt, pCategoryId, t);
       givenProjectIds = [...givenProjectIds, ...projects.map(p => p.id)];
 
       
