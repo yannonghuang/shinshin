@@ -923,7 +923,7 @@ export default class Award extends Component {
                      value={currentAward.startAt}
                      onSelect={this.onChangeStartAt}
                      minRange={1995}
-                     maxRange={2022}
+                     maxRange={2030}
                   />
                   }
                 </div>

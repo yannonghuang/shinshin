@@ -418,7 +418,7 @@ const DocumentsList = (props) => {
               onSelect={onChangeSearchStartAt}
               hideInput={true}
               minRange={1995}
-              maxRange={2025}
+              maxRange={2030}
             />
             <div>
               <button

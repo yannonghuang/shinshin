@@ -1031,7 +1031,7 @@ const SchoolsList = (props) => {
             onSelect={onChangeSearchStartAt}
             hideInput={true}
             minRange={1995}
-            maxRange={2025}
+            maxRange={2030}
           />
 
 
@@ -1065,7 +1065,7 @@ const SchoolsList = (props) => {
             onSelect={onChangeSearchLatestProjectYear}
             hideInput={true}
             minRange={1995}
-            maxRange={2025}
+            maxRange={2030}
           />
 
           <input
@@ -1081,7 +1081,7 @@ const SchoolsList = (props) => {
             onSelect={onChangeSearchProjectYear}
             hideInput={true}
             minRange={1995}
-            maxRange={2025}
+            maxRange={2030}
           />
 
           <select hidden={!AuthService.isLogin()}
