@@ -444,7 +444,8 @@ const uploadDonors = async (req, res, source) => {
         for (let cn = 1; cn <= 6; cn++) {
           let c = row.getCell(cn);
           //if (headers.getCell(cn).value === 'donor') continue;
-          rowObj[headers.getCell(cn).value.trim()] = c.value;
+          if (headers.getCell(cn).value)
+            rowObj[headers.getCell(cn).value.toLowerCase().trim()] = c.value;
         }
 
         if (cell.value) { // donor line
