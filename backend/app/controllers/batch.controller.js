@@ -6,6 +6,8 @@ const db = require("../models");
 
 const School = db.schools;
 const Project = db.projects;
+const Response = db.responses;
+const Form = db.forms;
 const Donor = db.donors;
 const Donation = db.donations;
 const fs = require('fs');
@@ -185,6 +187,17 @@ const uploadProjects = async (req, res) => {
           attributes: ['id', 'code'],
           required: false,
         },
+
+        {
+          model: Response,
+          attributes: ['formId'],
+          required: false,
+          include: {
+            model: Form,
+            attributes: ['multipleAllowed'],
+            required: false,
+          }
+        },
       ];
 
     return {condition, include};
@@ -216,6 +229,7 @@ const uploadProjects = async (req, res) => {
     return await Project.findAll({
       where: condition,
       include: include,
+      distinct: true, col: 'id'
       }, { transaction: t }
     );
   }
@@ -376,11 +390,16 @@ const uploadProjects = async (req, res) => {
         //projects[0].description = description;
         //projects[0].budget = budget;
         //projects[0].update( { transaction: t });
+        let responseId = projects[0].responseId;
+        if (projects[0].responseId && projects[0].response.formId && projects[0].response.form.multipleAllowed) {
+          console.log('+++++++++++++++ Project allowing multiple applications, application to be removed: ' + projects[0].name + ', schoolId = ' +  projects[0].schoolId);
+          responseId = null;
+        }
         if (!quantity1 && !quantity2 && !quantity3) {
-          await Project.update({description, budget, status, pCategoryId, pSubCategoryId}, 
+          await Project.update({description, budget, status, pCategoryId, pSubCategoryId, responseId}, 
             {where: { id: projects[0].id }}, { transaction: t });
         } else {
-          await Project.update({description, budget, status, pCategoryId, pSubCategoryId, quantity1, quantity2, quantity3}, 
+          await Project.update({description, budget, status, pCategoryId, pSubCategoryId, quantity1, quantity2, quantity3, responseId}, 
             {where: { id: projects[0].id }}, { transaction: t });
         }
         updatedTotal++;
