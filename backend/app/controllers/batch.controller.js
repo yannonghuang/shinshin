@@ -291,7 +291,7 @@ const uploadProjects = async (req, res) => {
       let startAt = row.getCell(1).value;
       let pCategory = row.getCell(2).value;
       let pSubCategory = row.getCell(3).value;      
-      let name = row.getCell(4).value;
+      let name = row.getCell(4).value.trim();
       let status = row.getCell(5).value;
       let description = row.getCell(6).value;
       let budget = parseFloat(row.getCell(7).value);
