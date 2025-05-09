@@ -1098,8 +1098,8 @@ const SchoolsList = (props) => {
             ))}
           </select>
 
-          <select style={{fontSize:'70%'}} 
-            className="form-control col-sm-1 ml-2"
+          <select /* style={{fontSize:'70%'}} */
+            className="form-control col-sm-2 ml-2"
             hidden={!AuthService.isLogin()}
             value={searchActive}
             onChange={onChangeSearchActive}
