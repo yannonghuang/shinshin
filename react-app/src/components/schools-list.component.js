@@ -1110,8 +1110,8 @@ const SchoolsList = (props) => {
               <option value={'非欣欣'}>
                 {'非欣欣'}
               </option>
-              <option value={'再续'}>
-                {'再续'}
+              <option value={'撤并再续'}>
+                {'撤并再续'}
               </option>     
               <option value={'全部'}>
                 {'全部'}
