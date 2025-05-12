@@ -171,7 +171,7 @@ const uploadProjects = async (req, res) => {
     var condition = {
       [Op.and]: [
         !given ? { id: { [Op.notIn]: givenProjectIds } } : null,
-        name ? { name: { [Op.eq]: `${name}` } } : null,
+        name ? { name: { [Op.like]: `%${name}%` } } : null,
         (pCategoryId || pCategoryId === 0) ? { pCategoryId: { [Op.eq]: `${pCategoryId}` } } : null,
         //(pSubCategoryId || pSubCategoryId === 0) ? { pSubCategoryId: { [Op.eq]: `${pSubCategoryId}` } } : null,
         given && code ? { '$school.code$': { [Op.eq]: `${code}` } } : null,
