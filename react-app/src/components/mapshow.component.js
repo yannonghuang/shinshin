@@ -13,19 +13,19 @@ import { isMobile } from 'react-device-detect';
 
 import * as echarts from 'echarts';
 import { chinaMapConfig } from "../geo/config";
-import { geoJson } from "../geo/geojson.js";
+import { geoJson } from "../geo/geojsonlocal.js";
 import { importJSON } from "../geo/import-json.js";
 import queryString from 'query-string';
 
 const MapShow = (props) => {
+
+  const [loading, setLoading] = useState(true);
 
   const [regions, setRegions] = useState([]);
 
   const qString = props.location ? queryString.parse(props.location.search) : null;
   const [region, setRegion] = useState(qString ? qString.region: null);
 
-  const [distribution, setDistribution] = useState(window.location.pathname.includes('regionsDist'));
-  const [navigation, setNavigation] = useState(window.location.pathname.includes('DistNav'));
 
   const [mapData, setMapData] = useState([]);
   const [mapDataMax, setMapDataMax] = useState(0);
@@ -36,7 +36,9 @@ const MapShow = (props) => {
   const [searchOriginalname, setSearchOriginalname] = useState("");
   const [responseId, setResponseId] = useState(props.match? props.match.params.responseId : props.responseId);
   //const [responseId, setResponseId] = useState(props.match.params.responseId);
-
+  const [distribution, setDistribution] = useState(window.location.pathname.includes('regionsDist'));
+  const [navigation, setNavigation] = useState(window.location.pathname.includes('DistNav'));
+  
   const regionsRef = useRef();
   regionsRef.current = regions;
 
@@ -309,6 +311,8 @@ const MapShow = (props) => {
           chinaMapConfig({ data: mapData, max: mapDataMax, min: 0, total: schoolsTotal, region })
         );
 
+        setLoading(false);
+
       } catch (error) {
         console.error("Failed to load or render GeoJSON:", error);
       }
@@ -359,9 +363,11 @@ const MapShow = (props) => {
   }, []);
 
 
-  return (
-    <div style={{ width: "100%", height: "99vh" }} ref={ref}></div>
+  return (<div>
 
-  )};
+    <div hidden={loading} style={{ width: "100%", height: "99vh" }} ref={ref}></div>
+    <div hidden={!loading} ><p>loading ... </p></div>
+
+  </div>)};
 
 export default MapShow;
