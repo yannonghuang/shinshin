@@ -1,12 +1,12 @@
 import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
 
 export const chinaMapConfig = (configData) => {
-  const { data, max, min, total } = configData;
+  const { data, max, min, total, region } = configData;
 
   return {
     title: {
       // 标题组件
-      text: "欣欣学校分布图(总数：" + total + ")",
+      text: (region ? region : '全国') + "欣欣学校分布图(总数：" + total + ")",
       // subtext: '数据来源于 xx平台',
       // sublink: 'http://www.census.gov/popest/data/datasets.html',
       left: "center",
@@ -86,7 +86,7 @@ export const chinaMapConfig = (configData) => {
       },
       type: "map",
       //roam: true,
-      map: "china",
+      map: region ? region : "china", //"china",
       zoom: 1.2, // 当前视角的缩放比例
       scaleLimit: {
         max: 2,

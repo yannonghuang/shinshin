@@ -15,15 +15,17 @@ import * as echarts from 'echarts';
 import { chinaMapConfig } from "../geo/config";
 import { geoJson } from "../geo/geojson.js";
 
+import MapShow from "./mapshow.component.js";
+
 const RegionsList = (props) => {
 
   const [regions, setRegions] = useState([]);
 
-  const [distribution, setDistribution] = useState(window.location.pathname.includes('regionsDist'));
-  const [navigation, setNavigation] = useState(window.location.pathname.includes('DistNav'));
+  //const [distribution, setDistribution] = useState(window.location.pathname.includes('regionsDist'));
+  //const [navigation, setNavigation] = useState(window.location.pathname.includes('DistNav'));
 
-  const [mapData, setMapData] = useState([]);
-  const [mapDataMax, setMapDataMax] = useState(0);
+  //const [mapData, setMapData] = useState([]);
+  //const [mapDataMax, setMapDataMax] = useState(0);
   const [schoolsTotal, setSchoolsTotal] = useState(0);
 
   const [currentRegion, setCurrentRegion] = useState(null);
@@ -37,9 +39,9 @@ const RegionsList = (props) => {
 
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(40);
 
-  const pageSizes = [5, 10, 20];
+  const pageSizes = [5, 10, 40];
 /**
   const onChangeSearchOriginalname = (e) => {
     const searchOriginalname = e.target.value;
@@ -87,6 +89,7 @@ const RegionsList = (props) => {
     return null;
   }
 
+
   const buildMapData = (regions) => {
     if (!regions) return;
 
@@ -107,10 +110,11 @@ const RegionsList = (props) => {
       schoolsTotal += regions[i].schoolsCount;
     }
 
-    setMapData(mData);
-    setMapDataMax(mMax);
+    //setMapData(mData);
+    //setMapDataMax(mMax);
     setSchoolsTotal(schoolsTotal);
   }
+
 
   const retrieveExportRegions = () => {
     const csv = ProjectDataService.exportCSV(regions, columns);
@@ -215,18 +219,19 @@ const RegionsList = (props) => {
   };
 
 
+/**
   const ref = useRef(null);
   let mapInstance = null;
 
   const renderMap = () => {
-/**
+
     const renderedMapInstance = echarts.getInstanceByDom(ref.current);
     if (renderedMapInstance) {
       mapInstance = renderedMapInstance;
     } else {
       mapInstance = echarts.init(ref.current);
     }
-*/
+
 
     if (!mapInstance) {
       mapInstance = echarts.init(ref.current);
@@ -240,6 +245,7 @@ const RegionsList = (props) => {
             //window.location.href = "/schools/region/" + r;
         }
       });
+
     }
 
     mapInstance.setOption(
@@ -254,6 +260,7 @@ const RegionsList = (props) => {
   }, [mapDataMax, mapData, schoolsTotal, regionsFull]);
 
 
+
   useEffect(() => {
     window.onresize = function () {
       mapInstance.resize();
@@ -262,18 +269,22 @@ const RegionsList = (props) => {
       mapInstance && mapInstance.dispose();
     };
   }, []);
-
+*/
 
   return (<div>
-
+{/*
     <div hidden={!distribution} style={{ width: "100%", height: "99vh" }} ref={ref}></div>
+*/}
 
+{/*
+    <MapShow hidden={!distribution} ></MapShow>
+*/}
 
 {/*
 <iframe hidden={!distribution} src="http://localhost:8081/regionsDistribution" title="欣欣学校分布" width="100%" height="800" ></iframe>
 */}
 
-    <div hidden={distribution} className="list row">
+    <div hidden={false /*distribution*/} className="list row">
       <div className="col-sm-8">
         <h4>地区列表(总数：{schoolsTotal})</h4>
         <div className="row mb-3 ml-1" hidden={!AuthService.isLogin() || isMobile}>

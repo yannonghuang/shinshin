@@ -369,6 +369,7 @@ const buildFilters = async (req) => {
   const projectYear = req.body.projectYear;
   const xr = req.body.xr;
   const active = req.body.active;
+  const city = req.body.city;
 
   var orderbyObject = null;
   if (orderby) {
@@ -394,7 +395,7 @@ const buildFilters = async (req) => {
             code ? { code: { [Op.like]: `${code}` } } : null,
             donor ? { donor: { [Op.like]: `%${donor}%` } } : null,
             region ? { region: { [Op.eq]: `${region}` } } : null,
-            //region ? { region: { [Op.like]: `%${region}%` } } : null,
+            city ? { city: { [Op.like]: `%${city}%` } } : null,
             stage ? { stage: { [Op.eq]: `${stage}` } } : null,
             status ? { status: { [Op.eq]: `${status}` } } : null,
             request ? { request: { [Op.eq]: `${request}` } } : null,
@@ -662,23 +663,45 @@ exports.findExport = async (req, res) => {
 exports.findCountsByRegion = (req, res) => {
   const page = req.body.page;
   const size = req.body.size;
-  //const region = req.body.region;
+  const region = req.body.region;
+
+  console.log('region = ' + region);
+  console.log('page = ' + page);
+  console.log('size = ' + size);
 
   //const { page, size, title } = req.query;
   //var condition = region ? { region: { [Op.eq]: `${region}` } } : null;
 
   const { limit, offset } = getPagination(page, size);
 
+  const  attributeClause = region
+  ? [
+      'region',
+      'city',
+      [db.Sequelize.fn("COUNT", db.Sequelize.col("id")), "schoolsCount"],
+    ]
+  : [
+      'region',
+      [db.Sequelize.fn("COUNT", db.Sequelize.col("id")), "schoolsCount"],
+    ];
+  
+  const groupClause = region
+  ? ['region', 'city']
+  : ['region'];
+
   School.findAndCountAll({
   //where: condition,
   limit: limit,
   offset: offset,
   //subQuery: false,
-  attributes: ['region',
-      [db.Sequelize.fn("COUNT", db.Sequelize.col("id")), "schoolsCount"],
-  ],
-  where: { code: { [Op.lt]: 10000 }},
-  group: ['region']
+  attributes: attributeClause,
+  where: { 
+    [Op.and]: [
+      {code: { [Op.lt]: 10000 }},
+      region ? { region: { [Op.like]: `%${region}%` } } : null,
+    ]
+  },
+  group: groupClause
   })
     .then(data => {
       const { count: totalItems, rows: regions } = data;

@@ -84,6 +84,8 @@ import Profile from "./components/profile.component";
 
 //import RegionsList from "./components/regions-list.component";
 const RegionsList = React.lazy(() => import("./components/regions-list.component"));
+const MapShow = React.lazy(() => import("./components/mapshow.component"));
+
 
 const jwt = require("jsonwebtoken");
 
@@ -478,13 +480,19 @@ class App extends Component {
 */}
 
 
-            <Route exact path={["/regions", "/regionsDistribution", "/regionsDistNav"]} component={RegionsList} >
+            <Route exact path={["/regions", "/regionsDistribution"]} component={RegionsList} >
               <Suspense fallback={<span>Loading...</span>}>
                 <AccessControlService ComposedClass={RegionsList} />
               </Suspense> 
             </Route>
-           
-            <Route exact path={["/schools", "/schools/region/:region"]} >
+
+            <Route exact path={["/regionsDistNav"]} component={MapShow} >
+              <Suspense fallback={<span>Loading...</span>}>
+                <AccessControlService ComposedClass={MapShow} />
+              </Suspense> 
+            </Route>
+
+            <Route exact path={["/schools", "/schools/region/:region", "/schools/city/:city"]} >
                 <AccessControlService ComposedClass={SchoolsList} />
             </Route>
             <Route path={["/schoolsView/:id", "/schools/:id", "/addS"]} component={School} >

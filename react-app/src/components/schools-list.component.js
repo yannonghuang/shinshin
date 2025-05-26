@@ -26,6 +26,7 @@ const SchoolsList = (props) => {
   const [searchName, setSearchName] = useState("");
   const [searchCode, setSearchCode] = useState("");
   const [searchRegion, setSearchRegion] = useState(props.match? props.match.params.region : props.region);
+  const [searchCity, setSearchCity] = useState(props.match? props.match.params.city : props.city);  
   const [searchStartAt, setSearchStartAt] = useState("");
   const [searchLastVisit, setSearchLastVisit] = useState("");
   const [searchLatestProjectYear, setSearchLatestProjectYear] = useState("");
@@ -243,6 +244,10 @@ const SchoolsList = (props) => {
 
     if (searchRegion) {
       params["region"] = searchRegion;
+    }
+
+    if (searchCity) {
+      params["city"] = searchCity;
     }
 
     if (searchStartAt) {
