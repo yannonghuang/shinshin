@@ -54,13 +54,13 @@ export function getCities(region) {
       if (cities[i].name.includes('湘西'))
         result.push('湘西');
 
-      if (cities[i].name.includes('梁平'))
+      else if (cities[i].name.includes('梁平'))
         result.push('梁平');
 
-      if (cities[i].name.includes('博尔塔拉蒙古自治州'))
+      else if (cities[i].name.includes('博尔塔拉蒙古自治州'))
         result.push('博州');
 
-      result.push(cities[i].name);
+      else result.push(cities[i].name);
 
     }
 
