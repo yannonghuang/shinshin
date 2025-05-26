@@ -15,6 +15,8 @@ import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detec
 
 import debounce from 'lodash.debounce';
 
+import { getCities } from "../geo/import-json.js";
+
 const SchoolsList = (props) => {
   const [schools, setSchools] = useState([]);
   const [exportSchools, setExportSchools] = useState([]);
@@ -62,6 +64,7 @@ const SchoolsList = (props) => {
   const [startup, setStartup] = useState(true);
 
   const [regions, setRegions] = useState([]);
+  const [cities, setCities] = useState([]);
   const [stages, setStages] = useState([]);
   const [statuses, setStatuses] = useState([]);
   const [requests, setRequests] = useState([]);
@@ -89,6 +92,13 @@ const SchoolsList = (props) => {
   const onChangeSearchRegion = (e) => {
     const searchRegion = e.target.value;
     setSearchRegion(searchRegion);
+
+    setStartup(false);
+  };
+
+  const onChangeSearchCity = (e) => {
+    const searchCity = e.target.value;
+    setSearchCity(searchCity);
 
     setStartup(false);
   };
@@ -167,6 +177,7 @@ const SchoolsList = (props) => {
     setSearchName("");
     setSearchCode("");
     setSearchRegion("");
+    setSearchCity("");
     setSearchStartAt("");
     setSearchLastVisit("");
     setSearchLatestProjectYear("");
@@ -195,6 +206,7 @@ const SchoolsList = (props) => {
     setOrderby(params["orderby"]);
     setSearchCode(params["code"]);
     setSearchRegion(params["region"]);
+    setSearchCity(params["city"]);
     setSearchStartAt(params["startAt"]);
     setSearchLatestProjectYear(params["latestProjectYear"]);
     setSearchProjectYear(params["projectYear"]);
@@ -312,6 +324,11 @@ const SchoolsList = (props) => {
         });
     }
   }
+
+  const updateCities = () => {
+    setCities(getCities(searchRegion));
+  }
+  useEffect(updateCities, [searchRegion]);
 
 
   const getRequests = () => {
@@ -451,7 +468,7 @@ const SchoolsList = (props) => {
     retrieveSchools();
   };
 
-  useEffect(search, [pageSize, orderby, searchName, searchCode, searchRegion, searchStartAt, searchLatestProjectYear, searchProjectYear,
+  useEffect(search, [pageSize, orderby, searchName, searchCode, searchRegion, searchCity, searchStartAt, searchLatestProjectYear, searchProjectYear,
                      searchLastVisit, searchDonor, searchStage, searchStatus, searchRequest, searchXR, searchActive]);
 
   useEffect(retrieveSchools, [page]);
@@ -1008,6 +1025,20 @@ const SchoolsList = (props) => {
           >
             <option value="">省/自治区</option>
             {regions.map((option) => (
+            <option value={option}>
+            {option}
+            </option>
+            ))}
+          </select>
+
+          <select
+            className="form-control col-sm-2 ml-2"
+            placeholder="...."
+            value={searchCity}
+            onChange={onChangeSearchCity}
+          >
+            <option value="">地市州</option>
+            {cities.map((option) => (
             <option value={option}>
             {option}
             </option>
