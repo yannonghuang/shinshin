@@ -98,8 +98,8 @@ const MapShow = (props) => {
     return null;
   }
 
-  const buildMapData = (regions) => {
-    if (!regions) return;
+  const buildMapData = (/*regions*/) => {
+    if (!regions || !geoJSON) return;
 
     console.log(regions);
 
@@ -115,16 +115,18 @@ const MapShow = (props) => {
         else rName = regions[i].region.substring(0, 2);
       } else {
         console.info('looking for rName ...');
-/*
+
         for (var j = 0; j < geoJSON.features.length; j++) {
-          if (geoJSON.features[j].properties.fullname.includes(regions[i].city.substring(0, 2))) {
+          if (geoJSON.features[j].properties.fullname.includes(regions[i].city.substring(0, 2)) ||
+              geoJSON.features[j].properties.name.includes(regions[i].city.substring(0, 2))
+            ) {
             rName = geoJSON.features[j].properties.name;
             break;
           }
         }
         console.info('rName = ' + rName)
-*/
-        rName = regions[i].city.substring(0, 2);
+
+        //rName = regions[i].city.substring(0, 2);
       }
 
       mData.push({name: rName, value: regions[i].schoolsCount});
@@ -153,7 +155,7 @@ const MapShow = (props) => {
 
         console.log(response.data);
 
-        buildMapData(schools);
+        //buildMapData(schools);
       })
       .catch((e) => {
 
@@ -215,7 +217,7 @@ const MapShow = (props) => {
   useEffect(() => {
     let isMounted = true;
 
-    const loadAndRenderMap = async () => {
+    const loadMap = async () => {
       try {
         console.log('region = ' + region);
         const gj = await importJSON(region /*'https://geojson.cn/api/china/100000.json'*/);
@@ -226,6 +228,64 @@ const MapShow = (props) => {
         // Register the map after loading
         echarts.registerMap(region ? region : "china", gj);
 
+/*
+        // Initialize or get existing chart instance
+        let mapInstance = mapInstanceRef.current;
+        if (!mapInstance && ref.current) {
+          mapInstance = echarts.init(ref.current);
+          mapInstanceRef.current = mapInstance;
+
+          mapInstance.on('click', (params) => {
+            if (params.name) {
+              const r = getRegion(params.name);
+              //if (r) window.open("/schools/region/" + r, '_blank');
+              if (r) 
+                window.open("/regionsDistNav?region=" + r, '_blank'); 
+              else
+                window.open("/schools/city/" + params.name, '_blank');
+            }
+          });
+        }
+
+        // Set the chart option
+        mapInstance.setOption(
+          chinaMapConfig({ data: mapData, max: mapDataMax, min: 0, total: schoolsTotal, region })
+        );
+*/
+      } catch (error) {
+        console.error("Failed to load or render GeoJSON:", error);
+      }
+    };
+
+    loadMap();
+
+    return () => {
+      isMounted = false;
+/*
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.dispose();
+        mapInstanceRef.current = null;
+      }
+*/
+    };
+  }, [/*mapData, mapDataMax, schoolsTotal, regionsFull*/]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const renderMap = async () => {
+      try {
+
+/*
+        console.log('region = ' + region);
+        const gj = await importJSON(region 'https://geojson.cn/api/china/100000.json');
+        setGeoJSON(gj);
+
+        if (!isMounted) return;
+
+        // Register the map after loading
+        echarts.registerMap(region ? region : "china", gj);
+*/
         // Initialize or get existing chart instance
         let mapInstance = mapInstanceRef.current;
         if (!mapInstance && ref.current) {
@@ -254,7 +314,7 @@ const MapShow = (props) => {
       }
     };
 
-    loadAndRenderMap();
+    renderMap();
 
     return () => {
       isMounted = false;
@@ -263,7 +323,7 @@ const MapShow = (props) => {
         mapInstanceRef.current = null;
       }
     };
-  }, [mapData, mapDataMax, schoolsTotal, regionsFull]);
+  }, [mapData, mapDataMax, schoolsTotal, regionsFull, geoJSON]);
 
 /*
   useEffect(() => {
