@@ -101,7 +101,7 @@ const MapShow = (props) => {
   }
 
   const buildMapData = (/*regions*/) => {
-    if (!regions || !geoJSON) return;
+    if (!regions || !geoJSON || !geoJSON.features) return;
 
     console.log(regions);
 
@@ -224,13 +224,13 @@ const MapShow = (props) => {
         console.log('region = ' + region);
         const gj = await importJSON(region /*'https://geojson.cn/api/china/100000.json'*/);
         setGeoJSON(gj);
-
+/*
         if (!isMounted) return;
 
         // Register the map after loading
         echarts.registerMap(region ? region : "china", gj);
 
-/*
+
         // Initialize or get existing chart instance
         let mapInstance = mapInstanceRef.current;
         if (!mapInstance && ref.current) {
@@ -282,12 +282,14 @@ const MapShow = (props) => {
         console.log('region = ' + region);
         const gj = await importJSON(region 'https://geojson.cn/api/china/100000.json');
         setGeoJSON(gj);
-
+*/
         if (!isMounted) return;
+        if (!geoJSON) return;
 
         // Register the map after loading
-        echarts.registerMap(region ? region : "china", gj);
-*/
+        //echarts.registerMap(region ? region : "china", gj);
+        echarts.registerMap(region ? region : "china", geoJSON);
+
         // Initialize or get existing chart instance
         let mapInstance = mapInstanceRef.current;
         if (!mapInstance && ref.current) {

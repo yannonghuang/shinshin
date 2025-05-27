@@ -4,6 +4,7 @@ const router = express.Router();
 const homeController = require("../controllers/upload-home");
 const uploadController = require("../controllers/upload");
 const batchController = require("../controllers/batch.controller");
+const geoController = require("../controllers/geo.controller");
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -59,4 +60,14 @@ module.exports = function(app) {
   app.post("/api/batch-upload",
     [authJwt.verifyToken],
     batchController.batchUpload);
+
+  // geo upload
+  app.post("/api/geo/upload/:filename",
+  //  [authJwt.verifyToken],
+    geoController.upload);
+
+  // geo download
+  app.get("/api/geo/download/:filename",
+  //  [authJwt.verifyToken],
+    geoController.download);
 };

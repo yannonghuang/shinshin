@@ -1,20 +1,68 @@
 import { meta } from "./_meta.js";
+import GeoDataService from "../services/geo.service.js";
 
 const url_prefix = 'https://geojson.cn/api/china/';
 
 export async function importJSON(region = null) {
   try {
-    const url = getUrl(region);
-    console.log(url);
-    const response = await fetch(url /*'https://api.example.com/data.json'*/);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    const filename = getFilename(region);
+
+    let data = await loadLocal(filename);
+
+    if (!data) {
+      console.log("Using remote map data .....");
+
+      const url = getUrl(region);
+      console.log(url);
+      const response = await fetch(url /*'https://api.example.com/data.json'*/);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      data = await response.json();
+
+      await saveLocal(data, filename);
     }
-    const data = await response.json();
     console.log(data);
     return data; 
   } catch (error) {
     console.error('Error fetching data:', error);
+  }
+}
+
+async function _loadLocal(filename) {
+  try {
+    let res = await GeoDataService.download(filename);
+    if (res.status === 500) return null;
+
+    let data = await res.json();
+    return data;
+  } catch (error) {
+    console.info('Error loading local data:', error);
+  }
+  return null;
+}
+
+
+ async function loadLocal(filename) {
+  try {
+    const res = await fetch(`/api/geo/download/${filename}`);
+    if (res.status === 500) return null;
+
+    const data = await res.json();
+    return data;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+}
+
+
+async function saveLocal(data, filename) {
+  try {
+    await GeoDataService.upload(data, filename);
+  } catch (error) {
+    console.info('Error uploading local data:', error);
   }
 }
 
