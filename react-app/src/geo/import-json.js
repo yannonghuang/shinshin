@@ -23,7 +23,7 @@ export async function importJSON(region = null) {
 
       await saveLocal(data, filename);
     }
-    console.log(data);
+    //console.log(data);
     return data; 
   } catch (error) {
     console.error('Error fetching data:', error);

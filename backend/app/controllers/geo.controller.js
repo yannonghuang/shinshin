@@ -28,7 +28,7 @@ const upload = (req, res) => {
       }
     });
 
-    console.log('Received JSON:', jsonData);
+    //console.log('Received JSON:', jsonData);
     res.status(200).send('Data received');
   })
 }

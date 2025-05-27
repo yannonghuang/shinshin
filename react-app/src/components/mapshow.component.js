@@ -31,6 +31,7 @@ const MapShow = (props) => {
   const [mapDataMax, setMapDataMax] = useState(0);
   const [schoolsTotal, setSchoolsTotal] = useState(0);
 
+  /*
   const [currentRegion, setCurrentRegion] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [searchOriginalname, setSearchOriginalname] = useState("");
@@ -38,7 +39,8 @@ const MapShow = (props) => {
   //const [responseId, setResponseId] = useState(props.match.params.responseId);
   const [distribution, setDistribution] = useState(window.location.pathname.includes('regionsDist'));
   const [navigation, setNavigation] = useState(window.location.pathname.includes('DistNav'));
-  
+  */
+ 
   const regionsRef = useRef();
   regionsRef.current = regions;
 
@@ -110,13 +112,13 @@ const MapShow = (props) => {
     let schoolsTotal = 0;
     for (var i = 0; i < regions.length; i++) {
       let rName = '';
-      if (!region) {
+      if (!region) { // configure map for regions
         if (regions[i].region.startsWith('内蒙古')) rName = '内蒙古';
         else if (regions[i].region.startsWith('黑龙江')) rName = '黑龙江';
         //else if (regions[i].region.includes('湘西')) rName = '湘西';
         else rName = regions[i].region.substring(0, 2);
-      } else {
-        console.info('looking for rName ...');
+      } else { // configure map for cities
+        //console.info('looking for rName ...');
 
         for (var j = 0; j < geoJSON.features.length; j++) {
           if (geoJSON.features[j].properties.fullname.includes(regions[i].city.substring(0, 2)) ||
@@ -126,7 +128,7 @@ const MapShow = (props) => {
             break;
           }
         }
-        console.info('rName = ' + rName)
+        //console.info('rName = ' + rName)
 
         //rName = regions[i].city.substring(0, 2);
       }
@@ -175,47 +177,6 @@ const MapShow = (props) => {
   const mapInstanceRef = useRef(null);
   let mapInstance = null;
 
-/*
-  const renderMap = () => {
-//
-//    const renderedMapInstance = echarts.getInstanceByDom(ref.current);
-//    if (renderedMapInstance) {
-//      mapInstance = renderedMapInstance;
-//    } else {
-//      mapInstance = echarts.init(ref.current);
-//    }
-
-
-    if (!mapInstance) {
-      mapInstance = echarts.init(ref.current);
-
-      mapInstance.on('click', (params) => {
-        if (params.name) {
-          let r = getRegion(params.name);
-          if (r)
-            window.open("/schools/region/" + r, 'School List for ' + r);
-            //window.open("/schools/region/" + r, navigation ? '_blank' : '_self'); // _blank for new window, _self for current window
-            //window.location.href = "/schools/region/" + r;
-        }
-      });
-    }
-
-    mapInstance.setOption(
-      chinaMapConfig({ data: mapData, max: mapDataMax, min: 0, total: schoolsTotal })
-    );
-
-  };
-*/
-
-/*
-  useEffect(() => {
-    //echarts.registerMap("china", { geoJSON: geoJson });
-    const geoJSON = importJSON('https://geojson.cn/api/china/100000.json');
-    echarts.registerMap("china", { geoJSON: geoJSON });
-    renderMap();
-  }, [mapDataMax, mapData, schoolsTotal, regionsFull]);
-*/
-
   useEffect(() => {
     let isMounted = true;
 
@@ -224,38 +185,9 @@ const MapShow = (props) => {
         console.log('region = ' + region);
         const gj = await importJSON(region /*'https://geojson.cn/api/china/100000.json'*/);
         setGeoJSON(gj);
-/*
-        if (!isMounted) return;
 
-        // Register the map after loading
-        echarts.registerMap(region ? region : "china", gj);
-
-
-        // Initialize or get existing chart instance
-        let mapInstance = mapInstanceRef.current;
-        if (!mapInstance && ref.current) {
-          mapInstance = echarts.init(ref.current);
-          mapInstanceRef.current = mapInstance;
-
-          mapInstance.on('click', (params) => {
-            if (params.name) {
-              const r = getRegion(params.name);
-              //if (r) window.open("/schools/region/" + r, '_blank');
-              if (r) 
-                window.open("/regionsDistNav?region=" + r, '_blank'); 
-              else
-                window.open("/schools/city/" + params.name, '_blank');
-            }
-          });
-        }
-
-        // Set the chart option
-        mapInstance.setOption(
-          chinaMapConfig({ data: mapData, max: mapDataMax, min: 0, total: schoolsTotal, region })
-        );
-*/
       } catch (error) {
-        console.error("Failed to load or render GeoJSON:", error);
+        console.error("Failed to load GeoJSON:", error);
       }
     };
 
@@ -263,12 +195,6 @@ const MapShow = (props) => {
 
     return () => {
       isMounted = false;
-/*
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.dispose();
-        mapInstanceRef.current = null;
-      }
-*/
     };
   }, [/*mapData, mapDataMax, schoolsTotal, regionsFull*/]);
 
@@ -277,12 +203,6 @@ const MapShow = (props) => {
 
     const renderMap = async () => {
       try {
-
-/*
-        console.log('region = ' + region);
-        const gj = await importJSON(region 'https://geojson.cn/api/china/100000.json');
-        setGeoJSON(gj);
-*/
         if (!isMounted) return;
         if (!geoJSON) return;
 
@@ -316,7 +236,7 @@ const MapShow = (props) => {
         setLoading(false);
 
       } catch (error) {
-        console.error("Failed to load or render GeoJSON:", error);
+        console.error("Failed or render GeoJSON:", error);
       }
     };
 
@@ -329,18 +249,7 @@ const MapShow = (props) => {
         mapInstanceRef.current = null;
       }
     };
-  }, [mapData, mapDataMax, schoolsTotal, regionsFull, geoJSON]);
-
-/*
-  useEffect(() => {
-    window.onresize = function () {
-      mapInstance.resize();
-    };
-    return () => {
-      mapInstance && mapInstance.dispose();
-    };
-  }, []);
-*/
+  }, [mapData, mapDataMax, schoolsTotal, geoJSON]);
 
   useEffect(() => {
 
