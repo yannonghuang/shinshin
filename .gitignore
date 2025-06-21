@@ -6,3 +6,4 @@ backend/upload/
 frontend/
 **/*/build/
 security/
+mysql/
