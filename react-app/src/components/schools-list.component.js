@@ -511,6 +511,7 @@ const SchoolsList = (props) => {
       })
       .catch((e) => {
         console.log(e);
+        alert(e);
       });
   };
 

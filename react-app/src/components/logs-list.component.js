@@ -36,6 +36,8 @@ const LogsList = (props) => {
   const [orderby, setOrderby] = useState([]);
 
   const [searchField, setSearchField] = useState("");
+  const [searchName, setSearchName] = useState("");
+  const [searchCode, setSearchCode] = useState("");
   const [importantFields, setImportantFields] = useState([]);
 
   const getImportantFields = () => {
@@ -130,6 +132,16 @@ const LogsList = (props) => {
     setSearchRegion(searchRegion);
   }
 
+  const onChangeSearchName = (e) => {
+    const searchName = e.target.value;
+    setSearchName(searchName);
+  }
+
+  const onChangeSearchCode = (e) => {
+    const searchCode = e.target.value;
+    setSearchCode(searchCode);
+  }
+
   const display = (schoolId) => {
     if (schools) {
       for (var i = 0; i < schools.length; i++) {
@@ -150,6 +162,8 @@ const LogsList = (props) => {
     //setSchoolId(null);
     setSearchCreatedAt("");
     //setSearchRegion("");
+    setSearchName("");
+    setSearchCode("");
 
     setOrderby([]);
 
@@ -187,6 +201,14 @@ const LogsList = (props) => {
       params["region"] = searchRegion;
     }
 
+    if (searchName) {
+      params["name"] = searchName;
+    }
+
+    if (searchCode) {
+      params["code"] = searchCode;
+    }
+
     if (orderby) {
       params["orderby"] = orderby;
     }
@@ -222,7 +244,7 @@ const LogsList = (props) => {
     retrieveLogs();
   };
 
-  useEffect(search, [pageSize, orderby, searchText, searchField, searchCreatedAt, schoolId, searchRegion]);
+  useEffect(search, [pageSize, orderby, searchText, searchField, searchCreatedAt, schoolId, searchRegion, searchName, searchCode]);
 
   useEffect(retrieveLogs, [page]);
 
@@ -370,6 +392,26 @@ const LogsList = (props) => {
         },
       },
       {
+        Header: "学校编号",
+        accessor: 'school.code',
+        Cell: (props) => {
+          const rowIdx = props.row.id;
+          return (
+            <div>
+            { (logsRef.current[rowIdx].school) ? (
+              <Link
+                to={"/schoolsView/" + logsRef.current[rowIdx].school.id}
+                className="badge badge-success"
+              >
+                {logsRef.current[rowIdx].school.code
+                }
+              </Link>
+            ) : ''}
+            </div>
+          );
+        },
+      },
+      {
         Header: "修改字段",
         accessor: "field",
       },
@@ -405,7 +447,7 @@ const LogsList = (props) => {
   );
 
   const hiddenColumns = schoolId
-    ? 'school.code'
+    ? ['school.code', 'school.name']
     : [];
 
   const {
@@ -421,7 +463,7 @@ const LogsList = (props) => {
     disableSortRemove: true,
     manualSortBy: true,
     initialState: {
-      //hiddenColumns: hiddenColumns,
+      hiddenColumns: hiddenColumns,
       sortBy: [
         {
           id: 'createdAt',
@@ -460,7 +502,7 @@ const LogsList = (props) => {
           <input
             type="text"
             readonly=""
-            className="form-control col-sm-2 ml-3"
+            className="form-control col-sm-1 ml-3"
             placeholder="修改年份"
             value={searchCreatedAt}
           />
@@ -473,6 +515,21 @@ const LogsList = (props) => {
             maxRange={2030}
           />
 
+          <input
+            type="text"
+            className="form-control col-sm-2 ml-2"
+            placeholder="学校编号"
+            value={searchCode}
+            onChange={onChangeSearchCode}
+          />
+
+          <input
+            type="text"
+            className="form-control col-sm-2 ml-2"
+            placeholder="学校名称"
+            value={searchName}
+            onChange={onChangeSearchName}
+          />
 
           <select
             className="form-control col-sm-4 ml-3"

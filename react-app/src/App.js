@@ -282,6 +282,12 @@ class App extends Component {
 */}
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href={"/awards"} hidden={!AuthService.isLogin()}>奖项列表</a>
+
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href={"/logs"}
+                  hidden={!AuthService.isLogin() || !AuthService.isAdmin()}
+                >学校修改记录
+                </a>
               </div>
             </li>)}
 

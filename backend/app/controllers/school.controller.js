@@ -933,8 +933,17 @@ exports.update = async (req, res) => {
 // Delete a school with the specified id in the request
 exports.delete = async (req, res) => {
   const id = req.params.id;
+  const userId = req.userId;
 
   try {
+    let school = await School.findByPk(id);
+    if (school.code < 500 && school.code > 0) {
+      res.status(500).send({
+        message: " Could not delete School with id=" + id + ", code=" + school.code
+      });
+      return;
+    }
+
     await Survey.destroy({
       where: { schoolId: id },
       force: true

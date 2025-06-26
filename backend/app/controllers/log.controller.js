@@ -57,6 +57,8 @@ exports.findAll2 = (req, res) => {
   const field = req.body.field;
   const createdAt = req.body.createdAt;
   const region = req.body.region;
+  const name = req.body.name;
+  const code = req.body.code;
 
   const orderby = req.body.orderby;
 
@@ -93,6 +95,10 @@ exports.findAll2 = (req, res) => {
             userId ? { userId: { [Op.eq]: `${userId}` } } : null,
             schoolId ? { schoolId: { [Op.eq]: `${schoolId}` } } : null,
             field ? { field: { [Op.eq]: `${field}` } } : null,
+
+            name ? { '$school.name$': { [Op.like]: `%${name}%` } } : null,
+            code ? { '$school.code$': { [Op.eq]: `${code}` } } : null,
+
             {field: {[Op.or]: importantFields}},
             createdAt
               ? db.Sequelize.literal(`YEAR(logs.createdAt) = ${createdAt}`)
@@ -125,7 +131,7 @@ exports.findAll2 = (req, res) => {
     },
     {
       model: School,
-      attributes: ['id', 'code', 'region'],
+      attributes: ['id', 'code', 'region', 'name'],
       required: false,
     },
   ],
