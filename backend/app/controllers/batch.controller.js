@@ -61,14 +61,18 @@ const uploadProjectsXR = async (req, res) => {
 
       if (!row.getCell(NON_NULL_COLUMN).value) break;
 
-      total++;
-
       let startAt = row.getCell(1).value;
       let code = row.getCell(2).value;
       //let pCategory = row.getCell(2).value;
       let name = row.getCell(4).value;
       let description = row.getCell(5).value;
-      //let budget = row.getCell(6).value;
+      let budget = parseFloat(row.getCell(6).text);
+      budget = isNaN(budget) ? 0 : budget;
+
+      console.log(`name = ${row.getCell(4).value}, rrow.getCell(6).text = ${row.getCell(6).text}, budget = ${budget}`);
+      if (!startAt || !code || !name) continue;
+
+      total++;
 
       let schools = await School.findAll({
         where: {code},
@@ -76,7 +80,7 @@ const uploadProjectsXR = async (req, res) => {
       );
 
       if (schools && schools[0]) {
-        updates.push({startAt: startAt + '-01-10', schoolId: schools[0].id, name, description, xr: 1});
+        updates.push({startAt: startAt + '-01-10', schoolId: schools[0].id, name, description, budget, xr: 1});
         updatedTotal++;
       }
     }
