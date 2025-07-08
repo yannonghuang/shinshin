@@ -82,6 +82,9 @@ const uploadProjectsXR = async (req, res) => {
       if (schools && schools[0]) {
         updates.push({startAt: startAt + '-01-10', schoolId: schools[0].id, name, description, budget, xr: 1});
         updatedTotal++;
+
+        await School.update({xr: 1}, {where: { id: schools[0].id }});
+        console.log(`School ${schools[0].code} is set to XR ........`)
       }
     }
     await Project.bulkCreate(updates, { transaction: t });
