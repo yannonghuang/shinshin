@@ -83,7 +83,7 @@ const uploadProjectsXR = async (req, res) => {
         updates.push({startAt: startAt + '-01-10', schoolId: schools[0].id, name, description, budget, xr: 1});
         updatedTotal++;
 
-        await School.update({xr: 1}, {where: { id: schools[0].id }});
+        await School.update({xr: 1}, {where: { id: schools[0].id }}, { transaction: t });
         console.log(`School ${schools[0].code} is set to XR ........`)
       }
     }
