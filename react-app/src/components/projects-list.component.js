@@ -712,6 +712,39 @@ const ProjectsList = (props) => {
       },
 
       {
+        Header: "学前学生数",
+        accessor: "school.kStudentsCount",
+      },
+      {
+        Header: "一年级学生数",
+        accessor: "school.g1StudentsCount",
+      },
+      {
+        Header: "二年级学生数",
+        accessor: "school.g2StudentsCount",
+      },
+      {
+        Header: "三年级学生数",
+        accessor: "school.g3StudentsCount",
+      },
+      {
+        Header: "四年级学生数",
+        accessor: "school.g4StudentsCount",
+      },
+      {
+        Header: "五年级学生数",
+        accessor: "school.g5StudentsCount",
+      },
+      {
+        Header: "六年级学生数",
+        accessor: "school.g6StudentsCount",
+      },
+      {
+        Header: "初中学生数",
+        accessor: "school.mStudentsCount",
+      },
+
+      {
         Header: "操作",
         accessor: "actions",
         disableSortBy: true,
@@ -747,6 +780,16 @@ const ProjectsList = (props) => {
     []
   );
 
+  var exportDetailOnlyColumns = [
+    'school.kStudentsCount',
+    'school.g1StudentsCount',
+    'school.g2StudentsCount',
+    'school.g3StudentsCount',
+    'school.g4StudentsCount',
+    'school.g5StudentsCount',
+    'school.g6StudentsCount',
+    'school.mStudentsCount'
+  ];    
   var exportDetailColumns = subtract(columns, ['response.title', 'designationsCount']);
 
   if (!ProjectDataService.getQuantity(pCategoryId))
@@ -769,6 +812,8 @@ const ProjectsList = (props) => {
     ['school.studentsCount', 'school.teachersCount', 'school.category', 'school.classesCount', 'school.gradesCount'];
 
   var hiddenColumns = ['quantity1', 'quantity2', 'quantity3', 'school.address', 'school.principalName', 'school.principalPhone', 'school.classesCount', 'school.gradesCount'];
+  hiddenColumns = [...hiddenColumns, ...exportDetailOnlyColumns];
+
   if (embedded || schoolId) hiddenColumns =
     [...hiddenColumns, ...schoolKnownColumns, ...exportOnlyColumns];
 

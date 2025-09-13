@@ -9,6 +9,7 @@ const REGIONS = db.REGIONS;
 const School = db.schools;
 const PROJECT_STATUSES = db.PROJECT_STATUSES;
 const PROJECT_CATEGORIES = db.PROJECT_CATEGORIES;
+const Survey = db.surveys
 
 const { authJwt } = require("../middleware");
 
@@ -305,14 +306,25 @@ exports.findAll2 = async (req, res) => {
         required: false,
       }];
 
-  const inner_include = [{
-    model: User,
-    //attributes: [['chineseName', 'principalName'], ['phone', 'principalPhone'], ['wechat', 'principalWechat']],
-    attributes: [],
-    required: false,
-    //where :  { id: { [Op.eq]: 'school'.'principalId' } }
-    where: db.Sequelize.literal('`school`.`principalId` = `school->users`.`id`')
-  }];
+  const inner_include = [
+
+    {
+      model: User,
+      //attributes: [['chineseName', 'principalName'], ['phone', 'principalPhone'], ['wechat', 'principalWechat']],
+      attributes: [],
+      required: false,
+      //where :  { id: { [Op.eq]: 'school'.'principalId' } }
+      where: db.Sequelize.literal('`school`.`principalId` = `school->users`.`id`')
+    },
+
+    {
+      model: Survey,
+      attributes: [],
+      //attributes: ['kStudentsCount', 'g1StudentsCount', 'g2StudentsCount', 'g3StudentsCount', 'g4StudentsCount', 'g5StudentsCount', 'g6StudentsCount', 'mStudentsCount'],
+      required: false,
+      where: db.Sequelize.literal('`school`.`id` = `school->surveys`.`schoolId`')
+    }
+];
 
   //'$school.region$'
   
@@ -320,8 +332,19 @@ exports.findAll2 = async (req, res) => {
                     {
                       model: School,
                       attributes: ['id', 'studentsCount', 'teachersCount', 'category', 'name', 'code', 'region', 'address', 'classesCount', 'gradesCount',
+
                         [db.Sequelize.literal('`school->users`.`chineseName`'), 'principalName'],
-                        [db.Sequelize.literal('`school->users`.`phone`'), 'principalPhone']
+                        [db.Sequelize.literal('`school->users`.`phone`'), 'principalPhone'],
+
+                        [db.Sequelize.literal('sum(`school->surveys`.`kStudentsCount`)'), 'kStudentsCount'],
+                        [db.Sequelize.literal('sum(`school->surveys`.`g1StudentsCount`)'), 'g1StudentsCount'],
+                        [db.Sequelize.literal('sum(`school->surveys`.`g2StudentsCount`)'), 'g2StudentsCount'],
+                        [db.Sequelize.literal('sum(`school->surveys`.`g3StudentsCount`)'), 'g3StudentsCount'],
+                        [db.Sequelize.literal('sum(`school->surveys`.`g4StudentsCount`)'), 'g4StudentsCount'],
+                        [db.Sequelize.literal('sum(`school->surveys`.`g5StudentsCount`)'), 'g5StudentsCount'],
+                        [db.Sequelize.literal('sum(`school->surveys`.`g6StudentsCount`)'), 'g6StudentsCount'],
+                        [db.Sequelize.literal('sum(`school->surveys`.`mStudentsCount`)'), 'mStudentsCount'],            
+
                       ],
                       required: false,
                       include: inner_include
