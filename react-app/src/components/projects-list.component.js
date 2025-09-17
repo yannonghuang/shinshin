@@ -672,6 +672,40 @@ const ProjectsList = (props) => {
         accessor: 'school.gradesCount',
         disableSortBy: true,
       },
+
+      {
+        Header: "学前学生数",
+        accessor: "school.kStudentsCount",
+      },
+      {
+        Header: "一年级学生数",
+        accessor: "school.g1StudentsCount",
+      },
+      {
+        Header: "二年级学生数",
+        accessor: "school.g2StudentsCount",
+      },
+      {
+        Header: "三年级学生数",
+        accessor: "school.g3StudentsCount",
+      },
+      {
+        Header: "四年级学生数",
+        accessor: "school.g4StudentsCount",
+      },
+      {
+        Header: "五年级学生数",
+        accessor: "school.g5StudentsCount",
+      },
+      {
+        Header: "六年级学生数",
+        accessor: "school.g6StudentsCount",
+      },
+      {
+        Header: "初中学生数",
+        accessor: "school.mStudentsCount",
+      },
+            
       {
         Header: "校长",
         accessor: 'school.principalName',
@@ -709,39 +743,6 @@ const ProjectsList = (props) => {
       {
         Header: "数量3",
         accessor: "quantity3",
-      },
-
-      {
-        Header: "学前学生数",
-        accessor: "school.kStudentsCount",
-      },
-      {
-        Header: "一年级学生数",
-        accessor: "school.g1StudentsCount",
-      },
-      {
-        Header: "二年级学生数",
-        accessor: "school.g2StudentsCount",
-      },
-      {
-        Header: "三年级学生数",
-        accessor: "school.g3StudentsCount",
-      },
-      {
-        Header: "四年级学生数",
-        accessor: "school.g4StudentsCount",
-      },
-      {
-        Header: "五年级学生数",
-        accessor: "school.g5StudentsCount",
-      },
-      {
-        Header: "六年级学生数",
-        accessor: "school.g6StudentsCount",
-      },
-      {
-        Header: "初中学生数",
-        accessor: "school.mStudentsCount",
       },
 
       {
