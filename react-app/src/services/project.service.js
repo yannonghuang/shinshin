@@ -332,7 +332,7 @@ class ProjectDataService {
         '评估指导'
       ]
     },
-    {id: 10, name: "项目式学习-美化校园"},
+    {id: 10, name: "PBL美化校园"},
     {id: 11, name: "乡土教育"},
     {id: 12, name: "读书月活动"},
     {id: 13, name: "美术园活动"},
