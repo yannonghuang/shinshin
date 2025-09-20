@@ -333,7 +333,7 @@ class ProjectDataService {
       ]
     },
     {id: 10, name: "PBL美化校园"},
-    {id: 11, name: "乡土教育"},
+    {id: 11, name: "乡土课程"},
     {id: 12, name: "读书月活动"},
     {id: 13, name: "美术园活动"},
     {id: 14, name: "编程活动"},
