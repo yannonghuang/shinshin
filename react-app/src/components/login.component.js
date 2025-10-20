@@ -157,7 +157,7 @@ export default class Login extends Component {
     });
 
     //const url = window.location.host;
-    const url = window.location.protocol + '//' + window.location.host;
+    const url = window.location.protocol + '//' + 'xxgl.shinshinfoundation.org'; //window.location.host; ////https://xxgl.shinshinfoundation.org
 
     var templateParams = {
       to: user.email,

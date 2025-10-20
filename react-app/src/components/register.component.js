@@ -654,7 +654,7 @@ export default class Register extends Component {
       });
 
       //const url = window.location.host;
-      const url = window.location.protocol + '//' + window.location.host;
+      const url = window.location.protocol + '//' + 'xxgl.shinshinfoundation.org'; //window.location.host; //https://xxgl.shinshinfoundation.org
       var templateParams = {
             to: this.state.email,
             username: (this.state.chineseName ? this.state.chineseName : this.state.username)
