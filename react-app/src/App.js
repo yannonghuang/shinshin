@@ -142,6 +142,7 @@ class App extends Component {
     if (this.props.location.pathname.match(/addU/)) return true;
 
     if (this.props.location.pathname.match(/regionsDistribution/)) return true;
+    if (this.props.location.pathname.match(/mapNoHead/)) return true;
 
     if (this.props.location.pathname.match(/batch/)) return true;
 
@@ -150,7 +151,8 @@ class App extends Component {
 
   noLogo() {
     if (this.props.location.pathname.match(/regionsDistribution/)) return true;
-
+    if (this.props.location.pathname.match(/mapNoHead/)) return true;
+    
     return false;
   }
 
@@ -492,7 +494,7 @@ class App extends Component {
               </Suspense> 
             </Route>
 
-            <Route exact path={["/regionsDistNav"]} component={MapShow} >
+            <Route exact path={["/regionsDistNav", "/mapNoHead"]} component={MapShow} >
               <Suspense fallback={<span>Loading...</span>}>
                 <AccessControlService ComposedClass={MapShow} />
               </Suspense> 
