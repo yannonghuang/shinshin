@@ -1137,6 +1137,20 @@ const SchoolsList = (props) => {
             ))}
           </select>
 
+          <select hidden={!AuthService.isLogin()}
+            className="form-control col-sm-3 ml-2"
+            placeholder="...."
+            value={searchStatus}
+            onChange={onChangeSearchStatus}
+          >
+            <option value="">学校状态</option>
+            {statuses.map((option) => (
+            <option value={option}>
+            {option}
+            </option>
+            ))}
+          </select>
+
           <select /* style={{fontSize:'70%'}} */
             className="form-control col-sm-2 ml-2"
             hidden={!AuthService.isLogin()}
@@ -1155,20 +1169,6 @@ const SchoolsList = (props) => {
               <option value={'全部'}>
                 {'全部'}
               </option>                                    
-          </select>
-
-          <select hidden={!AuthService.isLogin()}
-            className="form-control col-sm-3 ml-2"
-            placeholder="...."
-            value={searchStatus}
-            onChange={onChangeSearchStatus}
-          >
-            <option value="">学校状态</option>
-            {statuses.map((option) => (
-            <option value={option}>
-            {option}
-            </option>
-            ))}
           </select>
 
           <select hidden={true /*!AuthService.isLogin()*/}
