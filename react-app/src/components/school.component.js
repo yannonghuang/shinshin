@@ -1089,7 +1089,7 @@ export default class School extends Component {
                 </select>
                 </div>
 
-                <div class="select-container form-group col-sm-4" hidden={!AuthService.isVolunteer()}>
+                <div class="select-container form-group col-sm-4" hidden={true /* !AuthService.isVolunteer() */}>
                 <label htmlFor="request">学校需求</label>
                 <select
                 disabled={this.state.readonly?"disabled":false}
@@ -1100,6 +1100,7 @@ export default class School extends Component {
                 onChange={this.onChangeGenerics}
                 name="request"
                 >
+
                 <option value="">{this.state.readonly ? '' : '请选择' }</option>
                 {this.state.requests.map((option) => (
                   <option value={option}>{option}</option>

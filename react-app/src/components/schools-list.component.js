@@ -818,10 +818,12 @@ const SchoolsList = (props) => {
         Header: "学校状态",
         accessor: "status",
       },
+/**
       {
         Header: "需求状态",
         accessor: "request",
       },
+*/
       {
         Header: "捐款人",
         accessor: "donor",
@@ -1169,7 +1171,7 @@ const SchoolsList = (props) => {
             ))}
           </select>
 
-          <select hidden={!AuthService.isLogin()}
+          <select hidden={true /*!AuthService.isLogin()*/}
             className="form-control col-sm-2 ml-2"
             placeholder="...."
             value={searchRequest}
