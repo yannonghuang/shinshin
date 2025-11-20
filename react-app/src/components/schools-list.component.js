@@ -568,10 +568,12 @@ const SchoolsList = (props) => {
         Header: "学校状态",
         accessor: "status",
       },
+/*
       {
         Header: "需求状态",
         accessor: "request",
       },
+*/
       {
         Header: "省/自治区/直辖市",
         accessor: "region",
