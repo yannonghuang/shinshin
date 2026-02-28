@@ -50,6 +50,9 @@ const AutoLogoutTimer = (props: any) => {
     if (pathname.match(/projects/)) return true;
     if (pathname.match(/projects\/school\/(\d)+/)) return true;
     if (pathname.match(/projectsView\/(\d)+/)) return true;
+    if (pathname.match(/^\/courses$/)) return true;
+    if (pathname.match(/^\/cases$/)) return true;
+    if (pathname.match(/^\/cases\/(\d)+$/)) return true;
     if (pathname.match(/regionsDistribution/)) return true;
     if (pathname.match(/regionsDistNav/)) return true;
     if (pathname.match(/mapNoHead/)) return true;

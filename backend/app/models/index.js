@@ -45,6 +45,9 @@ db.feedbacks = require("./feedback.model.js")(sequelize, Sequelize);
 db.questionaires = require("./questionaire.model.js")(sequelize, Sequelize);
 db.materials = require("./material.model.js")(sequelize, Sequelize);
 db.awards = require("./award.model.js")(sequelize, Sequelize);
+db.courses = require("./course.model.js")(sequelize, Sequelize);
+db.cases = require("./case.model.js")(sequelize, Sequelize);
+db.artifacts = require("./artifact.model.js")(sequelize, Sequelize);
 
 db.forms.belongsToMany(db.schools, {
   through: "form_school",
@@ -397,5 +400,13 @@ db.awards.belongsTo(db.schools);
 db.awards.hasMany(db.materials, {foreignKey: 'awardId'}, {as: 'Materials'})
 db.materials.belongsTo(db.awards);
 
-module.exports = db;
+db.courses.hasMany(db.cases, { foreignKey: "courseId" }, { as: "Cases" });
+db.cases.belongsTo(db.courses);
 
+db.cases.hasMany(db.artifacts, { foreignKey: "caseId" }, { as: "Artifacts" });
+db.artifacts.belongsTo(db.cases);
+
+db.schools.hasMany(db.cases, { foreignKey: "schoolId" }, { as: "Cases" });
+db.cases.belongsTo(db.schools);
+
+module.exports = db;

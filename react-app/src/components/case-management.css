@@ -1,0 +1,120 @@
+.cm-page {
+  --cm-bg: #f7f8f4;
+  --cm-panel: #ffffff;
+  --cm-line: #e3e6dc;
+  --cm-text: #263026;
+  --cm-muted: #667166;
+  --cm-accent: #1f7a5c;
+  --cm-accent-soft: #e7f5ee;
+  --cm-warn: #7f5d2d;
+  --cm-warn-soft: #fff5e7;
+  background: radial-gradient(circle at 5% 0%, #eef6f0 0%, var(--cm-bg) 45%, #f5f5ef 100%);
+  min-height: calc(100vh - 140px);
+  padding: 16px;
+  border-radius: 14px;
+}
+
+.cm-hero {
+  background: linear-gradient(135deg, #1d6f53 0%, #2d8868 45%, #4ea27f 100%);
+  color: #f5fff9;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 10px 26px rgba(25, 87, 63, 0.2);
+}
+
+.cm-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.cm-subtitle {
+  margin: 6px 0 0 0;
+  font-size: 13px;
+  opacity: 0.92;
+}
+
+.cm-kpis {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.cm-kpi {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.cm-card {
+  background: var(--cm-panel);
+  border: 1px solid var(--cm-line);
+  border-radius: 12px;
+  box-shadow: 0 5px 14px rgba(36, 46, 37, 0.05);
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.cm-card h6 {
+  margin-bottom: 12px;
+  color: var(--cm-text);
+  font-weight: 700;
+}
+
+.cm-table-wrap {
+  background: var(--cm-panel);
+  border: 1px solid var(--cm-line);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 14px rgba(36, 46, 37, 0.05);
+}
+
+.cm-table-wrap .table {
+  margin-bottom: 0;
+}
+
+.cm-table-wrap thead th {
+  background: #f2f6ef;
+  color: var(--cm-text);
+  border-top: 0;
+  font-size: 12px;
+}
+
+.cm-table-wrap tbody td {
+  color: #2d372d;
+  vertical-align: middle;
+}
+
+.cm-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1.4;
+  background: var(--cm-accent-soft);
+  color: var(--cm-accent);
+  border: 1px solid #ccebdd;
+}
+
+.cm-tag-warn {
+  background: var(--cm-warn-soft);
+  color: var(--cm-warn);
+  border-color: #f2dfb8;
+}
+
+.cm-empty {
+  color: var(--cm-muted);
+  padding: 16px;
+  text-align: center;
+}
+
+.cm-section-title {
+  color: var(--cm-text);
+  font-weight: 700;
+  margin-bottom: 8px;
+}

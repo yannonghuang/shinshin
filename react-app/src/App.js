@@ -29,6 +29,9 @@ import Project from "./components/project.component";
 import ProjectsList from "./components/projects-list.component";
 import ProjectsByCategoriesList from "./components/projects-categories-list.component";
 import DossiersList from "./components/dossiers-list.component";
+import CasesList from "./components/cases-list.component";
+import CaseDetail from "./components/case-detail.component";
+import CoursesList from "./components/courses-list.component";
 
 //import AwardDataService from "./services/award.service";
 import Award from "./components/award.component";
@@ -128,6 +131,10 @@ class App extends Component {
   }
 
   noNavBar() {
+    if (!AuthService.isLogin() && this.props.location.pathname.match(/^\/cases$/)) return true;
+    if (!AuthService.isLogin() && this.props.location.pathname.match(/^\/cases\/(\d)+$/)) return true;
+    if (!AuthService.isLogin() && this.props.location.pathname.match(/^\/courses$/)) return true;
+
     if (this.props.location.pathname.match(/schools\/(\d)+/)) return true;
     if (this.props.location.pathname.match(/projects\/(\d)+/)) return true;
     if (this.props.location.pathname.match(/responses\/(\d)+/)) return true;
@@ -339,6 +346,17 @@ class App extends Component {
               </div>
             </li>)}
 
+            {(!AuthService.isLogin() || AuthService.isVolunteer()) && (
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                案例管理
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href={"/cases"}>案例列表</a>
+                <a class="dropdown-item" href={"/courses"}>课程管理</a>
+              </div>
+            </li>)}
+
             {AuthService.isVolunteer() && (
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -532,6 +550,15 @@ class App extends Component {
                     "/projectsByCategoryByStartAt/:pCategoryId/:pSubCategoryId/:startAt/:name/:formId"]}
                 component={ProjectsList} >
                 <AccessControlService ComposedClass={ProjectsList} />
+            </Route>
+            <Route exact path={["/cases"]} component={CasesList} >
+                <AccessControlService ComposedClass={CasesList} />
+            </Route>
+            <Route path={["/cases/:id"]} component={CaseDetail} >
+                <AccessControlService ComposedClass={CaseDetail} />
+            </Route>
+            <Route exact path={["/courses"]} component={CoursesList} >
+                <AccessControlService ComposedClass={CoursesList} />
             </Route>
             <Route exact path={["/projects/category/:pCategoryId/:pSubCategoryId", "/projects/categoryCanonical/:pCategoryId",
                             "/projects/allCategories", "/projects/allCategoriesCanonical"]}
