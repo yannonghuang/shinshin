@@ -242,7 +242,7 @@ const CasesList = () => {
       <table className="table table-sm table-bordered">
         <thead>
           <tr>
-            <th>ID</th>
+            {/*<th>ID</th>*/} 
             <th>年份</th>
             <th>描述</th>
             <th>课程</th>
@@ -254,7 +254,7 @@ const CasesList = () => {
         <tbody>
           {cases.map((item) => (
             <tr key={item.id}>
-              <td>{item.id}</td>
+              {/*<td>{item.id}</td>*/}
               <td>{item.year || "-"}</td>
               <td>{item.description}</td>
               <td>{stylishPublic ? <span className="cm-tag">{item.course || "-"}</span> : (item.course || "-")}</td>

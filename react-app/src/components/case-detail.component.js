@@ -621,7 +621,7 @@ const CaseDetail = (props) => {
       <table className="table table-sm table-bordered">
         <thead>
           <tr>
-            <th>ID</th>
+            {/*<th>ID</th>*/}
             <th>文件名</th>
             <th>类型</th>
             <th>分类</th>
@@ -633,7 +633,7 @@ const CaseDetail = (props) => {
         <tbody>
           {filteredArtifacts.map((artifact) => (
             <tr key={artifact.id}>
-              <td>{artifact.id}</td>
+              {/*<td>{artifact.id}</td>*/}
               <td>{artifact.attachmentName}</td>
               <td>
                 {artifact.type}
