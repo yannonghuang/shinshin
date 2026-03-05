@@ -400,11 +400,16 @@ db.awards.belongsTo(db.schools);
 db.awards.hasMany(db.materials, {foreignKey: 'awardId'}, {as: 'Materials'})
 db.materials.belongsTo(db.awards);
 
-db.courses.hasMany(db.cases, { foreignKey: "courseId" }, { as: "Cases" });
-db.cases.belongsTo(db.courses);
-
-db.cases.hasMany(db.artifacts, { foreignKey: "caseId" }, { as: "Artifacts" });
-db.artifacts.belongsTo(db.cases);
+db.cases.hasMany(db.artifacts, {
+  as: "Artifacts",
+  foreignKey: "caseId",
+  onDelete: "CASCADE",
+  hooks: true,
+});
+db.artifacts.belongsTo(db.cases, {
+  foreignKey: "caseId",
+  onDelete: "CASCADE",
+});
 
 db.schools.hasMany(db.cases, { foreignKey: "schoolId" }, { as: "Cases" });
 db.cases.belongsTo(db.schools);

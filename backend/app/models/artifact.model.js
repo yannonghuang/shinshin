@@ -23,7 +23,7 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.BIGINT,
       },
       type: {
-        type: Sequelize.ENUM("doc", "pdf", "video", "audio"),
+        type: Sequelize.STRING(64),
         allowNull: false,
       },
     },

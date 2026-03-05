@@ -6,6 +6,18 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING(4096),
         allowNull: false,
       },
+      year: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      course: {
+        type: Sequelize.STRING(64),
+        allowNull: false,
+      },
+      category: {
+        type: Sequelize.STRING(255),
+        allowNull: false,
+      },
       schoolId: {
         type: Sequelize.INTEGER,
         allowNull: true,

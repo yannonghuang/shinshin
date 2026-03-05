@@ -1,13 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
+import mammoth from "mammoth/mammoth.browser";
 import ArtifactDataService from "../services/artifact.service";
 import CaseDataService from "../services/case.service";
 import AuthService from "../services/auth.service";
 import "./case-management.css";
 
+const ARTIFACT_CATEGORIES = ["图片", "视频", "课程材料"];
+
 const defaultArtifactForm = {
   description: "",
-  category: "",
-  type: "doc",
+  category: "图片",
   file: null,
 };
 
@@ -15,21 +17,38 @@ const CaseDetail = (props) => {
   const caseId = props.match.params.id;
   const [caseData, setCaseData] = useState(null);
   const [artifactForm, setArtifactForm] = useState(defaultArtifactForm);
+  const [bulkZipFile, setBulkZipFile] = useState(null);
   const [editingArtifactId, setEditingArtifactId] = useState(null);
   const [editingArtifactForm, setEditingArtifactForm] = useState(defaultArtifactForm);
   const [previewArtifact, setPreviewArtifact] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
   const [previewMime, setPreviewMime] = useState("");
+  const [previewDocxHtml, setPreviewDocxHtml] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("图片");
+  const [artifactUploadProgress, setArtifactUploadProgress] = useState(null);
+  const [bulkUploadProgress, setBulkUploadProgress] = useState(null);
+  const [isUploadingArtifact, setIsUploadingArtifact] = useState(false);
+  const [isUploadingBulk, setIsUploadingBulk] = useState(false);
+  const [isDownloadingBulk, setIsDownloadingBulk] = useState(false);
+  const [bulkDownloadProgress, setBulkDownloadProgress] = useState(null);
+  const [isLoadingCase, setIsLoadingCase] = useState(true);
   const [message, setMessage] = useState("");
   const canEdit = AuthService.isVolunteer();
+  const goBackToCases = () => props.history.push("/cases");
+
+  const normalizeCategory = (value) => (ARTIFACT_CATEGORIES.includes(value) ? value : "图片");
 
   const retrieveCase = useCallback(async () => {
+    setIsLoadingCase(true);
     try {
       const resp = await CaseDataService.get(caseId);
       setCaseData(resp.data);
     } catch (e) {
       console.log(e);
-      setMessage("加载案例详情失败。");
+      setCaseData(null);
+      setMessage(e?.response?.data?.message || "加载案例详情失败。");
+    } finally {
+      setIsLoadingCase(false);
     }
   }, [caseId]);
 
@@ -58,14 +77,59 @@ const CaseDetail = (props) => {
       const formData = new FormData();
       formData.append("description", artifactForm.description || "");
       formData.append("category", artifactForm.category || "");
-      formData.append("type", artifactForm.type);
       formData.append("file", artifactForm.file);
-      await ArtifactDataService.create(caseId, formData);
+      setIsUploadingArtifact(true);
+      setArtifactUploadProgress(0);
+      await ArtifactDataService.create(caseId, formData, (event) => {
+        if (!event || !event.total) return;
+        const percent = Math.min(100, Math.round((event.loaded * 100) / event.total));
+        setArtifactUploadProgress(percent);
+      });
       setArtifactForm(defaultArtifactForm);
+      setArtifactUploadProgress(100);
       setMessage("附件上传成功。");
       retrieveCase();
     } catch (err) {
       setMessage(err?.response?.data?.message || "上传失败。");
+    } finally {
+      setIsUploadingArtifact(false);
+      setTimeout(() => setArtifactUploadProgress(null), 600);
+    }
+  };
+
+  const onBulkZipChange = (e) => {
+    const file = e.target.files && e.target.files[0] ? e.target.files[0] : null;
+    setBulkZipFile(file);
+  };
+
+  const uploadBulkZip = async (e) => {
+    e.preventDefault();
+    setMessage("");
+    try {
+      if (!bulkZipFile) {
+        setMessage("请先选择 zip 文件。");
+        return;
+      }
+      const formData = new FormData();
+      formData.append("file", bulkZipFile);
+      setIsUploadingBulk(true);
+      setBulkUploadProgress(0);
+      const resp = await ArtifactDataService.bulkCreate(caseId, formData, (event) => {
+        if (!event || !event.total) return;
+        const percent = Math.min(100, Math.round((event.loaded * 100) / event.total));
+        setBulkUploadProgress(percent);
+      });
+      const created = resp?.data?.createdCount || 0;
+      const skipped = resp?.data?.skippedCount || 0;
+      setBulkUploadProgress(100);
+      setMessage(`批量导入完成：成功 ${created}，跳过 ${skipped}。`);
+      setBulkZipFile(null);
+      retrieveCase();
+    } catch (err) {
+      setMessage(err?.response?.data?.message || "批量导入失败。");
+    } finally {
+      setIsUploadingBulk(false);
+      setTimeout(() => setBulkUploadProgress(null), 800);
     }
   };
 
@@ -87,20 +151,90 @@ const CaseDetail = (props) => {
     }
   };
 
+  const downloadAllArtifacts = async () => {
+    try {
+      setMessage("");
+      setIsDownloadingBulk(true);
+      setBulkDownloadProgress(0);
+      const resp = await ArtifactDataService.downloadByCase(caseId, (event) => {
+        if (!event) return;
+        if (event.total) {
+          const percent = Math.min(100, Math.round((event.loaded * 100) / event.total));
+          setBulkDownloadProgress(percent);
+        }
+      });
+      const bytes = new Uint8Array(resp.data || []);
+      const isZipSignature =
+        bytes.length >= 4 &&
+        bytes[0] === 0x50 &&
+        bytes[1] === 0x4b &&
+        (bytes[2] === 0x03 || bytes[2] === 0x05 || bytes[2] === 0x07) &&
+        (bytes[3] === 0x04 || bytes[3] === 0x06 || bytes[3] === 0x08);
+
+      if (!isZipSignature) {
+        let serverMessage = "批量下载失败：返回内容不是有效 zip。";
+        try {
+          const text = new TextDecoder("utf-8").decode(bytes);
+          if (text) {
+            const parsed = JSON.parse(text);
+            if (parsed && parsed.message) {
+              serverMessage = parsed.message;
+            } else {
+              serverMessage = text.slice(0, 200);
+            }
+          }
+        } catch (e) {
+          // Keep default message.
+        }
+        throw new Error(serverMessage);
+      }
+
+      setBulkDownloadProgress(100);
+      const url = window.URL.createObjectURL(new Blob([resp.data], { type: "application/zip" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `case-${caseId}-artifacts.zip`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      setMessage("附件打包下载已开始。");
+    } catch (err) {
+      setMessage(err?.message || err?.response?.data?.message || "批量下载失败。");
+    } finally {
+      setIsDownloadingBulk(false);
+      setTimeout(() => setBulkDownloadProgress(null), 800);
+    }
+  };
+
   const previewArtifactContent = async (artifact) => {
     try {
       if (previewUrl) {
         window.URL.revokeObjectURL(previewUrl);
       }
+      setPreviewDocxHtml("");
       const resp = await ArtifactDataService.download(artifact.id);
       const mime = artifact.attachmentMime || "application/octet-stream";
+      const ext = (artifact.attachmentName || "").toLowerCase().split(".").pop();
+      if (
+        ext === "docx" ||
+        mime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      ) {
+        const result = await mammoth.convertToHtml({ arrayBuffer: resp.data });
+        setPreviewArtifact(artifact);
+        setPreviewMime("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        setPreviewDocxHtml(result.value || "<p>文档内容为空。</p>");
+        setPreviewUrl("");
+        return;
+      }
+
       const url = window.URL.createObjectURL(new Blob([resp.data], { type: mime }));
       setPreviewArtifact(artifact);
       setPreviewMime(mime);
       setPreviewUrl(url);
     } catch (e) {
       console.log(e);
-      setMessage("预览失败。");
+      setMessage("预览失败。若为 .doc 文件，请使用下载。");
     }
   };
 
@@ -111,6 +245,7 @@ const CaseDetail = (props) => {
     setPreviewArtifact(null);
     setPreviewUrl("");
     setPreviewMime("");
+    setPreviewDocxHtml("");
   };
 
   useEffect(() => {
@@ -137,8 +272,7 @@ const CaseDetail = (props) => {
     setEditingArtifactId(artifact.id);
     setEditingArtifactForm({
       description: artifact.description || "",
-      category: artifact.category || "",
-      type: artifact.type || "doc",
+      category: normalizeCategory(artifact.category),
       file: null,
     });
   };
@@ -163,7 +297,6 @@ const CaseDetail = (props) => {
       const formData = new FormData();
       formData.append("description", editingArtifactForm.description || "");
       formData.append("category", editingArtifactForm.category || "");
-      formData.append("type", editingArtifactForm.type || "doc");
       if (editingArtifactForm.file) {
         formData.append("file", editingArtifactForm.file);
       }
@@ -177,22 +310,43 @@ const CaseDetail = (props) => {
     }
   };
 
-  if (!caseData) {
+  const artifacts = caseData?.artifacts || caseData?.Artifacts || [];
+  const filteredArtifacts = artifacts.filter(
+    (artifact) => normalizeCategory(artifact.category) === selectedCategory
+  );
+
+  if (isLoadingCase) {
     return <div className="container cm-page"><div className="cm-empty">加载中...</div></div>;
+  }
+
+  if (!caseData) {
+    return (
+      <div className="container cm-page">
+        <div className="alert alert-danger py-2 mb-0">{message || "加载案例详情失败。"}</div>
+      </div>
+    );
   }
 
   return (
     <div className="container cm-page">
       <div className="cm-hero">
+        <div className="mb-2">
+          <button type="button" className="btn btn-primary" onClick={goBackToCases}>
+            返回
+          </button>
+        </div>
         <h4 className="cm-title">案例详情 #{caseData.id}</h4>
         <p className="cm-subtitle">查看案例基础信息与关联附件。</p>
       </div>
 
       <div className="cm-card">
+        <div><b>年份：</b>{caseData.year || "-"}</div>
         <div><b>描述：</b>{caseData.description}</div>
         <div>
-          <b>课程：</b>
-          {caseData.course ? `${caseData.course.title} (${caseData.course.category || "-"} / ${caseData.course.subcategory || "-"})` : "-"}
+          <b>课程：</b>{caseData.course || caseData.field || "-"}
+        </div>
+        <div>
+          <b>类型：</b>{caseData.category || caseData.topic || "-"}
         </div>
         <div>
           <b>关联学校：</b>
@@ -210,17 +364,14 @@ const CaseDetail = (props) => {
           <form onSubmit={uploadArtifact}>
             <div className="form-row">
               <div className="form-group col-md-3">
-                <label>类型</label>
-                <select className="form-control" name="type" value={artifactForm.type} onChange={onArtifactChange}>
-                  <option value="doc">doc</option>
-                  <option value="pdf">pdf</option>
-                  <option value="video">video</option>
-                  <option value="audio">audio</option>
-                </select>
-              </div>
-              <div className="form-group col-md-3">
                 <label>分类</label>
-                <input className="form-control" name="category" value={artifactForm.category} onChange={onArtifactChange} />
+                <select className="form-control" name="category" value={artifactForm.category} onChange={onArtifactChange}>
+                  {ARTIFACT_CATEGORIES.map((item) => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="form-group col-md-3">
                 <label>描述</label>
@@ -228,15 +379,121 @@ const CaseDetail = (props) => {
               </div>
               <div className="form-group col-md-3">
                 <label>文件</label>
-                <input className="form-control" type="file" onChange={onArtifactFileChange} required />
+                <input
+                  className="form-control"
+                  type="file"
+                  onChange={onArtifactFileChange}
+                  required
+                  disabled={isUploadingArtifact}
+                />
               </div>
             </div>
-            <button className="btn btn-primary" type="submit">上传</button>
+            <button className="btn btn-primary" type="submit" disabled={isUploadingArtifact}>
+              {isUploadingArtifact ? "上传中..." : "上传"}
+            </button>
+            {artifactUploadProgress !== null && (
+              <div className="cm-progress-wrap mt-2">
+                <div className="progress">
+                  <div
+                    className="progress-bar progress-bar-striped progress-bar-animated"
+                    role="progressbar"
+                    style={{ width: `${artifactUploadProgress}%` }}
+                    aria-valuenow={artifactUploadProgress}
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  >
+                    {artifactUploadProgress}%
+                  </div>
+                </div>
+              </div>
+            )}
+          </form>
+
+          <hr />
+          <h6 className="card-title mb-2">批量导入 zip</h6>
+          <p className="text-muted mb-2">
+            zip 内需包含 3 个子目录：图片、视频、课程材料。
+          </p>
+          <form onSubmit={uploadBulkZip}>
+            <div className="form-row">
+              <div className="form-group col-md-9">
+                <input
+                  className="form-control"
+                  type="file"
+                  accept=".zip,application/zip"
+                  onChange={onBulkZipChange}
+                  disabled={isUploadingBulk}
+                />
+              </div>
+              <div className="form-group col-md-3">
+                <button className="btn btn-outline-primary btn-block" type="submit" disabled={isUploadingBulk}>
+                  {isUploadingBulk ? "导入中..." : "批量导入"}
+                </button>
+              </div>
+            </div>
+            {bulkUploadProgress !== null && (
+              <div className="cm-progress-wrap">
+                <div className="progress">
+                  <div
+                    className="progress-bar progress-bar-striped progress-bar-animated bg-info"
+                    role="progressbar"
+                    style={{ width: `${bulkUploadProgress}%` }}
+                    aria-valuenow={bulkUploadProgress}
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  >
+                    {bulkUploadProgress}%
+                  </div>
+                </div>
+                {isUploadingBulk && bulkUploadProgress === 100 && (
+                  <small className="text-muted d-block mt-1">文件已上传，正在服务器处理 zip，请稍候...</small>
+                )}
+              </div>
+            )}
           </form>
         </div>
       </div>}
 
       {message && <div className="alert alert-info py-2">{message}</div>}
+
+      <div className="cm-card">
+        <div className="cm-folder-row">
+          <button
+            type="button"
+            className="btn btn-sm btn-outline-secondary mr-2"
+            onClick={downloadAllArtifacts}
+            disabled={isDownloadingBulk}
+          >
+            {isDownloadingBulk ? "打包中..." : "批量下载全部附件"}
+          </button>
+          {bulkDownloadProgress !== null && (
+            <div className="cm-progress-wrap w-100 mt-2">
+              <div className="progress">
+                <div
+                  className="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                  role="progressbar"
+                  style={{ width: `${bulkDownloadProgress}%` }}
+                  aria-valuenow={bulkDownloadProgress}
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                >
+                  {bulkDownloadProgress}%
+                </div>
+              </div>
+            </div>
+          )}
+          {ARTIFACT_CATEGORIES.map((category) => (
+            <button
+              key={category}
+              type="button"
+              className={`cm-folder-btn ${selectedCategory === category ? "is-active" : ""}`}
+              onClick={() => setSelectedCategory(category)}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+      </div>
 
       <div className="cm-table-wrap">
       <table className="table table-sm table-bordered">
@@ -252,37 +509,29 @@ const CaseDetail = (props) => {
           </tr>
         </thead>
         <tbody>
-          {(caseData.artifacts || []).map((artifact) => (
+          {filteredArtifacts.map((artifact) => (
             <tr key={artifact.id}>
               <td>{artifact.id}</td>
               <td>{artifact.attachmentName}</td>
               <td>
-                {editingArtifactId === artifact.id ? (
-                  <select
-                    className="form-control form-control-sm"
-                    name="type"
-                    value={editingArtifactForm.type}
-                    onChange={onEditArtifactChange}
-                  >
-                    <option value="doc">doc</option>
-                    <option value="pdf">pdf</option>
-                    <option value="video">video</option>
-                    <option value="audio">audio</option>
-                  </select>
-                ) : (
-                  artifact.type
-                )}
+                {artifact.type}
               </td>
               <td>
                 {editingArtifactId === artifact.id ? (
-                  <input
+                  <select
                     className="form-control form-control-sm"
                     name="category"
                     value={editingArtifactForm.category}
                     onChange={onEditArtifactChange}
-                  />
+                  >
+                    {ARTIFACT_CATEGORIES.map((item) => (
+                      <option key={item} value={item}>
+                        {item}
+                      </option>
+                    ))}
+                  </select>
                 ) : (
-                  artifact.category
+                  normalizeCategory(artifact.category)
                 )}
               </td>
               <td>
@@ -330,15 +579,15 @@ const CaseDetail = (props) => {
               </td>
             </tr>
           ))}
-          {(caseData.artifacts || []).length === 0 && (
+          {filteredArtifacts.length === 0 && (
             <tr>
-              <td colSpan="7" className="cm-empty">暂无附件</td>
+              <td colSpan="7" className="cm-empty">当前分类暂无附件</td>
             </tr>
           )}
         </tbody>
       </table>
       </div>
-      {previewArtifact && previewUrl && (
+      {previewArtifact && (previewUrl || previewDocxHtml) && (
         <div className="cm-card mt-3">
           <div className="card-body">
             <div className="d-flex justify-content-between align-items-center mb-2">
@@ -360,10 +609,16 @@ const CaseDetail = (props) => {
             {previewMime.startsWith("audio/") && (
               <audio controls src={previewUrl} style={{ width: "100%" }} />
             )}
+            {previewMime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && (
+              <div className="cm-docx-preview border rounded p-3 bg-white">
+                <div dangerouslySetInnerHTML={{ __html: previewDocxHtml }} />
+              </div>
+            )}
             {!previewMime.startsWith("image/") &&
               !previewMime.includes("pdf") &&
               !previewMime.startsWith("video/") &&
-              !previewMime.startsWith("audio/") && (
+              !previewMime.startsWith("audio/") &&
+              previewMime !== "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && (
                 <div>
                   当前文件类型不支持内嵌预览，请使用下载。
                 </div>

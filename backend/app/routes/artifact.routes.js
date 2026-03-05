@@ -11,7 +11,9 @@ module.exports = function(app) {
   });
 
   app.post("/api/cases/:caseId/artifacts", [authJwt.verifyToken, authJwt.isVolunteerOrAdmin], artifacts.create);
+  app.post("/api/cases/:caseId/artifacts/bulk", [authJwt.verifyToken, authJwt.isVolunteerOrAdmin], artifacts.bulkCreateFromZip);
   app.get("/api/cases/:caseId/artifacts", artifacts.findByCase);
+  app.get("/api/cases/:caseId/artifacts/download", artifacts.downloadByCase);
   app.get("/api/artifacts/:id", artifacts.findOne);
   app.get("/api/artifacts/:id/download", artifacts.download);
   app.put("/api/artifacts/:id", [authJwt.verifyToken, authJwt.isVolunteerOrAdmin], artifacts.update);
