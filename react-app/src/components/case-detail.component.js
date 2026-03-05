@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import mammoth from "mammoth/mammoth.browser";
 import ArtifactDataService from "../services/artifact.service";
 import CaseDataService from "../services/case.service";
@@ -33,6 +33,9 @@ const CaseDetail = (props) => {
   const [bulkDownloadProgress, setBulkDownloadProgress] = useState(null);
   const [isLoadingCase, setIsLoadingCase] = useState(true);
   const [message, setMessage] = useState("");
+  const [dragUploadCategory, setDragUploadCategory] = useState("");
+  const [pendingCategoryFiles, setPendingCategoryFiles] = useState([]);
+  const categoryFileInputRef = useRef(null);
   const canEdit = AuthService.isVolunteer();
   const goBackToCases = () => props.history.push("/cases");
 
@@ -95,6 +98,74 @@ const CaseDetail = (props) => {
       setIsUploadingArtifact(false);
       setTimeout(() => setArtifactUploadProgress(null), 600);
     }
+  };
+
+  const uploadCategoryFiles = async (files, category) => {
+    if (!files || files.length === 0) {
+      setMessage("请先选择或拖入文件。");
+      return;
+    }
+
+    setMessage("");
+    setIsUploadingArtifact(true);
+    setArtifactUploadProgress(0);
+    try {
+      for (let index = 0; index < files.length; index += 1) {
+        const formData = new FormData();
+        formData.append("description", "");
+        formData.append("category", category);
+        formData.append("file", files[index]);
+        await ArtifactDataService.create(caseId, formData);
+        setArtifactUploadProgress(Math.round(((index + 1) * 100) / files.length));
+      }
+      setPendingCategoryFiles([]);
+      if (categoryFileInputRef.current) {
+        categoryFileInputRef.current.value = "";
+      }
+      setMessage(`已上传 ${files.length} 个文件到 ${category}。`);
+      retrieveCase();
+    } catch (err) {
+      setMessage(err?.response?.data?.message || "分类上传失败。");
+    } finally {
+      setIsUploadingArtifact(false);
+      setDragUploadCategory("");
+      setTimeout(() => setArtifactUploadProgress(null), 600);
+    }
+  };
+
+  const onCategoryFilesPicked = (e) => {
+    const files = Array.from(e.target.files || []);
+    setPendingCategoryFiles(files);
+    if (files.length > 0) {
+      setMessage(`已选择 ${files.length} 个文件，请点击下面的分类文件夹上传。`);
+    }
+  };
+
+  const openCategoryFilePicker = () => {
+    if (!isUploadingArtifact && categoryFileInputRef.current) {
+      categoryFileInputRef.current.click();
+    }
+  };
+
+  const onCategoryFolderDragOver = (category) => (e) => {
+    e.preventDefault();
+    if (!isUploadingArtifact) {
+      setDragUploadCategory(category);
+    }
+  };
+
+  const onCategoryFolderDragLeave = (category) => () => {
+    if (dragUploadCategory === category) {
+      setDragUploadCategory("");
+    }
+  };
+
+  const onCategoryFolderDrop = (category) => async (e) => {
+    e.preventDefault();
+    setDragUploadCategory("");
+    if (isUploadingArtifact) return;
+    const files = Array.from(e.dataTransfer?.files || []);
+    await uploadCategoryFiles(files, category);
   };
 
   const onBulkZipChange = (e) => {
@@ -457,6 +528,51 @@ const CaseDetail = (props) => {
               </div>
             )}
           </form>
+
+          <hr />
+          <h6 className="card-title">分类拖拽上传</h6>
+          <p className="text-muted mb-2">
+            选择多个文件后点击文件夹上传，或直接把本地文件拖到对应分类文件夹。
+          </p>
+          <input
+            ref={categoryFileInputRef}
+            type="file"
+            multiple
+            className="d-none"
+            onChange={onCategoryFilesPicked}
+            disabled={isUploadingArtifact}
+          />
+          <div className="cm-upload-toolbar">
+            <button
+              type="button"
+              className="btn btn-outline-primary btn-sm"
+              onClick={openCategoryFilePicker}
+              disabled={isUploadingArtifact}
+            >
+              选择文件
+            </button>
+            <span className="text-muted">
+              {pendingCategoryFiles.length > 0 ? `已选 ${pendingCategoryFiles.length} 个文件` : "未选择文件"}
+            </span>
+          </div>
+          <div className="cm-folder-row">
+            {ARTIFACT_CATEGORIES.map((category) => (
+              <button
+                key={category}
+                type="button"
+                className={`cm-folder-btn cm-drop-folder ${dragUploadCategory === category ? "is-dragover" : ""}`}
+                onClick={() => uploadCategoryFiles(pendingCategoryFiles, category)}
+                onDragOver={onCategoryFolderDragOver(category)}
+                onDragEnter={onCategoryFolderDragOver(category)}
+                onDragLeave={onCategoryFolderDragLeave(category)}
+                onDrop={onCategoryFolderDrop(category)}
+                disabled={isUploadingArtifact}
+              >
+                {category}
+                <span className="cm-folder-hint">拖拽到这里，或点击上传已选文件</span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>}
 

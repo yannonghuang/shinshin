@@ -10,6 +10,7 @@ const Artifact = db.artifacts;
 const Case = db.cases;
 
 const ARTIFACT_CATEGORIES = ["图片", "视频", "课程材料"];
+const COURSE_FOLDERS = ["语文", "数学", "乡土课程"];
 const BULK_MAX_ZIP_BYTES = Number(process.env.CASE_BULK_ZIP_MAX_BYTES || 1024 * 1024 * 1024); // 1GB default
 const BULK_MAX_FILE_BYTES = Number(process.env.CASE_BULK_FILE_MAX_BYTES || 512 * 1024 * 1024); // 512MB default
 const BULK_DB_BATCH_SIZE = Number(process.env.CASE_BULK_DB_BATCH_SIZE || 100);
@@ -23,6 +24,46 @@ const getCaseDirectory = (caseId) => {
     fs.mkdirSync(dir, { recursive: true });
   }
   return dir;
+};
+
+const normalizeFolder = (category, folder) => {
+  if (category !== "课程材料") return null;
+  return COURSE_FOLDERS.includes(folder) ? folder : null;
+};
+
+const getArtifactStorageDirectory = (caseId, category, folder) => {
+  const segments = [getCaseDirectory(caseId), category];
+  const normalizedFolder = normalizeFolder(category, folder);
+  if (normalizedFolder) segments.push(normalizedFolder);
+  const dir = path.join(...segments);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+  return dir;
+};
+
+const moveIntoArtifactDirectory = (caseId, category, folder, uploadedFile) => {
+  const targetDir = getArtifactStorageDirectory(caseId, category, folder);
+  const targetPath = path.join(targetDir, path.basename(uploadedFile.path));
+  moveFileAtomic(uploadedFile.path, targetPath);
+  return path.resolve(targetPath);
+};
+
+const resolveArtifactFolder = (artifact) => {
+  if (!artifact || artifact.category !== "课程材料" || !artifact.attachmentPath) return null;
+  const parts = path.normalize(artifact.attachmentPath).split(path.sep).filter(Boolean);
+  const categoryIndex = parts.lastIndexOf("课程材料");
+  if (categoryIndex < 0 || categoryIndex >= parts.length - 2) return null;
+  const candidate = parts[categoryIndex + 1];
+  return COURSE_FOLDERS.includes(candidate) ? candidate : null;
+};
+
+const serializeArtifact = (artifact) => {
+  const plain = artifact && typeof artifact.get === "function" ? artifact.get({ plain: true }) : artifact;
+  return {
+    ...plain,
+    folder: resolveArtifactFolder(plain),
+  };
 };
 
 const storage = multer.diskStorage({
@@ -108,7 +149,7 @@ exports.create = async (req, res) => {
     await uploadSingle(req, res);
 
     const caseId = Number(req.params.caseId);
-    const { description, category } = req.body;
+    const { description, category, folder } = req.body;
 
     if (!Number.isInteger(caseId) || caseId <= 0) {
       return res.status(422).send({ message: "案例 ID 无效。" });
@@ -126,18 +167,20 @@ exports.create = async (req, res) => {
       return res.status(404).send({ message: "案例不存在。" });
     }
 
+    const attachmentPath = moveIntoArtifactDirectory(caseId, category, folder, req.file);
+
     const data = await Artifact.create({
       caseId,
       description,
       category,
       type: inferArtifactType(req.file.originalname),
-      attachmentPath: path.resolve(req.file.path),
+      attachmentPath,
       attachmentName: req.file.originalname,
       attachmentMime: req.file.mimetype,
       attachmentSize: req.file.size,
     });
 
-    return res.send(data);
+    return res.send(serializeArtifact(data));
   } catch (err) {
     return res.status(500).send({
       message: err.message || "创建附件时发生错误。",
@@ -255,6 +298,11 @@ exports.bulkCreateFromZip = async (req, res) => {
         continue;
       }
 
+      const folder =
+        category === "课程材料" && categoryIndex < parts.length - 2
+          ? normalizeFolder(category, parts[categoryIndex + 1])
+          : null;
+
       const originalName = path.basename(extractedFilePath);
       const safeOriginalName = path.basename(originalName);
       if (!safeOriginalName) {
@@ -269,7 +317,7 @@ exports.bulkCreateFromZip = async (req, res) => {
       }
 
       const storedName = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}-${safeOriginalName}`;
-      const targetPath = path.join(getCaseDirectory(caseId), storedName);
+      const targetPath = path.join(getArtifactStorageDirectory(caseId, category, folder), storedName);
       moveFileAtomic(extractedFilePath, targetPath);
       createdFilePaths.push(targetPath);
 
@@ -348,7 +396,7 @@ exports.findByCase = async (req, res) => {
       where: { caseId },
       order: [["id", "DESC"]],
     });
-    return res.send(data);
+    return res.send(data.map((artifact) => serializeArtifact(artifact)));
   } catch (err) {
     return res.status(500).send({
       message: err.message || "查询附件列表时发生错误。",
@@ -362,7 +410,7 @@ exports.findOne = async (req, res) => {
     if (!data) {
       return res.status(404).send({ message: `未找到附件 id=${req.params.id}。` });
     }
-    return res.send(data);
+    return res.send(serializeArtifact(data));
   } catch (err) {
     return res.status(500).send({
       message: err.message || `查询附件 id=${req.params.id} 时发生错误。`,
@@ -423,7 +471,10 @@ exports.downloadByCase = async (req, res) => {
       if (!artifact.attachmentPath || !fs.existsSync(artifact.attachmentPath)) continue;
       const safeName = path.basename(artifact.attachmentName || `artifact-${artifact.id}`);
       const folderName = ARTIFACT_CATEGORIES.includes(artifact.category) ? artifact.category : "未分类";
-      const folderPath = path.join(stagingDir, folderName);
+      const courseFolder = resolveArtifactFolder(artifact);
+      const folderPath = courseFolder
+        ? path.join(stagingDir, folderName, courseFolder)
+        : path.join(stagingDir, folderName);
       if (!fs.existsSync(folderPath)) {
         fs.mkdirSync(folderPath, { recursive: true });
       }
@@ -484,6 +535,7 @@ exports.update = async (req, res) => {
       category: req.body.category !== undefined ? req.body.category : artifact.category,
       type: artifact.type,
     };
+    const nextFolder = normalizeFolder(payload.category, req.body.folder);
 
     if (!ARTIFACT_CATEGORIES.includes(payload.category)) {
       if (req.file && fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
@@ -492,11 +544,19 @@ exports.update = async (req, res) => {
 
     const oldPath = artifact.attachmentPath;
     if (req.file) {
-      payload.attachmentPath = path.resolve(req.file.path);
+      payload.attachmentPath = moveIntoArtifactDirectory(artifact.caseId, payload.category, nextFolder, req.file);
       payload.attachmentName = req.file.originalname;
       payload.attachmentMime = req.file.mimetype;
       payload.attachmentSize = req.file.size;
       payload.type = inferArtifactType(req.file.originalname);
+    } else if (oldPath && fs.existsSync(oldPath)) {
+      const filename = path.basename(oldPath);
+      const targetDir = getArtifactStorageDirectory(artifact.caseId, payload.category, nextFolder);
+      const targetPath = path.join(targetDir, filename);
+      if (path.resolve(targetPath) !== path.resolve(oldPath)) {
+        moveFileAtomic(oldPath, targetPath);
+        payload.attachmentPath = path.resolve(targetPath);
+      }
     }
 
     await Artifact.update(payload, { where: { id } });
