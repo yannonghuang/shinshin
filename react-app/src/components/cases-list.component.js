@@ -260,17 +260,30 @@ const CasesList = () => {
               <td>{stylishPublic ? <span className="cm-tag">{item.course || "-"}</span> : (item.course || "-")}</td>
               <td>{item.category || "-"}</td>
               <td>
-                {stylishPublic
-                  ? (
-                    item.school
-                      ? <span className="cm-tag">{`${item.school.code}-${item.school.name}`}</span>
-                      : <span className="cm-tag cm-tag-warn">未关联</span>
-                  )
-                  : (
-                    item.school
-                      ? `${item.school.code}-${item.school.name}`
-                      : "-"
-                  )}
+                {(() => {
+                  const schoolId = item.schoolId || (item.school ? item.school.id : null);
+                  const schoolLabel = item.school ? `${item.school.code}-${item.school.name}` : "";
+                  if (!item.school) {
+                    return stylishPublic ? <span className="cm-tag cm-tag-warn">未关联</span> : "-";
+                  }
+                  return stylishPublic ? (
+                    <span className="cm-tag">
+                      {schoolId ? (
+                        <a href={`/schoolsView/${schoolId}`} target="_blank" rel="noopener noreferrer">
+                          {schoolLabel}
+                        </a>
+                      ) : (
+                        schoolLabel
+                      )}
+                    </span>
+                  ) : schoolId ? (
+                    <a href={`/schoolsView/${schoolId}`} target="_blank" rel="noopener noreferrer">
+                      {schoolLabel}
+                    </a>
+                  ) : (
+                    schoolLabel
+                  );
+                })()}
               </td>
               <td>
                 <Link className="btn btn-link p-0 mr-2" to={`/cases/${item.id}`}>
@@ -285,9 +298,7 @@ const CasesList = () => {
                       删除
                     </button>
                   </>
-                ) : (
-                  <span className="text-muted">只读</span>
-                )}
+                ) : null}
               </td>
             </tr>
           ))}

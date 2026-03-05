@@ -314,6 +314,8 @@ const CaseDetail = (props) => {
   const filteredArtifacts = artifacts.filter(
     (artifact) => normalizeCategory(artifact.category) === selectedCategory
   );
+  const primarySchool = caseData?.school || (caseData?.schools && caseData.schools[0]) || null;
+  const primarySchoolId = caseData?.schoolId || (primarySchool ? primarySchool.id : null);
 
   if (isLoadingCase) {
     return <div className="container cm-page"><div className="cm-empty">加载中...</div></div>;
@@ -350,16 +352,63 @@ const CaseDetail = (props) => {
         </div>
         <div>
           <b>关联学校：</b>
-          {caseData.school
-            ? `${caseData.school.code}-${caseData.school.name}`
-            : caseData.schools && caseData.schools[0]
-              ? `${caseData.schools[0].code}-${caseData.schools[0].name}`
-              : "无"}
+          {primarySchool && primarySchoolId ? (
+            <a href={`/schoolsView/${primarySchoolId}`} target="_blank" rel="noopener noreferrer">
+              {`${primarySchool.code}-${primarySchool.name}`}
+            </a>
+          ) : primarySchool ? (
+            `${primarySchool.code}-${primarySchool.name}`
+          ) : (
+            "无"
+          )}
         </div>
       </div>
 
       {canEdit && <div className="cm-card">
         <div className="card-body">
+          <h6 className="card-title mb-2">批量导入 zip</h6>
+          <p className="text-muted mb-2">
+            zip 内需包含 3 个子目录：图片、视频、课程材料。
+          </p>
+          <form onSubmit={uploadBulkZip}>
+            <div className="form-row">
+              <div className="form-group col-md-9">
+                <input
+                  className="form-control"
+                  type="file"
+                  accept=".zip,application/zip"
+                  onChange={onBulkZipChange}
+                  disabled={isUploadingBulk}
+                />
+              </div>
+              <div className="form-group col-md-3">
+                <button className="btn btn-primary btn-block" type="submit" disabled={isUploadingBulk}>
+                  {isUploadingBulk ? "导入中..." : "批量导入"}
+                </button>
+              </div>
+            </div>
+            {bulkUploadProgress !== null && (
+              <div className="cm-progress-wrap">
+                <div className="progress">
+                  <div
+                    className="progress-bar progress-bar-striped progress-bar-animated bg-info"
+                    role="progressbar"
+                    style={{ width: `${bulkUploadProgress}%` }}
+                    aria-valuenow={bulkUploadProgress}
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  >
+                    {bulkUploadProgress}%
+                  </div>
+                </div>
+                {isUploadingBulk && bulkUploadProgress === 100 && (
+                  <small className="text-muted d-block mt-1">文件已上传，正在服务器处理 zip，请稍候...</small>
+                )}
+              </div>
+            )}
+          </form>
+
+          <hr />
           <h6 className="card-title">上传附件</h6>
           <form onSubmit={uploadArtifact}>
             <div className="form-row">
@@ -408,49 +457,6 @@ const CaseDetail = (props) => {
               </div>
             )}
           </form>
-
-          <hr />
-          <h6 className="card-title mb-2">批量导入 zip</h6>
-          <p className="text-muted mb-2">
-            zip 内需包含 3 个子目录：图片、视频、课程材料。
-          </p>
-          <form onSubmit={uploadBulkZip}>
-            <div className="form-row">
-              <div className="form-group col-md-9">
-                <input
-                  className="form-control"
-                  type="file"
-                  accept=".zip,application/zip"
-                  onChange={onBulkZipChange}
-                  disabled={isUploadingBulk}
-                />
-              </div>
-              <div className="form-group col-md-3">
-                <button className="btn btn-outline-primary btn-block" type="submit" disabled={isUploadingBulk}>
-                  {isUploadingBulk ? "导入中..." : "批量导入"}
-                </button>
-              </div>
-            </div>
-            {bulkUploadProgress !== null && (
-              <div className="cm-progress-wrap">
-                <div className="progress">
-                  <div
-                    className="progress-bar progress-bar-striped progress-bar-animated bg-info"
-                    role="progressbar"
-                    style={{ width: `${bulkUploadProgress}%` }}
-                    aria-valuenow={bulkUploadProgress}
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  >
-                    {bulkUploadProgress}%
-                  </div>
-                </div>
-                {isUploadingBulk && bulkUploadProgress === 100 && (
-                  <small className="text-muted d-block mt-1">文件已上传，正在服务器处理 zip，请稍候...</small>
-                )}
-              </div>
-            )}
-          </form>
         </div>
       </div>}
 
@@ -464,7 +470,7 @@ const CaseDetail = (props) => {
             onClick={downloadAllArtifacts}
             disabled={isDownloadingBulk}
           >
-            {isDownloadingBulk ? "打包中..." : "批量下载全部附件"}
+            {isDownloadingBulk ? "打包中..." : "下载全部附件"}
           </button>
           {bulkDownloadProgress !== null && (
             <div className="cm-progress-wrap w-100 mt-2">
@@ -573,9 +579,7 @@ const CaseDetail = (props) => {
                       删除
                     </button>
                   </>
-                ) : (
-                  <span className="text-muted">只读</span>
-                )}
+                ) : null}
               </td>
             </tr>
           ))}
