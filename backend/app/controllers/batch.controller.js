@@ -255,12 +255,19 @@ const uploadProjects = async (req, res) => {
       ]
     };
 */
-    let projectsDeleted = await Project.findAll({where: condition}, { transaction: t });
+    let projectsDeleted = await Project.findAll({
+      where: condition,
+      include: [{
+        model: School,
+        attributes: ['code'],
+        required: false,
+      }],
+      transaction: t
+    });
+    let codes = projectsDeleted.map(p => p.school ? p.school.code : null).filter(code => code).join(', ');
     await Project.destroy({where: condition}, { transaction: t });
 
-    if (!projectsDeleted) return 0;
-
-    return projectsDeleted.length;
+    return { count: projectsDeleted.length, codes };
   }
 
   const NON_NULL_COLUMN = 1;
@@ -413,7 +420,7 @@ const uploadProjects = async (req, res) => {
       }
     }
 
-    let projectsDestroyed = await destroyNonGivenProjects(universeName, universeStartAt, universePCategoryId, givenProjectIds, t);
+    let { count: projectsDestroyed, codes: deletedSchoolCodes } = await destroyNonGivenProjects(universeName, universeStartAt, universePCategoryId, givenProjectIds, t);
 
     await Project.bulkCreate(newProjects, { transaction: t });
 
@@ -422,7 +429,7 @@ const uploadProjects = async (req, res) => {
     let message = '批量上传学校项目总数：' + total +
       `;\n 更新数：` + updatedTotal +
       `;\n 原无项目、后增加项目数：` + notFoundTotal + (notFoundSchoolCodes ? ' (学校：' + notFoundSchoolCodes + ')' : '') +
-      `;\n 删除项目数：` + projectsDestroyed +      
+      `;\n 删除项目数：` + projectsDestroyed + (deletedSchoolCodes ? ' (学校：' + deletedSchoolCodes + ')' : '') +      
       `;\n 重复项目数：` + duplicatedTotal + // + (duplicatedSchoolCodes ? ' (学校：' + duplicatedSchoolCodes + ')' : '');
       `;\n 无效学校代码数：` + notFoundCodeTotal
 
