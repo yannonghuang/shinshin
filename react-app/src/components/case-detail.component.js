@@ -193,11 +193,11 @@ const CaseDetail = (props) => {
       const created = resp?.data?.createdCount || 0;
       const skipped = resp?.data?.skippedCount || 0;
       setBulkUploadProgress(100);
-      setMessage(`批量导入完成：成功 ${created}，跳过 ${skipped}。`);
+      setMessage(`批量上传完成：成功 ${created}，跳过 ${skipped}。`);
       setBulkZipFile(null);
       retrieveCase();
     } catch (err) {
-      setMessage(err?.response?.data?.message || "批量导入失败。");
+      setMessage(err?.response?.data?.message || "批量上传失败。");
     } finally {
       setIsUploadingBulk(false);
       setTimeout(() => setBulkUploadProgress(null), 800);
@@ -454,7 +454,7 @@ const CaseDetail = (props) => {
               </div>
               <div className="form-group col-md-3">
                 <button className="btn btn-primary btn-block" type="submit" disabled={isUploadingBulk}>
-                  {isUploadingBulk ? "导入中..." : "批量导入"}
+                  {isUploadingBulk ? "上传中..." : "批量上传"}
                 </button>
               </div>
             </div>
