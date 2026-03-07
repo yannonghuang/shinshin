@@ -269,7 +269,7 @@ const CaseDetail = (props) => {
       link.click();
       link.remove();
       window.URL.revokeObjectURL(url);
-      setMessage("附件打包下载已开始。");
+      setMessage("附件打包下载已完成。");
     } catch (err) {
       setMessage(err?.message || err?.response?.data?.message || "批量下载失败。");
     } finally {
@@ -437,7 +437,7 @@ const CaseDetail = (props) => {
 
       {canEdit && <div className="cm-card">
         <div className="card-body">
-          <h6 className="card-title mb-2">批量导入 zip</h6>
+          <h6 className="card-title mb-2">批量上传 zip</h6>
           <p className="text-muted mb-2">
             zip 内需包含 3 个子目录：图片、视频、课程材料。
           </p>
@@ -480,7 +480,7 @@ const CaseDetail = (props) => {
           </form>
 
           <hr />
-          <h6 className="card-title">上传附件</h6>
+          <h6 className="card-title">单个文件上传</h6>
           <form onSubmit={uploadArtifact}>
             <div className="form-row">
               <div className="form-group col-md-3">
@@ -530,9 +530,9 @@ const CaseDetail = (props) => {
           </form>
 
           <hr />
-          <h6 className="card-title">分类拖拽上传</h6>
+          <h6 className="card-title">按类别（图片、视频、课程材料）多文件上传</h6>
           <p className="text-muted mb-2">
-            选择多个文件后点击文件夹上传，或直接把本地文件拖到对应分类文件夹。
+            选择多个文件后点击类别文件夹上传，或直接把文件拖到对应类别文件夹。
           </p>
           <input
             ref={categoryFileInputRef}
@@ -582,10 +582,11 @@ const CaseDetail = (props) => {
         <div className="cm-folder-row">
           <button
             type="button"
-            className="btn btn-sm btn-outline-secondary mr-2"
+            className="btn btn btn-primary mr-2"
             onClick={downloadAllArtifacts}
             disabled={isDownloadingBulk}
           >
+
             {isDownloadingBulk ? "打包中..." : "下载全部附件"}
           </button>
           {bulkDownloadProgress !== null && (
