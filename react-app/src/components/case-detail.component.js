@@ -36,6 +36,8 @@ const CaseDetail = (props) => {
   const [dragUploadCategory, setDragUploadCategory] = useState("");
   const [pendingCategoryFiles, setPendingCategoryFiles] = useState([]);
   const categoryFileInputRef = useRef(null);
+  const previewRef = useRef(null);
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
   const canEdit = AuthService.isVolunteer();
   const goBackToCases = () => props.history.push("/cases");
 
@@ -280,6 +282,7 @@ const CaseDetail = (props) => {
 
   const previewArtifactContent = async (artifact) => {
     try {
+      setIsPreviewLoading(true);
       if (previewUrl) {
         window.URL.revokeObjectURL(previewUrl);
       }
@@ -296,16 +299,18 @@ const CaseDetail = (props) => {
         setPreviewMime("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
         setPreviewDocxHtml(result.value || "<p>文档内容为空。</p>");
         setPreviewUrl("");
-        return;
+      } else {
+        const url = window.URL.createObjectURL(new Blob([resp.data], { type: mime }));
+        setPreviewArtifact(artifact);
+        setPreviewMime(mime);
+        setPreviewUrl(url);
       }
-
-      const url = window.URL.createObjectURL(new Blob([resp.data], { type: mime }));
-      setPreviewArtifact(artifact);
-      setPreviewMime(mime);
-      setPreviewUrl(url);
+      setTimeout(() => previewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' }), 0);
     } catch (e) {
       console.log(e);
       setMessage("预览失败。若为 .doc 文件，请使用下载。");
+    } finally {
+      setIsPreviewLoading(false);
     }
   };
 
@@ -317,6 +322,7 @@ const CaseDetail = (props) => {
     setPreviewUrl("");
     setPreviewMime("");
     setPreviewDocxHtml("");
+    setIsPreviewLoading(false);
   };
 
   useEffect(() => {
@@ -708,8 +714,8 @@ const CaseDetail = (props) => {
         </tbody>
       </table>
       </div>
-      {previewArtifact && (previewUrl || previewDocxHtml) && (
-        <div className="cm-card mt-3">
+      {previewArtifact && (
+        <div ref={previewRef} className="cm-card mt-3">
           <div className="card-body">
             <div className="d-flex justify-content-between align-items-center mb-2">
               <h6 className="mb-0">附件预览：{previewArtifact.attachmentName}</h6>
@@ -718,32 +724,38 @@ const CaseDetail = (props) => {
               </button>
             </div>
 
-            {previewMime.startsWith("image/") && (
-              <img src={previewUrl} alt="artifact-preview" style={{ maxWidth: "100%" }} />
+            {isPreviewLoading ? (
+              <div>预览加载中...</div>
+            ) : (
+              <>
+                {previewMime.startsWith("image/") && (
+                  <img src={previewUrl} alt="artifact-preview" style={{ maxWidth: "100%" }} />
+                )}
+                {previewMime.includes("pdf") && (
+                  <iframe title="artifact-pdf-preview" src={previewUrl} style={{ width: "100%", height: "600px" }} />
+                )}
+                {previewMime.startsWith("video/") && (
+                  <video controls src={previewUrl} style={{ width: "100%" }} />
+                )}
+                {previewMime.startsWith("audio/") && (
+                  <audio controls src={previewUrl} style={{ width: "100%" }} />
+                )}
+                {previewMime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && (
+                  <div className="cm-docx-preview border rounded p-3 bg-white">
+                    <div dangerouslySetInnerHTML={{ __html: previewDocxHtml }} />
+                  </div>
+                )}
+                {!previewMime.startsWith("image/") &&
+                  !previewMime.includes("pdf") &&
+                  !previewMime.startsWith("video/") &&
+                  !previewMime.startsWith("audio/") &&
+                  previewMime !== "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && (
+                    <div>
+                      当前文件类型不支持内嵌预览，请使用下载。
+                    </div>
+                  )}
+              </>
             )}
-            {previewMime.includes("pdf") && (
-              <iframe title="artifact-pdf-preview" src={previewUrl} style={{ width: "100%", height: "600px" }} />
-            )}
-            {previewMime.startsWith("video/") && (
-              <video controls src={previewUrl} style={{ width: "100%" }} />
-            )}
-            {previewMime.startsWith("audio/") && (
-              <audio controls src={previewUrl} style={{ width: "100%" }} />
-            )}
-            {previewMime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && (
-              <div className="cm-docx-preview border rounded p-3 bg-white">
-                <div dangerouslySetInnerHTML={{ __html: previewDocxHtml }} />
-              </div>
-            )}
-            {!previewMime.startsWith("image/") &&
-              !previewMime.includes("pdf") &&
-              !previewMime.startsWith("video/") &&
-              !previewMime.startsWith("audio/") &&
-              previewMime !== "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && (
-                <div>
-                  当前文件类型不支持内嵌预览，请使用下载。
-                </div>
-              )}
           </div>
         </div>
       )}
