@@ -5,11 +5,12 @@ const School = db.schools;
 const Artifact = db.artifacts;
 const Op = db.Sequelize.Op;
 
-const COURSE_OPTIONS = ["语文", "数学", "乡土课程"];
+const COURSE_OPTIONS = ["语文", "数学", "乡土课程", "PBL美化校园"];
 const COMMON_GRADE_OPTIONS = ["一年级", "二年级", "三年级", "四年级", "五年级", "六年级"];
 const COURSE_CATEGORY_OPTIONS = {
   语文: COMMON_GRADE_OPTIONS,
   数学: COMMON_GRADE_OPTIONS,
+  PBL美化校园: ["制作装置", "美化墙面", "改造区域"],
   乡土课程: [
     "家乡美食与饮食文化",
     "非遗与传统手工艺",

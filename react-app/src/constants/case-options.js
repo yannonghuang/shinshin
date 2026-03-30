@@ -1,10 +1,11 @@
-export const CASE_COURSES = ["语文", "数学", "乡土课程"];
+export const CASE_COURSES = ["乡土课程", "语文", "数学", "PBL美化校园"];
 
 const GRADE_CATEGORIES = ["一年级", "二年级", "三年级", "四年级", "五年级", "六年级"];
 
 export const CASE_CATEGORIES_BY_COURSE = {
   语文: GRADE_CATEGORIES,
   数学: GRADE_CATEGORIES,
+  PBL美化校园: ["制作装置", "美化墙面", "改造区域"],
   乡土课程: [
     "家乡美食与饮食文化",
     "非遗与传统手工艺",
