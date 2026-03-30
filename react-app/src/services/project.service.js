@@ -315,7 +315,8 @@ class ProjectDataService {
         '图书角', 
         '图书',
         '期刊',
-        '借书卡'
+        '借书卡',
+        '家具'
       ],
       quantity: [
         '阅览室数量',
