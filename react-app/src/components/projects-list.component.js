@@ -402,7 +402,7 @@ const ProjectsList = (props) => {
             ? setQuantityLabel(exportDetailColumns)
             : schoolId
               ? exportColumnsWithSchoolKnown
-              : exportColumns,
+              : setQuantityLabel(exportColumns),
           {
             header: '项目类型',
             translate: (dataIndex) => {return ProjectDataService.getCategory(dataIndex)},
@@ -797,7 +797,9 @@ const ProjectsList = (props) => {
     exportDetailColumns = subtract(exportDetailColumns, ['quantity1', 'quantity2', 'quantity3']);
 
   var exportColumns = subtract(exportDetailColumns,
-    ['quantity1', 'quantity2', 'quantity3', 'school.name', 'school.classesCount', 'school.gradesCount', 'school.principalName', 'school.principalPhone', 'school.category', 'school.teachersCount', 'school.studentsCount']);
+    ['school.name', 'school.classesCount', 'school.gradesCount', 'school.principalName', 'school.principalPhone', 'school.category', 'school.teachersCount', 'school.studentsCount']);
+    //['quantity1', 'quantity2', 'quantity3', 'school.name', 'school.classesCount', 'school.gradesCount', 'school.principalName', 'school.principalPhone', 'school.category', 'school.teachersCount', 'school.studentsCount']);
+
 
   exportColumns = subtract(exportColumns, exportDetailOnlyColumns);
 
