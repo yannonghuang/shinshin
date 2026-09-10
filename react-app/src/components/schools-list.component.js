@@ -37,6 +37,7 @@ const SchoolsList = (props) => {
   const [searchDonor, setSearchDonor] = useState("");
   const [searchStage, setSearchStage] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
+  const [searchCategory, setSearchCategory] = useState("");
   const [searchRequest, setSearchRequest] = useState("");
   const [searchXR, setSearchXR] = useState(null);
   const [searchActive, setSearchActive] = useState('欣欣');
@@ -67,6 +68,7 @@ const SchoolsList = (props) => {
   const [cities, setCities] = useState([]);
   const [stages, setStages] = useState([]);
   const [statuses, setStatuses] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [requests, setRequests] = useState([]);
 
 
@@ -120,6 +122,13 @@ const SchoolsList = (props) => {
   const onChangeSearchStatus = (e) => {
     const searchStatus = e.target.value;
     setSearchStatus(searchStatus);
+
+    setStartup(false);
+  };
+
+  const onChangeSearchCategory = (e) => {
+    const searchCategory = e.target.value;
+    setSearchCategory(searchCategory);
 
     setStartup(false);
   };
@@ -185,6 +194,7 @@ const SchoolsList = (props) => {
     setSearchDonor("");
     setSearchStage("");
     setSearchStatus("");
+    setSearchCategory("");
     setSearchRequest("");
     setSearchXR("");
     setSearchActive('欣欣');
@@ -214,6 +224,7 @@ const SchoolsList = (props) => {
     setSearchDonor(params["donor"]);
     setSearchStage(params["stage"]);
     setSearchStatus(params["status"]);
+    setSearchCategory(params["category"]);
     setSearchRequest(params["request"]);
     setSearchXR(params["xr"]);
     setSearchActive(params["active"]);    
@@ -290,6 +301,10 @@ const SchoolsList = (props) => {
       params["status"] = searchStatus;
     }
 
+    if (searchCategory) {
+      params["category"] = searchCategory;
+    }
+
     if (searchRequest) {
       params["request"] = searchRequest;
     }
@@ -353,6 +368,17 @@ const SchoolsList = (props) => {
       });
   }
 
+  const getCategories = () => {
+    SchoolDataService.getCategories()
+      .then(response => {
+        setCategories(response.data);
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
   const getStages = () => {
     SchoolDataService.getStages()
       .then(response => {
@@ -367,6 +393,7 @@ const SchoolsList = (props) => {
   useEffect(getRegions, [orderby]);
   useEffect(getStages, [orderby]);
   useEffect(getStatuses, [orderby]);
+  useEffect(getCategories, [orderby]);
   useEffect(getRequests, [orderby]);
 
   const retrieveSchools = (refresh = false) => {
@@ -469,7 +496,7 @@ const SchoolsList = (props) => {
   };
 
   useEffect(search, [pageSize, orderby, searchName, searchCode, searchRegion, searchCity, searchStartAt, searchLatestProjectYear, searchProjectYear,
-                     searchLastVisit, searchDonor, searchStage, searchStatus, searchRequest, searchXR, searchActive]);
+                     searchLastVisit, searchDonor, searchStage, searchStatus, searchCategory, searchRequest, searchXR, searchActive]);
 
   useEffect(retrieveSchools, [page]);
   useEffect(() => {retrieveSchools(true)}, []);
@@ -1140,13 +1167,27 @@ const SchoolsList = (props) => {
           </select>
 
           <select hidden={!AuthService.isLogin()}
-            className="form-control col-sm-3 ml-2"
+            className="form-control col-sm-2 ml-2"
             placeholder="...."
             value={searchStatus}
             onChange={onChangeSearchStatus}
           >
             <option value="">学校状态</option>
             {statuses.map((option) => (
+            <option value={option}>
+            {option}
+            </option>
+            ))}
+          </select>
+
+          <select hidden={!AuthService.isLogin()}
+            className="form-control col-sm-2 ml-2"
+            placeholder="...."
+            value={searchCategory}
+            onChange={onChangeSearchCategory}
+          >
+            <option value="">学校类型</option>
+            {categories.map((option) => (
             <option value={option}>
             {option}
             </option>
@@ -1196,12 +1237,12 @@ const SchoolsList = (props) => {
           />
 
           <select
-            className="form-control col-sm-2 ml-2"
+            className="form-control col-sm-1 ml-2"
             hidden={!AuthService.isLogin()}
             value={searchXR}
             onChange={onChangeSearchXR}
           >
-            <option value="">向荣支持?</option>
+            <option value="">向荣</option>
               <option value={false}>
                 {'否'}
               </option>

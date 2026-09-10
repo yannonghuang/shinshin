@@ -360,6 +360,7 @@ const buildFilters = async (req) => {
   //const region = req.body.region;
   const stage = req.body.stage;
   const status = req.body.status;
+  const category = req.body.category;
   const request = req.body.request;
   const startAt = req.body.startAt;
   const lastVisit = req.body.lastVisit;
@@ -398,6 +399,7 @@ const buildFilters = async (req) => {
             city ? { city: { [Op.like]: `%${city}%` } } : null,
             stage ? { stage: { [Op.eq]: `${stage}` } } : null,
             status ? { status: { [Op.eq]: `${status}` } } : null,
+            category ? { category: { [Op.eq]: `${category}` } } : null,
             request ? { request: { [Op.eq]: `${request}` } } : null,
             startAt ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('schools.startAt')), `${startAt}`) } } : null,
             lastVisit ? { "": { [Op.eq]: db.Sequelize.where(db.Sequelize.fn('YEAR', db.Sequelize.col('schools.lastVisit')), `${lastVisit}`) } } : null,
