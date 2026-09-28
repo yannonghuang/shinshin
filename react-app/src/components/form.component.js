@@ -1,6 +1,7 @@
 //import React, { Component } from "react";
 import FormDataService from "../services/form.service";
 import ProjectDataService from "../services/project.service";
+import SchoolDataService from "../services/school.service";
 import FormDesignation from ".//form-designation.component";
 
 import $ from "jquery"; //Load jquery
@@ -70,6 +71,20 @@ export default class Form extends Component {
     });
   }
 
+  // default designation for a new form: all schools with code < 10000
+  setDefaultSchools = () => {
+    SchoolDataService.getAllSimple()
+      .then(response => {
+        const ids = response.data
+          .filter(school => school.code != null && school.code < 10000)
+          .map(school => school.id);
+        this.setSchools(ids);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
   newFormOptions = {
     id: "shinshin-form-id",
     action: "http://localhost:8080/multiple-upload",
@@ -102,9 +117,10 @@ export default class Form extends Component {
     this.setState({newform: newform});
     this.setState({readonly: readonly});
 
-    if (newform)
+    if (newform) {
       this.fBuilder = $(this.fb.current).formBuilder(this.newFormOptions);
-    else {
+      this.setDefaultSchools();
+    } else {
       //if (!readonly)
         //this.fBuilder = $(this.fb.current).formBuilder(this.oldFormOptions);
       this.getForm(this.props.match.params.id, readonly);
@@ -328,6 +344,7 @@ export default class Form extends Component {
       },
       submitted: false
     }));
+    this.setDefaultSchools();
   }
 
   deleteForm() {

@@ -38,6 +38,12 @@ export default class FormDesignation extends Component {
     this.getSchools(chosenSchools);
   }
 
+  componentDidUpdate(prevProps) {
+    // chosenSchools may arrive after mount (e.g. default designation of a new form)
+    if (prevProps.chosenSchools !== this.props.chosenSchools && this.state.schools.length > 0)
+      this.updateSelection(this.props.chosenSchools ? this.props.chosenSchools : [], true);
+  }
+
   updateSelection(chosenIds, init = false) {
     if (this.state.readonly && !init) return;
 
@@ -107,7 +113,7 @@ export default class FormDesignation extends Component {
           schools: this.convert(response.data)
         });
 
-        this.updateSelection(chosenSchools, true);
+        this.updateSelection(this.props.chosenSchools ? this.props.chosenSchools : chosenSchools, true);
         console.log(response);
       })
       .catch(e => {
