@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { withRouter } from "react-router-dom";
 import { useIdleTimer } from 'react-idle-timer';
 //import { useHistory } from 'react-router'
@@ -68,15 +68,41 @@ const AutoLogoutTimer = (props: any) => {
     timeout: 1000 * 60 * SESSION_IDLE_MINUTES,
     onIdle: (event: any) => {login()},
     debounce: 500,
-    crossTab: true,
+    // without emitOnAllTabs only the leader tab gets onIdle; the other tabs
+    // stay on their page with a cleared session
+    crossTab: { emitOnAllTabs: true },
     syncTimers: 200,
 
     startOnMount: false,
     startManually: true,
   });
 
-  if (AuthService.getCurrentUser())
-    start();
+  useEffect(() => {
+    if (AuthService.getCurrentUser())
+      start();
+
+    // session ended elsewhere (idle logout / sign-out in another tab)
+    const onStorage = (e: any) => {
+      if ((e.key === 'user' || e.key === null) && !localStorage.getItem('user') && !isExempted())
+        login();
+    };
+
+    // returning to a tab (or waking the machine) after the token has expired
+    const checkValidity = () => {
+      if (document.visibilityState === 'visible' &&
+          AuthService.getCurrentUser() && !AuthService.isValid())
+        login();
+    };
+
+    window.addEventListener('storage', onStorage);
+    document.addEventListener('visibilitychange', checkValidity);
+    window.addEventListener('focus', checkValidity);
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      document.removeEventListener('visibilitychange', checkValidity);
+      window.removeEventListener('focus', checkValidity);
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const { ComposedClass, ...passThroughProps } = props;
   return <ComposedClass  {...passThroughProps} />
