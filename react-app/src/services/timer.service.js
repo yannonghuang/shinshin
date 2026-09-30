@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { withRouter } from "react-router-dom";
-import { useIdleTimer } from 'react-idle-timer';
+// legacy (ES5) build: webpack 4 in react-scripts 3 can't parse the default build
+import { useIdleTimer } from 'react-idle-timer/dist/index.legacy.cjs.js';
 //import { useHistory } from 'react-router'
 
 import AuthService from "./auth.service";
 
-const SESSION_IDLE_MINUTES = 20;
+const SESSION_IDLE_MINUTES = 1;
 
 
 /**
@@ -68,9 +69,10 @@ const AutoLogoutTimer = (props: any) => {
     timeout: 1000 * 60 * SESSION_IDLE_MINUTES,
     onIdle: (event: any) => {login()},
     debounce: 500,
-    // without emitOnAllTabs only the leader tab gets onIdle; the other tabs
-    // stay on their page with a cleared session
-    crossTab: { emitOnAllTabs: true },
+    // v5 replicates onIdle to every tab, so no tab stays on its page with a
+    // cleared session (v4 needed emitOnAllTabs and used the deprecated
+    // `unload` event, which Chrome reports as a permissions policy violation)
+    crossTab: true,
     syncTimers: 200,
 
     startOnMount: false,
