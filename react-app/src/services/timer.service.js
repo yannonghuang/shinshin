@@ -6,7 +6,7 @@ import { useIdleTimer } from 'react-idle-timer/dist/index.legacy.cjs.js';
 
 import AuthService from "./auth.service";
 
-const SESSION_IDLE_MINUTES = 1;
+const SESSION_IDLE_MINUTES = 20;
 
 
 /**
