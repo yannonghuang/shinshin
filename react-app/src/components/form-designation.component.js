@@ -7,6 +7,9 @@ import Select from 'react-select';
 
 import SchoolDataService from "../services/school.service";
 
+// schools designated by default: all schools with code < 10000
+export const isDefaultSchool = (school) => school.code != null && school.code < 10000;
+
 export default class FormDesignation extends Component {
   constructor(props) {
     super(props);
@@ -40,8 +43,22 @@ export default class FormDesignation extends Component {
 
   componentDidUpdate(prevProps) {
     // chosenSchools may arrive after mount (e.g. default designation of a new form)
-    if (prevProps.chosenSchools !== this.props.chosenSchools && this.state.schools.length > 0)
-      this.updateSelection(this.props.chosenSchools ? this.props.chosenSchools : [], true);
+    if (prevProps.chosenSchools !== this.props.chosenSchools && this.state.schools.length > 0) {
+      if (prevProps.chosenSchools == null)
+        this.initSelection();
+      else
+        this.updateSelection(this.props.chosenSchools ? this.props.chosenSchools : [], true);
+    }
+  }
+
+  // first selection shown once both schools and the form's designation are loaded;
+  // an editable form with no designated schools gets the default designation
+  initSelection() {
+    const chosenSchools = this.props.chosenSchools;
+    if (!this.props.readonly && Array.isArray(chosenSchools) && chosenSchools.length === 0)
+      this.updateSelection(this.getSchoolIds(this.state.schools.filter(isDefaultSchool)));
+    else
+      this.updateSelection(chosenSchools ? chosenSchools : [], true);
   }
 
   updateSelection(chosenIds, init = false) {
@@ -90,6 +107,7 @@ export default class FormDesignation extends Component {
     if (schools) {
     for (var i = 0; i < schools.length; i++) {
       result.push({value: schools[i].id,
+        code: schools[i].code,
         label: schools[i].code + "-" + schools[i].name + "-" + schools[i].region });
     }
     return result;
@@ -113,7 +131,7 @@ export default class FormDesignation extends Component {
           schools: this.convert(response.data)
         });
 
-        this.updateSelection(this.props.chosenSchools ? this.props.chosenSchools : chosenSchools, true);
+        this.initSelection();
         console.log(response);
       })
       .catch(e => {

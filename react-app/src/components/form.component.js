@@ -2,7 +2,7 @@
 import FormDataService from "../services/form.service";
 import ProjectDataService from "../services/project.service";
 import SchoolDataService from "../services/school.service";
-import FormDesignation from ".//form-designation.component";
+import FormDesignation, { isDefaultSchool } from ".//form-designation.component";
 
 import $ from "jquery"; //Load jquery
 import React, { Component, createRef } from "react"; //For react component
@@ -76,7 +76,7 @@ export default class Form extends Component {
     SchoolDataService.getAllSimple()
       .then(response => {
         const ids = response.data
-          .filter(school => school.code != null && school.code < 10000)
+          .filter(isDefaultSchool)
           .map(school => school.id);
         this.setSchools(ids);
       })
